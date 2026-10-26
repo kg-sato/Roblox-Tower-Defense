@@ -66,3 +66,6 @@ Reference image -> `/make-ui` skill using the UI Kit -> validator (Scale-only) -
 - Phone: menu is a top row beside Roblox's own buttons, counters beneath it, leaderboard shows 5 rows, item bar and hints dropped; Roll cluster bottom-centre between the thumbstick (bottom-left) and jump button (bottom-right). Emulated at 812x375 with ghost zones for those controls; all interactive elements 45 px or more except none left under 44.
 - Chevrons: K.chevrons(parent, {x,y,w,h,count,dir}), sprite icon_chevron, ripples tail to head, still when reduced motion is on. Used in UnlockToast, pointing at the egg.
 - Not done: real phone or touch test (emulated only), wiring to game data (blocked on ProfileStore and the redesign's economy), the in-match HUD in GameClient is unchanged.
+
+## Fonts (2026-10-26)
+Tested 14 Roblox fonts side by side (UI Kit Renders/FontTest.jpg). Chosen: **Fondamento** headings and buttons, **Titillium Web** body text and numbers, **Grenze Gotisch** only for big display titles (banners, game title). Rejected: Sarpanch (its 'a' reads as 'o' at small sizes), Merriweather (too bookish; digits look old-style), Creepster. In UITheme.Sols as font, titleFont, numberFont, displayFont; GameClient STYLE uses the same.

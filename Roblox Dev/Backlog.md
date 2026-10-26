@@ -44,3 +44,9 @@ Top = next. Keep "Now" to 3 items or fewer.
 ## Ideas (not committed)
 - Git repo for scripts (needs user OK)
 - [ ] Wire the new Lobby HUD to real data once ProfileStore and the economy exist (gems, keys, coins, rolls, leaderboard); in-match HUD (GameClient) still uses its own old UI
+- [ ] Verify the restyled in-match panels (Pet upgrades, Odds, Progression, Skill Tree) and a full wave plus boss in Play after the HUD restyle; test on a real phone
+- [ ] GameClient local count: keep new top-level helpers inside the UI table (limit 200)
+- [ ] Test boss stage and the Pet upgrade panel after the HUD restyle; upload UI sprites to Roblox (needs the user's OK) before shipping
+- [x] Boss stage and Pet panel tested after the HUD restyle (2026-10-26)
+- [ ] Needs the user: import Blender\import_ready\StarDrake.fbx and Frostling.fbx (Asset Manager > Import > 3D), then Claude runs post_import_fix.luau and tests; approve or reject the other five pets from Blender/out_pets/review_sheet.jpg
+- [ ] Balance check: waves cleared by leaks (no defenders) still advance the stage and pay the tutorial gems; decide whether leaks should pay less. Also: reveal card can cover the ultimate banner during Auto.

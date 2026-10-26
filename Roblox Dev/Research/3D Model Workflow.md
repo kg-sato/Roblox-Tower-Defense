@@ -38,3 +38,6 @@ Every model must be recognisably different from the others at game size, with en
 ## Open
 - Which reference images to use for the first real set of pets (user to attach).
 - Whether to batch several references in one Hunyuan3D run (it loads the model once, about 25 s, then about 20 s per image).
+
+## First image-first result (2026-10-26)
+Star Drake: flat dark-fantasy concept on a plain light background, three-quarter front view with all limbs visible -> Hunyuan3D read it well (silhouette, horns, wings, back spikes, star-tipped tail). Thin wing membranes are very thin from the side. Blender needs absolute output paths (a relative path resolved to C:\Blender). Awaiting the user's quality check.

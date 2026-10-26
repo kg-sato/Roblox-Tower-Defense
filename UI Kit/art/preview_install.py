@@ -17,7 +17,7 @@ OUT = os.path.join(HERE, "out")
 versions = os.path.join(os.environ["LOCALAPPDATA"], "Roblox", "Versions")
 targets = []
 for exe in glob.glob(os.path.join(versions, "version-*", "RobloxStudioBeta.exe")):
-    targets.append(os.path.join(os.path.dirname(exe), "content", "textures", "uikit_v6"))
+    targets.append(os.path.join(os.path.dirname(exe), "content", "textures", "uikit_v7"))
 if not targets:
     sys.exit("No Roblox Studio version folder found under " + versions)
 
@@ -34,6 +34,7 @@ for t in targets:
         shutil.copy2(f, os.path.join(t, os.path.basename(f)))
         n += 1
     print("copied", n, "PNGs to", t)
+
 
 
 
