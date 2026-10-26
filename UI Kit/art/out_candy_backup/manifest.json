@@ -1,0 +1,595 @@
+{
+  "btn_green": {
+    "file": "btn_green.png",
+    "w": 384,
+    "h": 160,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "pill_btn_green": {
+    "file": "pill_btn_green.png",
+    "w": 384,
+    "h": 128,
+    "slice": [
+      66,
+      64,
+      66,
+      64
+    ]
+  },
+  "btn_blue": {
+    "file": "btn_blue.png",
+    "w": 384,
+    "h": 160,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "pill_btn_blue": {
+    "file": "pill_btn_blue.png",
+    "w": 384,
+    "h": 128,
+    "slice": [
+      66,
+      64,
+      66,
+      64
+    ]
+  },
+  "btn_red": {
+    "file": "btn_red.png",
+    "w": 384,
+    "h": 160,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "pill_btn_red": {
+    "file": "pill_btn_red.png",
+    "w": 384,
+    "h": 128,
+    "slice": [
+      66,
+      64,
+      66,
+      64
+    ]
+  },
+  "btn_yellow": {
+    "file": "btn_yellow.png",
+    "w": 384,
+    "h": 160,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "pill_btn_yellow": {
+    "file": "pill_btn_yellow.png",
+    "w": 384,
+    "h": 128,
+    "slice": [
+      66,
+      64,
+      66,
+      64
+    ]
+  },
+  "btn_orange": {
+    "file": "btn_orange.png",
+    "w": 384,
+    "h": 160,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "pill_btn_orange": {
+    "file": "pill_btn_orange.png",
+    "w": 384,
+    "h": 128,
+    "slice": [
+      66,
+      64,
+      66,
+      64
+    ]
+  },
+  "btn_purple": {
+    "file": "btn_purple.png",
+    "w": 384,
+    "h": 160,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "pill_btn_purple": {
+    "file": "pill_btn_purple.png",
+    "w": 384,
+    "h": 128,
+    "slice": [
+      66,
+      64,
+      66,
+      64
+    ]
+  },
+  "btn_pink": {
+    "file": "btn_pink.png",
+    "w": 384,
+    "h": 160,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "pill_btn_pink": {
+    "file": "pill_btn_pink.png",
+    "w": 384,
+    "h": 128,
+    "slice": [
+      66,
+      64,
+      66,
+      64
+    ]
+  },
+  "btn_gray": {
+    "file": "btn_gray.png",
+    "w": 384,
+    "h": 160,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "pill_btn_gray": {
+    "file": "pill_btn_gray.png",
+    "w": 384,
+    "h": 128,
+    "slice": [
+      66,
+      64,
+      66,
+      64
+    ]
+  },
+  "btn_dark": {
+    "file": "btn_dark.png",
+    "w": 384,
+    "h": 160,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "pill_btn_dark": {
+    "file": "pill_btn_dark.png",
+    "w": 384,
+    "h": 128,
+    "slice": [
+      66,
+      64,
+      66,
+      64
+    ]
+  },
+  "panel_dark": {
+    "file": "panel_dark.png",
+    "w": 512,
+    "h": 512,
+    "slice": [
+      72,
+      72,
+      72,
+      72
+    ],
+    "cap": 0.36
+  },
+  "panel_light": {
+    "file": "panel_light.png",
+    "w": 512,
+    "h": 512,
+    "slice": [
+      72,
+      72,
+      72,
+      72
+    ],
+    "cap": 0.36
+  },
+  "header_green": {
+    "file": "header_green.png",
+    "w": 512,
+    "h": 168,
+    "slice": [
+      64,
+      64,
+      64,
+      8
+    ],
+    "cap": 0.4
+  },
+  "header_blue": {
+    "file": "header_blue.png",
+    "w": 512,
+    "h": 168,
+    "slice": [
+      64,
+      64,
+      64,
+      8
+    ],
+    "cap": 0.4
+  },
+  "header_orange": {
+    "file": "header_orange.png",
+    "w": 512,
+    "h": 168,
+    "slice": [
+      64,
+      64,
+      64,
+      8
+    ],
+    "cap": 0.4
+  },
+  "header_purple": {
+    "file": "header_purple.png",
+    "w": 512,
+    "h": 168,
+    "slice": [
+      64,
+      64,
+      64,
+      8
+    ],
+    "cap": 0.4
+  },
+  "header_red": {
+    "file": "header_red.png",
+    "w": 512,
+    "h": 168,
+    "slice": [
+      64,
+      64,
+      64,
+      8
+    ],
+    "cap": 0.4
+  },
+  "header_pink": {
+    "file": "header_pink.png",
+    "w": 512,
+    "h": 168,
+    "slice": [
+      64,
+      64,
+      64,
+      8
+    ],
+    "cap": 0.4
+  },
+  "header_yellow": {
+    "file": "header_yellow.png",
+    "w": 512,
+    "h": 168,
+    "slice": [
+      64,
+      64,
+      64,
+      8
+    ],
+    "cap": 0.4
+  },
+  "header_night": {
+    "file": "header_night.png",
+    "w": 512,
+    "h": 168,
+    "slice": [
+      64,
+      64,
+      64,
+      8
+    ],
+    "cap": 0.4
+  },
+  "pill_dark": {
+    "file": "pill_dark.png",
+    "w": 320,
+    "h": 112,
+    "slice": [
+      56,
+      50,
+      56,
+      50
+    ]
+  },
+  "bar_track": {
+    "file": "bar_track.png",
+    "w": 384,
+    "h": 96,
+    "slice": [
+      46,
+      44,
+      46,
+      44
+    ]
+  },
+  "bar_fill_green": {
+    "file": "bar_fill_green.png",
+    "w": 384,
+    "h": 96,
+    "slice": [
+      46,
+      44,
+      46,
+      44
+    ]
+  },
+  "bar_fill_blue": {
+    "file": "bar_fill_blue.png",
+    "w": 384,
+    "h": 96,
+    "slice": [
+      46,
+      44,
+      46,
+      44
+    ]
+  },
+  "bar_fill_orange": {
+    "file": "bar_fill_orange.png",
+    "w": 384,
+    "h": 96,
+    "slice": [
+      46,
+      44,
+      46,
+      44
+    ]
+  },
+  "bar_fill_red": {
+    "file": "bar_fill_red.png",
+    "w": 384,
+    "h": 96,
+    "slice": [
+      46,
+      44,
+      46,
+      44
+    ]
+  },
+  "bar_fill_purple": {
+    "file": "bar_fill_purple.png",
+    "w": 384,
+    "h": 96,
+    "slice": [
+      46,
+      44,
+      46,
+      44
+    ]
+  },
+  "bar_fill_yellow": {
+    "file": "bar_fill_yellow.png",
+    "w": 384,
+    "h": 96,
+    "slice": [
+      46,
+      44,
+      46,
+      44
+    ]
+  },
+  "bar_fill_pink": {
+    "file": "bar_fill_pink.png",
+    "w": 384,
+    "h": 96,
+    "slice": [
+      46,
+      44,
+      46,
+      44
+    ]
+  },
+  "close_x": {
+    "file": "close_x.png",
+    "w": 176,
+    "h": 176
+  },
+  "badge_red": {
+    "file": "badge_red.png",
+    "w": 128,
+    "h": 128
+  },
+  "slot_dark": {
+    "file": "slot_dark.png",
+    "w": 256,
+    "h": 256,
+    "slice": [
+      48,
+      48,
+      48,
+      48
+    ],
+    "cap": 0.4
+  },
+  "card_blue": {
+    "file": "card_blue.png",
+    "w": 384,
+    "h": 512,
+    "slice": [
+      80,
+      80,
+      80,
+      80
+    ],
+    "cap": 0.4
+  },
+  "card_orange": {
+    "file": "card_orange.png",
+    "w": 384,
+    "h": 512,
+    "slice": [
+      80,
+      80,
+      80,
+      80
+    ],
+    "cap": 0.4
+  },
+  "card_purple": {
+    "file": "card_purple.png",
+    "w": 384,
+    "h": 512,
+    "slice": [
+      80,
+      80,
+      80,
+      80
+    ],
+    "cap": 0.4
+  },
+  "card_green": {
+    "file": "card_green.png",
+    "w": 384,
+    "h": 512,
+    "slice": [
+      80,
+      80,
+      80,
+      80
+    ],
+    "cap": 0.4
+  },
+  "card_pink": {
+    "file": "card_pink.png",
+    "w": 384,
+    "h": 512,
+    "slice": [
+      80,
+      80,
+      80,
+      80
+    ],
+    "cap": 0.4
+  },
+  "card_yellow": {
+    "file": "card_yellow.png",
+    "w": 384,
+    "h": 512,
+    "slice": [
+      80,
+      80,
+      80,
+      80
+    ],
+    "cap": 0.4
+  },
+  "card_red": {
+    "file": "card_red.png",
+    "w": 384,
+    "h": 512,
+    "slice": [
+      80,
+      80,
+      80,
+      80
+    ],
+    "cap": 0.4
+  },
+  "glow_soft": {
+    "file": "glow_soft.png",
+    "w": 256,
+    "h": 256
+  },
+  "sunburst": {
+    "file": "sunburst.png",
+    "w": 512,
+    "h": 512
+  },
+  "icon_coin": {
+    "file": "icon_coin.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_gem": {
+    "file": "icon_gem.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_star": {
+    "file": "icon_star.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_heart": {
+    "file": "icon_heart.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_bolt": {
+    "file": "icon_bolt.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_plus": {
+    "file": "icon_plus.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_check": {
+    "file": "icon_check.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_crown": {
+    "file": "icon_crown.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_lock": {
+    "file": "icon_lock.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_arrow_up": {
+    "file": "icon_arrow_up.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_rebirth": {
+    "file": "icon_rebirth.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_trade": {
+    "file": "icon_trade.png",
+    "w": 256,
+    "h": 256
+  }
+}

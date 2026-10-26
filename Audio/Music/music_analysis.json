@@ -1,0 +1,57 @@
+{
+ "iremos_forest.ogg": {
+  "dur": 25.61,
+  "sr": 44100,
+  "channels": 2,
+  "peak_db": -6.0,
+  "rms_db": -19.4,
+  "centroid_hz": 1229,
+  "tempo_bpm": 133,
+  "energy_variation": 0.21,
+  "seam_db": 3.5
+ },
+ "chill_lofi.ogg": {
+  "dur": 123.17,
+  "sr": 44100,
+  "channels": 2,
+  "peak_db": -1.1,
+  "rms_db": -18.2,
+  "centroid_hz": 1915,
+  "tempo_bpm": 109,
+  "energy_variation": 0.52,
+  "seam_db": -56.8
+ },
+ "rising_moon.ogg": {
+  "dur": 224.73,
+  "sr": 44100,
+  "channels": 2,
+  "peak_db": -2.4,
+  "rms_db": -19.3,
+  "centroid_hz": 1220,
+  "tempo_bpm": 109,
+  "energy_variation": 0.46,
+  "seam_db": -51.5
+ },
+ "artifact_room.ogg": {
+  "dur": 38.41,
+  "sr": 44100,
+  "channels": 2,
+  "peak_db": -2.6,
+  "rms_db": -18.1,
+  "centroid_hz": 681,
+  "tempo_bpm": 133,
+  "energy_variation": 0.7,
+  "seam_db": -0.8
+ },
+ "shinsei.ogg": {
+  "dur": 134.45,
+  "sr": 44100,
+  "channels": 2,
+  "peak_db": -4.5,
+  "rms_db": -19.4,
+  "centroid_hz": 2623,
+  "tempo_bpm": 100,
+  "energy_variation": 0.7,
+  "seam_db": -54.7
+ }
+}

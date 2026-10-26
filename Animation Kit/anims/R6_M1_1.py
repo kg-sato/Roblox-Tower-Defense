@@ -1,0 +1,6 @@
+"""M1 hit 1 of 4 (right straight), snappy preset. The recipe lives in _m1.py."""
+from _m1 import make
+
+
+def build():
+    return make(1, "snappy")

@@ -1,0 +1,51 @@
+# Systems
+
+Every game system, where it lives, and its status.
+Status: `idea` → `building` → `testing` → `done`
+Design: [[Game Design Doc]]. Patterns: [[Merge Tower Defense Playbook]].
+
+| System | Status | Server / Client | Where in Studio | Notes |
+|---|---|---|---|---|
+| Config (pets, enemies, waves, crates) | testing (pets, enemies, waves done; crates not) | Shared | ReplicatedStorage.Shared.Config | Data tables feed gameplay and UI |
+| Player data saving (ProfileStore) | idea | Server | ServerScriptService | Library must be inserted and verified |
+| Match service (state, grid, economy) | testing (`MatchSim` headless-tested; `MatchService` ran in Play) | Server | ServerScriptService | Pure logic modules, tested headless |
+| Merge logic | testing | Server (logic), Client (animation) | Shared.Logic | 3 same -> next tier |
+| Enemy sim (data, path distance) | testing | Server | ServerScriptService | No Humanoids; 10 Hz |
+| Enemy renderer | testing (4 procedural models, move verified in Play) | Client | StarterPlayerScripts | Interpolates from spawn time and speed |
+| Targeting + damage + projectiles | idea | Server (logic), Client (visuals) | | Pooled |
+| Skill tree (honeycomb, Skill Points) | testing (19 nodes, server-validated purchases, headless-tested; UI seen in a screenshot) | Server (rules), Client (UI) | Shared.Config.TREE, MatchSim.skill, GameClient | Effects: damage, coins, gems, luck, crystal HP, ult, roll cost, pity, double hatch |
+| Ultimates | testing (cinematic: rune circle, orb, lightning, meteors; gather phase seen in a screenshot, release not) | Both | | Server validates charge |
+| Bosses (telegraphed abilities) | idea | Both | | |
+| Crates / gacha (now: ROLL with gems) | testing (roll, rarity, pity, odds panel, reveal card; headless-tested) | Server roll, Client reveal | | Free currency only; odds panel |
+| Pets / models / trainer progression | testing (7 species x 5 tiers build with no errors; XP, levels, luck headless-tested) | Server | | |
+| Shop / purchases (premium pets, passes) | idea | Server | | ProcessReceipt, fixed prices |
+| UI (HUD, menus, reveal) | testing (left rail with coins/gems/menus, upgrade panel, odds panel, roll card, banners; scripted run only; no UIStyle module yet) | Client | StarterGui / PlayerScripts | UIStyle + UIAnimator modules |
+| UI Kit (free UI generator: tokens, components, screens, validator) | testing (12 screens built and validated in a live playtest; 3 newest use real sprite art, the first 9 still mostly emoji icons; screenshots by eye, not a human playtest; sprites not uploaded) | Client | ReplicatedStorage.UIKit (5 ModuleScripts); source in `UI Kit/luau/` | Not wired into the game UI yet. See `UI Kit/README.md`, [[Research/UI Generator Method|UI Generator Method]] |
+| Settings (display, accessibility, sound) | idea | Client (apply), Server (validate and save) | StarterPlayerScripts, ReplicatedStorage.Shared | Launch: Music, SFX, Flashes, Particles, Backdrop, Number format. See [[Game Design Doc]] "Display and accessibility settings" |
+| Number format (`NumberFormat`) | idea | Shared | ReplicatedStorage.Shared | One function for every number shown; headless test cases listed in the Game Design Doc |
+| Animation pass (HUD, enemies, world) | testing (coverage table in [[Research/Asset and Animation Workflow|Asset and Animation Workflow]]) | Client | GameClient | In-engine tweens; Blender clips exist only for the pilot pet |
+| Audio (music, sfx) | idea | Client | | Asset licence/availability to verify |
+| Merge core and roster | prototype logic (rules tested, difficulty simulated, not wired in) | Shared | `VFX/MergeCore.luau`, `VFX/Roster.luau`, [[Game Redesign - Merge Academy]] | Proposal awaiting the user's answers (section 12) |
+| Music | prototype (5 CC0 tracks uploaded 2026-10-25, ids in `VFX/AudioIds.luau`, load and length checked in Edit mode, never listened to) | Client | `Audio/CREDITS.md`, `VFX/MusicFX.luau` | Needs playtest check of `VFXVerify.music()` and moderation status |
+| VFX | prototype (standalone, not wired in; loading, reveal ideas, feedback baseline, 23 synthesized sound effects and camera motion blur added and machine-verified 2026-10-25; see VFX Verification Report) | Client | `VFX/RevealFX.luau`, [[VFX Renders]] | Reveal tiers Common to Legendary plus a medieval-magic Ultimate; Flashes, Particles and Reduced-motion settings honoured; headless audit passes; needs sound, uploaded textures, your judgement of the motion |
+| Tutorial / onboarding | testing (5 highlighted steps, scripted run reached stage 2; not played by a human) | Client | | |
+| Analytics events | idea | Server | | Funnel events |
+| Test harness | idea | Studio | | Headless asserts via execute_luau |
+
+## Security rules (apply to every system)
+- Never trust the client for currency, rewards, purchases, inventory or cooldowns.
+- RemoteEvents: check type, range and rate of every argument on the server.
+- Review AI-written Luau before shipping.
+- Crate roll, merge, summon, ultimate cast, wave start: all server-decided.
+
+## Details
+### Player data saving
+- ProfileStore with session locking. Schema: gems, shards, pets {id -> level, owned}, equipped, worldsCleared, dailyState, settings, version.
+
+### Settings
+- `settings` table in the profile: musicVolume, sfxVolume, flashes (bool), particles ("low" | "default" | "high"), backdrop ("moving" | "still"), numberFormat ("short" | "grouped" | "scientific"). Allowed values and defaults live in one shared `SettingsDefaults` module used by client UI and server validation.
+- Client applies changes immediately and saves debounced through one RemoteEvent. Server checks each key against the allowed values, clamps or rejects anything else, and rate-limits the event.
+- Systems that read settings: VFX pool (particle cap), `UIAnimator` (flashes, later reduced motion), `NumberFormat`, lobby backdrop, audio groups.
+
+### Currency
+- In-match coins: server only, reset per match. Meta gems/shards: saved.

@@ -1,0 +1,5 @@
+.secrets/
+out/blend/
+out/_frames/
+out/uploads.json
+__pycache__/
