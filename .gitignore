@@ -1,0 +1,53 @@
+# Large third-party apps and local tools (not ours; see CLAUDE.md)
+Kimi/
+ComfyUI/
+
+# Hunyuan3D: venv and downloaded model weights / caches (multi-GB)
+Hunyuan3D/.venv/
+Hunyuan3D/hf_cache/
+
+# Python / Node
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+
+# Model weights and checkpoints
+*.safetensors
+*.gguf
+*.ckpt
+*.pth
+*.onnx
+
+# Roblox Studio lock / backup / autosave files
+*.rbxl.lock
+*.rbxl.bak
+*.rbxl.autosave
+*.rbxlx.lock
+*.rbxlx.bak
+
+# Obsidian per-machine workspace state and cache
+Roblox Dev/.obsidian/workspace*.json
+Roblox Dev/.obsidian/cache
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+*.p12
+
+# Temp and log files
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+Thumbs.db
+desktop.ini
+
+# Claude Code per-machine state
+.claude/settings.local.json
+
+# Third-party upstream clone with its own .git (Tencent Hunyuan3D-2, ~160 MB)
+Hunyuan3D/Hunyuan3D-2/

@@ -1,0 +1,331 @@
+{
+  "icon_chest": {
+    "file": "icon_chest.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_crystal": {
+    "file": "icon_crystal.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_egg": {
+    "file": "icon_egg.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_gear": {
+    "file": "icon_gear.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_gift": {
+    "file": "icon_gift.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_index": {
+    "file": "icon_index.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_key": {
+    "file": "icon_key.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_paw": {
+    "file": "icon_paw.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_potion": {
+    "file": "icon_potion.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_shard": {
+    "file": "icon_shard.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_shop": {
+    "file": "icon_shop.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_trophy": {
+    "file": "icon_trophy.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_apple": {
+    "file": "icon_apple.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_candy": {
+    "file": "icon_candy.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_garlic": {
+    "file": "icon_garlic.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_pickaxe": {
+    "file": "icon_pickaxe.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_stopwatch": {
+    "file": "icon_stopwatch.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_dragon": {
+    "file": "icon_dragon.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_shoe": {
+    "file": "icon_shoe.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_bag": {
+    "file": "icon_bag.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_bell": {
+    "file": "icon_bell.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_clover": {
+    "file": "icon_clover.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_fish": {
+    "file": "icon_fish.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_hook": {
+    "file": "icon_hook.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_rod": {
+    "file": "icon_rod.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_flag": {
+    "file": "icon_flag.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_gold_bar": {
+    "file": "icon_gold_bar.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_grapes": {
+    "file": "icon_grapes.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_melon": {
+    "file": "icon_melon.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_player": {
+    "file": "icon_player.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_rebirth": {
+    "file": "icon_rebirth.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_shield": {
+    "file": "icon_shield.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_skull": {
+    "file": "icon_skull.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_sword": {
+    "file": "icon_sword.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_trade": {
+    "file": "icon_trade.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_wave": {
+    "file": "icon_wave.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_wrench": {
+    "file": "icon_wrench.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_coin": {
+    "file": "icon_coin.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_crown": {
+    "file": "icon_crown.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_gem": {
+    "file": "icon_gem.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_heart": {
+    "file": "icon_heart.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_lock": {
+    "file": "icon_lock.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_star": {
+    "file": "icon_star.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_weapons": {
+    "file": "icon_weapons.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_check": {
+    "file": "icon_check.png",
+    "w": 256,
+    "h": 256
+  },
+  "hud_slot": {
+    "file": "hud_slot.png",
+    "w": 256,
+    "h": 256,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "hud_slot_hot": {
+    "file": "hud_slot_hot.png",
+    "w": 256,
+    "h": 256,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "hud_btn": {
+    "file": "hud_btn.png",
+    "w": 384,
+    "h": 160,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "hud_btn_on": {
+    "file": "hud_btn_on.png",
+    "w": 384,
+    "h": 160,
+    "slice": [
+      56,
+      56,
+      56,
+      56
+    ]
+  },
+  "hud_roll": {
+    "file": "hud_roll.png",
+    "w": 512,
+    "h": 192,
+    "slice": [
+      64,
+      64,
+      64,
+      64
+    ]
+  },
+  "hud_counter_cyan": {
+    "file": "hud_counter_cyan.png",
+    "w": 384,
+    "h": 112,
+    "slice": [
+      44,
+      44,
+      44,
+      44
+    ]
+  },
+  "hud_counter_violet": {
+    "file": "hud_counter_violet.png",
+    "w": 384,
+    "h": 112,
+    "slice": [
+      44,
+      44,
+      44,
+      44
+    ]
+  },
+  "hud_counter_gold": {
+    "file": "hud_counter_gold.png",
+    "w": 384,
+    "h": 112,
+    "slice": [
+      44,
+      44,
+      44,
+      44
+    ]
+  },
+  "hud_row": {
+    "file": "hud_row.png",
+    "w": 512,
+    "h": 96,
+    "slice": [
+      40,
+      40,
+      40,
+      40
+    ]
+  },
+  "icon_chevron": {
+    "file": "icon_chevron.png",
+    "w": 256,
+    "h": 256
+  }
+}
