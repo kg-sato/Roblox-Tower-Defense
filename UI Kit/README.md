@@ -118,3 +118,9 @@ Every screen here (including `FishHud` and `CatchHud`, the fishing-reference HUD
 
 ## Licences
 Rules and validator adapted from `xtrair/figma-to-roblox-ui` (MIT; keep the credit). Everything else here is ours. Reference screenshots belong to their games and are used only as private design references, not shipped.
+
+## Dark-fantasy skin and HUD (2026-10-26)
+- Theme Sols (UITheme) with fonts Fondamento (headings), Titillium Web (body, numbers), Grenze Gotisch (display). K.skin = 'Sols' in UIKit.luau forces it on every screen; K.skin = nil restores each screen's own theme. K.backdrop uses one midnight gradient under Sols.
+- Chrome sprites come from art/make_chrome_sols.py (candy originals in art/out_candy_backup, --restore puts them back); HUD sprites from art/make_hud_sprites.py. Icons are ComfyUI sols-style images (art/comfy_generate.py --style sols, descriptions in art/sols_descriptions.py).
+- New: UIScreens2.NowPlaying, UnlockToast, EquipBest, FreeReward; LobbyHud rebuilt (opts.phone, opts.backdrop); K.isPhone(); K.chevrons(parent, opts) in UIMotion.
+- Sprite folder is textures/uikit_v5; Studio caches textures by path, so bump the folder name in make_uiart.py and preview_install.py when sprites change.

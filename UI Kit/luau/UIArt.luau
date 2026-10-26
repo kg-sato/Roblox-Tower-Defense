@@ -6,7 +6,7 @@
 local RunService = game:GetService("RunService")
 
 local UIArt = {}
-UIArt.localRoot = "rbxasset://textures/uikit_v6/"
+UIArt.localRoot = "rbxasset://textures/uikit_v7/"
 UIArt.useLocal = RunService:IsStudio()
 
 UIArt.sprites = {

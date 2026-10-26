@@ -160,9 +160,13 @@ Themes.Aura = {
 Themes.Sols = {
 	name = "Sols",
 	headerColor = "night",
-	font = Enum.Font.Merriweather,
+	-- fonts chosen 2026-10-26 from a side-by-side test: Fondamento (medieval but readable) for headings and buttons,
+	-- Titillium Web (clean, slightly techno) for body text and numbers, Grenze Gotisch only for big display titles.
+	-- Rejected: Sarpanch (its 'a' reads as 'o' when small), Merriweather (too bookish for a HUD), Creepster (too spooky).
+	font = Enum.Font.TitilliumWeb,
 	titleFont = Enum.Font.Fondamento,
-	numberFont = Enum.Font.Merriweather,
+	numberFont = Enum.Font.TitilliumWeb,
+	displayFont = Enum.Font.GrenzeGotisch,
 	textStroke = 0.04,
 	colors = {
 		text = rgb(240, 244, 255),

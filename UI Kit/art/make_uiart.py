@@ -31,7 +31,7 @@ lines = [
     "local RunService = game:GetService(\"RunService\")",
     "",
     "local UIArt = {}",
-    "UIArt.localRoot = \"rbxasset://textures/uikit_v6/\"",
+    "UIArt.localRoot = \"rbxasset://textures/uikit_v7/\"",
     "UIArt.useLocal = RunService:IsStudio()",
     "",
     "UIArt.sprites = {",
@@ -72,6 +72,7 @@ lines += [
 out = os.path.join(ROOT, "luau", "UIArt.luau")
 open(out, "w", encoding="utf-8", newline="\n").write("\n".join(lines))
 print("wrote", out, "with", len(manifest), "sprites and", len(ids), "ids")
+
 
 
 

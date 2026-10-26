@@ -21,3 +21,9 @@ Near-black navy panels, thin pale frames, thin serif text with a faint outline, 
 
 ## Lessons
 - Studio caches textures by path, and a re-synced sprite can show stale art even in a new Play session; always bump the folder (`textures/uikit_vN`) after any chrome change (needed v3 to v6 here).
+
+## Status
+2026-10-26: Hearth work paused by the user until the other chat finishes the HUD and fonts. Dark chrome restored (sprites in 	extures/uikit_v7); the default skin is still Sols. To resume: run python UI Kit/art/make_chrome_hearth.py (then bump the sprite folder), set K.skin = "Hearth", and convert the hand-set navy fills in UIScreens2 to theme tokens.
+
+## Status
+2026-10-26: Hearth work paused by the user until the other chat finishes the HUD and fonts. Dark chrome restored: sprites in 	extures/uikit_v7, and copied into uikit_v6 too because the open Studio place still pointed at v6 (its UIArt module could not be re-synced while Studio was in Play, started by the other chat). Default skin is still Sols. Pending: re-sync UIArt (v7) into Studio when Play ends. To resume Hearth: run python UI Kit/art/make_chrome_hearth.py, bump the sprite folder, set K.skin = "Hearth", and convert the hand-set navy fills in UIScreens2 to theme tokens.
