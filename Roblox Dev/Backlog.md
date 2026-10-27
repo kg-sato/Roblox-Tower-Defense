@@ -35,6 +35,13 @@ Top = next. Keep "Now" to 3 items or fewer.
 - [ ] Passes + premium pet dev products (user creates in Creator Hub)
 - [ ] Test matrix pass, bug log clean, balance simulator
 
+- [x] Wire `AbilityFX.rend` to a pet ability (tier 3+ crits) and add impact frame + smooth shake (2026-10-26)
+- [x] Boss escape telegraph ring and scorch after big hits (2026-10-26)
+- [x] (2026-10-27: not needed this time; the Studio-imported meshes were used instead, see below) **Needs the user:** create an Open Cloud API key (Assets read+write) and OK the first real upload with `tools/upload_asset.py` (StarDrake/Frostling FBX would skip the manual import)
+- [ ] **Needs the user:** 10-15 min session on a real phone with MicroProfiler / F9 memory
+- [ ] Textured Beam crescent for Verdant Rend (needs one uploaded texture)
+- [ ] Needs the user: watch Verdant Rend in Play and judge feel; send a sharper frame or the source for the bbstudios4 font if wanted
+
 ## Later
 - [ ] Publish (user clicks)
 - [ ] Watch D1 retention and session time (see [[Analytics/Analytics Log|Analytics Log]])
@@ -48,5 +55,13 @@ Top = next. Keep "Now" to 3 items or fewer.
 - [ ] GameClient local count: keep new top-level helpers inside the UI table (limit 200)
 - [ ] Test boss stage and the Pet upgrade panel after the HUD restyle; upload UI sprites to Roblox (needs the user's OK) before shipping
 - [x] Boss stage and Pet panel tested after the HUD restyle (2026-10-26)
-- [ ] Needs the user: import Blender\import_ready\StarDrake.fbx and Frostling.fbx (Asset Manager > Import > 3D), then Claude runs post_import_fix.luau and tests; approve or reject the other five pets from Blender/out_pets/review_sheet.jpg
-- [ ] Balance check: waves cleared by leaks (no defenders) still advance the stage and pay the tutorial gems; decide whether leaks should pay less. Also: reveal card can cover the ultimate banner during Auto.
+- [x] (2026-10-27: imported by the user, wired in as `ReplicatedStorage.PetMeshes`; in-game pets now use the meshes, flat colour, no rig animation yet) Needs the user: import Blender\import_ready\StarDrake.fbx and Frostling.fbx (Asset Manager > Import > 3D), then Claude runs post_import_fix.luau and tests; approve or reject the other five pets from Blender/out_pets/review_sheet.jpg
+- [ ] Balance check: waves cleared by leaks (no defenders) still advance the stage and pay the tutorial gems; decide whether leaks should pay less. (Reveal covering the ultimate banner: fixed 2026-10-26, banners now wait for the reveal.)
+- [x] (2026-10-27: Idle loops and Attack plays on each shot via `Models.playClip`; Spawn clip is empty in Roblox (scale-only), so the existing pop-in stays) Play the imported Idle/Attack/Spawn clips on the Frostling and Star Drake meshes (they sit in ServerStorage.RBX_ANIMSAVES; the pets are anchored and only bob through the pivot today)
+- [ ] Approve or reject the other five Blender pets so they can replace their shape versions the same way (add to MESHED in Models)
+- [ ] **Needs the user before going live:** upload the Frostling/Star Drake Idle and Attack clips as Animation assets (Studio: right-click the KeyframeSequence in ReplicatedStorage.PetAnims > Save to Roblox) and paste the ids into `UPLOADED` in Models. Without that, clips only play in Studio
+- [ ] Watch a real wave with a Frostling or Star Drake on a pad (the in-run hook was not observed; the debug hatch does not keep pets)
+- [x] (2026-10-27) UI pass 2 from [[Research/bbstudios UI Reference]]: rows stagger in after the unroll, dim + sigil intro on Progression and Skill Tree, Odds/Progression sit below the tutorial scroll
+- [ ] UI pass 3: restyle the Skill Tree detail card and the Pet panel contents as scroll pieces; painted banner/card art (needs uploads)
+- [x] (2026-10-27, enabled by the user; glass UI checked in Play) **Needs the user:** turn on Experience Settings > Security > Allow Mesh / Image APIs (owner must be 13+ ID verified), then Claude checks the glass UI against the reference
+- [x] (2026-10-27) Glass pass 4: HP bar, Skill Tree detail card and Pet panel rows in the glass style; painted emblem symbols

@@ -9,7 +9,6 @@ Severity: `crash` / `major` (breaks a feature) / `minor` / `cosmetic`
 |---|---|---|---|---|---|
 | 1 | 2026-10-24 | unverified | Drag-to-merge input (mouse and touch) never exercised by a real pointer; tested only by firing remotes from a script | Play in Studio, drag one pet onto a matching pet with three on the grid | Client input |
 | 2 | 2026-10-24 | minor | Console shows "User is not authorized to access Asset" from `cloud_3976620715.Sprint Execute`. Not our script; source unidentified (likely Studio/plugin) | Start Play | Studio |
-| 3 | 2026-10-24 | minor | Match ends are never cleaned up server-side except on player leave; "Over" sessions keep sending snapshots every 0.25 s | Finish a match | MatchService |
 
 ## Fixed
 
@@ -21,6 +20,9 @@ Severity: `crash` / `major` (breaks a feature) / `minor` / `cosmetic`
 | 4 | 2026-10-24 | 2026-10-24 | Pads and lane did not match where pets stood (reported twice) | Root cause: the static Map was built in Edit mode from a cached, outdated copy of Config (`require` returns the old module until Studio restarts the DataModel), so pads and lane followed the old layout. Map is now built at server start from Config by `MapBuilder`. Verified in Play: pad vs Config offset 0.000 studs; screenshot showed pet centred on pad |
 | 5 | 2026-10-24 | 2026-10-24 | Stage popup outline stayed after the text faded | The black text outline is a separate UIStroke that was never faded. Text and outline now fade together. Verified: both transparency 1.00 after the popup |
 | 6 | 2026-10-24 | 2026-10-24 | ROLL text hidden behind the egg icon | UIPadding shifted the icon too. Label used instead. Seen in screenshot; fix not re-screenshotted |
+| 7 | 2026-10-26 | 2026-10-26 | Hatch reveal covered banners fired during it (ULTIMATE!, LEVEL UP, STAGE CLEAR) | Reveal frame sits above the HUD layer. `showBanner` now queues while the reveal is visible (max 3) and plays them 1.1 s apart after the queue empties. Verified in Play: STAGE 2 banner held during a Legendary reveal, shown after |
+| 8 | 2026-10-26 | 2026-10-26 | `SkipTutorial` remote restarted the run at any time with no rate limit (wipes progress, spam creates sims) | MatchService ignores it unless the current run is still the tutorial. Verified in Play: second skip mid-run ignored, roll count kept |
+| 9 | 2026-10-24 | 2026-10-26 | (was open #3) finished matches never cleaned up | Obsolete: the no-lose rework removed the match-over state; sessions end on player leave. Checked MatchSim/MatchService source |
 
 **Lesson (Dev Process):** in Studio, `require` caches modules by instance, so edit-mode scripts that read Config after it changed can use stale data. Clone the module folder before requiring in tests, and build anything that mirrors Config at runtime.
 
