@@ -10,9 +10,9 @@ The first version used flat frames and emoji, which is why it did not feel like 
 - `art/blender/render_icons.py` renders 12 glossy 3D icons with Blender (headless).
 - `art/ingest_art.py` turns any inbox image (Kimi, Blender) into a sprite (magenta key, trim, resize, register).
 - `luau/UIArt.luau` (generated) and `luau/UIKitArt.luau` swap components to sprite versions when sprites exist.
-- One command: `python "UI Kit/art/build_art.py"`. Automation: `art/watch_inbox.py` (auto-process new `icon_*` images; `--also <folder>` for Kimi's output folder; not started by default) and `art/next_batch.py` (writes `briefs/NEXT-BATCH.md` of icons the screens still lack). Workflow with Kimi: `art/briefs/KIMI-MASTER-PROMPT.md`. Local generator (no account): `art/comfy_generate.py` (ComfyUI + FLUX schnell in `ComfyUI/`, see `Roblox Dev/Research/UI Art Pipeline.md`).
+- One command: `python "UI Kit/art/build_art.py"`. Automation: `art/watch_inbox.py` (auto-process new `icon_*` images; `--also <folder>` for Kimi's output folder; not started by default) and `art/next_batch.py` (writes `briefs/NEXT-BATCH.md` of icons the screens still lack). Workflow with Kimi: `art/briefs/KIMI-MASTER-PROMPT.md`. Local generator (no account): `art/comfy_generate.py` (ComfyUI + FLUX schnell in `ComfyUI/`, see `Roblox Dev/Research/UI/UI Art Pipeline.md`).
 - Studio preview needs no upload (`art/preview_install.py` copies PNGs into Studio's content folder). Published games need uploaded asset ids in `art/ids.json` (**needs the owner's approval**).
-- Details, evidence and limits: `Roblox Dev/Research/UI Art Pipeline.md`. Renders: `Roblox Dev/Research/UI Kit Renders/art-*.jpg`.
+- Details, evidence and limits: `Roblox Dev/Research/UI/UI Art Pipeline.md`. Renders: `Roblox Dev/Research/UI Kit Renders/art-*.jpg`.
 - New screens built with it (all pass the validator, checked by screenshot): `Inventory`, `Rebirth`, `Loading`. The first nine were not restyled.
 - Eight Luau modules now go into `ReplicatedStorage.UIKit`: UITheme, UIArt, UIMotion, UIKitArt, UIKit, UIScreens, UIValidate, UIBuild (order matters only for sync; `UIKit` loads the art layer with `FindFirstChild`).
 
@@ -33,7 +33,7 @@ The first version used flat frames and emoji, which is why it did not feel like 
 `luau/UIScreens2.luau` holds screens added after the first set (`LobbyHud`, `BattlePass`, `CrateClaim`, `UnitView`, `ModeSelect`, `EventShop`, `PassShop`, `Profile`, `FirstDraw`). Use: `require(UIKit.UIScreens2).LobbyHud(require(UIKit), parent)`. Synced to Studio with the localhost fetch method below; validator OK; renders in `Roblox Dev/Research/UI Kit Renders/`.
 
 ## Why this exists
-The sites in the sponsored videos (RobloxGUIMaker, ForgeGUI, Bloxsmith, LuaPilot and similar) appear to share one design: a closed **style preset** (colours, fonts, corner radii), a fixed **component set**, some **art assets**, and an automatic **check** of the result. The "one prompt" effect comes from that closed vocabulary, not from a smarter model. I could not read their internals (they are proprietary), so this is inferred from their marketing pages and from open-source methods like `xtrair/figma-to-roblox-ui`. Details: `Roblox Dev/Research/UI Generator Method.md`.
+The sites in the sponsored videos (RobloxGUIMaker, ForgeGUI, Bloxsmith, LuaPilot and similar) appear to share one design: a closed **style preset** (colours, fonts, corner radii), a fixed **component set**, some **art assets**, and an automatic **check** of the result. The "one prompt" effect comes from that closed vocabulary, not from a smarter model. I could not read their internals (they are proprietary), so this is inferred from their marketing pages and from open-source methods like `xtrair/figma-to-roblox-ui`. Details: `Roblox Dev/Research/UI/UI Generator Method.md`.
 
 We copy the idea with our own parts:
 

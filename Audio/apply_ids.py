@@ -3,7 +3,7 @@
     python Audio/apply_ids.py
 
 asset_ids.json: {"music": {"shinsei": 123456789, ...}, "sfx": {"merge_1": 123456790, ...}}  (names = file names without extension, as in
-Audio/Upload/). Unknown names are rejected; missing ones simply keep using the local files. Re-sync VFX/AudioIds.luau into
+Audio/Music/game and Audio/Upload/sfx). Unknown names are rejected; missing ones simply keep using the local files. Re-sync VFX/AudioIds.luau into
 ReplicatedStorage afterwards and run VFXVerify.sounds() / VFXVerify.music() (they check that every id loads and its length matches).
 """
 import json
@@ -12,7 +12,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ids = json.load(open(os.path.join(HERE, "asset_ids.json")))
-music = {os.path.splitext(f)[0] for f in os.listdir(os.path.join(HERE, "Upload", "music"))}
+music = {os.path.splitext(f)[0] for f in os.listdir(os.path.join(HERE, "Music", "game"))}
 sfx = {os.path.splitext(f)[0] for f in os.listdir(os.path.join(HERE, "Upload", "sfx"))}
 bad = [k for k in ids.get("music", {}) if k not in music] + [k for k in ids.get("sfx", {}) if k not in sfx]
 if bad:

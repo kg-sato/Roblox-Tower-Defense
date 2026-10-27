@@ -3,7 +3,7 @@
 -- Soft-edged glass panels (9-slice), glowing capsule buttons, emblems, tapered dividers, glow and vignette sprites.
 -- Live games need Experience Settings > Security > "Allow Mesh / Image APIs" (owner must be 13+ and ID verified);
 -- if creation fails, FrameArt.ok is false and callers keep the old frame style.
--- Research: [[Research/UI Methods and Magic Effects]].
+-- Research: [[Research/UI/UI Methods and Magic Effects]].
 
 local AssetService = game:GetService("AssetService")
 
@@ -252,6 +252,96 @@ function FA.symbol(name)
 		local body = 1 - smooth(-0.8, 0.8, d)
 		local glow = (1 - smooth(0, 10, d)) ^ 2 * 0.35
 		return 1, 1, 1, math.max(body, glow)
+	end)
+end
+
+-- Summoning card icon (ROLL button): gold-edged violet card with an eye; one bold shape for small sizes.
+function FA.cardIcon()
+	local W, H = 96, 128
+	local cx, cy = W / 2, H / 2
+	return paint("cardIcon", W, H, function(x, y)
+		local d = rrect(x, y, cx, cy, 34, 52, 9)
+		local gold = { 0.93, 0.8, 0.52 }
+		local glow = d > 0 and (1 - smooth(0, 9, d)) ^ 2 * 0.5 or 0
+		if d > 0 then
+			return gold[1], gold[2], gold[3], glow
+		end
+		local border = d > -4.5
+		local t = (y - (cy - 52)) / 104
+		local r, g, b = lerp(0.24, 0.12, t), lerp(0.15, 0.08, t), lerp(0.42, 0.26, t)
+		if border then
+			r, g, b = gold[1], gold[2], gold[3]
+		end
+		-- eye: almond ring + pupil
+		local ex, ey = (x - cx) / 22, (y - cy) / 12
+		local e = math.sqrt(ex * ex + ey * ey)
+		local ring = 1 - smooth(0.06, 0.16, math.abs(e - 1))
+		local pupil = 1 - smooth(5, 6.5, math.sqrt((x - cx) ^ 2 + (y - cy) ^ 2))
+		local diamond = 1 - smooth(4, 5.5, math.abs(x - cx) + math.abs(math.abs(y - cy) - 34))
+		local k = math.max(ring, pupil, diamond)
+		r, g, b = lerp(r, gold[1], k), lerp(g, gold[2], k), lerp(b, gold[3], k)
+		return r, g, b, 1 - smooth(-0.8, 0.8, d)
+	end)
+end
+
+-- Magic circle for the summon reveal (replaces flat sunburst rays): three thin rings, tick marks,
+-- eight diamond runes and a hexagram, with a faint inner glow. White; tint with ImageColor3.
+function FA.sigil()
+	local S = 384 -- 512 took ~390 ms to paint on a desktop; 384 is about half and scales up cleanly
+	local h = S / 2
+	local function seg(px, py, ax, ay, bx, by)
+		local dx, dy = bx - ax, by - ay
+		local t = clamp01(((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy))
+		local qx, qy = ax + dx * t - px, ay + dy * t - py
+		return math.sqrt(qx * qx + qy * qy)
+	end
+	local tri = {}
+	for k = 0, 5 do
+		local a = -math.pi / 2 + k * math.pi / 3
+		tri[k] = { h + math.cos(a) * h * 0.6, h + math.sin(a) * h * 0.6 }
+	end
+	return paint("sigil", S, S, function(x, y)
+		local dx, dy = x - h, y - h
+		local r = math.sqrt(dx * dx + dy * dy)
+		local u = r / h
+		local function ring(at, w)
+			return 1 - smooth(w, w + 1.2, math.abs(r - at * h))
+		end
+		local line = math.max(ring(0.95, 1.6), ring(0.89, 0.9) * 0.8, ring(0.62, 1.2), ring(0.3, 1.0) * 0.8)
+		-- tick marks between the two outer rings
+		if u > 0.89 and u < 0.95 then
+			local a = math.atan2(dy, dx)
+			local step = math.pi * 2 / 36
+			local d = math.abs(((a + step / 2) % step) - step / 2) * r
+			line = math.max(line, (1 - smooth(0.8, 1.8, d)) * 0.9)
+		end
+		-- eight diamond runes on the middle band
+		for k = 0, 7 do
+			local a = k * math.pi / 4
+			local cx, cy = h + math.cos(a) * h * 0.76, h + math.sin(a) * h * 0.76
+			local md = math.abs(x - cx) + math.abs(y - cy)
+			line = math.max(line, 1 - smooth(8, 9.5, md), (1 - smooth(0.6, 1.6, math.abs(md - 14))) * 0.6)
+		end
+		-- hexagram: two triangles inside the inner ring
+		local hx = math.huge
+		for k = 0, 5 do
+			local a, b = tri[k], tri[(k + 2) % 6]
+			hx = math.min(hx, seg(x, y, a[1], a[2], b[1], b[2]))
+		end
+		line = math.max(line, (1 - smooth(0.7, 1.7, hx)) * 0.85)
+		local glow = u < 1 and (1 - u) ^ 2 * 0.18 or 0
+		return 1, 1, 1, math.max(line, glow)
+	end)
+end
+
+-- Range circle (Bloons-style): faint fill that brightens toward a crisp edge; white, tint with ImageColor3.
+function FA.ring()
+	local S = 256
+	return paint("ring", S, S, function(x, y)
+		local r = math.sqrt((x - S / 2) ^ 2 + (y - S / 2) ^ 2) / (S / 2)
+		local fill = r < 0.96 and lerp(0.1, 0.28, smooth(0.6, 0.96, r)) or 0
+		local edge = 1 - smooth(0.006, 0.022, math.abs(r - 0.97))
+		return 1, 1, 1, math.max(fill, edge * 0.95)
 	end)
 end
 

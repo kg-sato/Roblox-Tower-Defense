@@ -1,5 +1,5 @@
 --!nocheck
--- LoadingFX: loading sequence (spec section A of Roblox Dev/Research/Loading and Reveal Spec.md). Standalone, client-side.
+-- LoadingFX: loading sequence (spec section A of Roblox Dev/Research/UI/Loading and Reveal Spec.md). Standalone, client-side.
 -- Source of truth: VFX/LoadingFX.luau, installed as ReplicatedStorage.LoadingFX. Not wired into the game.
 -- Original emblem and name only: no art from Rivals or Sol's RNG. Idea sources are timings and structure only.
 --

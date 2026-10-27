@@ -8,7 +8,7 @@
 --                                           -- outline ring + inner disc that fills as the fraction rises (where AND when)
 --   ImpactFX.shakeOffset(time, amount)      -- smooth (noise-based) camera offset; amount 0..1 is squared ("trauma")
 --   ImpactFX.audit()                        -- runs everything headless and checks clean-up
--- Research: [[Research/TikTok VFX Reference Study]] (viewers asked for impact frames and shake), trauma shake from
+-- Research: [[Research/VFX and Animation/TikTok VFX Reference Study]] (viewers asked for impact frames and shake), trauma shake from
 -- Squirrel Eiserloh's GDC 2014 talk "Juice It or Lose It" via the community write-ups cited there.
 
 local Lighting = game:GetService("Lighting")

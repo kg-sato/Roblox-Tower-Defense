@@ -1,6 +1,6 @@
 --!nocheck
 -- MergeCore: the rules of the 2048-style character merge, as pure logic (no UI, no Roblox objects), so it can be tested and
--- simulated headless. Source: VFX/MergeCore.luau, installed as ReplicatedStorage.MergeCore. Design: Roblox Dev/Game Redesign - Merge Academy.md
+-- simulated headless. Source: VFX/MergeCore.luau, installed as ReplicatedStorage.MergeCore. Design: Roblox Dev/Planning/Game Redesign - Merge Academy.md
 --
 --   local C = require(...MergeCore)
 --   local g = C.new(C.defaults, 12345)      -- cells = cols*rows, each 0 (empty) or a tier 1..maxTier

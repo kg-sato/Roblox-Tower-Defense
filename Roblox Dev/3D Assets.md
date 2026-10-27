@@ -16,7 +16,7 @@ Files go in `Assets/3D/`.
 
 | Asset | Source image | Triangles | Textured? | In Studio? | Notes |
 |---|---|---|---|---|---|
-| StarDrake T1 (pilot) | `Hunyuan3D\reference\StarDrake_T1.png` (Studio render of the procedural pet) | 12,000 -> 2,800 | No (flat colour) | Yes: v2 FBX imported 2026-10-25, upright, clips verified; faces -Z; needs pose-rename + Animator after import; pilot only (plain shape, not final art) | Blender: 1 Root bone, clips Idle/Attack/Spawn; files in `Blender\out\`; see [[Research/Asset and Animation Workflow|Asset and Animation Workflow]] |
+| StarDrake T1 (pilot) | `Hunyuan3D\reference\StarDrake_T1.png` (Studio render of the procedural pet) | 12,000 -> 2,800 | No (flat colour) | Yes: v2 FBX imported 2026-10-25, upright, clips verified; faces -Z; needs pose-rename + Animator after import; pilot only (plain shape, not final art) | Blender: 1 Root bone, clips Idle/Attack/Spawn; files in `Blender\out\`; see [[Research/3D and Art/Asset and Animation Workflow|Asset and Animation Workflow]] |
 
 ## Setup notes (2026-10-24)
 - Installed in `Hunyuan3D/` (Python 3.11 env `.venv`, models cached in `hf_cache/`, about 9 GB; the `.venv` is another 5 GB).

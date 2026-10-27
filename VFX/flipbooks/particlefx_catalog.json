@@ -1,0 +1,1263 @@
+{
+ "count": 44,
+ "identical_files": [
+  [
+   "enemy-defeat-coin-drop_v1",
+   "enemy-defeat-coin-drop"
+  ],
+  [
+   "lightning-charge-aura_v1",
+   "lightning-charge-aura"
+  ],
+  [
+   "rarity-frames_v1",
+   "rarity-frames"
+  ],
+  [
+   "respawn_v1",
+   "respawn"
+  ],
+  [
+   "splash-damage-ring_v1",
+   "splash-damage-ring"
+  ],
+  [
+   "tap-glitter-ripple_v1",
+   "tap-glitter-ripple"
+  ]
+ ],
+ "effects": {
+  "angelic-wings": {
+   "file": "angelic-wings-roblox-8x8.png",
+   "sha256_16": "918d2ae7d12f2fae",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 20.7,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.99,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    249,
+    234,
+    204
+   ],
+   "lifetime": 1.2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "anime-impact-frame": {
+   "file": "anime-impact-frame-roblox-8x8.png",
+   "sha256_16": "32319b9538e4e805",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 22,
+   "hit_frame": 15,
+   "peak_coverage_pct": 73.9,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.0,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    26,
+    15,
+    20
+   ],
+   "lifetime": 1,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "battle-fury": {
+   "file": "battle-fury-roblox-8x8.png",
+   "sha256_16": "3d5424e349e448cd",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 34.7,
+   "ends_clean": false,
+   "loop_seam_vs_step": 1.3,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    254,
+    144,
+    57
+   ],
+   "lifetime": 1.6,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.6,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "beam-clash": {
+   "file": "beam-clash-roblox-8x8.png",
+   "sha256_16": "2aab6b6e886b6747",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 24.6,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.83,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    228,
+    222,
+    222
+   ],
+   "lifetime": 1.2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "blazing-combo": {
+   "file": "blazing-combo-roblox-8x8.png",
+   "sha256_16": "9d7fab03c6243b53",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 55,
+   "hit_frame": 42,
+   "peak_coverage_pct": 16.0,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.38,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    254,
+    194,
+    110
+   ],
+   "lifetime": 1,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "blessed": {
+   "file": "blessed-roblox-8x8.png",
+   "sha256_16": "4fbfea6b7748efbd",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 4,
+   "peak_coverage_pct": 12.1,
+   "ends_clean": false,
+   "loop_seam_vs_step": 1.02,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    253,
+    215,
+    139
+   ],
+   "lifetime": 3,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 3,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "blocky-character-break-apart": {
+   "file": "blocky-character-break-apart-roblox-8x8.png",
+   "sha256_16": "9c68f8d52706c3a3",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 58,
+   "hit_frame": 0,
+   "peak_coverage_pct": 27.1,
+   "ends_clean": true,
+   "loop_seam_vs_step": 4.65,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    143,
+    166,
+    123
+   ],
+   "lifetime": 1.6,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.6,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "claim-button": {
+   "file": "claim-button-roblox-8x8.png",
+   "sha256_16": "38a295136f6aa9ab",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 24.0,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.0,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    146,
+    194,
+    118
+   ],
+   "lifetime": 1.8,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.8,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "coin-magnet-collect": {
+   "file": "coin-magnet-collect-roblox-8x8.png",
+   "sha256_16": "1c885f4563952508",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 17.9,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.76,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    246,
+    210,
+    101
+   ],
+   "lifetime": 1.5,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.5,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "cooldown-ready": {
+   "file": "cooldown-ready-roblox-8x8.png",
+   "sha256_16": "c3799bdb60db8d4e",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 28,
+   "peak_coverage_pct": 33.4,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.21,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    227,
+    247,
+    254
+   ],
+   "lifetime": 2.2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2.2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "dark-pact-aura": {
+   "file": "dark-pact-aura-roblox-8x8.png",
+   "sha256_16": "52c0563566068710",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 32.8,
+   "ends_clean": false,
+   "loop_seam_vs_step": 1.45,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    108,
+    41,
+    14
+   ],
+   "lifetime": 2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "demonic-possession": {
+   "file": "demonic-possession-roblox-8x8.png",
+   "sha256_16": "b1a582fc2a24160b",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 62,
+   "hit_frame": 37,
+   "peak_coverage_pct": 23.2,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.1,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    42,
+    24,
+    53
+   ],
+   "lifetime": 3,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 3,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "emp-blast": {
+   "file": "emp-blast-roblox-8x8.png",
+   "sha256_16": "9ba2d2f68ef2295d",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 1,
+   "peak_coverage_pct": 36.2,
+   "ends_clean": true,
+   "loop_seam_vs_step": 4.89,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    162,
+    160,
+    244
+   ],
+   "lifetime": 1.6,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.6,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "enemy-defeat-coin-drop_v1": {
+   "file": "enemy-defeat-coin-drop-roblox-8x8(1).png",
+   "sha256_16": "a954426944cc3cee",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 57,
+   "hit_frame": 1,
+   "peak_coverage_pct": 21.1,
+   "ends_clean": true,
+   "loop_seam_vs_step": 6.16,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    214,
+    198,
+    208
+   ],
+   "lifetime": 1.3,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.3,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "enemy-defeat-coin-drop": {
+   "file": "enemy-defeat-coin-drop-roblox-8x8.png",
+   "sha256_16": "a954426944cc3cee",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 57,
+   "hit_frame": 1,
+   "peak_coverage_pct": 21.1,
+   "ends_clean": true,
+   "loop_seam_vs_step": 6.16,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    214,
+    198,
+    208
+   ],
+   "lifetime": 1.3,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.3,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "energy-blade": {
+   "file": "energy-blade-roblox-8x8.png",
+   "sha256_16": "6ad4019166b067da",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 22,
+   "peak_coverage_pct": 15.9,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.85,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    254,
+    154,
+    184
+   ],
+   "lifetime": 1.2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "floating-ghost": {
+   "file": "floating-ghost-roblox-8x8.png",
+   "sha256_16": "ace64342126102e3",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 22.1,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.82,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    75,
+    88,
+    107
+   ],
+   "lifetime": 4,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 4,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "frost-nova": {
+   "file": "frost-nova-roblox-8x8.png",
+   "sha256_16": "268f127d9b0f0df6",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 59,
+   "hit_frame": 5,
+   "peak_coverage_pct": 18.8,
+   "ends_clean": true,
+   "loop_seam_vs_step": 1.98,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    150,
+    210,
+    243
+   ],
+   "lifetime": 1.6,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.6,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "jump-pad": {
+   "file": "jump-pad-roblox-8x8.png",
+   "sha256_16": "f62d93ef5004ed3a",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 13,
+   "peak_coverage_pct": 12.0,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.37,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    136,
+    239,
+    254
+   ],
+   "lifetime": 1.6,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.6,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "katana-combo": {
+   "file": "katana-combo-roblox-4x4.png",
+   "sha256_16": "4d428a48d8b8bb86",
+   "grid": 4,
+   "frame_px": 256,
+   "frames_nonblank": 12,
+   "hit_frame": 1,
+   "peak_coverage_pct": 10.9,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.15,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    142,
+    219,
+    248
+   ],
+   "lifetime": 0.6,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid4x4",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 0.6,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "lightning-charge-aura_v1": {
+   "file": "lightning-charge-aura-roblox-8x8(1).png",
+   "sha256_16": "2070bf01db5d61cf",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 18.6,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.63,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    152,
+    222,
+    252
+   ],
+   "lifetime": 1.6,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.6,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "lightning-charge-aura": {
+   "file": "lightning-charge-aura-roblox-8x8.png",
+   "sha256_16": "2070bf01db5d61cf",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 18.6,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.63,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    152,
+    222,
+    252
+   ],
+   "lifetime": 1.6,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.6,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "new-item-sparkle": {
+   "file": "new-item-sparkle-roblox-8x8.png",
+   "sha256_16": "874f3194c4ce69af",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 26.2,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.58,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    53,
+    60,
+    70
+   ],
+   "lifetime": 2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "notification-badge-pop": {
+   "file": "notification-badge-pop-roblox-8x8.png",
+   "sha256_16": "bb1f77fdb90bd029",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 62,
+   "hit_frame": 5,
+   "peak_coverage_pct": 35.4,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.07,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    238,
+    115,
+    130
+   ],
+   "lifetime": 2.6,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2.6,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "orbital-strike": {
+   "file": "orbital-strike-roblox-8x8.png",
+   "sha256_16": "067e08653a9dcb75",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 19,
+   "peak_coverage_pct": 14.8,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.2,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    221,
+    147,
+    192
+   ],
+   "lifetime": 2.4,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2.4,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "pet-egg-hatch": {
+   "file": "pet-egg-hatch-roblox-8x8.png",
+   "sha256_16": "0ded9be6c38c7d78",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 59,
+   "hit_frame": 35,
+   "peak_coverage_pct": 37.1,
+   "ends_clean": true,
+   "loop_seam_vs_step": 6.29,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    172,
+    226,
+    208
+   ],
+   "lifetime": 2.4,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2.4,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "rarity-frames_v1": {
+   "file": "rarity-frames-roblox-8x8(1).png",
+   "sha256_16": "135f753ce98c2bab",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 47.2,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.96,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    58,
+    53,
+    62
+   ],
+   "lifetime": 2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "rarity-frames": {
+   "file": "rarity-frames-roblox-8x8.png",
+   "sha256_16": "135f753ce98c2bab",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 47.2,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.96,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    58,
+    53,
+    62
+   ],
+   "lifetime": 2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "reaper-s-harvest": {
+   "file": "reaper-s-harvest-roblox-8x8.png",
+   "sha256_16": "e66afb9261eba2e2",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 40,
+   "hit_frame": 21,
+   "peak_coverage_pct": 16.3,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.03,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    102,
+    171,
+    142
+   ],
+   "lifetime": 1.4,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.4,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "rebirth-burst": {
+   "file": "rebirth-burst-roblox-8x8.png",
+   "sha256_16": "b4e3273925a04dbe",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 51,
+   "hit_frame": 18,
+   "peak_coverage_pct": 31.8,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.08,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    242,
+    213,
+    136
+   ],
+   "lifetime": 2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "regeneration": {
+   "file": "regeneration-roblox-8x8.png",
+   "sha256_16": "28465e76f910a08b",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 2,
+   "peak_coverage_pct": 19.0,
+   "ends_clean": false,
+   "loop_seam_vs_step": 1.21,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    135,
+    252,
+    178
+   ],
+   "lifetime": 2.4,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2.4,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "respawn_v1": {
+   "file": "respawn-roblox-8x8(1).png",
+   "sha256_16": "8d8a5c3fd0380138",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 53,
+   "hit_frame": 31,
+   "peak_coverage_pct": 22.0,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.0,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    101,
+    189,
+    254
+   ],
+   "lifetime": 2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "respawn": {
+   "file": "respawn-roblox-8x8.png",
+   "sha256_16": "8d8a5c3fd0380138",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 53,
+   "hit_frame": 31,
+   "peak_coverage_pct": 22.0,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.0,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    101,
+    189,
+    254
+   ],
+   "lifetime": 2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "shadow-flurry": {
+   "file": "shadow-flurry-roblox-8x8.png",
+   "sha256_16": "5940e7de92e81d9d",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 57,
+   "hit_frame": 39,
+   "peak_coverage_pct": 27.0,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.06,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    178,
+    132,
+    236
+   ],
+   "lifetime": 1.2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "slowed": {
+   "file": "slowed-roblox-8x8.png",
+   "sha256_16": "37e0a5bdbce5c9c7",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 14.7,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.74,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    90,
+    65,
+    165
+   ],
+   "lifetime": 3,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 3,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "splash-damage-ring_v1": {
+   "file": "splash-damage-ring-roblox-8x8(1).png",
+   "sha256_16": "c9798f3dabb04fe2",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 56,
+   "hit_frame": 6,
+   "peak_coverage_pct": 29.5,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.0,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    190,
+    128,
+    72
+   ],
+   "lifetime": 1.1,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.1,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "splash-damage-ring": {
+   "file": "splash-damage-ring-roblox-8x8.png",
+   "sha256_16": "c9798f3dabb04fe2",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 56,
+   "hit_frame": 6,
+   "peak_coverage_pct": 29.5,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.0,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    190,
+    128,
+    72
+   ],
+   "lifetime": 1.1,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.1,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "tap-glitter-ripple_v1": {
+   "file": "tap-glitter-ripple-roblox-8x8(1).png",
+   "sha256_16": "6d0b9b4d2849522b",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 48,
+   "hit_frame": 5,
+   "peak_coverage_pct": 44.1,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.0,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    184,
+    233,
+    241
+   ],
+   "lifetime": 0.8,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 0.8,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "tap-glitter-ripple": {
+   "file": "tap-glitter-ripple-roblox-8x8.png",
+   "sha256_16": "6d0b9b4d2849522b",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 48,
+   "hit_frame": 5,
+   "peak_coverage_pct": 44.1,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.0,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    184,
+    233,
+    241
+   ],
+   "lifetime": 0.8,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 0.8,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "tower-upgrade": {
+   "file": "tower-upgrade-roblox-8x8.png",
+   "sha256_16": "b7e41e8750f72098",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 45,
+   "hit_frame": 7,
+   "peak_coverage_pct": 23.0,
+   "ends_clean": true,
+   "loop_seam_vs_step": 0.0,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    254,
+    223,
+    125
+   ],
+   "lifetime": 1.6,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 1.6,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "twin-fang-x": {
+   "file": "twin-fang-x-roblox-8x8.png",
+   "sha256_16": "eee8f929c5a67be3",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 2,
+   "peak_coverage_pct": 15.9,
+   "ends_clean": false,
+   "loop_seam_vs_step": 0.47,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    166,
+    93,
+    160
+   ],
+   "lifetime": 0.85,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 0.85,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "umbral-flame": {
+   "file": "umbral-flame-roblox-8x8.png",
+   "sha256_16": "7a070af81cf89990",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 15.4,
+   "ends_clean": false,
+   "loop_seam_vs_step": 1.09,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    37,
+    11,
+    73
+   ],
+   "lifetime": 2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "whirlwind": {
+   "file": "whirlwind-roblox-8x8.png",
+   "sha256_16": "78e33ac8eeaaa80b",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 7.9,
+   "ends_clean": false,
+   "loop_seam_vs_step": 1.3,
+   "kind": "loop",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    203,
+    254,
+    249
+   ],
+   "lifetime": 0.8,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 0.8,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  },
+  "win-pad": {
+   "file": "win-pad-roblox-8x8.png",
+   "sha256_16": "684f886ad0bcb0aa",
+   "grid": 8,
+   "frame_px": 128,
+   "frames_nonblank": 64,
+   "hit_frame": 0,
+   "peak_coverage_pct": 29.0,
+   "ends_clean": false,
+   "loop_seam_vs_step": 2.44,
+   "kind": "one_shot",
+   "edge_alpha_max": 0.0,
+   "mean_rgb": [
+    250,
+    220,
+    102
+   ],
+   "lifetime": 2,
+   "emitter": {
+    "Texture": "rbxassetid://<upload id>",
+    "FlipbookLayout": "Grid8x8",
+    "FlipbookMode": "OneShot",
+    "Lifetime": 2,
+    "Rate": 0,
+    "LightInfluence": 0,
+    "LockedToPart": true
+   }
+  }
+ }
+}

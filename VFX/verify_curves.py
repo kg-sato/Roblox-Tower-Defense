@@ -1,6 +1,6 @@
 """Compares our blur-resolve curves with the Rivals ramp, using measured stills. Pillow-free: numbers only.
 
-The Rivals ramp is the sharpness series from Roblox Dev/Research/Video Reference Analysis.md (frames 20.0..21.0 s, every 0.2 s):
+The Rivals ramp is the sharpness series from Roblox Dev/Research/VFX and Animation/Video Reference Analysis.md (frames 20.0..21.0 s, every 0.2 s):
 683, 1270, 2027, 2795, 3559, 4133. Our side: sharpness measured in Studio on the same grass region at fixed BlurEffect sizes
 (the transfer function), pushed through each candidate size-versus-time curve. Both are normalised to 0..1 and compared at
 the same fractions of the resolve. RMSE below 0.12 counts as the same shape. Limits: sharpness is scene dependent, the

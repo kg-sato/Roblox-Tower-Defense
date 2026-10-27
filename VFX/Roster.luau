@@ -1,6 +1,6 @@
 --!nocheck
 -- Roster: the eight characters of the merge chain (tier 1 to 8), as data. Source: VFX/Roster.luau, installed as ReplicatedStorage.Roster.
--- All original; humanoid or magical creatures. Design: Roblox Dev/Game Redesign - Merge Academy.md. Each character has ONE visual hook
+-- All original; humanoid or magical creatures. Design: Roblox Dev/Planning/Game Redesign - Merge Academy.md. Each character has ONE visual hook
 -- (colour + a signature prop), one voice (the pentatonic note its merge sound is built on), one catchphrase and one idle gesture:
 -- enough for a unique identity without stats, skills or lore to learn on day one. Tier stats later derive from the tier alone.
 -- Portraits: Roblox Dev/Assets/Characters/ (generated locally with ComfyUI, not uploaded).

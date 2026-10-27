@@ -1,6 +1,6 @@
 # UI Screens
 
-Wireframes for each game screen, drawn with the Excalidraw plugin (open source, AGPL-3.0). Review: [[Research/GUI Maker Tools Review|GUI Maker Tools Review]]. Rules: [[Research/UI Design Playbook|UI Design Playbook]], [[Research/Low-End Device Playbook|Low-End Device Playbook]].
+Wireframes for each game screen, drawn with the Excalidraw plugin (open source, AGPL-3.0). Review: [[Research/UI/GUI Maker Tools Review|GUI Maker Tools Review]]. Rules: [[Research/UI/UI Design Playbook|UI Design Playbook]], [[Research/Game Design and Market/Low-End Device Playbook|Low-End Device Playbook]].
 
 ## How to use
 1. New drawing: command palette (Ctrl+P) -> "Excalidraw: Create new drawing". It is saved in `UI/Drawings/` and, on every save, a **PNG copy is written next to it** (same name, `.png`) so Claude can read it.

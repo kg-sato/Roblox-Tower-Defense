@@ -1,6 +1,6 @@
 """Measures music files with Blender's bundled audio decoder (no ffmpeg or pip needed).
 
-    blender.exe -b --python Audio/analyze_music.py -- <audio files...>      (path to blender in Roblox Dev/Research/Blender Cinematic Pipeline.md)
+    blender.exe -b --python Audio/analyze_music.py -- <audio files...>      (path to blender in Roblox Dev/Research/3D and Art/Blender Cinematic Pipeline.md)
 
 Prints per file: duration, sample rate, channels, peak dBFS, RMS dBFS (loudness proxy), spectral centroid Hz (brightness),
 rough tempo (autocorrelation of the onset envelope), energy variation over time (0 = constant, higher = dynamic/tense), and

@@ -1,6 +1,6 @@
 # Market Snapshots
 
-A weekly copy of Roblox's public Charts page, so we can see which mid-size games keep their players and which formulas are fading. This is **market** data, not our own game's numbers (those go in the weekly notes made from [[Templates/Weekly Analytics]]). Linked from [[Analytics/Analytics Log|Analytics Log]]. Background: [[Research/Mid-Size Game Patterns|Mid-Size Game Patterns]].
+A weekly copy of Roblox's public Charts page, so we can see which mid-size games keep their players and which formulas are fading. This is **market** data, not our own game's numbers (those go in the weekly notes made from [[Templates/Weekly Analytics]]). Linked from [[Analytics/Analytics Log|Analytics Log]]. Background: [[Research/Game Design and Market/Mid-Size Game Patterns|Mid-Size Game Patterns]].
 
 ## How it works
 

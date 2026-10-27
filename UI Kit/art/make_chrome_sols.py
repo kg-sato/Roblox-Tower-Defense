@@ -5,7 +5,7 @@
 
 Same sprite names, sizes and 9-slice margins as make_chrome.py, so every existing screen re-skins without code
 changes. Look: near-black midnight navy bodies, one bright accent line per colour token, pale corner brackets,
-square-ish corners. Icons are not touched (they come from ComfyUI, see Roblox Dev/Research/Image Generation Workflow.md).
+square-ish corners. Icons are not touched (they come from ComfyUI, see Roblox Dev/Research/3D and Art/Image Generation Workflow.md).
 Never run make_chrome.py after this: it would write the candy chrome back (and its vector icons over the ingested ones).
 """
 import json

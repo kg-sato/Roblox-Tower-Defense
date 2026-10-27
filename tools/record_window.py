@@ -5,7 +5,7 @@ Then make contact sheets: tools/video_sheets.py <out.mp4> <dir> 0.1
 Notes: uses PrintWindow, so the window can be behind others but not minimised (add --screen to grab the screen
 area instead, which needs the window in front). Real rate is about 20 fps for a 1080p Studio window. Prints the real
 captured fps, because screen grabbing can fall below the target on a busy PC; the file is written at that real rate
-so playback speed is correct. Local only: nothing is uploaded."""
+so playback speed is correct. Frames are held as JPEG in memory (about 0.3 MB each) until the clip ends. Local only: nothing is uploaded."""
 import sys, time, ctypes
 from ctypes import wintypes
 import cv2, numpy as np
@@ -67,7 +67,8 @@ frames, stamps = [], []
 t0 = time.perf_counter()
 nxt = t0
 while time.perf_counter() - t0 < seconds:
-    frames.append(grab())
+    # keep JPEG bytes, not raw frames: a raw 1080p frame is 6 MB, so a 30 s clip needed several GB of RAM
+    frames.append(cv2.imencode('.jpg', grab(), [cv2.IMWRITE_JPEG_QUALITY, 93])[1])
     stamps.append(time.perf_counter() - t0)
     nxt += 1.0 / fps
     delay = nxt - time.perf_counter()
@@ -76,7 +77,7 @@ while time.perf_counter() - t0 < seconds:
 real = (len(frames) - 1) / (stamps[-1] - stamps[0]) if len(frames) > 1 else fps
 vw = cv2.VideoWriter(out, cv2.VideoWriter_fourcc(*"mp4v"), real, (w, h))
 for f in frames:
-    vw.write(f)
+    vw.write(cv2.imdecode(f, cv2.IMREAD_COLOR))
 vw.release()
 gdi32.DeleteObject(bmp); gdi32.DeleteDC(hdc_mem); user32.ReleaseDC(hwnd, hdc_win)
 gaps = np.diff(stamps) if len(stamps) > 1 else np.array([0])

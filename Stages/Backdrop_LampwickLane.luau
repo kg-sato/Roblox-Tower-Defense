@@ -1,7 +1,7 @@
 --!nocheck
 -- Lampwick Lane (stage set 1): a gaslit Victorian street at dusk around the board.
 -- Installed as ServerScriptService.Backdrop. Visual only: nothing here is gameplay.
--- Plan: [[Research/Backgrounds and Enemies - Mystic Victorian]] (three rings: calm board, warm-lit props, dark skyline in fog).
+-- Plan: [[Research/3D and Art/Backgrounds and Enemies - Mystic Victorian]] (three rings: calm board, warm-lit props, dark skyline in fog).
 -- Rules: the path stays the lightest value on screen; only lamps and windows are warm; far things are dark and fogged.
 
 local Lighting = game:GetService("Lighting")

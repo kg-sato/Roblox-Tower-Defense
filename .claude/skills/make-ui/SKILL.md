@@ -7,7 +7,7 @@ description: Builds Roblox UI (HUD, shop, modal, settings, tutorial, collection,
 
 This is the project's version of what the paid "AI Roblox UI generator" sites do: a fixed design vocabulary, a component set, a validator and a visual check. Do not hand-set hundreds of properties. Compose components.
 
-Read first: `UI Kit/README.md`. Reference images: `Roblox Dev/Research/*.png` (see `Roblox Dev/Research/Screenshot Analysis.md` for what each shows and the patterns to copy). Rules and sources: `Roblox Dev/Research/UI Design Playbook.md`, `Low-End Device Playbook.md`, `GUI Maker Tools Review.md`.
+Read first: `UI Kit/README.md`. Reference images: `Roblox Dev/Research/*.png` (see `Roblox Dev/Research/UI/Screenshot Analysis.md` for what each shows and the patterns to copy). Rules and sources: `Roblox Dev/Research/UI/UI Design Playbook.md`, `Low-End Device Playbook.md`, `GUI Maker Tools Review.md`.
 
 ## Steps
 
@@ -20,7 +20,7 @@ Read first: `UI Kit/README.md`. Reference images: `Roblox Dev/Research/*.png` (s
 7. **Report honestly**: what matches, what is approximated (emoji icons instead of art, no 3D bevels, no particles), what is untested. A screenshot is not an interaction test.
 
 ## Art first (the biggest quality lever)
-The kit looks right only with real artwork. Before building a screen, check what sprites exist (`UI Kit/luau/UIArt.luau`) and use `K.icon` / `K.sprite` with sprite names, not emoji. Missing icon? Request it: Blender (`UI Kit/art/blender/render_icons.py`, add a model), Pillow (`make_chrome.py`), or Kimi (`UI Kit/art/briefs/`, drop images in `UI Kit/art/inbox/`), then run `python "UI Kit/art/build_art.py"`. Never upload art to Roblox without the owner's OK. Eight modules sync to Studio (UITheme, UIArt, UIMotion, UIKitArt, UIKit, UIScreens, UIValidate, UIBuild). Details: `Roblox Dev/Research/UI Art Pipeline.md`.
+The kit looks right only with real artwork. Before building a screen, check what sprites exist (`UI Kit/luau/UIArt.luau`) and use `K.icon` / `K.sprite` with sprite names, not emoji. Missing icon? Request it: Blender (`UI Kit/art/blender/render_icons.py`, add a model), Pillow (`make_chrome.py`), or Kimi (`UI Kit/art/briefs/`, drop images in `UI Kit/art/inbox/`), then run `python "UI Kit/art/build_art.py"`. Never upload art to Roblox without the owner's OK. Eight modules sync to Studio (UITheme, UIArt, UIMotion, UIKitArt, UIKit, UIScreens, UIValidate, UIBuild). Details: `Roblox Dev/Research/UI/UI Art Pipeline.md`.
 
 ## Motion (use it on every screen)
 Call `K.popIn(panel)` after building a modal; `K.stagger(container)` on grids, card rows and lists; `K.pulse(btn)` on anything claimable; `K.countUp(label, value, {prefix})` for rewards; `K.shake(inst)` for "locked / not enough". Buttons made with `K.button` already get hover, press and release. All are Scale-only and honour `K.setReducedMotion`. To test motion, sample `AbsoluteSize` over time in a playtest (a screenshot cannot show it), and use `user_mouse_input` for real hover and press. Details: `UI Kit/README.md`, "Motion layer".

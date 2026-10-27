@@ -1,5 +1,5 @@
 --!nocheck
--- FeedbackFX: the feedback and menu motion baseline (spec section C of Roblox Dev/Research/Loading and Reveal Spec.md).
+-- FeedbackFX: the feedback and menu motion baseline (spec section C of Roblox Dev/Research/UI/Loading and Reveal Spec.md).
 -- Standalone, client-side, nothing wired into the game HUD. Source: VFX/FeedbackFX.luau, installed as ReplicatedStorage.FeedbackFX.
 -- Motion baseline comes from the vibe-coded game's animations (combo text, ring pulse, milestone banner, dim-and-highlight
 -- tutorial, living background); our UI look stays our own. Everything eases (Quint/Back/Sine), nothing strobes.

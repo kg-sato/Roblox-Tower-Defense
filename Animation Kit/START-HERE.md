@@ -2,7 +2,7 @@
 
 Installed 2026-10-24 from the download `Roblox-Animations-by-fwjelaa` by **fwjelaa (FWJ STUDIOS)**. Free to use in our own game; **credit fwjelaa** if we show or share the method, and do not re-upload the pack as our own (see `docs/CREDITS.md`).
 
-Project review and decisions: `Roblox Dev/Research/Animation Kit Review.md` (read that first).
+Project review and decisions: `Roblox Dev/Research/3D and Art/Animation Kit Review.md` (read that first).
 
 ## What it is
 A pipeline that makes **humanoid R6 or R15 character animations** (runs, combos, sword swings, dashes, emotes) as Roblox KeyframeSequences. Two paths:
@@ -10,7 +10,7 @@ A pipeline that makes **humanoid R6 or R15 character animations** (runs, combos,
 - **Path B, Studio only.** `roblox/AnimKit.luau` is a ModuleScript that writes keyframes straight into Studio through the Studio MCP (`execute_luau`). No Blender needed. **Installed in `Claude.rbxl` on 2026-10-24** as `ServerStorage.AnimKit` (trimmed: the HttpService helpers `fetch/load/verify` were left out). Test emote: `ServerStorage.Animations.R6_Cheer`.
 
 ## What it is not
-- Not a particle / aura / VFX tool. The Sol's RNG style reveal effects are separate (see `Roblox Dev/Research/Magical Roll Animation Playbook.md`).
+- Not a particle / aura / VFX tool. The Sol's RNG style reveal effects are separate (see `Roblox Dev/Research/VFX and Animation/Magical Roll Animation Playbook.md`).
 - Not for our current pets. They are procedural 3D models, and the kit only knows the standard R6 and R15 rigs (plus Sword, Spear, Dagger, Axe props).
 
 ## Folder

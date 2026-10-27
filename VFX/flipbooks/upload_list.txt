@@ -1,0 +1,41 @@
+# 38 unique particlefx flipbooks to upload (Studio > Asset Manager > Import), then put the asset ids in Overnight/asset_ids.json as {"<name>": 123, ...}
+# Source folder: VFX/third_party/particlefx/ (copy of C:\Users\kgsat\Downloads\particlefx). Skip the files ending (1).png: byte-identical duplicates.
+
+angelic-wings-roblox-8x8.png	grid 8x8	Lifetime 1.2	loop
+anime-impact-frame-roblox-8x8.png	grid 8x8	Lifetime 1	one_shot
+battle-fury-roblox-8x8.png	grid 8x8	Lifetime 1.6	loop
+beam-clash-roblox-8x8.png	grid 8x8	Lifetime 1.2	loop
+blazing-combo-roblox-8x8.png	grid 8x8	Lifetime 1	one_shot
+blessed-roblox-8x8.png	grid 8x8	Lifetime 3	loop
+blocky-character-break-apart-roblox-8x8.png	grid 8x8	Lifetime 1.6	one_shot
+claim-button-roblox-8x8.png	grid 8x8	Lifetime 1.8	loop
+coin-magnet-collect-roblox-8x8.png	grid 8x8	Lifetime 1.5	loop
+cooldown-ready-roblox-8x8.png	grid 8x8	Lifetime 2.2	one_shot
+dark-pact-aura-roblox-8x8.png	grid 8x8	Lifetime 2	loop
+demonic-possession-roblox-8x8.png	grid 8x8	Lifetime 3	one_shot
+emp-blast-roblox-8x8.png	grid 8x8	Lifetime 1.6	one_shot
+enemy-defeat-coin-drop-roblox-8x8.png	grid 8x8	Lifetime 1.3	one_shot
+energy-blade-roblox-8x8.png	grid 8x8	Lifetime 1.2	loop
+floating-ghost-roblox-8x8.png	grid 8x8	Lifetime 4	loop
+frost-nova-roblox-8x8.png	grid 8x8	Lifetime 1.6	one_shot
+jump-pad-roblox-8x8.png	grid 8x8	Lifetime 1.6	one_shot
+katana-combo-roblox-4x4.png	grid 4x4	Lifetime 0.6	one_shot
+lightning-charge-aura-roblox-8x8.png	grid 8x8	Lifetime 1.6	loop
+new-item-sparkle-roblox-8x8.png	grid 8x8	Lifetime 2	loop
+notification-badge-pop-roblox-8x8.png	grid 8x8	Lifetime 2.6	one_shot
+orbital-strike-roblox-8x8.png	grid 8x8	Lifetime 2.4	loop
+pet-egg-hatch-roblox-8x8.png	grid 8x8	Lifetime 2.4	one_shot
+rarity-frames-roblox-8x8.png	grid 8x8	Lifetime 2	loop
+reaper-s-harvest-roblox-8x8.png	grid 8x8	Lifetime 1.4	one_shot
+rebirth-burst-roblox-8x8.png	grid 8x8	Lifetime 2	one_shot
+regeneration-roblox-8x8.png	grid 8x8	Lifetime 2.4	loop
+respawn-roblox-8x8.png	grid 8x8	Lifetime 2	one_shot
+shadow-flurry-roblox-8x8.png	grid 8x8	Lifetime 1.2	one_shot
+slowed-roblox-8x8.png	grid 8x8	Lifetime 3	loop
+splash-damage-ring-roblox-8x8.png	grid 8x8	Lifetime 1.1	one_shot
+tap-glitter-ripple-roblox-8x8.png	grid 8x8	Lifetime 0.8	one_shot
+tower-upgrade-roblox-8x8.png	grid 8x8	Lifetime 1.6	one_shot
+twin-fang-x-roblox-8x8.png	grid 8x8	Lifetime 0.85	loop
+umbral-flame-roblox-8x8.png	grid 8x8	Lifetime 2	loop
+whirlwind-roblox-8x8.png	grid 8x8	Lifetime 0.8	loop
+win-pad-roblox-8x8.png	grid 8x8	Lifetime 2	one_shot
