@@ -63,6 +63,24 @@ def set_mark(task_id, mark):
 
 state["iter"] += 1
 
+# 0. hourly report, written by the gate itself so it costs no model tokens
+hours = int((time.time() - cfg["start"]) / 3600)
+if hours > state.get("reported", 0):
+    state["reported"] = hours
+    ts = tasks()
+    cnt = {m: sum(1 for t in ts if t["mark"] == m) for m in " x!"}
+    try:
+        denied = len((ov / "denials.log").read_text(encoding="utf-8").splitlines())
+    except Exception:
+        denied = 0
+    try:
+        recent = [l.strip() for l in (ov / "PROGRESS.md").read_text(encoding="utf-8").splitlines()[-3:]]
+    except Exception:
+        recent = []
+    with open(ov / "HOURLY.md", "a", encoding="utf-8") as f:
+        f.write(f"## Hour {hours} ({time.strftime('%H:%M')}): done {cnt['x']}, blocked {cnt['!']}, open {cnt[' ']}, loops {state['iter']}, denials {denied}\n"
+                + "".join(f"- {l}\n" for l in recent))
+
 # 1. control files restored if changed
 restored = []
 for rel, h in cfg.get("hashes", {}).items():
