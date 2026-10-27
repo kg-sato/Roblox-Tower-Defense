@@ -51,3 +51,6 @@ desktop.ini
 
 # Third-party upstream clone with its own .git (Tencent Hunyuan3D-2, ~160 MB)
 Hunyuan3D/Hunyuan3D-2/
+
+# Third-party download archive (not ours)
+archive-JKGEwB/
