@@ -65,3 +65,10 @@ Top = next. Keep "Now" to 3 items or fewer.
 - [ ] UI pass 3: restyle the Skill Tree detail card and the Pet panel contents as scroll pieces; painted banner/card art (needs uploads)
 - [x] (2026-10-27, enabled by the user; glass UI checked in Play) **Needs the user:** turn on Experience Settings > Security > Allow Mesh / Image APIs (owner must be 13+ ID verified), then Claude checks the glass UI against the reference
 - [x] (2026-10-27) Glass pass 4: HP bar, Skill Tree detail card and Pet panel rows in the glass style; painted emblem symbols
+- [x] (2026-10-27) Glass pass 5: Skill Tree hexes and the hatch-reveal glow/rays/titles
+- [x] (2026-10-27, 0558bc7 pushed) **Decide:** remove `archive-JKGEwB/gk_3.1.77_windows_amd64.zip` (9.9 MB, not ours) from the repo? It was pushed in 8e97690
+- [x] (2026-10-27) Build stage 1 "Lampwick Lane" backdrop (three rings + fog recipe) from [[Research/Backgrounds and Enemies - Mystic Victorian]]
+- [x] (2026-10-27) Restyle enemies to the roster (Hollow Parishioner, Fog Wisp, Brass Sentinel, The Unbound) with the silhouette and greyscale checks
+- [ ] Phone check of Lampwick Lane (10 shadow lamps + fog particles); add a Low setting that turns lamp shadows off if needed
+- [ ] Stage sets 2 to 5 (Harbour of Brass, Silent Cathedral, Clockwork Foundry, Above the Grey Veil) and switching backdrop by stage
+- [ ] Restyle the portal (still a neon purple slab) and crystal to fit Lampwick Lane

@@ -40,6 +40,6 @@ This is a checklist, not a measured score; whether it reaches "90%" is the user'
 
 ## Gaps
 - Painted art (calligraphy glyphs, illustrated banners) still missing.
-- Skill Tree hexes and the pet-reveal screen keep the older look.
+- Skill Tree hexes and the reveal glow/rays were moved to painted art on 2026-10-27 (pass 5); the 3D neon aura disc under legendary pets in the reveal still renders flat.
 - EditableImage memory on low-end phones not measured.
 - Region blur (DoF glass) not tried; whole-world blur only.

@@ -255,6 +255,47 @@ function FA.symbol(name)
 	end)
 end
 
+-- Soft light beam (vertical): feathered across its width, brightest in the middle of its length; white.
+function FA.beam()
+	local W, H = 32, 256
+	return paint("beam", W, H, function(x, y)
+		local u = math.abs(2 * x / W - 1)
+		local v = math.abs(2 * y / H - 1)
+		local across = (1 - smooth(0.0, 1.0, u)) ^ 1.5
+		local along = (1 - smooth(0.05, 1.0, v))
+		return 1, 1, 1, across * along
+	end)
+end
+
+-- Pointy-top hexagon pieces, white (tint with ImageColor3). The hexagon's circumradius is 56 of the
+-- 128 px image, so size the ImageLabel at 64/56 of the old hexagon's diameter.
+-- kind: "body" (filled, top-lit gradient), "rim" (bright outline + outer glow), "shine" (soft top highlight)
+FA.HEX_FIT = 64 / 56
+function FA.hex(kind)
+	local S, R = 128, 56
+	local pts = {}
+	for i = 0, 5 do
+		local a = -math.pi / 2 + i * math.pi / 3
+		table.insert(pts, { S / 2 + math.cos(a) * R, S / 2 + math.sin(a) * R })
+	end
+	return paint("hex" .. kind, S, S, function(x, y)
+		local d = sdPoly(x, y, pts)
+		local t = clamp01((y - (S / 2 - R)) / (2 * R))
+		if kind == "body" then
+			local k = lerp(1.0, 0.62, t)
+			local bevel = (1 - smooth(0, 5, -d)) * (1 - t) * 0.25
+			return k + bevel, k + bevel, k + bevel, 1 - smooth(-0.8, 0.8, d)
+		elseif kind == "rim" then
+			local line = 1 - smooth(1.4, 2.8, math.abs(d + 1.5))
+			local glow = d > 0 and (1 - smooth(0, 8, d)) ^ 2 * 0.55 or 0
+			return 1, 1, 1, math.max(line, glow)
+		else
+			local inside = 1 - smooth(-0.8, 0.8, d)
+			return 1, 1, 1, inside * (1 - smooth(0.0, 0.55, t)) * 0.9
+		end
+	end)
+end
+
 do
 	FA.ok = pcall(function()
 		FA.glow()

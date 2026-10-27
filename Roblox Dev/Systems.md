@@ -50,3 +50,4 @@ Design: [[Game Design Doc]]. Patterns: [[Merge Tower Defense Playbook]].
 
 ### Currency
 - In-match coins: server only, reset per match. Meta gems/shards: saved.
+| Stage backdrop (Lampwick Lane) | testing (built 2026-10-27, checked in Play on PC) | Server | ServerScriptService.Backdrop | Visual only; see [[Research/Backgrounds and Enemies - Mystic Victorian]] |
