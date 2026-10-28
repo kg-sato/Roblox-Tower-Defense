@@ -41,9 +41,9 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [ ] Ultimates and VFX
 - [ ] Crate roll (server) + reveal UI + odds panel
 - [ ] HUD, menus, UIAnimator, sounds, music
-- [ ] Settings foundation: `SettingsDefaults` module, `NumberFormat` function with headless tests (999, 1500, 1.5M, 13.66T, grouped, scientific, zero, negative), `settings` in the profile schema
-- [ ] Settings panel (gear button, Sound / Display / Accessibility sections, reset to defaults) and `SettingsController`; server validation and rate limit on the save event
-- [ ] Wire settings into systems: particle cap in VFX pool, Flashes On/Off with a no-flash crate reveal and boss intro, lobby Backdrop Moving/Still, `NumberFormat` on every number in HUD and results
+- [x] Settings foundation: `SettingsDefaults` module, `NumberFormat` function with headless tests (999, 1500, 1.5M, 13.66T, grouped, scientific, zero, negative), `settings` in the profile schema
+- [x] Settings panel (gear button, Sound / Display / Accessibility sections, reset to defaults) and `SettingsController`; server validation and rate limit on the save event
+- [x] Wire settings into systems: particle cap in VFX pool, Flashes On/Off with a no-flash crate reveal and boss intro, lobby Backdrop Moving/Still, `NumberFormat` on every number in HUD and results
 - [ ] Flashing-lights notice on the loading screen (needed once any flash effect exists)
 - [ ] Verify settings: each one changes what the Game Design Doc says, persists across rejoin, bad values rejected, Particles Low keeps frame rate steady on the baseline phone
 - [ ] Tutorial, analytics events, daily rewards
@@ -71,7 +71,7 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [ ] Test boss stage and the Pet upgrade panel after the HUD restyle; upload UI sprites to Roblox (needs the user's OK) before shipping
 - [x] Boss stage and Pet panel tested after the HUD restyle (2026-10-26)
 - [x] (2026-10-27: imported by the user, wired in as `ReplicatedStorage.PetMeshes`; in-game pets now use the meshes, flat colour, no rig animation yet) Needs the user: import Blender\import_ready\StarDrake.fbx and Frostling.fbx (Asset Manager > Import > 3D), then Claude runs post_import_fix.luau and tests; approve or reject the other five pets from Blender/out_pets/review_sheet.jpg
-- [ ] Balance check: waves cleared by leaks (no defenders) still advance the stage and pay the tutorial gems; decide whether leaks should pay less. (Reveal covering the ultimate banner: fixed 2026-10-26, banners now wait for the reveal.)
+- [x] Balance check: waves cleared by leaks (no defenders) still advance the stage and pay the tutorial gems; decide whether leaks should pay less. (Reveal covering the ultimate banner: fixed 2026-10-26, banners now wait for the reveal.)
 - [x] (2026-10-27: Idle loops and Attack plays on each shot via `Models.playClip`; Spawn clip is empty in Roblox (scale-only), so the existing pop-in stays) Play the imported Idle/Attack/Spawn clips on the Frostling and Star Drake meshes (they sit in ServerStorage.RBX_ANIMSAVES; the pets are anchored and only bob through the pivot today)
 - [x] (2026-10-27, obsolete: pets are now familiar models in Characters folders) Approve or reject the other five Blender pets so they can replace their shape versions the same way (add to MESHED in Models)
 - [ ] **Needs the user before going live:** upload the Frostling/Star Drake Idle and Attack clips (now in `ReplicatedStorage.Characters/<id>/Animations`; right-click a KeyframeSequence > Save to Roblox) and replace each with an Animation object holding the id. Without that, clips only play in Studio
@@ -85,7 +85,7 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [x] (2026-10-27) Build stage 1 "Lampwick Lane" backdrop (three rings + fog recipe) from [[Research/3D and Art/Backgrounds and Enemies - Mystic Victorian]]
 - [x] (2026-10-27) Restyle enemies to the roster (Hollow Parishioner, Fog Wisp, Brass Sentinel, The Unbound) with the silhouette and greyscale checks
 - [ ] Phone check of Lampwick Lane (10 shadow lamps + fog particles); add a Low setting that turns lamp shadows off if needed
-- [ ] Stage sets 2 to 5 (Harbour of Brass, Silent Cathedral, Clockwork Foundry, Above the Grey Veil) and switching backdrop by stage
+- [ ] Stage sets 3 to 5 (set 2 Harbour of Brass done 2026-10-27 overnight T08/T39; Harbour of Brass, Silent Cathedral, Clockwork Foundry, Above the Grey Veil) and switching backdrop by stage
 - [x] (2026-10-27) Restyle the portal (Fog Gate) and crystal (Ward Lantern) to fit Lampwick Lane
 - [x] (2026-10-27) Free placement with per-character ranges and footprints; range circle; data-driven characters; summoning card replaces the egg
 - [x] (2026-10-27) Restyle the pet roster as mystic familiars (rarity escalation: variants, glow, aura) using the Characters folders
@@ -93,9 +93,9 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [ ] Phone test: drag placement and range circle with touch
 - [ ] More maps/paths with line-of-sight blockers (difficulty from length and blockers)
 - [x] ProfileStore saving of gems, level, xp, skill points and skill tree (audit finding 1, 2026-10-27; `Vendor/ProfileStore.luau`, `MatchService`). A rejoin on the live game is still unchecked
-- [ ] Split GameClient (3,294 lines, at Luau's 200-local limit): move reveal and ultimate into modules (audit finding 8)
-- [ ] Delete duplicate audio: `Audio/Upload/music` vs `Audio/Music/game` (5 identical pairs) and raw mp3s (audit finding 7)
-- [ ] Apply the layered-beam kit (`CutsceneFX.kit.beam/impact/caption`) to GRAND ARCANA pillars and WINTER'S HUSH
+- [x] Split GameClient (3,294 lines, at Luau's 200-local limit): move reveal and ultimate into modules (audit finding 8)
+- [x] Delete duplicate audio: `Audio/Upload/music` vs `Audio/Music/game` (5 identical pairs) and raw mp3s (audit finding 7)
+- [x] Apply the layered-beam kit (`CutsceneFX.kit.beam/impact/caption`) to GRAND ARCANA pillars and WINTER'S HUSH
 
 ## From the community research (2026-10-27, suggestions, not started)
 - [ ] Spring helper for button press and hover, compared with tweens by the user ([[Research/UI/Community UI Approaches|Community UI Approaches]])

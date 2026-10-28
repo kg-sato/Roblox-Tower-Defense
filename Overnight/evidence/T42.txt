@@ -1,0 +1,5 @@
+PASS flashing-lights notice on the start screen.
+GameClient: under the start card, "Contains flashing lights." with a "Flashes: ON/OFF" toggle. One tap sends a batched Setting (flashes off and reduced motion on; tapping again turns flashes back on); the label follows the saved setting whenever the server confirms it. Changed from the task text: it toggles the setting in place instead of opening the Settings panel, because the panel lives in the in-match HUD that is hidden on the start screen; the full panel is still one tap away in the match.
+First placement inside the card was under the PLAY button's glow skin and could not be clicked; moved below the card.
+Play (real mouse click): toggle input began, clicked and activated; label changed to "Flashes: OFF"; server profile saved flashes=false, reducedMotion=true; restored afterwards. Capture: Overnight/captures/T42_flash_notice.jpg. Console: only the pre-existing lines.
+Side finding for future tests: Studio's mouse-input coordinates are in GUI space (without the 58 px top-bar inset).

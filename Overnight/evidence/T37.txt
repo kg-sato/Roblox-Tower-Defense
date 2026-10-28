@@ -1,0 +1,4 @@
+PASS HUD numbers use Shared.NumberFormat with the player's numberFormat setting.
+GameClient: fmt now calls NumberFormat.format(n, UI.numberMode) (all callers: coin and gem counters, upgrade costs, damage numbers, overrun banner); applySettings sets UI.numberMode from the setting and UI.refreshNumbers redraws the counters at once.
+Play (gem counter, 2,589 gems): default "2.59K"; switched via the Setting remote to grouped "2,589", scientific "2.59e3", back to short "2.59K". Console: only the pre-existing "not authorized to access Asset" lines.
+Note: values under 1,000 now show as plain numbers in every mode and 10,000-999,999 show with two decimals ("12.35K" instead of the old "12.3K"), per NumberFormat's tested rules.

@@ -1,0 +1,8 @@
+PASS cutscene skip by tap and at game speed 2x, clean return.
+CutsceneFX.play now runs the signature in its own thread; a mouse click or touch more than 0.4 s after the start (so the cast tap itself does not skip), or game speed 2x (auto after 1.3 s, once the cut-in has shown the name), cancels the thread and runs one cleanup: disconnects the cutscene's frame connections (camera driver and Grand Arcana's card ring are now tracked), clears the camera override, re-enables the hidden HUD, destroys the Cutscene stage, CutsceneGui and colour grade, then calls ctx.onSkip (GameClient releases the held enemy deaths). The old error path uses the same cleanup. GameClient passes SETTINGS.gameSpeed and onSkip.
+Play results (real Ult casts, real mouse clicks through Studio's input):
+- Starfall, tap at 1.03 s: stage gone at 1.03 s; CutsceneGui, grade and leftover connections gone; HUD back (capture Overnight/captures/T41_after_skip.jpg is a different run showing the board with HUD).
+- GrandArcana, tap at 1.31 s: stage gone at 1.31 s; gui false, grade false, HUD true.
+- WintersHush, tap at 1x: gone at 1.31 s, clean; at 2x with no tap: gone at 1.34 s, clean.
+Console: only the pre-existing "not authorized to access Asset" lines.
+Note: my test script's own require of CutsceneFX is a separate copy from the game's (command-bar context), so I measured the result in the world (stage, GUI, grade, HUD) rather than the module's lastSkip field.

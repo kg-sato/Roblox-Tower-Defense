@@ -1,0 +1,4 @@
+PASS Frostling signature cutscene exists and runs through the character registry (no new code needed tonight).
+Registry check: Frostling has Name "Frostling", Signature "WintersHush", Shot "ice". WINTER'S HUSH was built before tonight and upgraded in T10 (captions, impacts at the crack).
+Run evidence (from T10, same build): real Ult casts with a Frostling; the server announced signature WintersHush; ran end to end twice and returned to the HUD; captures Overnight/captures/T10/winters_hush_hush.jpg and winters_hush_shattered.jpg; console clean apart from the pre-existing lines.
+Look UNVERIFIED.

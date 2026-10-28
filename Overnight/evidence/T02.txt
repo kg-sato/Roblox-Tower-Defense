@@ -1,0 +1,2 @@
+PASS Tests/MatchSim.test.luau run in Studio Edit mode: 31 checks ok, 0 FAIL (16 existing, 15 new: leaked wave clears/pays/resets streak, clean wave keeps streak, boss flagged/queued/clock/escape, overrun stage and coin loss, never below stage 1, tutorial leaks free).
+Decision written to Roblox Dev/Systems.md section "Stage, wave and leak rule".

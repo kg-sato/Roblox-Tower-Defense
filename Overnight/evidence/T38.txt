@@ -1,0 +1,1 @@
+PASS Tests/StageSets.test.luau: 18 of 18 checks ok in Studio Edit mode (stages 1-5 Lampwick, 6-10 Harbour, 11 and 16 wrap, 0 / negative / 5.9 clamp or floor, 1e6 valid, every set has id, count and lighting).

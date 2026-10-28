@@ -48,8 +48,17 @@ Design: [[Game Design Doc]]. Patterns: [[Merge Tower Defense Playbook]].
 - Client applies changes immediately and saves debounced through one RemoteEvent. Server checks each key against the allowed values, clamps or rejects anything else, and rate-limits the event.
 - Systems that read settings: VFX pool (particle cap), `UIAnimator` (flashes, later reduced motion), `NumberFormat`, lobby backdrop, audio groups.
 
+### Stage, wave and leak rule
+- Decision (2026-10-27, covered by `Tests/MatchSim.test.luau`): a wave that leaks still clears and advances the stage and pays the gem bonus at combo 0; the leak resets the streak (after `streakGuard` leaks) and costs crystal HP (none in the tutorial). You cannot lose.
+- Crystal HP 0 pushes the run back `OVERRUN_STAGE_LOSS` stages (never below 1), takes `OVERRUN_COIN_LOSS` of coins, resets the streak, heals the crystal. An unkilled boss when its clock ends sends the run back one stage.
+
 ### Currency
 - In-match coins: server only, reset per match. Meta gems/shards: saved.
 | Stage backdrop (Lampwick Lane) | testing (built 2026-10-27, checked in Play on PC) | Server | ServerScriptService.Backdrop | Visual only; see [[Research/3D and Art/Backgrounds and Enemies - Mystic Victorian]] |
 | Free placement + range display | testing (2026-10-27; headless + Play checks pass) | Shared/Server/Client | Config.canPlace, MatchSim.move, GameClient drag | Bloons-style footprints; max 12 |
 | Character registry | testing (2026-10-27; no-code add tested) | Shared | ReplicatedStorage.Characters | see [[How to Add a Character]] |
+| Settings (save, panel, wiring) | testing (2026-10-27 overnight; unit tests + Play clicks) | Shared/Server/Client | Shared.SettingsDefaults, MatchService "Setting", SettingsPanel, GameClient FXK.applySettings | 1 save per second, batch up to 16 keys; flashes, reduced motion, shake, volumes, effects detail, numbers, game speed |
+| Game speed 1x/2x | testing (2026-10-27 overnight; headless equal-results test + Play) | Server/Client | MatchService gclock + SettingsDefaults.stepsFor, GameClient FXK.simNow, ProjectileFX.timeScale | cutscene skip not done |
+| Effect budget / Low graphics | testing (2026-10-27 overnight; measured in Play) | Client | GameClient burst cap, FXK.budgetEmitter, ProjectileFX.quality, Backdrop LampLight | Low: lamp shadows off, emitter Rate x0.5, secondary layers off |
+| NumberFormat | built, tested headless (not used by the HUD yet) | Shared | Shared.NumberFormat | short, grouped, scientific |
+| Summon reveal module | refactor (2026-10-27 overnight) | Client | StarterPlayerScripts.RevealSection | split from GameClient; backup in ServerStorage.GameClient_backup_T14 |

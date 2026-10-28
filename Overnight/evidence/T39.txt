@@ -1,0 +1,4 @@
+PASS Harbour of Brass now reads at the default board camera.
+BackdropHarbour gained an edge ring on Lampwick's rail rectangle (x -54..50, z -30..32): chain posts with brass caps and chains between them, plank dock strips along the long sides, bollards with rope coils, crate stacks at the corners, 8 cold harbour lamps on the rail (LampLight, 15 harbour lamps in total) and one crane at the near-left corner leaning over the edge. Everything is dark wood, iron and brass, so the path stays the lightest value.
+Captures at the default camera: before Overnight/captures/T39_before.jpg (bare board in cold light), after T39_after.jpg (lamps, posts, chains, bollards and rope visible around the board; the path is still the brightest thing). Low setting: all 15 harbour lamps lose shadows. Console: only the pre-existing "not authorized to access Asset" lines.
+Look UNVERIFIED. The crane and ships are still mostly outside the frame (the top edge shows the far dock line).

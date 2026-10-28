@@ -1,0 +1,4 @@
+Gate-verified task (verify-all exit 0, 30 sheets PASS). tools/fx_sheet.py gained: compose (COMPOSITES table: layers of our sheets and ingested CC0 sheets with start frame, alpha and an envelope), recolor-test and contact.
+Composites: shockwave_smoke (smoke aftermath under the ring; hit frame 7, max jump 0.07), ember_burst (fire licks after a hit flash, for ember familiars; hit 12), ember_aura_loop (flame under the orbiting wisps; seamless). One fix from the checks: the smoke layer first came in too early and moved the hit, giving a 0.368 jump; it now fades in after the hit settles.
+Recolor test (Roblox-style multiply, one mono sheet, five rarity tints Common/Rare/Epic/Legendary/Mythic): mean colour error at most 0.01/255, PASS; strip at Overnight/captures/fx_recolor_test.png.
+Contact sheet for the morning review: Overnight/captures/fx_contact.png (30 effects, 8 frames each, names on the left). Look UNVERIFIED.

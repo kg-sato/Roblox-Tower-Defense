@@ -1,0 +1,92 @@
+
+## Run 2026-10-27 19:53 on overnight/2026-10-27 (8.0 h, 60 loops)
+- 19:57 T01 export: 40 scripts mirrored via tools/export_receiver.py (port 8791, GET chunks); byte sizes match Studio; re-run the same Luau loop after script changes
+- 19:57 T01 DONE (gate-verified): Mirror every Studio script into `Studio_Export/` so git can checkpoint Studio-only work
+- 19:58 T32 audit written to evidence/T32.txt: map and Path are global singletons, sims per player
+- 19:58 T32 DONE (attested): Read-only audit of how the stage map is built and who shares it (MapBuilder, Config.PATH, the Workspace map): is one map shared by all players in a server, and what would per-run layouts need; write the answer to `Overnight/evidence/T32.txt`, change nothing
+- 19:59 T33 Tests/Balance.test.luau ran in Studio (1 s); baseline in evidence/T33.txt; static server for Tests on 8792
+- 19:59 T33 DONE (attested): Save the balance harness as a headless test `Tests/Balance.test.luau`: bot plays full runs on fixed seeds with strategies idle, roll only, upgrade and full; reports stage by minute (1, 2, 3, 5, 10, 20), gems per minute, time to first Rare, Epic and Legendary, damage per second by rarity and tier, enemy HP by stage; baseline only, no game changes
+- 20:02 T35 UI Quality Bar written; captures in Overnight/captures/T35; SendMessage is denied by the guard, subagent digest failed
+- 20:02 T35 DONE (attested): UI and effects quality bar, with a research gate: write `Roblox Dev/Research/UI/UI Quality Bar.md` that lists, for each priority screen and effect (in-match HUD, summon reveal, familiar panel, level-up and next-unlock bar, skill tree, boss intro, hit and merge feedback), what the best reference games do (layout, hierarchy, type, colour, states, motion timing, sound) with the reference file or URL cited, compares it with the current build (captures of our UI in Play into Overnight/captures/), and ends with a gap list in priority order
+- 20:03 T02 31/31 checks pass in Studio; Systems.md leak rule added
+- 20:03 T02 DONE (attested): Headless test coverage for stage/wave/boss flow and the leak rule (leaked waves advance and pay) in `Tests/MatchSim.test.luau`, document the decision in `Roblox Dev/Systems.md`
+- 20:03 T03 NumberFormat 24/24 checks; module in Shared, not wired into HUD yet
+- 20:03 T03 DONE (attested): `NumberFormat` module with headless tests: 999, 1500, 1.5M, 13.66T, grouped, scientific, zero, negative
+- 20:04 T04 settings schema+server validation+1/s limit; 32 unit checks and a Play run pass
+- 20:05 T04 DONE (attested): `SettingsDefaults` + `settings` in the ProfileStore template with server validation and a 1 per second rate limit on the save remote; bad values rejected; tests
+- 20:08 T05 settings wired (Settings event, applySettings, shake in CutsceneFX); 11 toggles observed in Play; hatch/impact no-flash not captured
+- 20:08 T05 DONE (attested): Wire reduced motion, flashes, shake and volume into the existing SETTINGS stub (GameClient, CutsceneFX, ImpactFX); no-flash variant of the hatch reveal and cutscene impact frames
+- 20:12 T06 settings panel: validator 0 problems on content, real-click toggle+reset verified server side; shell not validated; sliders/touch untested
+- 20:12 T06 DONE (attested): Settings panel (gear button; Sound, Display, Accessibility; reset to defaults) in the glass style, through `UIKit` rules, validator clean
+- 20:13 T07 lamp shadows off on Low, 10/10 lights toggled in Play
+- 20:13 T07 DONE (attested): Low setting that turns Lampwick Lane lamp shadows off (needs T05)
+- 20:21 T22 emitter budget: Low boss peak 26 vs 33 default, Rate sum -63%, familiar emitters 9->3
+- 20:22 T22 DONE (attested): Effect budget and low-graphics fallback (needs T05): cap live emitters, short lifetimes (0.2 to 1 s) for repeated effects, drop secondary layers on Low, scale Rate by quality setting; record live emitter counts during a boss wave
+- 20:27 T34 game speed 1x/2x: 28 headless checks, Play measured 8.0 vs 15.9 studs/s, no teleport
+- 20:27 T34 DONE (attested): Game speed setting 1x or 2x (needs T04): the server validates the value (only 1 or 2, rate limited) and runs two 0.1 s sim steps per tick at 2x so results stay identical; the client enemy clock and projectile timing read the same speed; the setting is saved with the other settings
+- 20:31 T14 RevealSection split; real roll + 3 DebugReveals + DebugUlt clean after ease() fix
+- 20:33 BLOCKED checkpoint 1: the checkpoint script stops at its staging step. git 2.54 exits with code 1 because the script's exclude pathspecs name paths that .gitignore already ignores (Overnight/ACTIVE, Overnight/state.json, Overnight/captures, Roblox Dev/Codex Handoff); it staged all 69 files but made no commit. The script is a protected control file, so it was not edited and raw git writes are denied. Morning fix: remove those four excludes from the script (they are ignored anyway). All work is on disk and staged; nothing is lost.
+- 20:32 T14 DONE (attested): Split the reveal/hatch section out of GameClient into a module, same method as UltFX (backup first, ctx table, Play check; needs T01 and T02 done; do before T20)
+- 20:34 T18 EditableImage as ParticleEmitter/Beam texture: NO (accepted but not drawn); UI ImageLabel yes
+- 20:34 T18 DONE (attested): Spike: can a world ParticleEmitter flipbook use a FrameArt EditableImage as its texture? Test and record the answer; if not, world flipbooks need uploaded sheets (Section B)
+- 20:36 T16 FlipbookFX kit: 20 effects spawn and clean back to baseline 666/19; UI player stepped and stopped
+- 20:36 T16 DONE (attested): FlipbookFX kit in `VFX/FlipbookFX.luau` (install by HTTP pull like CutsceneFX): world one-shot and loop flipbook player (Rate 0, Clear then Emit(1), Debris at lifetime+1), UI player (ImageRectOffset stepping, returns stop()), emitters driven by EmitCount/EmitDelay/EmitDuration attributes, resize and recolor helpers, an `ReplicatedStorage.Effects` registry; no uploads
+- 20:40 T24 fx_sheet library: 14 sheets (12 new) + mono, verify-all PASS
+- 20:40 T24 DONE (gate-verified): Grow `tools/fx_sheet.py` into an original sheet library in `VFX/flipbooks/`: at least 10 effects (hit flash, slash arc, shockwave ring, ground sigil variants, loot beam column, aura wisps loop, coin and gem sparkle, heal, frost nova, smoke puff), each with a coloured and a `_mono` sheet, 4x4 or 8x8 by length, every one passing verify-all; log each in `VFX/ASSETS.md`
+- 20:44 T27 Unity Labs CC0 ingest: 13 sheets + mono, verify-all PASS (27 sheets)
+- 20:44 T27 DONE (gate-verified): Ingest the CC0 Unity Labs sets the user downloads into `VFX/third_party/unity_labs/` (folder now exists): write `tools/fx_ingest.py` that unpacks the flipbook zips, extracts alpha from luminance, resamples to 4x4 or 8x8 with transparent margins, applies the violet-gold-white gradient map and a posterise step, writes coloured and `_mono` sheets to `VFX/flipbooks/`, and logs source, URL and CC0 in `VFX/ASSETS.md`
+- 20:45 T28 composites (3), recolor test PASS, contact sheet Overnight/captures/fx_contact.png; verify-all 30 PASS
+- 20:45 T28 DONE (gate-verified): Compose layered effects in `tools/fx_sheet.py`: allow an effect to stack procedural shapes with ingested CC0 layers (smoke aftermath under the ring, fire licks for ember familiars), add a runtime-style recolor test (same sheet, five rarity tints) and a contact sheet of every effect for the user to review in the morning at `Overnight/captures/fx_contact.png`
+- 20:52 T25 FXRecipes: 6 recipes x 3 beats captured, hit-stop/shake logged, emitters 19->23->19
+- 20:52 T25 DONE (attested): Effect recipes in Luau on the T16 kit: placement, merge/upgrade, enemy defeat, familiar hit, summon reveal burst per rarity (violet to gold to white ramp by rarity), ultimate impact; each has anticipation, hit, aftermath beats, hit-stop of 2 to 5 frames and shake scaled to importance (once per impact), recolor and resize in one call, uses procedural FrameArt art until sheets are uploaded
+- 20:54 T26 FX gate: 6/6 pass (emitters <= 7, cleanup <= 3.1 s, 0 parts left; hot area <= 1.1%)
+- 20:54 T26 DONE (attested): Effect quality gate script in Studio: for each recipe record peak luminance, hot-area percent, live emitter count at peak, cleanup time, and fail any recipe over the emitter cap or leaving parts behind; write the table to `Overnight/evidence/T26.txt`
+- 20:56 T19 TDFeedback: placement/upgrade/range/splash/coin fire in Play, 0 parts left
+- 20:56 T19 DONE (attested): Tower-defense feedback set sized for the far camera (bold, large, 512 px style): placement ring + turning sigil, merge/upgrade chevrons up a light column coloured by tier, range/splash ring sized from Config range, enemy-defeat coin drop; built from procedural parts/FrameArt through T16
+- 20:58 T20 rarity accents (beam/aura/sigil) + SharedSummon banner; all 4 rarities rolled via QAGrant
+- 20:59 T20 DONE (attested): Rarity-escalated accents on the summon reveal (needs T14): loot beam by rarity, small aura welded to the revealed familiar (positive ZOffset), larger shared moments only for the highest rarities, personal effects stay local
+- 21:01 T21 slash-arc style: combo 0/160/-35, crit half speed, ink LightEmission 0; cleans up
+- 21:01 T21 DONE (attested): Slash-arc hit style in `VFX/ProjectileFX.luau`: arc placed 3 studs in front (-Z), per-hit rotation in a combo (0, 160, -35 degrees), TimeScale 0.5 for heavy hits, Trail pairing, ZOffset 1 to 2, additive only on dark backgrounds (LightEmission 0 for smoke and ink)
+- 21:06 T36 quality pass: HUD below top bar + icon fallback, reveal text moved, TDFeedback wired (merge column, coin drops); recording failed, freeze captures used
+- 21:07 T36 DONE (attested): Apply the UI and effects quality pass (needs T35, T06, T16, T20, T25): polish the existing priority screens in the order of the T35 gap list (in-match HUD, summon reveal, familiar panel, skill tree) using the `make-ui` skill, UIKit rules and the effect kit; each change cites its line in `Roblox Dev/Research/UI/UI Quality Bar.md`; if a gap is marked UNKNOWN, skip it and say so; then test-run each changed screen and effect in Play, record the Studio window and review the frames the way the reference videos were studied
+- 21:09 T30 rbxl numeric decode (103 layers) + 3 ported recipes; peaks <= 21 emitters, back to baseline
+- 21:10 T30 DONE (gate-verified): Extend `tools/rbxl_emitters.py` to read numeric properties (Size, Transparency and Color sequences, Lifetime, Rate, Speed, Rotation, Squash, LightEmission, FlipbookLayout, ZOffset) with the binary rules (interleaved floats, sequence keypoints) and write `VFX/flipbooks/yuruzuu_recipes.json`; then port Hollow Purple (orb ultimate), Healing and Arrow Rain (projectile rain) as layered recipes in our kit using our own textures, not their ids
+- 21:13 T29 ParticleFX registry (44, ids from asset_ids.json) + ParticleFXLib; 88 plays clean up; uploaded art still processing on Roblox
+- 21:13 T29 DONE (attested): FlipbookFX registry from `VFX/flipbooks/particlefx_catalog.json`: effect name to emitter settings (Grid8x8, OneShot, Lifetime, Rate 0, LightInfluence 0, Size by use), using uploaded asset ids from `Overnight/asset_ids.json` when present and our procedural FrameArt or `tools/fx_sheet.py` art as fallback when an id is missing; one function `FXK.play(name, cframe, opts)` with recolor and resize; applies the fit table in the research note (placement, merge, enemy defeat, range ring, reveal accents, hits, status, UI)
+- 21:15 T23 sheets wired (upgrade, coin) with fetch-status gate + procedural fallback; 4 of 6 ids ready
+- 21:15 T23 DONE (attested): Wire the particlefx.studio sheets the user supplies (asset ids in `Overnight/asset_ids.json`) into the Effects registry for placement, upgrade, splash ring, coin drop, rarity frames, achievement; keep procedural fallbacks when an id is missing (needs T29)
+- 21:18 T08 stage sets data + Harbour of Brass set; switch 1->6->1/11 verified in Play; harbour props mostly off-camera
+- 21:18 T08 DONE (attested): Stage sets as data: one folder per set, backdrop switches by stage, Lampwick Lane as the template; set 2 Harbour of Brass backdrop per [[Research/3D and Art/Backgrounds and Enemies - Mystic Victorian]]
+- 21:22 T09 hit reactions per style (tint/push/wobble/jitter + accent); 6 styles seen in a real wave, all 8 checked directly
+- 21:22 T09 DONE (attested): Hit reaction on enemies per projectile style (bolt, flame, leaf, spark, ice, stone, card, star)
+- 21:23 T17 UIFlipbooks: 6 FrameArt sheets, 16 frames each, painted once; 4 rarities captured
+- 21:24 T17 DONE (attested): UI flipbooks painted by FrameArt (lazy, cached, no upload): animated rarity-frame shimmer per rarity (dust, glints, comet trail, border flame), claim-button sparkle, achievement burst, played by the T16 UI player; glow effects only over dark panels
+- 21:26 T10 Grand Arcana layered pillars + impacts + captions, Winter's Hush captions + impacts; both run end to end
+- 21:26 T10 DONE (attested): Beam, impact and caption kit for GRAND ARCANA pillars and WINTER'S HUSH in `VFX/CutsceneFX.luau` (install by HTTP pull)
+- 21:28 T11 Starfall end to end x5, 5 phase captures, no errors; judgement notes for a human
+- 21:28 T11 DONE (attested): Run the full STARFALL cutscene end to end, capture freeze frames at each phase, fix only errors, regressions and timing bugs; record what a human should judge
+- 21:28 T12 Arcane Fox signature already wired (VoltFox Signature=GrandArcana); runs per T10
+- 21:28 T12 DONE (attested): Arcane Fox signature cutscene via [[How to Add a Character]], reusing the kit
+- 21:28 T13 Frostling signature already wired (Signature=WintersHush); runs per T10
+- 21:29 T13 DONE (attested): Frostling signature cutscene, same method
+- 21:30 T31 48 AnnoMotion CC0 icons cut from the PSD with alpha; contact sheet
+- 21:30 T31 DONE (attested): Optional: AnnoMotion fantasy item icons (CC0, JPG sheet and PSD in Downloads) cut into individual PNGs with alpha for relic or skill-tree icons, logged in `VFX/ASSETS.md`; only if the sheet background can be removed cleanly
+- 21:30 original list done at 1.6 h; added T37-T41 (follow-ups found tonight) per the user's 'under 6 hours: add more and continue'; T15 hygiene moved to the end (PASS now)
+- 21:32 T37 HUD numbers via NumberFormat + setting (short/grouped/scientific verified in Play)
+- 21:32 T37 DONE (attested): Use NumberFormat in the HUD: coin, gem, cost and damage numbers go through Shared.NumberFormat with the player's numberFormat setting (short / grouped / scientific), replacing GameClient's own fmt
+- 21:32 T38 StageSets test 18/18
+- 21:32 T38 DONE (attested): Headless test for StageSets.forStage (stages 1-5 Lampwick, 6-10 Harbour, 11 wraps, 0 and negatives clamp, huge stage) in `Tests/StageSets.test.luau`
+- 21:33 T39 Harbour edge ring (posts, chains, docks, bollards, 8 lamps, crane); before/after captures
+- 21:33 T39 DONE (attested): Harbour of Brass reads at the board camera: move piers, bollards, lamps and one crane close to the board edge like Lampwick's rails and lamps; keep the path the lightest value
+- 21:34 T40 FrameArt.thinRing + no fill + decal above path; ring reads clean over the street
+- 21:34 T40 DONE (attested): Fix the FrameArt ring on world billboards and SurfaceGuis (reads as a dark filled disc in T25 captures): transparent centre, bright rim
+- 21:39 T41 cutscene skip (tap, 2x auto) with full cleanup; all 3 signatures verified
+- 21:39 T41 DONE (attested): Cutscene skip: at game speed 2x, or when the player taps during a signature cutscene, end it early and return the camera cleanly (no leftover stage parts or GUIs)
+- 21:39 vault: Backlog ticked (settings x3, GameClient split, duplicate audio, beam kit, leak rule); added T42-T43 from the Backlog
+- 21:41 T42 start-screen flashing notice + Flashes toggle (real click verified, saved)
+- 21:42 T42 DONE (attested): Flashing-lights notice on the start screen (Backlog: needed once flash effects exist): one short line with a link-style button that opens Settings > Accessibility; hidden once the player has seen it this session
+- 21:43 T43 Silent Cathedral set 3 + data + test 23/23; stage 11 shows it in Play
+- 21:43 T43 DONE (attested): Stage set 3 The Silent Cathedral (stages 11-15): moonlit gothic nave around the board per [[Research/3D and Art/Backgrounds and Enemies - Mystic Victorian]] (stained glass, candles, covered statues), data entry in StageSets, edge ring visible at the board camera, lamps named LampLight
+- 21:43 T15 hygiene PASS (also export, compile, verify-all)
+- 21:43 T15 DONE (gate-verified): Repo hygiene check passes at the end of the run
+- 21:44 Run ended: all tasks done or blocked

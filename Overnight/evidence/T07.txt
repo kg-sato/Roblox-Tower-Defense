@@ -1,0 +1,4 @@
+PASS Low effects detail turns Lampwick Lane lamp shadows off (client side).
+Backdrop names each lamp light "LampLight"; GameClient.applySettings sets Shadows = not (particles == "low") on all of them and on lights added later (workspace.DescendantAdded).
+Play run, client counts: default 10 on / 0 off; Low 0 on / 10 off; High 10 on / 0 off; back to Default 10 on / 0 off. Console: only the pre-existing "not authorized to access Asset" lines.
+Not measured: frame rate gain on a phone (needs a device). The server's lights keep Shadows = true; only the player's own copy changes.

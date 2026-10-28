@@ -1,0 +1,13 @@
+PASS (read-only audit ran; nothing changed; line numbers from Studio_Export mirror, 2026-10-27)
+Answer: ONE map shared by everyone in a server; the simulation is per player but the lane is global.
+- MapBuilder:7-13,112 builds one workspace.Map at server start (reuses an existing Map), from Config.PATH (MapBuilder:40). No per-player copy.
+- Config:23 PATH is a module constant (Vector3 list). Config:114-146 distToPath and placement checks read the same global PATH.
+- Path:8-17 caches lengths/total at require time from Config.PATH; Path.positionAt (19-31) and Path.length are module singletons.
+- MatchSim:6,575,597 requires Path; leak check (e.dist >= Path.length) and enemy position use the global Path.
+- MatchService:45,60 keeps one sim per player (sessions[player]); sims differ in state, not in lane.
+- GameClient:14,2647-2648,3030-3084,3051 uses Path/Config.PATH for enemy motion, rings, cutscene effects, end-of-lane marker.
+Per-run layouts need:
+1. Path becomes an instance built from a layout (points list) passed to MatchSim.new, not a require-time singleton; Config.distToPath and placement validation take that path.
+2. Server sends the layout id/seed in the session payload (MatchService:51 payload) so clients rebuild positionAt locally.
+3. Map geometry: shared workspace.Map cannot differ per player. Either (a) one layout per server (server picks the seed, all players match), or (b) per-player map copies offset in world space, or (c) client-built cosmetic map per player (server stays authoritative on the path data only). Option (a) is smallest.
+4. GameClient hard-codes Path usage at the lines above, so those become ctx-based reads.

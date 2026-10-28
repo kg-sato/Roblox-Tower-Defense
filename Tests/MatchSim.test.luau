@@ -146,6 +146,85 @@ return function(Shared)
 			end
 			check("ultimate announces the signature caster", ult and ult.pet == withSig, ult and ult.pet)
 		end
+
+		-- stage, wave and boss flow; the leak rule (decision in Systems.md: a leaked wave still advances and pays)
+		local function runUntil(s, pred, maxSteps)
+			for _ = 1, maxSteps or 3000 do
+				s:step(0.1)
+				if pred(s) then
+					return true
+				end
+			end
+			return false
+		end
+		local function record(s)
+			local log = {}
+			s.emit = function(k, p)
+				log[k] = log[k] or {}
+				table.insert(log[k], p)
+			end
+			return log
+		end
+
+		local leakSim = newSim(11, false)
+		local leakLog = record(leakSim)
+		local gems0, hp0 = leakSim.gems, leakSim.crystalHp
+		leakSim:startWave()
+		check("leaked wave still clears", runUntil(leakSim, function(s) return s.stage == 2 end))
+		check("leaked wave pays the clear bonus", leakSim.gems > gems0, leakSim.gems - gems0)
+		check("leaked wave resets the streak and costs crystal hp", leakSim.combo == 0 and leakSim.crystalHp < hp0 + 2 and leakLog.Leak ~= nil)
+		check("leak clear is reported as not perfect", leakLog.Clear ~= nil and leakLog.Clear[1].perfect == false)
+
+		local perfect = newSim(12, false)
+		perfect.gems = 1e6
+		for _ = 1, 8 do
+			perfect:roll()
+		end
+		perfect:startWave()
+		runUntil(perfect, function(s) return s.stage == 2 end)
+		check("a clean wave advances the stage", perfect.stage == 2, perfect.stage)
+		check("a clean wave keeps the streak", perfect.leaked == false and perfect.combo == 1, tostring(perfect.combo))
+
+		local boss = newSim(13, false)
+		local bossLog = record(boss)
+		boss.stage = Config.BOSS_EVERY
+		boss.crystalHp = 1e6
+		boss:startWave()
+		check("boss stage is flagged", Config.isBossStage(Config.BOSS_EVERY) and bossLog.Stage[1].boss == true)
+		local queuedBoss = false
+		for _, q in boss.queue do
+			if q.kind == "Boss" then
+				queuedBoss = true
+			end
+		end
+		check("boss stage queues a Boss", queuedBoss)
+		runUntil(boss, function(s) return s.bossClock ~= nil end)
+		check("boss arrival starts the boss clock", boss.bossClock ~= nil)
+		boss.bossClock = 0.05
+		runUntil(boss, function(s) return bossLog.BossEscaped ~= nil end, 20)
+		check("an unkilled boss sends the run back one stage", bossLog.BossEscaped ~= nil and boss.stage == Config.BOSS_EVERY - 1 and boss.state == "ready", boss.stage)
+
+		local over = newSim(14, false)
+		local overLog = record(over)
+		over.stage, over.coins, over.crystalHp = 6, 100, 1
+		over:startWave()
+		runUntil(over, function(s) return overLog.Overrun ~= nil end)
+		check("falling crystal pushes the stage back", over.stage == 6 - Config.OVERRUN_STAGE_LOSS, over.stage)
+		check("overrun costs a share of coins and the streak", over.coins <= math.ceil(100 * (1 - Config.OVERRUN_COIN_LOSS)) and over.combo == 0, over.coins)
+		check("overrun heals the crystal and waits for a new wave", over.crystalHp == over:maxHp() and over.state == "ready")
+
+		local low = newSim(15, false)
+		low.stage, low.crystalHp = 2, 1
+		local lowLog = record(low)
+		low:startWave()
+		runUntil(low, function(s) return lowLog.Overrun ~= nil end)
+		check("overrun never drops below stage 1", low.stage == 1, low.stage)
+
+		local tut = newSim(16, true)
+		local tutHp = tut.crystalHp
+		tut:startWave()
+		runUntil(tut, function(s) return s.stage == 2 end)
+		check("tutorial leaks cost no crystal hp", tut.crystalHp == tutHp, tut.crystalHp)
 	end)
 	if not ok then
 		failed += 1

@@ -1,0 +1,8 @@
+PASS full STARFALL cutscene run end to end five times in Play (real Ult with a StarDrake; the server chose the Starfall signature each time), freeze-frame captured at each phase by timing from the Ult event: Overnight/captures/T11/
+ 1 (0.25 s) letterbox, grade, magic circle under the drake, cut-in band "STAR DRAKE / STARFALL", caption [ STARS GATHER ], gold column
+ 2 (1.1 s) cut-in still up, the drake rises in the column
+ 3 (1.75 s) camera up to the sky: ring of stars above the skyline
+ 4 (2.25 s) stars fall with layered beams onto the enemies, impacts and shockwaves, caption [ IMPACT CONFIRMED ]
+ 5 (3.05 s) camera easing back over the board, last beam fading, caption fading
+After the run: no cutscene stage folders or cutscene GUIs left, HUD visible, camera back on the board camera (Scriptable is the game's normal board camera). Console: only the pre-existing "not authorized to access Asset" lines and the ProfileStore line. No errors, regressions or timing bugs found, so nothing was changed.
+For a human to judge (UNVERIFIED): the gold column in phases 1-2 is very bright and fills the middle of the frame (it covers most of the cut-in background); the cut-in band covers the drake's rise, so the rise is barely seen; the falling stars are white rather than gold; the impacts read as flat white discs at this angle; the boss (top hat, green glow) is outside the main impact cluster in phase 5. And the user's earlier note "effects need work" for Star Drake still needs the specifics.

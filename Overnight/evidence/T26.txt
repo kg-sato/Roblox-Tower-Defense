@@ -1,0 +1,15 @@
+PASS effect quality gate: no recipe over the emitter cap, none leaves parts behind.
+Gate script: Tests/harness/FXGate.luau (Play, client; plays each recipe 3.5 s apart, samples every frame). Cap = 24 live emitters added per recipe. Baseline scene: 19 emitters, 0 effect parts. After all recipes + 6 s: 0 parts left over.
+Pixel measures: tools/fx_gate_frames.py was written for a screen recording, but the PrintWindow recording of Studio came back as identical frames (mean jump 0.0), so peak luminance and hot area were measured on the T25 freeze-frames instead (Overnight/captures/T25, baseline = the empty familiarHit anticipation frame; brightest of the three beats per recipe; hot = pixels > 0.9 that were not hot in the baseline).
+
+| recipe | peak emitters | peak parts | cleanup s | peak lum (beat) | hot area % | changed area % | result |
+|---|---|---|---|---|---|---|---|
+| placement | 2 | 4 | 2.27 | 0.969 (hit) | 0.13 | 0.75 | pass |
+| merge | 4 | 5 | 2.29 | 0.972 (aftermath) | 0.14 | 0.65 | pass |
+| enemyDefeat | 5 | 4 | 2.15 | 0.972 (aftermath) | 0.10 | 0.70 | pass |
+| familiarHit | 1 | 2 | 2.08 | 0.972 (hit) | 0.04 | 0.34 | pass |
+| summonBurst (Legendary) | 7 | 7 | 3.10 | 0.968 (hit) | 1.10 | 9.01 | pass |
+| ultimateImpact | 4 | 5 | 2.41 | 0.968 (hit) | 0.25 | 2.55 | pass |
+
+Reading: hot areas are tiny (largest 1.1 % of the screen, the Legendary summon), so no flash risk; the same numbers say the effects are small at the default camera (see T25). Luminance is from freeze frames, not a continuous recording, so short peaks between beats are not covered (UNVERIFIED).
+Also: moved the two harness scripts to Tests/harness/ and gave Balance.test.luau a check() so the hygiene check (every Tests/*.luau has checks) holds; Balance still PASS.

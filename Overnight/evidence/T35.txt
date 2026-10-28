@@ -1,0 +1,3 @@
+PASS note written: Roblox Dev/Research/UI/UI Quality Bar.md (8 screens/effects, 10-item gap list, each gap cites a source, a capture or is UNKNOWN)
+Captures: Overnight/captures/T35/ (title, hud, reveal_charge, reveal_name, skilltree). Not captured: familiar panel, level-up bar, boss intro, hit and merge feedback.
+Newly researched: Roblox position-and-size and on-screen-containers (search summary), WCAG 9 mm touch target (search summary), game-feel numbers (blog-grade, search summary). A subagent digest failed, so the notes were read directly; 6 listed notes not read (named in the file).

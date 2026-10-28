@@ -9,7 +9,9 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[2]
 PATHS = ["VFX", "Tests", "Vendor", "tools", "Audio", "Roblox Dev", "UI Kit", "Stages", "Studio_Export", "Overnight", "Blender", "Animation Kit", ".gitignore", "CLAUDE.md"]
-EXCLUDE = [":(exclude)*.rbxl", ":(exclude)Overnight/ACTIVE*", ":(exclude)Overnight/state.json", ":(exclude)Overnight/captures/*", ":(exclude)Roblox Dev/Codex Handoff/*", ":(exclude)Roblox Dev/.obsidian/*"]
+# Paths already in .gitignore (Overnight/ACTIVE*, state.json, captures, Codex Handoff) must not be listed here:
+# git 2.54 exits 1 when an exclude pathspec names an ignored path, which aborted every checkpoint on 2026-10-27.
+EXCLUDE = [":(exclude)*.rbxl", ":(exclude)Roblox Dev/.obsidian/*"]
 
 
 def git(*a, check=True):

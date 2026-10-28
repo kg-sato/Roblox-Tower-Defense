@@ -51,6 +51,13 @@ local function wait(t)
 	task.wait(t)
 end
 
+-- Frame connections a cutscene opens; a skip disconnects them all (T41).
+CutsceneFX._conns = {}
+local function hold(conn)
+	table.insert(CutsceneFX._conns, conn)
+	return conn
+end
+
 -- ===== kit =====
 
 -- Folder for 3D pieces; destroyed when the cutscene ends.
@@ -115,13 +122,13 @@ function K.camera(ctx)
 	local v = Instance.new("CFrameValue")
 	v.Value = ctx.gameCamera()
 	local shake = 0
-	local conn = RunService.RenderStepped:Connect(function()
+	local conn = hold(RunService.RenderStepped:Connect(function()
 		local cf = v.Value
-		if shake > 0 and not ctx.settings.reducedMotion and IF then
+		if shake > 0 and not ctx.settings.reducedMotion and ctx.settings.shake ~= false and IF then
 			cf = cf * CFrame.new(IF.shakeOffset(os.clock(), shake))
 		end
 		ctx.setCamera(cf)
-	end)
+	end))
 	local c = {}
 	function c.to(cf, t, style, dir)
 		if t <= 0 then
@@ -399,6 +406,10 @@ function K.caption(ov, text, color)
 	s.Thickness = 1.5
 	s.Color = Color3.new(0, 0, 0)
 	s.Parent = l
+	if ov.lastCaption and ov.lastCaption.Parent then
+		ov.lastCaption:Destroy() -- one caption at a time (two phases close together overlapped)
+	end
+	ov.lastCaption = l
 	tw(l, 0.2, { TextTransparency = 0 })
 	task.delay(0.9, function()
 		tw(l, 0.3, { TextTransparency = 1 })
@@ -610,7 +621,7 @@ CutsceneFX.signatures.GrandArcana = function(ctx)
 	end
 	-- rise and fan out in a slowly turning ring
 	local t0 = os.clock()
-	local ringConn = RunService.Heartbeat:Connect(function()
+	local ringConn = hold(RunService.Heartbeat:Connect(function()
 		local e = os.clock() - t0
 		for i, c in cards do
 			if not c.flying then
@@ -620,8 +631,9 @@ CutsceneFX.signatures.GrandArcana = function(ctx)
 				setCard(c, CFrame.lookAt(p, p + (p - o) * Vector3.new(1, 0, 1)))
 			end
 		end
-	end)
+	end))
 	K.gather(stage, o, violet, 18, 7, 1.2)
+	K.caption(ov, "[ THE CARDS ARE DRAWN ]", Color3.fromRGB(225, 200, 255))
 	wait(0.4)
 	ctx.sfx("summon")
 	K.cutIn(ov, ctx, 0.75)
@@ -660,6 +672,7 @@ CutsceneFX.signatures.GrandArcana = function(ctx)
 	ringConn:Disconnect()
 	-- the reading: every card flips at once
 	ctx.sfx("ring")
+	K.caption(ov, "[ THE READING ]", gold)
 	for i, c in cards do
 		local base = c.back.CFrame
 		local v = Instance.new("NumberValue")
@@ -679,10 +692,16 @@ CutsceneFX.signatures.GrandArcana = function(ctx)
 		IF.impactFrame(ctx.settings)
 	end
 	cam.shake(1.0, 0.6)
+	K.caption(ov, "[ JUDGEMENT FALLS ]", violet)
 	for i, c in cards do
 		local p = spots[i]
-		local pillar = part({ Shape = Enum.PartType.Cylinder, Color = violet, Transparency = 0.15, Size = Vector3.new(28, 2.6, 2.6), CFrame = CFrame.new(p + Vector3.new(0, 14, 0)) * CFrame.Angles(0, 0, math.pi / 2) }, stage)
-		tw(pillar, 0.5, { Size = Vector3.new(28, 0.2, 0.2), Transparency = 1 }, Enum.EasingStyle.Quad)
+		-- each card becomes a layered pillar of light (white core, violet glow, bent streaks) driven into the ground
+		local pillar = K.beam(anchorAt(stage, p + Vector3.new(0, 30, 0)), anchorAt(stage, p), violet, 1.6)
+		pillar.grow(0.12, 1.2)
+		task.delay(0.35, function()
+			pillar.fade(0.35)
+		end)
+		K.impact(stage, p, violet, 0.8)
 		for _, q in { c.back, c.edge, c.eye } do
 			tw(q, 0.2, { Transparency = 1, Size = q.Size * 0.3 })
 		end
@@ -737,6 +756,7 @@ CutsceneFX.signatures.WintersHush = function(ctx)
 	end)
 	wait(0.35)
 	ctx.sfx("summon")
+	K.caption(ov, "[ THE FROST SPREADS ]", ice)
 	K.cutIn(ov, ctx, 0.75)
 	wait(1.15)
 	-- the hush: crystals close around the enemies, snow drifts, everything holds
@@ -766,6 +786,7 @@ CutsceneFX.signatures.WintersHush = function(ctx)
 		blocks[i] = cluster
 	end
 	ctx.sfx("ring")
+	K.caption(ov, "[ HUSH ]", Color3.fromRGB(230, 245, 255))
 	local snow = part({ Transparency = 1, Size = Vector3.new(60, 1, 40), CFrame = CFrame.new(center + Vector3.new(0, 16, 0)) }, stage)
 	local pe = Instance.new("ParticleEmitter")
 	pe.Color = ColorSequence.new(Color3.new(1, 1, 1))
@@ -796,8 +817,10 @@ CutsceneFX.signatures.WintersHush = function(ctx)
 		end
 		b:Destroy()
 		K.shockwave(stage, p - Vector3.new(0, 1.8, 0), ice, 7, 0.5)
+		K.impact(stage, p - Vector3.new(0, 1.8, 0), ice, 0.7)
 	end
 	K.flash(ov, ctx, Color3.fromRGB(220, 245, 255), 0.4, 0.45)
+	K.caption(ov, "[ SHATTERED ]", ice)
 	pe.Rate = 0
 	wait(0.6)
 	tw(frost, 0.6, { Transparency = 1 })
@@ -817,6 +840,25 @@ end
 
 CutsceneFX.duration = { Starfall = 3.9, GrandArcana = 4.2, WintersHush = 4.1 }
 
+-- Undo everything a cutscene leaves behind: frame connections, camera, hidden HUD, stage, overlay, colour grade.
+local function cleanup(ctx)
+	for _, c in CutsceneFX._conns do
+		c:Disconnect()
+	end
+	table.clear(CutsceneFX._conns)
+	pcall(ctx.setCamera, nil)
+	for _, g in CutsceneFX._hidden or {} do
+		g.Enabled = true
+	end
+	CutsceneFX._hidden = nil
+	for _, inst in { workspace:FindFirstChild("Cutscene"), Players.LocalPlayer.PlayerGui:FindFirstChild("CutsceneGui"), Lighting:FindFirstChild("CutsceneGrade") } do
+		inst:Destroy()
+	end
+end
+
+-- Plays a signature. A tap or click during it skips to the end (after a short grace so the cast tap itself does not
+-- skip); at game speed 2x (ctx.settings.gameSpeed == 2) it skips by itself once the cut-in has shown the name.
+-- ctx.onSkip() is called after a skip so the caller can release anything it was holding for the cutscene.
 function CutsceneFX.play(name, ctx)
 	local fn = CutsceneFX.signatures[name]
 	if not fn then
@@ -824,20 +866,51 @@ function CutsceneFX.play(name, ctx)
 	end
 	ctx.sfx = ctx.sfx or function() end
 	ctx.settings = ctx.settings or {}
-	task.spawn(function()
+	local done = false
+	local thread
+	local function skip(reason)
+		if done then
+			return
+		end
+		done = true
+		if thread and coroutine.status(thread) ~= "dead" then
+			task.cancel(thread)
+		end
+		cleanup(ctx)
+		CutsceneFX.lastSkip = reason
+		if ctx.onSkip then
+			pcall(ctx.onSkip)
+		end
+	end
+	thread = task.spawn(function()
 		local ok, err = pcall(fn, ctx)
+		done = true
 		if not ok then
 			warn("CutsceneFX " .. name .. ": " .. tostring(err))
-			-- undo everything a half-finished cutscene leaves behind: camera, hidden HUD, stage, colour grade
-			pcall(ctx.setCamera, nil)
-			for _, g in CutsceneFX._hidden or {} do
-				g.Enabled = true
-			end
-			CutsceneFX._hidden = nil
-			for _, inst in { workspace:FindFirstChild("Cutscene"), Players.LocalPlayer.PlayerGui:FindFirstChild("CutsceneGui"), Lighting:FindFirstChild("CutsceneGrade") } do
-				inst:Destroy()
-			end
+			cleanup(ctx)
 		end
+	end)
+	local t0 = os.clock()
+	local input
+	input = game:GetService("UserInputService").InputBegan:Connect(function(io)
+		local tap = io.UserInputType == Enum.UserInputType.MouseButton1 or io.UserInputType == Enum.UserInputType.Touch
+		if tap and os.clock() - t0 > 0.4 then
+			skip("tap")
+		end
+	end)
+	function CutsceneFX.skip()
+		skip("call")
+	end
+	if ctx.settings.gameSpeed == 2 then
+		task.delay(1.3, function()
+			skip("2x")
+		end)
+	end
+	task.spawn(function()
+		while not done do
+			task.wait(0.1)
+		end
+		input:Disconnect()
 	end)
 	return CutsceneFX.duration[name] or 3.5
 end

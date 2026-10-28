@@ -1,0 +1,5 @@
+PASS the world ring no longer reads as a dark disc.
+Causes found: (1) FrameArt.ring() has a faint filled centre (meant for UI), which over the dark street on a billboard or SurfaceGui became a dark plate; (2) TDFeedback.range added its own faint colour fill Frame, which on a SurfaceGui drew as a dark navy disc over the path; (3) ground decals sat at y 0.12, below the path tiles, so the path cut the ring.
+Fix: new FrameArt.thinRing() (fully transparent centre, bright rim, soft glow both sides); FXRecipes flares and TDFeedback decals use it (FA.ring stays for UI); TDFeedback.range no longer adds a fill; decals moved to y 0.75, above the path tiles.
+Captures over the dark street: Overnight/captures/T40_before_fill.jpg (range ring with the dark plate hiding the path; billboard thin ring already clean on the right), T40_after_ring.jpg (thin bright violet range ring, street and path visible inside and through it). Console: only the pre-existing "not authorized to access Asset" lines.
+Look UNVERIFIED.

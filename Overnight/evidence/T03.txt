@@ -1,0 +1,2 @@
+PASS NumberFormat (ReplicatedStorage.Shared.NumberFormat, source Studio_Export/NumberFormat.luau) 24 of 24 checks ok via Tests/NumberFormat.test.luau in Studio Edit mode.
+Covers 0, 999, 1000, 1500, 999999 roll-up, 1.5M, 13.66T, negatives, NaN/inf, suffix cap, grouped, scientific, unknown mode fallback. Not yet used by the HUD (T05/T06 wire settings).

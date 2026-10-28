@@ -1,0 +1,382 @@
+--!nocheck
+-- FrameArt: paints UI art at runtime with EditableImage (no uploads). Installed as ReplicatedStorage.FrameArt.
+-- Soft-edged glass panels (9-slice), glowing capsule buttons, emblems, tapered dividers, glow and vignette sprites.
+-- Live games need Experience Settings > Security > "Allow Mesh / Image APIs" (owner must be 13+ and ID verified);
+-- if creation fails, FrameArt.ok is false and callers keep the old frame style.
+-- Research: [[Research/UI Methods and Magic Effects]].
+
+local AssetService = game:GetService("AssetService")
+
+local FA = { cache = {} }
+
+local function clamp01(x)
+	return x < 0 and 0 or (x > 1 and 1 or x)
+end
+local function smooth(a, b, x)
+	local t = clamp01((x - a) / (b - a))
+	return t * t * (3 - 2 * t)
+end
+local function lerp(a, b, t)
+	return a + (b - a) * t
+end
+local function rrect(px, py, cx, cy, hw, hh, r)
+	local qx = math.abs(px - cx) - hw + r
+	local qy = math.abs(py - cy) - hh + r
+	return math.min(math.max(qx, qy), 0) + math.sqrt(math.max(qx, 0) ^ 2 + math.max(qy, 0) ^ 2) - r
+end
+local function hash(x, y)
+	local n = math.sin(x * 12.9898 + y * 78.233) * 43758.5453
+	return n - math.floor(n)
+end
+
+local function paint(key, w, h, fn)
+	if FA.cache[key] then
+		return FA.cache[key]
+	end
+	local img = AssetService:CreateEditableImage({ Size = Vector2.new(w, h) })
+	local buf = buffer.create(w * h * 4)
+	local i = 0
+	for y = 0, h - 1 do
+		for x = 0, w - 1 do
+			local r, g, b, a = fn(x + 0.5, y + 0.5)
+			buffer.writeu8(buf, i, math.floor(clamp01(r) * 255 + 0.5))
+			buffer.writeu8(buf, i + 1, math.floor(clamp01(g) * 255 + 0.5))
+			buffer.writeu8(buf, i + 2, math.floor(clamp01(b) * 255 + 0.5))
+			buffer.writeu8(buf, i + 3, math.floor(clamp01(a) * 255 + 0.5))
+			i += 4
+		end
+	end
+	img:WritePixelsBuffer(Vector2.zero, Vector2.new(w, h), buf)
+	local c = Content.fromObject(img)
+	FA.cache[key] = c
+	return c
+end
+
+FA.paint = paint -- shared painter + cache (used by UIFlipbooks)
+
+local function ckey(c)
+	return string.format("%d_%d_%d", c.R * 255, c.G * 255, c.B * 255)
+end
+
+function FA.panel(accent, feather, radius, alpha)
+	feather, radius, alpha = feather or 48, radius or 28, alpha or 0.9
+	local S = 2 * (feather + radius) + 32
+	local key = "panel" .. ckey(accent) .. feather .. "_" .. radius .. "_" .. alpha
+	local ar, ag, ab = accent.R, accent.G, accent.B
+	local c = paint(key, S, S, function(x, y)
+		local d = rrect(x, y, S / 2, S / 2, S / 2 - feather, S / 2 - feather, radius)
+		local t = y / S
+		local r = lerp(16, 4, t) / 255
+		local g = lerp(12, 4, t) / 255
+		local b = lerp(26, 9, t) / 255
+		r, g, b = lerp(r, ar * 0.35, 0.08), lerp(g, ag * 0.35, 0.08), lerp(b, ab * 0.35, 0.08)
+		local top = (1 - t) ^ 3 * 0.06
+		r, g, b = r + ar * top, g + ag * top, b + ab * top
+		local n = (hash(x, y) - 0.5) * 0.02
+		r, g, b = r + n, g + n, b + n
+		local a = alpha * (1 - smooth(-feather * 0.2, feather * 0.85, d))
+		local rim = (1 - smooth(0, 1.6, math.abs(d + 7))) * 0.12 * (1 - t) ^ 3
+		r, g, b = lerp(r, lerp(ar, 1, 0.4), rim), lerp(g, lerp(ag, 1, 0.4), rim), lerp(b, lerp(ab, 1, 0.4), rim)
+		a = math.max(a, rim * alpha)
+		return r, g, b, a
+	end)
+	local e = feather + radius + 2
+	return c, Rect.new(e, e, S - e, S - e), feather
+end
+
+function FA.button(accent, bright)
+	local W, H, F, R = 96, 64, 12, 18
+	local ar, ag, ab = accent.R, accent.G, accent.B
+	local c = paint("btn" .. ckey(accent) .. (bright and "b" or ""), W, H, function(x, y)
+		local d = rrect(x, y, W / 2, H / 2, W / 2 - F, H / 2 - F, R)
+		local t = clamp01((y - F) / (H - 2 * F))
+		local k = bright and lerp(1.0, 0.62, t) or lerp(0.42, 0.16, t)
+		local r, g, b = ar * k, ag * k, ab * k
+		local sheen = (1 - smooth(0.0, 0.5, t)) * 0.12
+		r, g, b = r + sheen, g + sheen, b + sheen
+		local inside = 1 - smooth(-0.8, 0.8, d)
+		local rimW = 1 - smooth(1.2, 2.6, math.abs(d + 1.4))
+		local rimK = lerp(1.0, 0.55, t)
+		r, g, b = lerp(r, lerp(ar, 1, 0.35), rimW * rimK), lerp(g, lerp(ag, 1, 0.35), rimW * rimK), lerp(b, lerp(ab, 1, 0.35), rimW * rimK)
+		local a = inside * 0.96
+		if d > 0 then
+			local glow = (1 - smooth(0, F, d)) ^ 2 * 0.45
+			if glow > a then
+				return ar, ag, ab, glow
+			end
+		end
+		return r, g, b, a
+	end)
+	local e = F + R + 1
+	return c, Rect.new(e, e, W - e, H - e), F
+end
+
+function FA.emblem(accent)
+	local S = 192
+	local ar, ag, ab = accent.R, accent.G, accent.B
+	return paint("emb" .. ckey(accent), S, S, function(x, y)
+		local dx, dy = x - S / 2, y - S / 2
+		local r = math.sqrt(dx * dx + dy * dy)
+		local col, a = { 0, 0, 0 }, 0
+		if r < 64 then
+			local k = lerp(0.62, 0.18, (r / 64) ^ 1.4)
+			col = { ar * k + 0.03, ag * k + 0.02, ab * k + 0.05 }
+			a = 1 - smooth(62.5, 64, r)
+		end
+		local ring1 = 1 - smooth(1.6, 3.2, math.abs(r - 68))
+		local ring2 = (1 - smooth(0.4, 1.4, math.abs(r - 80))) * 0.7
+		local tick = 0
+		for _, p in { { 0, -80 }, { 80, 0 }, { 0, 80 }, { -80, 0 } } do
+			local md = math.abs(dx - p[1]) + math.abs(dy - p[2])
+			tick = math.max(tick, 1 - smooth(6, 7.5, md))
+		end
+		local line = math.max(ring1, ring2, tick)
+		if line > 0 then
+			local lc = { lerp(ar, 1, 0.45), lerp(ag, 1, 0.45), lerp(ab, 1, 0.45) }
+			col = { lerp(col[1], lc[1], line), lerp(col[2], lc[2], line), lerp(col[3], lc[3], line) }
+			a = math.max(a, line)
+		end
+		if r > 64 then
+			local glow = (1 - smooth(66, 96, r)) ^ 2 * 0.5
+			if glow > a then
+				return ar, ag, ab, glow
+			end
+		end
+		return col[1], col[2], col[3], a
+	end)
+end
+
+function FA.divider()
+	local W, H = 512, 16
+	return paint("div", W, H, function(x, y)
+		local u = math.abs(2 * x / W - 1)
+		local taper = (1 - u ^ 1.8)
+		local dy = math.abs(y - H / 2)
+		local core = 1 - smooth(0.3, 1.3, dy)
+		local glow = (1 - smooth(0, H / 2, dy)) ^ 2 * 0.35
+		return 1, 1, 1, math.max(core, glow) * taper
+	end)
+end
+
+function FA.glow()
+	local S = 128
+	return paint("glow", S, S, function(x, y)
+		local r = math.sqrt((x - S / 2) ^ 2 + (y - S / 2) ^ 2) / (S / 2)
+		return 1, 1, 1, clamp01(1 - r) ^ 2.2
+	end)
+end
+
+function FA.vignette()
+	local S = 256
+	return paint("vig", S, S, function(x, y)
+		local u, v = (x / S - 0.5) * 2, (y / S - 0.5) * 2
+		local r = math.sqrt(u * u * 0.8 + v * v)
+		return 0.02, 0.01, 0.06, smooth(0.6, 1.35, r) * 0.6
+	end)
+end
+
+local function sdPoly(px, py, pts)
+	local n = #pts
+	local dx, dy = px - pts[1][1], py - pts[1][2]
+	local d = dx * dx + dy * dy
+	local s = 1
+	local j = n
+	for i = 1, n do
+		local vi, vj = pts[i], pts[j]
+		local ex, ey = vj[1] - vi[1], vj[2] - vi[2]
+		local wx, wy = px - vi[1], py - vi[2]
+		local t = clamp01((wx * ex + wy * ey) / (ex * ex + ey * ey))
+		local bx, by = wx - ex * t, wy - ey * t
+		d = math.min(d, bx * bx + by * by)
+		local c1, c2, c3 = py >= vi[2], py < vj[2], ex * wy > ey * wx
+		if (c1 and c2 and c3) or (not c1 and not c2 and not c3) then
+			s = -s
+		end
+		j = i
+	end
+	return s * math.sqrt(d)
+end
+
+local SHAPES = {}
+do
+	local star = {}
+	for i = 0, 9 do
+		local a = -math.pi / 2 + i * math.pi / 5
+		local r = (i % 2 == 0) and 40 or 17
+		table.insert(star, { 48 + math.cos(a) * r, 50 + math.sin(a) * r })
+	end
+	SHAPES.star = function(x, y)
+		return sdPoly(x, y, star)
+	end
+	local gem = { { 26, 36 }, { 36, 22 }, { 60, 22 }, { 70, 36 }, { 48, 76 } }
+	SHAPES.gem = function(x, y)
+		local d = sdPoly(x, y, gem)
+		if d < -2 and math.abs(y - 36) < 1 then
+			return 1
+		end
+		return d
+	end
+	SHAPES.crown = function(x, y)
+		return sdPoly(x, y, { { 22, 70 }, { 18, 32 }, { 34, 48 }, { 48, 24 }, { 62, 48 }, { 78, 32 }, { 74, 70 } })
+	end
+	SHAPES.paw = function(x, y)
+		local function circ(cx, cy, r)
+			return math.sqrt((x - cx) ^ 2 + (y - cy) ^ 2) - r
+		end
+		local pad = math.sqrt(((x - 48) / 1.15) ^ 2 + (y - 60) ^ 2) - 15
+		return math.min(pad, circ(28, 42, 7.5), circ(40, 30, 8), circ(56, 30, 8), circ(68, 42, 7.5))
+	end
+end
+
+function FA.symbol(name)
+	local fn = SHAPES[name]
+	if not fn then
+		return nil
+	end
+	return paint("sym" .. name, 96, 96, function(x, y)
+		local d = fn(x, y)
+		local body = 1 - smooth(-0.8, 0.8, d)
+		local glow = (1 - smooth(0, 10, d)) ^ 2 * 0.35
+		return 1, 1, 1, math.max(body, glow)
+	end)
+end
+
+function FA.cardIcon()
+	local W, H = 96, 128
+	local cx, cy = W / 2, H / 2
+	return paint("cardIcon", W, H, function(x, y)
+		local d = rrect(x, y, cx, cy, 34, 52, 9)
+		local gold = { 0.93, 0.8, 0.52 }
+		local glow = d > 0 and (1 - smooth(0, 9, d)) ^ 2 * 0.5 or 0
+		if d > 0 then
+			return gold[1], gold[2], gold[3], glow
+		end
+		local border = d > -4.5
+		local t = (y - (cy - 52)) / 104
+		local r, g, b = lerp(0.24, 0.12, t), lerp(0.15, 0.08, t), lerp(0.42, 0.26, t)
+		if border then
+			r, g, b = gold[1], gold[2], gold[3]
+		end
+		local ex, ey = (x - cx) / 22, (y - cy) / 12
+		local e = math.sqrt(ex * ex + ey * ey)
+		local ring = 1 - smooth(0.06, 0.16, math.abs(e - 1))
+		local pupil = 1 - smooth(5, 6.5, math.sqrt((x - cx) ^ 2 + (y - cy) ^ 2))
+		local diamond = 1 - smooth(4, 5.5, math.abs(x - cx) + math.abs(math.abs(y - cy) - 34))
+		local k = math.max(ring, pupil, diamond)
+		r, g, b = lerp(r, gold[1], k), lerp(g, gold[2], k), lerp(b, gold[3], k)
+		return r, g, b, 1 - smooth(-0.8, 0.8, d)
+	end)
+end
+
+function FA.sigil()
+	local S = 384 -- 512 took ~390 ms to paint on a desktop; 384 is about half and scales up cleanly
+	local h = S / 2
+	local function seg(px, py, ax, ay, bx, by)
+		local dx, dy = bx - ax, by - ay
+		local t = clamp01(((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy))
+		local qx, qy = ax + dx * t - px, ay + dy * t - py
+		return math.sqrt(qx * qx + qy * qy)
+	end
+	local tri = {}
+	for k = 0, 5 do
+		local a = -math.pi / 2 + k * math.pi / 3
+		tri[k] = { h + math.cos(a) * h * 0.6, h + math.sin(a) * h * 0.6 }
+	end
+	return paint("sigil", S, S, function(x, y)
+		local dx, dy = x - h, y - h
+		local r = math.sqrt(dx * dx + dy * dy)
+		local u = r / h
+		local function ring(at, w)
+			return 1 - smooth(w, w + 1.2, math.abs(r - at * h))
+		end
+		local line = math.max(ring(0.95, 1.6), ring(0.89, 0.9) * 0.8, ring(0.62, 1.2), ring(0.3, 1.0) * 0.8)
+		if u > 0.89 and u < 0.95 then
+			local a = math.atan2(dy, dx)
+			local step = math.pi * 2 / 36
+			local d = math.abs(((a + step / 2) % step) - step / 2) * r
+			line = math.max(line, (1 - smooth(0.8, 1.8, d)) * 0.9)
+		end
+		for k = 0, 7 do
+			local a = k * math.pi / 4
+			local cx, cy = h + math.cos(a) * h * 0.76, h + math.sin(a) * h * 0.76
+			local md = math.abs(x - cx) + math.abs(y - cy)
+			line = math.max(line, 1 - smooth(8, 9.5, md), (1 - smooth(0.6, 1.6, math.abs(md - 14))) * 0.6)
+		end
+		local hx = math.huge
+		for k = 0, 5 do
+			local a, b = tri[k], tri[(k + 2) % 6]
+			hx = math.min(hx, seg(x, y, a[1], a[2], b[1], b[2]))
+		end
+		line = math.max(line, (1 - smooth(0.7, 1.7, hx)) * 0.85)
+		local glow = u < 1 and (1 - u) ^ 2 * 0.18 or 0
+		return 1, 1, 1, math.max(line, glow)
+	end)
+end
+
+function FA.ring()
+	local S = 256
+	return paint("ring", S, S, function(x, y)
+		local r = math.sqrt((x - S / 2) ^ 2 + (y - S / 2) ^ 2) / (S / 2)
+		local fill = r < 0.96 and lerp(0.1, 0.28, smooth(0.6, 0.96, r)) or 0
+		local edge = 1 - smooth(0.006, 0.022, math.abs(r - 0.97))
+		return 1, 1, 1, math.max(fill, edge * 0.95)
+	end)
+end
+
+-- Thin ring for world effects (billboards, ground decals): fully transparent centre, bright rim, soft glow on both
+-- sides. FA.ring() keeps its faint filled centre for UI, which read as a dark disc in the world (T40).
+function FA.thinRing()
+	local S = 256
+	return paint("thinRing", S, S, function(x, y)
+		local r = math.sqrt((x - S / 2) ^ 2 + (y - S / 2) ^ 2) / (S / 2)
+		local d = math.abs(r - 0.92)
+		local core = 1 - smooth(0.008, 0.03, d)
+		local glow = (1 - smooth(0.02, 0.09, d)) * 0.45
+		return 1, 1, 1, math.max(core, glow)
+	end)
+end
+
+function FA.beam()
+	local W, H = 32, 256
+	return paint("beam", W, H, function(x, y)
+		local u = math.abs(2 * x / W - 1)
+		local v = math.abs(2 * y / H - 1)
+		local across = (1 - smooth(0.0, 1.0, u)) ^ 1.5
+		local along = (1 - smooth(0.05, 1.0, v))
+		return 1, 1, 1, across * along
+	end)
+end
+
+FA.HEX_FIT = 64 / 56
+function FA.hex(kind)
+	local S, R = 128, 56
+	local pts = {}
+	for i = 0, 5 do
+		local a = -math.pi / 2 + i * math.pi / 3
+		table.insert(pts, { S / 2 + math.cos(a) * R, S / 2 + math.sin(a) * R })
+	end
+	return paint("hex" .. kind, S, S, function(x, y)
+		local d = sdPoly(x, y, pts)
+		local t = clamp01((y - (S / 2 - R)) / (2 * R))
+		if kind == "body" then
+			local k = lerp(1.0, 0.62, t)
+			local bevel = (1 - smooth(0, 5, -d)) * (1 - t) * 0.25
+			return k + bevel, k + bevel, k + bevel, 1 - smooth(-0.8, 0.8, d)
+		elseif kind == "rim" then
+			local line = 1 - smooth(1.4, 2.8, math.abs(d + 1.5))
+			local glow = d > 0 and (1 - smooth(0, 8, d)) ^ 2 * 0.55 or 0
+			return 1, 1, 1, math.max(line, glow)
+		else
+			local inside = 1 - smooth(-0.8, 0.8, d)
+			return 1, 1, 1, inside * (1 - smooth(0.0, 0.55, t)) * 0.9
+		end
+	end)
+end
+
+do
+	FA.ok = pcall(function()
+		FA.glow()
+	end)
+end
+
+return FA

@@ -1,0 +1,3 @@
+PASS SettingsDefaults (Shared.SettingsDefaults, source Studio_Export/SettingsDefaults.luau): 32 of 32 unit checks ok (Tests/SettingsDefaults.test.luau), plus a Play integration run.
+Server: MatchService TEMPLATE.settings, sanitize on load, Action kind "Setting" (key, value) validated and rate limited to 1 per second per player; no client reply yet (T05).
+Play run (client fired the remote, server profile read back via QAProfile): musicVolume 0.3 saved; sfxVolume 0.1 sent within 1 s dropped; flashes "yes" rejected; godMode rejected; particles "low" saved; sfxVolume 50 clamped to 1. Console shows only the existing "not authorized to access Asset" lines and the ProfileStore API-available line, nothing from the new code.

@@ -12,6 +12,8 @@ local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 
 local ProjectileFX = {}
+ProjectileFX.timeScale = 1 -- game speed (1 or 2): flights take dur / timeScale, set by GameClient
+ProjectileFX.quality = "default" -- "low" | "default" | "high"; set by GameClient from the player's Effects detail setting
 
 local function part(parent, props)
 	local p = Instance.new("Part")
@@ -33,6 +35,7 @@ end
 
 -- move a part along a path over `dur` seconds; pathFn(a) -> CFrame for a in 0..1
 local function fly(p, dur, pathFn, onArrive)
+	dur = dur / ProjectileFX.timeScale
 	local t0 = os.clock()
 	local conn
 	conn = RunService.Heartbeat:Connect(function()
@@ -203,15 +206,19 @@ STYLES.star = function(from, to, color, w, parent)
 	pe.LightEmission = 1
 	pe.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, w * 0.5), NumberSequenceKeypoint.new(1, 0) })
 	pe.Lifetime = NumberRange.new(0.25, 0.4)
-	pe.Rate = 80
+	pe.Rate = ProjectileFX.quality == "high" and 100 or 80
 	pe.Speed = NumberRange.new(0.5, 1.5)
 	pe.SpreadAngle = Vector2.new(180, 180)
-	pe.Parent = star
+	if ProjectileFX.quality == "low" then
+		pe:Destroy() -- Low drops the secondary sparkle layer
+	else
+		pe.Parent = star
+	end
 	local dur = 0.18
 	fly(star, dur, function(a)
 		return CFrame.new(arc(from, to, a, 1.0))
 	end, function()
-		for i = 0, 4 do
+		for i = 0, (ProjectileFX.quality == "low" and 1 or 4) do
 			local ang = i * math.pi * 2 / 5
 			local ray = part(parent, { Color = Color3.fromRGB(255, 230, 150), Size = Vector3.new(w * 0.15, w * 0.15, w * 1.4), CFrame = CFrame.new(to) * CFrame.Angles(0, ang, 0.4) * CFrame.new(0, 0, -w * 0.6) })
 			TweenService:Create(ray, TweenInfo.new(0.22), { Transparency = 1, Size = Vector3.new(0.05, 0.05, w * 2.2) }):Play()
@@ -221,16 +228,115 @@ STYLES.star = function(from, to, color, w, parent)
 	return dur
 end
 
+-- Slash arc (melee-style hit): a crescent swept by a Trail 3 studs in front of the attacker, facing the target.
+-- Combo: each attacker's hits roll the arc 0, 160, -35 degrees in turn. Heavy (crit) hits play at half speed
+-- (TimeScale 0.5). Sparks at the target use ZOffset 1.5 so they draw in front of the enemy. Additive glow only for
+-- bright colours; dark ink or smoke colours use LightEmission 0 (additive blending would make them vanish).
+ProjectileFX.combo = {}
+local COMBO = { 0, 160, -35 }
+STYLES.slash = function(from, to, color, w, parent, crit)
+	local key = string.format("%d,%d", math.floor(from.X + 0.5), math.floor(from.Z + 0.5))
+	local n = (ProjectileFX.combo[key] or 0) % #COMBO + 1
+	ProjectileFX.combo[key] = n
+	local slow = (crit and 2 or 1) / ProjectileFX.timeScale -- TimeScale 0.5 on heavy hits = twice as long
+	local dur = 0.12 * slow
+	local nominal = 0.12 * (crit and 2 or 1) -- fire() divides by the game speed itself
+	local ink = (color.R + color.G + color.B) / 3 < 0.25
+	local flat = Vector3.new(to.X, from.Y, to.Z)
+	-- laid almost flat (tilted 80 degrees) so the crescent reads from the high board camera; the combo roll turns it
+	local pivot = CFrame.lookAt(from, flat) * CFrame.new(0, 0, -3) * CFrame.Angles(math.rad(-80), 0, 0) * CFrame.Angles(0, 0, math.rad(COMBO[n]))
+	local r = 2.6 * w
+	local blade = part(parent, { Transparency = 1, Size = Vector3.one * 0.2, CFrame = pivot })
+	local a0, a1 = Instance.new("Attachment"), Instance.new("Attachment")
+	a0.Position, a1.Position = Vector3.new(0, r, 0), Vector3.new(0, r * 0.72, 0)
+	a0.Parent, a1.Parent = blade, blade
+	local trail = Instance.new("Trail")
+	trail.Attachment0, trail.Attachment1 = a0, a1
+	trail.Color = ColorSequence.new(ink and color or Color3.new(1, 1, 1), color)
+	trail.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) })
+	trail.WidthScale = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(1, 0.1) })
+	trail.Lifetime = 0.16 * slow
+	trail.LightEmission = ink and 0 or 1
+	trail.LightInfluence = 0
+	trail.Parent = blade
+	local t0 = os.clock()
+	local conn
+	conn = RunService.Heartbeat:Connect(function()
+		local a = math.min(1, (os.clock() - t0) / dur)
+		local e = 1 - (1 - a) ^ 3 -- fast start, settles at the end of the swing
+		blade.CFrame = pivot * CFrame.Angles(0, 0, math.rad(-70 + 170 * e))
+		if a >= 1 then
+			conn:Disconnect()
+			local sp = part(parent, { Transparency = 1, Size = Vector3.one * 0.2, CFrame = CFrame.new(to) })
+			local pe = Instance.new("ParticleEmitter")
+			pe.Texture = "rbxasset://textures/particles/sparkles_main.dds"
+			pe.Color = ColorSequence.new(color)
+			pe.LightEmission = ink and 0 or 1
+			pe.LightInfluence = 0
+			pe.ZOffset = 1.5
+			pe.TimeScale = crit and 0.5 or 1
+			pe.Size = NumberSequence.new(0.6 * w, 0)
+			pe.Lifetime = NumberRange.new(0.25, 0.4)
+			pe.Speed = NumberRange.new(6, 12)
+			pe.SpreadAngle = Vector2.new(60, 60)
+			pe.Rate = 0
+			pe.Parent = sp
+			pe:Emit(crit and 14 or 8)
+			Debris:AddItem(sp, 1.2 / ProjectileFX.timeScale)
+			Debris:AddItem(blade, trail.Lifetime + 0.05)
+		end
+	end)
+	return nominal
+end
+
 function ProjectileFX.fire(style, from, to, color, w, parent, crit)
 	local fn = STYLES[style] or STYLES.bolt
-	local ok, dur = pcall(fn, from, to, color, w * (crit and 1.25 or 1), parent)
+	local ok, dur = pcall(fn, from, to, color, w * (crit and 1.25 or 1), parent, crit)
 	if not ok then
-		return STYLES.bolt(from, to, color, w, parent)
+		return STYLES.bolt(from, to, color, w, parent) / ProjectileFX.timeScale
 	end
 	if crit then
 		puff(parent, to, Color3.fromRGB(255, 220, 120), w * 1.4)
 	end
-	return dur
+	return dur / ProjectileFX.timeScale
+end
+
+-- Hit reactions per projectile style (T09): how the enemy reacts when the shot lands. GameClient reads the numbers
+-- (tint on the enemy's highlight, push back along the lane, wobble, tilt, jitter, how long a tint holds) and calls
+-- ProjectileFX.react for the small accent at the hit point. Reduced motion keeps only the tint.
+ProjectileFX.REACT = {
+	bolt = { tint = Color3.fromRGB(255, 255, 255), jolt = 0.6, wobble = 0, tilt = 0, jitter = 0, hold = 0, dur = 0.18 },
+	flame = { tint = Color3.fromRGB(255, 140, 60), jolt = 0.3, wobble = 0, tilt = 0, jitter = 0, hold = 0.35, dur = 0.4 },
+	leaf = { tint = Color3.fromRGB(120, 230, 110), jolt = 0.2, wobble = 0.35, tilt = 0, jitter = 0, hold = 0, dur = 0.35 },
+	spark = { tint = Color3.fromRGB(170, 230, 255), jolt = 0.1, wobble = 0, tilt = 0, jitter = 0.45, hold = 0.15, dur = 0.3 },
+	ice = { tint = Color3.fromRGB(140, 200, 255), jolt = 0.15, wobble = 0, tilt = 0, jitter = 0, hold = 0.6, dur = 0.7 },
+	stone = { tint = Color3.fromRGB(190, 170, 150), jolt = 1.3, wobble = 0, tilt = 0.12, jitter = 0, hold = 0, dur = 0.3 },
+	card = { tint = Color3.fromRGB(190, 140, 255), jolt = 0.25, wobble = 0, tilt = 0.3, jitter = 0, hold = 0, dur = 0.3 },
+	star = { tint = Color3.fromRGB(255, 225, 140), jolt = 0.4, wobble = 0.2, tilt = 0, jitter = 0, hold = 0.1, dur = 0.3 },
+	slash = { tint = Color3.fromRGB(255, 240, 220), jolt = 0.8, wobble = 0, tilt = 0.2, jitter = 0, hold = 0, dur = 0.22 },
+}
+
+-- Small accent at the hit point for the style (puffs and shards from this module; nothing persistent).
+function ProjectileFX.react(style, at, parent, crit)
+	local r = ProjectileFX.REACT[style] or ProjectileFX.REACT.bolt
+	local k = crit and 1.4 or 1
+	if style == "flame" then
+		puff(parent, at, Color3.fromRGB(255, 120, 40), 1.6 * k)
+	elseif style == "leaf" then
+		shards(parent, at, Color3.fromRGB(110, 200, 90), 4, 0.35 * k)
+	elseif style == "spark" then
+		shards(parent, at, Color3.fromRGB(190, 240, 255), 5, 0.22 * k)
+	elseif style == "ice" then
+		puff(parent, at, Color3.fromRGB(200, 230, 255), 1.4 * k)
+		shards(parent, at, Color3.fromRGB(235, 248, 255), 4, 0.3 * k)
+	elseif style == "stone" then
+		puff(parent, at - Vector3.new(0, 1, 0), Color3.fromRGB(130, 118, 104), 2.2 * k)
+	elseif style == "card" then
+		puff(parent, at, Color3.fromRGB(170, 120, 255), 1.2 * k)
+	else
+		puff(parent, at, r.tint, 1 * k)
+	end
+	return r
 end
 
 ProjectileFX.styles = STYLES

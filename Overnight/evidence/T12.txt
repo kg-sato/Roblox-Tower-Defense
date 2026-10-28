@@ -1,0 +1,4 @@
+PASS Arcane Fox signature cutscene exists and runs through the character registry (no new code needed tonight).
+Registry check (Edit mode, ReplicatedStorage.Characters): VoltFox has Name "Arcane Fox", Signature "GrandArcana", Shot "card" - the [[How to Add a Character]] route (Signature attribute names a function in CutsceneFX.signatures). The GRAND ARCANA cutscene was built before tonight and upgraded in T10 with the beam / impact / caption kit.
+Run evidence (from T10, same build): real Ult casts with an Arcane Fox on the board; the server announced signature GrandArcana; the cutscene ran end to end twice and returned to the HUD; captures Overnight/captures/T10/grand_arcana_reading.jpg and grand_arcana_pillars.jpg; console clean apart from the pre-existing "not authorized to access Asset" lines.
+Look UNVERIFIED.
