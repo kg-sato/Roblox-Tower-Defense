@@ -6,7 +6,7 @@
 local RunService = game:GetService("RunService")
 
 local UIArt = {}
-UIArt.localRoot = "rbxasset://textures/uikit_v6/"
+UIArt.localRoot = "rbxasset://textures/uikit_v7/"
 UIArt.useLocal = RunService:IsStudio()
 
 UIArt.sprites = {
@@ -71,6 +71,7 @@ UIArt.sprites = {
 	["icon_egg"] = { w = 256, h = 256 },
 	["icon_fish"] = { w = 256, h = 256 },
 	["icon_flag"] = { w = 256, h = 256 },
+	["icon_flame"] = { w = 256, h = 256 },
 	["icon_garlic"] = { w = 256, h = 256 },
 	["icon_gear"] = { w = 256, h = 256 },
 	["icon_gem"] = { w = 256, h = 256 },
@@ -120,6 +121,25 @@ UIArt.sprites = {
 }
 
 UIArt.ids = {
+	["icon_bolt"] = "rbxassetid://121738926400945",
+	["icon_chest"] = "rbxassetid://112081989260527",
+	["icon_coin"] = "rbxassetid://93007984461409",
+	["icon_crown"] = "rbxassetid://74707140327748",
+	["icon_crystal"] = "rbxassetid://82753242617563",
+	["icon_flag"] = "rbxassetid://85452353987225",
+	["icon_flame"] = "rbxassetid://108574647086501",
+	["icon_gear"] = "rbxassetid://90060877131480",
+	["icon_gem"] = "rbxassetid://130417417090960",
+	["icon_gift"] = "rbxassetid://118356668244519",
+	["icon_index"] = "rbxassetid://130163467503790",
+	["icon_lock"] = "rbxassetid://137670412546353",
+	["icon_rebirth"] = "rbxassetid://75132842759812",
+	["icon_shield"] = "rbxassetid://91531296540547",
+	["icon_skull"] = "rbxassetid://115900692785837",
+	["icon_star"] = "rbxassetid://103702070307340",
+	["icon_stopwatch"] = "rbxassetid://136446507511717",
+	["icon_sword"] = "rbxassetid://103109177610563",
+	["icon_trophy"] = "rbxassetid://87280674486491",
 }
 
 -- the image to show for a sprite, or nil if it cannot be shown on this machine

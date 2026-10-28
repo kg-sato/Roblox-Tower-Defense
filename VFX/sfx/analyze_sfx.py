@@ -57,6 +57,17 @@ DESIGN = {
     "bank": (0.4, 1.0, (1500, 6000), 0.2, None),  # an arpeggio of four coins: the loudest coin is not the first
     "charge_ready": (0.4, 1.2, (800, 3000), 0.2, None),
     "merge_fail": (0.15, 0.5, (80, 900), 0.04, None),
+    # Lampwick Lane game sounds (2026-10-28), written from intent before the first run
+    "brass_click": (0.08, 0.25, (1200, 4500), 0.02, None),
+    "card_flip": (0.12, 0.35, (2500, 7000), 0.03, None),
+    "bell_toll": (2.0, 4.0, (300, 1500), 0.05, None),
+    "coin_clink": (0.25, 0.8, (2500, 6000), 0.02, None),
+    "enemy_hit": (0.1, 0.3, (200, 1200), 0.02, None),
+    "enemy_poof": (0.3, 1.0, (1500, 5000), 0.06, None),
+    "glass_crack": (0.4, 1.2, (3000, 8000), 0.03, None),
+    "clock_tick": (0.04, 0.15, (1500, 5000), 0.01, None),
+    "place_thud": (0.1, 0.35, (200, 1200), 0.02, None),
+    "iron_clank": (0.6, 1.8, (800, 3500), 0.03, None),
     "wish_pull": (1.3, 1.8, (300, 5200), None, 0.5),  # a riser to 4.5 kHz, cut by the reveal
 }
 

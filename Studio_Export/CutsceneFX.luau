@@ -840,6 +840,216 @@ end
 
 CutsceneFX.duration = { Starfall = 3.9, GrandArcana = 4.2, WintersHush = 4.1 }
 
+-- ===== FIRST-PERSON ULTIMATE (2026-10-28) =====
+-- The user: "when the user presses ultimate, it goes into first person and you can see the ultimate in action".
+-- Research applied (Roblox Dev/Research/VFX and Animation/Cinematic Cutscenes.md): camera keyed relative to the caster
+-- (Moon Animator reference-part pattern), smooth spline moves with keyed FOV (long lens for tension, wide for speed),
+-- small handheld noise, an anime impact frame (~0.09 s), radial speed lines, depth of field on the subject.
+-- Beats (full 3.5 s / short 1.7 s for repeats and 2x):
+--   0.00  letterbox, grade, the camera swoops from the board into the familiar's eyes, looking down the lane
+--   0.45  charge: an orb forms just in front of the eyes, motes and the other familiars' bolts pour into it,
+--         FOV narrows 70 -> 52, handheld shake rises, the name band slides across
+--   1.40  release: impact frame, FOV punches to 92, the camera rides behind the orb down the lane, speed lines
+--   1.90  impact: the camera brakes beside the enemy cluster, impacts on every target, shake, caption
+--   2.90  ease back to the game view
+local function speedLines(ov, n, t)
+	local holder = Instance.new("Frame")
+	holder.BackgroundTransparency = 1
+	holder.Size = UDim2.fromScale(1, 1)
+	holder.ZIndex = 18
+	holder.Parent = ov.gui
+	for i = 1, n do
+		local a = math.random() * math.pi * 2
+		local l = Instance.new("Frame")
+		l.AnchorPoint = Vector2.new(0, 0.5)
+		l.BorderSizePixel = 0
+		l.BackgroundColor3 = Color3.new(1, 1, 1)
+		l.BackgroundTransparency = 0.35 + math.random() * 0.4
+		local r0 = 0.32 + math.random() * 0.12
+		l.Position = UDim2.fromScale(0.5 + math.cos(a) * r0, 0.5 + math.sin(a) * r0 * 1.6)
+		l.Size = UDim2.new(0.25 + math.random() * 0.3, 0, 0, math.random(2, 5))
+		l.Rotation = math.deg(a)
+		l.ZIndex = 18
+		l.Parent = holder
+		local g = Instance.new("UIGradient")
+		g.Transparency = NumberSequence.new(1, 0)
+		g.Parent = l
+	end
+	-- lines flicker (re-roll angles) so they read as motion, not a static star
+	local t0 = os.clock()
+	local conn
+	conn = hold(RunService.RenderStepped:Connect(function()
+		if os.clock() - t0 > t or not holder.Parent then
+			conn:Disconnect()
+			if holder.Parent then holder:Destroy() end
+			return
+		end
+		for _, l in holder:GetChildren() do
+			if math.random() < 0.35 then
+				local a = math.random() * math.pi * 2
+				local r0 = 0.32 + math.random() * 0.12
+				l.Position = UDim2.fromScale(0.5 + math.cos(a) * r0, 0.5 + math.sin(a) * r0 * 1.6)
+				l.Rotation = math.deg(a)
+			end
+		end
+	end))
+end
+
+local function catmull(p0, p1, p2, p3, t)
+	local t2, t3 = t * t, t * t * t
+	return 0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 + (-p0 + 3 * p1 - 3 * p2 + p3) * t3)
+end
+
+CutsceneFX.signatures.FirstPerson = function(ctx)
+	local short = ctx.short == true
+	local S = short and 0.5 or 1 -- time scale for the charge beats
+	local stage = K.stage()
+	local ov = K.overlay()
+	ov.open(0.1)
+	local ungrade = K.grade(ctx.color)
+	local cam = K.camera(ctx)
+	local setFov = ctx.setFov or function() end
+	local dof = Instance.new("DepthOfFieldEffect")
+	dof.Name = "CutsceneDOF"
+	dof.FarIntensity, dof.NearIntensity, dof.FocusDistance, dof.InFocusRadius = 0.6, 0, 6, 8
+	dof.Parent = Lighting
+
+	-- frame of reference: the caster's head, facing the first target (the lane ahead)
+	local pivot = ctx.model and ctx.model:GetPivot() or CFrame.new(ctx.origin)
+	local size = ctx.model and select(2, ctx.model:GetBoundingBox()) or Vector3.new(3, 4, 3)
+	local P = pivot.Position
+	local first = ctx.targets[1] or (P + Vector3.new(0, 0, -30))
+	local fwd = Vector3.new(first.X - P.X, 0, first.Z - P.Z)
+	fwd = fwd.Magnitude > 0.1 and fwd.Unit or Vector3.new(0, 0, -1)
+	local up = Vector3.yAxis
+	local eye = P + up * (size.Y * 0.62) + fwd * (math.max(size.X, size.Z) * 0.45) -- just in front of the eyes
+	local look = first + up * 2.5
+	local center = Vector3.zero
+	for _, t in ctx.targets do center += t end
+	center = #ctx.targets > 0 and center / #ctx.targets or first
+
+	-- 1) swoop into the eyes along a curve (game view -> high over the shoulder -> eyes)
+	local fromCF = ctx.gameCamera()
+	local mid = P - fwd * 10 + up * 9
+	local swoopT = short and 0.3 or 0.45
+	local t0 = os.clock()
+	local a, b, c, d = fromCF.Position, fromCF.Position, mid, eye
+	local swoop = hold(RunService.RenderStepped:Connect(function()
+		local k = math.clamp((os.clock() - t0) / swoopT, 0, 1)
+		local e = 1 - (1 - k) ^ 3
+		local pos = k < 0.5 and catmull(a, b, c, d, e * 2) or catmull(b, c, d, d, e * 2 - 1)
+		local tgt = (fromCF.Position + fromCF.LookVector * 40):Lerp(look, e)
+		cam.to(CFrame.lookAt(pos, tgt), 0)
+		setFov(60 + 10 * e)
+	end))
+	task.wait(swoopT)
+	swoop:Disconnect()
+	ctx.sfx("legendary_gather")
+
+	-- 2) charge in first person
+	local orbPos = eye + fwd * 6.5 - up * 1.6 -- low in frame so the lane stays readable (v1 covered ~40% of the screen)
+	local orb = part({ Shape = Enum.PartType.Ball, Color = Color3.new(1, 1, 1), Size = Vector3.one * 0.3, Position = orbPos }, stage)
+	local glow = part({ Shape = Enum.PartType.Ball, Color = ctx.color, Transparency = 0.45, Size = Vector3.one * 0.6, Position = orbPos }, stage)
+	local light = Instance.new("PointLight")
+	light.Color, light.Range, light.Brightness = ctx.color, 18, 2
+	light.Parent = orb
+	local chargeT = 0.95 * S
+	tw(orb, chargeT, { Size = Vector3.one * 1.6 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+	tw(glow, chargeT, { Size = Vector3.one * 2.2 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+	tw(light, chargeT, { Brightness = 9, Range = 26 })
+	K.gather(stage, orbPos, ctx.color, short and 10 or 22, 9, chargeT)
+	for i, ally in ctx.allies or {} do -- the other familiars feed the orb: beams from the sides of the frame
+		if i > 6 then break end
+		task.delay(0.08 * i * S, function()
+			local from = anchorAt(stage, ally + up * 3)
+			local to = anchorAt(stage, orbPos)
+			local bm = K.beam(from, to, ctx.color, 0.5)
+			bm.grow(0.15)
+			task.delay(0.35 * S, function() bm.fade(0.2) end)
+		end)
+	end
+	-- slow push and lens narrowing with growing handheld shake
+	cam.to(CFrame.lookAt(eye + fwd * 0.8, look), chargeT, Enum.EasingStyle.Sine, Enum.EasingDirection.In)
+	local fovStart = os.clock()
+	local fovConn = hold(RunService.RenderStepped:Connect(function()
+		local k = math.clamp((os.clock() - fovStart) / chargeT, 0, 1)
+		setFov(70 - 18 * k)
+		dof.FocusDistance = 4.5
+	end))
+	cam.shake(0.25, chargeT)
+	if not short then
+		task.delay(0.15, function() K.cutIn(ov, ctx, 0.55) end)
+	end
+	task.wait(chargeT)
+	fovConn:Disconnect()
+
+	-- 3) release: impact frame, FOV punch, ride behind the orb down the lane
+	ctx.sfx("legendary_burst")
+	if IF and ctx.settings.flashes ~= false then
+		IF.impactFrame(ctx.settings)
+	else
+		K.flash(ov, ctx, Color3.new(1, 1, 1), 0.6, 0.18)
+	end
+	glow:Destroy()
+	local travelT = short and 0.35 or 0.5
+	local startPos = orbPos
+	local endPos = center + up * 2
+	speedLines(ov, short and 16 or 26, travelT + 0.1)
+	dof.FarIntensity = 0
+	local rideStart = os.clock()
+	local ride = hold(RunService.RenderStepped:Connect(function()
+		local k = math.clamp((os.clock() - rideStart) / travelT, 0, 1)
+		local e = k * k -- accelerate into the hit
+		local op = startPos:Lerp(endPos, e)
+		orb.Position = op
+		local dir = (endPos - startPos)
+		dir = dir.Magnitude > 0.1 and dir.Unit or fwd
+		cam.to(CFrame.lookAt(op - dir * 7 + up * 2.2, op + dir * 3), 0)
+		setFov(92 - 10 * k)
+	end))
+	-- a trail of light behind the orb
+	local trail = anchorAt(stage, startPos)
+	local tb = K.beam(trail, orb, ctx.color, 0.9)
+	tb.grow(0.1)
+	task.wait(travelT)
+	ride:Disconnect()
+	tb.fade(0.3)
+	orb:Destroy()
+
+	-- 4) impact: brake to a side vantage on the cluster
+	ctx.sfx("summon")
+	local side = fwd:Cross(up)
+	local vantage = center - fwd * 14 + side * 9 + up * 7
+	cam.to(CFrame.lookAt(vantage, center + up), 0.18, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+	setFov(64)
+	cam.shake(0.9, short and 0.4 or 0.8)
+	dof.FarIntensity, dof.FocusDistance, dof.InFocusRadius = 0.35, (vantage - center).Magnitude, 10
+	for i, t in ctx.targets do
+		if i > (short and 5 or 9) then break end
+		task.delay((i - 1) * 0.05, function() K.impact(stage, t, ctx.color, short and 0.9 or 1.1) end)
+	end
+	K.shockwave(stage, center, ctx.color, 22, 0.5) -- coloured, not white: v1 washed the frame white
+	if not short then
+		K.caption(ov, "[ " .. (ctx.ability or "ULTIMATE") .. " ]", ctx.color:Lerp(Color3.new(1, 1, 1), 0.5))
+	end
+	if ctx.onHit then pcall(ctx.onHit) end
+	-- a slow drift across the impact so the aftermath reads
+	cam.to(CFrame.lookAt(vantage + side * 3 + up * 1, center + up), short and 0.5 or 0.9, Enum.EasingStyle.Sine)
+	task.wait(short and 0.5 or 0.95)
+
+	-- 5) back to the board
+	ungrade()
+	tw(dof, 0.4, { FarIntensity = 0, InFocusRadius = 50 })
+	Debris:AddItem(dof, 0.45)
+	setFov(nil)
+	ov.close()
+	cam.done(short and 0.4 or 0.55)
+	task.wait(short and 0.4 or 0.55)
+	stage:Destroy()
+	return true
+end
+CutsceneFX.duration.FirstPerson = 3.5
+
 -- Undo everything a cutscene leaves behind: frame connections, camera, hidden HUD, stage, overlay, colour grade.
 local function cleanup(ctx)
 	for _, c in CutsceneFX._conns do
@@ -847,11 +1057,12 @@ local function cleanup(ctx)
 	end
 	table.clear(CutsceneFX._conns)
 	pcall(ctx.setCamera, nil)
+	if ctx.setFov then pcall(ctx.setFov, nil) end
 	for _, g in CutsceneFX._hidden or {} do
 		g.Enabled = true
 	end
 	CutsceneFX._hidden = nil
-	for _, inst in { workspace:FindFirstChild("Cutscene"), Players.LocalPlayer.PlayerGui:FindFirstChild("CutsceneGui"), Lighting:FindFirstChild("CutsceneGrade") } do
+	for _, inst in { workspace:FindFirstChild("Cutscene"), Players.LocalPlayer.PlayerGui:FindFirstChild("CutsceneGui"), Lighting:FindFirstChild("CutsceneGrade"), Lighting:FindFirstChild("CutsceneDOF") } do
 		inst:Destroy()
 	end
 end
@@ -901,7 +1112,7 @@ function CutsceneFX.play(name, ctx)
 	function CutsceneFX.skip()
 		skip("call")
 	end
-	if ctx.settings.gameSpeed == 2 then
+	if ctx.settings.gameSpeed == 2 and not ctx.short then -- short cuts already fit 2x
 		task.delay(1.3, function()
 			skip("2x")
 		end)

@@ -73,3 +73,32 @@ Earlier work (see [[Research/VFX and Animation/TikTok VFX Reference Study]]) use
 ### Full study done (2026-10-27)
 **Said:** study all videos; STARFALL feels low effort because the beams are plain cylinders; learn how to do these effects from the videos and online sources; if still unclear, research privately; report errors in this chat, otherwise forward to the main chat.
 **Done:** all 19 viewed (sampled frames, no audio); Roblox Beam docs read via search. Recipe: [[Research/VFX and Animation/Beam and Impact VFX Recipes]]. Forwarded to the main session. No errors.
+
+### UI and design rework list (2026-10-28, said during the VFX 1:1 session)
+**Said (summary of the user's words):** rework, after the VFX 1:1 task is finished:
+1. The ROLL option at the bottom: redesign it as we already discussed (see [[Planning/Direction]] and earlier design talks).
+2. Loading screen is terrible: research loading screens that match our game, and add a start menu.
+3. The left-side buttons are useless and the generic UI looks sloppy.
+4. Skill tree is low effort; needs to be much better.
+5. Progression tab is useless; make it useful.
+6. Many buttons are in bad positions; move them.
+7. Perfect-streak and gem indicators are ugly.
+8. Overall: ugly UI and weak game design. "Work on everything once you finished it."
+**Status (2026-10-28):** done in a first pass, see [[Research/UI/UI Rework 2026-10-28]]; then the user said everything was still generic and uniform, so controls became Victorian objects (same note). Look UNVERIFIED until the user plays it.
+
+### Effect craft quality (2026-10-28, VFX 1:1 session)
+**Said:** our effects are not close in quality: the real ones have well-crafted shock and cracking animations, ours look like a low-effort triangle. If we cannot make that, research how to make them like that. Full permission for this.
+**Status (2026-10-28):** researched and built: [[Research/VFX and Animation/Crafted Sheet Techniques]]. Earlier status: researching how sheet effects are authored (noise erosion, gradient maps, branching cracks, distortion, bloom; Blender and free particle tools), then rebuilding the egg hatch and coin drop with that method.
+
+### Every action is a cutscene (2026-10-28, VFX 1:1 + UI session)
+**Said:** "I don't just want a generic game, I want every action the user does to be a cutscene." Examples: pressing ULTIMATE goes into first person and you see the ultimate in action; opening the SKILL TREE goes into first person, you watch the actual tree grow, walk towards it and upgrade.
+Also said: "I want absolute immersion when doing anything in the game."
+**Status:** design draft in [[Planning/Immersion - Every Action a Cutscene]]; not built. Needs a design pass (which actions, length per action, skip rules for repeated actions, reduced-motion setting) before building.
+
+### Roll and bottom buttons still generic (2026-10-28)
+**Said:** "Our rolling animation is still too generic. Our buttons on the bottom as well. Look at creative games with the fantasy theme and see what they are doing."
+**Status:** done in a first pass: [[Research/VFX and Animation/Summon References]] (The Reading reveal, the desk). Look UNVERIFIED until the user plays it.
+
+### Settings too generic + a quick fix tool (2026-10-28)
+**Said:** the settings buttons are too generic; research creative ones; create something I can use to instantly tell you to fix and make more creative, and record how to do it in Obsidian.
+**Done:** settings rebuilt as an instrument board; `/make-creative` skill (`.claude/skills/make-creative/`) and [[Research/UI/Creative Fix Method]] (loop, metaphor table, pitfalls, log).

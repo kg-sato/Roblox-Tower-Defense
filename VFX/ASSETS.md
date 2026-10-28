@@ -56,3 +56,9 @@ Outputs in `flipbooks/`: `ul_candlesmoke01_loop`, `ul_cloud01_loop`, `ul_explosi
 | `third_party/yuruzuu_rbxl/{Healing_Effect, Hollow_Purple, Arrow_Rain, Lightning_Blade, Pyronado, Lightning_Strike, Thunder_Spear (1)}.rbxl` | Yuruzuu's open-source VFX, https://devforum.roblox.com/t/yuruzuus-open-source-vfx/1840021 | "free to use", credit appreciated, do not claim you made it; no named licence | Study only. Layers and texture ids extracted by `tools/rbxl_emitters.py` into `flipbooks/yuruzuu_emitter_layers.json`. The texture ids are the author's uploads: using them in our game depends on their asset permissions (**unverified**); prefer our own sheets |
 | `flipbooks/yuruzuu_recipes.json`, `YuruzuuPorts.luau` | layer numbers read from the Yuruzuu files above by `tools/rbxl_emitters.py --full` (no textures or ids taken); ported as FXRecipes hollowPurple, healing, arrowRain with built-in Roblox textures | credit: Yuruzuu (DevForum open-source VFX) | 2026-10-27 overnight (T30) |
 
+
+## Our particle textures and crafted sheets (2026-10-28, uploaded with the owner's OK for our own textures)
+| File | Source | Licence | Notes |
+|---|---|---|---|
+| `textures/*.png` (lightning_ring, bolts_4x4, dot, dot_4x4, wisps, disc, ray_burst, swirl, crescent, glow, spark4, streak, ring, shard, plus, dot_corner and their `_v2`/`_v3` revisions) | painted by `tools/fx_tex.py` (original, shapes chosen to match the roles of Yuruzuu's layers; no pixels copied) | ours | uploaded via Studio MCP `upload_image`; ids in `textures/ids.json` |
+| `flipbooks/egg_hatch_8x8.png`, `flipbooks/coin_drop_8x8.png` (also `textures/*_v2_8x8.png`) | drawn by `tools/fx_craft.py` (original; beats and sizes measured from the ParticleFX Pet Egg Hatch and Enemy Defeat Coin Drop sheets, no pixels copied) | ours | uploaded: egg 85571191205476, coin 113999797256109 |

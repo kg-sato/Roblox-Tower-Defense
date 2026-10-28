@@ -2,6 +2,7 @@
 
     python VFX/sfx/make_sfx.py            write WAVs to VFX/sfx/out/ and copy to Studio's local content/sounds/vfx/
     python VFX/sfx/make_sfx.py --remove   delete the installed folder
+    python VFX/sfx/make_sfx.py --only lampwick   only the Lampwick Lane game sounds (or a comma list of names)
 
 16-bit mono 44.1 kHz, peak normalised to about -3 dBFS, 5 ms fade in and out so nothing clicks. Loaded in Studio from
 rbxasset://sounds/vfx/<name>.wav (dev preview only; a published game needs these uploaded: owner's OK).
@@ -501,6 +502,101 @@ def wish_pull():
     finish(mix(ris, tone, beats, gains=[0.7, 0.35, 0.6]), "wish_pull", 0.65)
 
 
+
+# ---- Lampwick Lane game sounds (2026-10-28): the game itself was nearly silent between cutscenes ------------------------
+def brass_click():
+    """a brass control pressed: two inharmonic metal partials and a small low tick"""
+    d = 0.14
+    s = mix(mul(sine(2380, d), env_exp(d, 38)), mul(sine(3910, d), env_exp(d, 55)), mul(sine(320, d, sweep_to=220), env_exp(d, 60, 0.001)),
+            mul(filt(noise(d, 61), "hp", 5000), env_exp(d, 160)), gains=[0.5, 0.3, 0.6, 0.25])
+    finish(s, "brass_click", 0.55)
+
+
+def card_flip():
+    """a tarot card snapped off the deck: two quick paper flicks"""
+    d = 0.2
+    a = mul(swept_bp(noise(0.09, 62), 1800, 6500, 1.8), env_curve(0.09, [(0, 0), (0.015, 1), (0.09, 0)]))
+    b = mul(swept_bp(noise(0.08, 63), 2500, 5000, 1.8), env_curve(0.08, [(0, 0), (0.01, 0.7), (0.08, 0)]))
+    finish(mix(place(a, 0, d), place(b, 0.07, d), gains=[1, 0.7]), "card_flip", 0.55)
+
+
+def bell_toll():
+    """a deep street bell: minor-third bell partials with long decays and a strike"""
+    d = 2.6
+    f = 196.0
+    parts = [(0.5, 1.4, 0.5), (1.0, 1.8, 0.8), (1.19, 2.4, 0.45), (1.5, 2.8, 0.35), (2.0, 3.2, 0.4), (2.52, 4.5, 0.2), (3.0, 5.5, 0.15), (4.07, 7, 0.1)]
+    tones = [mul(vibrato_sine(f * r, d, 1, 1.3 + i * 0.4, 0.0015), env_exp(d, dec, 0.002)) for i, (r, dec, g) in enumerate(parts)]
+    strike = mul(filt(noise(0.06, 64), "bp", 1500, 1.2), env_exp(0.06, 60))
+    s = mix(*tones, place(strike, 0, d), gains=[g for (_, _, g) in parts] + [0.5])
+    finish(reverb(s, 0.3, 1.0), "bell_toll", 0.7)
+
+
+def coin_clink():
+    """coins dropped in a purse: two bright pings"""
+    d = 0.3
+    a = mix(mul(sine(3150, d), env_exp(d, 28)), mul(sine(4730, d), env_exp(d, 40)), gains=[0.6, 0.35])
+    b = mix(mul(sine(3480, d), env_exp(d, 30)), mul(sine(5210, d), env_exp(d, 45)), gains=[0.5, 0.3])
+    finish(reverb(mix(place(a, 0, 0.36), place(b, 0.045, 0.36), gains=[1, 0.8]), 0.1, 0.2), "coin_clink", 0.5)
+
+
+def enemy_hit():
+    """a soft body hit: low thud and a puff of noise"""
+    d = 0.16
+    thud = mul(sine(190, d, sweep_to=85, curve=0.5), env_exp(d, 22, 0.001))
+    puff = mul(filt(noise(d, 65), "lp", 1400), env_exp(d, 35))
+    finish(mix(thud, puff, gains=[0.85, 0.4]), "enemy_hit", 0.5)
+
+
+def enemy_poof():
+    """an enemy dissolving into lamp smoke: a downward whoosh with a small pop"""
+    d = 0.42
+    whoosh = mul(swept_bp(noise(d, 66), 3200, 500, 1.5, 0.7), env_curve(d, [(0, 0), (0.05, 1), (d, 0)]))
+    pop = mul(sine(520, 0.12, sweep_to=980, curve=0.6), env_exp(0.12, 30))
+    finish(reverb(mix(whoosh, place(pop, 0, d), gains=[0.8, 0.45]), 0.15, 0.3), "enemy_poof", 0.5)
+
+
+def glass_crack():
+    """the crystal cracking: a crackle of tiny clicks, a high ring and a thud"""
+    d = 0.6
+    r = random.Random(67)
+    crack = zeros(d)
+    for _ in range(26):
+        t = r.random() ** 1.7 * 0.28
+        i0 = int(t * SR)
+        for j in range(int(0.003 * SR)):
+            if i0 + j < len(crack):
+                crack[i0 + j] += (r.random() * 2 - 1) * math.exp(-j / 30) * (0.5 + r.random() * 0.5)
+    crack = filt(crack, "hp", 2500)
+    ring_ = mix(mul(sine(5200, d), env_exp(d, 9)), mul(sine(7900, d), env_exp(d, 14)), gains=[0.4, 0.2])
+    thud = mul(sine(120, 0.25, sweep_to=60), env_exp(0.25, 18, 0.001))
+    finish(reverb(mix(crack, ring_, place(thud, 0, d), gains=[1, 0.5, 0.7]), 0.15, 0.3), "glass_crack", 0.6)
+
+
+def clock_tick():
+    """a pocket-watch tick (play at pitch 0.8 for the tock)"""
+    d = 0.08
+    s = mix(mul(filt(noise(d, 68), "bp", 3200, 3), env_exp(d, 120)), mul(sine(1250, d), env_exp(d, 90)), gains=[1, 0.5])
+    finish(s, "clock_tick", 0.5)
+
+
+def place_thud():
+    """a familiar set down on the cobbles: a wooden knock"""
+    d = 0.2
+    s = mix(mul(sine(210, d, sweep_to=170), env_exp(d, 28, 0.001)), mul(sine(445, d), env_exp(d, 45)), mul(filt(noise(d, 69), "lp", 900), env_exp(d, 50)), gains=[0.7, 0.35, 0.4])
+    finish(s, "place_thud", 0.5)
+
+
+def iron_clank():
+    """an iron sign swinging into place on its chains (the boss plate)"""
+    d = 0.8
+    parts = [(310, 6), (847, 9), (1432, 12), (2213, 16), (3050, 22)]
+    s = mix(*[mul(sine(f, d), env_exp(d, dec, 0.001)) for f, dec in parts], mul(filt(noise(0.1, 70), "bp", 2000, 1.0), env_exp(0.1, 40)), gains=[0.6, 0.45, 0.35, 0.25, 0.15, 0.5])
+    rattle = mix(*[place(mul(filt(noise(0.04, 71 + i), "bp", 2600 + 300 * i, 2), env_exp(0.04, 70)), 0.12 + 0.07 * i, d) for i in range(4)], gains=[0.3] * 4)
+    finish(reverb(mix(s, rattle, gains=[1, 1]), 0.2, 0.5), "iron_clank", 0.6)
+
+
+LAMPWICK = [brass_click, card_flip, bell_toll, coin_clink, enemy_hit, enemy_poof, glass_crack, clock_tick, place_thud, iron_clank]
+
 MERGE_GAME = [lambda k=k: merge_tier(k) for k in range(1, 9)] + [summon, surge, echo, bank, charge_ready, merge_fail, wish_pull]
 
 ALL = [ui_click, combo, ring, milestone, spotlight, menu_open, menu_close, discovery, load_start, load_synced, load_resolve, common, rare, epic,
@@ -515,7 +611,9 @@ if __name__ == "__main__":
             print("removed", t)
         sys.exit()
     os.makedirs(OUT, exist_ok=True)
-    for fn in ALL + MERGE_GAME:
+    only = sys.argv[sys.argv.index("--only") + 1].split(",") if "--only" in sys.argv else None  # e.g. --only lampwick
+    todo = LAMPWICK if only == ["lampwick"] else [f for f in ALL + MERGE_GAME + LAMPWICK if not only or f.__name__ in only]
+    for fn in todo:
         fn()
     for t in targets:
         os.makedirs(t, exist_ok=True)

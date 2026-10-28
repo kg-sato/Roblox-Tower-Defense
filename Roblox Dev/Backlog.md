@@ -24,6 +24,10 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [~] (old) Vertical slice built 2026-10-24 (Shared/Config, Path, MatchSim; ServerScriptService/MatchService; StarterPlayerScripts/GameClient; Workspace/Map). Verified: headless logic tests, scripted Play run with no errors from our scripts. NOT verified: real drag input, visuals by eye, phone layout. Next: user plays it once.
 
 ## Next
+- [ ] **Needs the user:** play the 2026-10-28 UI rework and the 1:1 effects, judge the look ([[Research/UI/UI Rework 2026-10-28]], [[Research/VFX and Animation/Effect Recreation 1to1 - Index]])
+- [ ] Wire the crafted egg hatch and coin drop sheets and the 1:1 Hollow Purple / Healing ports into real game moments; run the same 1:1 method on merge burst, hit spark, Starfall
+- [ ] Phone check of the new HUD (dock moves right, START WAVE above the roll bar)
+- [ ] Lighting for effects: bloom threshold 0.92 and StageGrade saturation -0.18 dull effect colours; test a brief bloom drop on big moments
 - [x] Re-imported v2 and verified (upright, clips play); duplicates deleted 2026-10-25
 - [ ] **Needs the user:** attach reference images for the first real set of distinct pets ([[Research/3D and Art/3D Model Workflow|3D Model Workflow]]), and publish the clips as Animation assets when ready
 - [~] Recreate the screenshot UIs in order: LobbyHud and BattlePass built 2026-10-25; CrateClaim, UnitView and ModeSelect built the same day; EventShop, PassShop, Profile and FirstDraw built the same day (9 screens in UIScreens2); next: unlock toast and island portals, equip-best inventory, tutorial steps, free-reward popup, idle columns, aura viewer list, settings variants, loading warning, trade menu, fishing family. Pick the order for recreating the screenshot UIs ([[Research/UI/UI Recreation Coverage|UI Recreation Coverage]]) and whether the game HUD moves onto the UI Kit
@@ -32,7 +36,7 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [ ] Blender idle/attack animation for the other 6 pets and the 4 enemies
 - [ ] Blender cinematic hatch (shell pieces, shards, rarity styles)
 - [ ] Blender: find blender.exe, then egg/shard models and animation per [[Research/3D and Art/Blender Cinematic Pipeline|Blender Cinematic Pipeline]]
-- [ ] Skill tree polish: connecting lines, respec, next-best hint
+- [x] Skill tree polish: connecting lines (2026-10-28); still open: respec, next-best hint
 - [ ] Per-pet ultimates (each pet its own effect)
 - [x] Set up Hunyuan3D-2 locally (mini-Turbo, shape only on 8 GB GPU)
 - [ ] Decide source of reference images for Hunyuan3D (user-supplied or Studio renders)

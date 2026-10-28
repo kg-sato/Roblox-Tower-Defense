@@ -50,6 +50,9 @@ return function(Shared)
 	check("enum outside the list rejected", not ok("particles", "ultra"))
 	check("enum wrong type rejected", not ok("backdrop", 3))
 	check("numberFormat bogus rejected", not ok("numberFormat", "roman"))
+	check("cinematics short accepted", ok("cinematics", "short"))
+	check("cinematics bogus rejected", not ok("cinematics", "epic"))
+	check("cinematics default is full", S.defaults.cinematics == "full")
 
 	-- sanitize
 	local s = S.sanitize({ musicVolume = 99, flashes = "x", bogus = 1, particles = "high", backdrop = false })

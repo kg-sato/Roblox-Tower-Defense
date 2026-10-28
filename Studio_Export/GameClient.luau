@@ -607,6 +607,16 @@ function UI.numFont(inst)
 end
 
 function UI.tintButton(b, color)
+	if b:GetAttribute("ObjectButton") then -- object buttons: grey = dim the art, green = switched on
+		local dim = color == STYLE.grey
+		for _, o in b:GetDescendants() do
+			if o:IsA("ImageLabel") and o:GetAttribute("Tint") then
+				o.ImageColor3 = dim and Color3.fromRGB(125, 122, 140) or Color3.new(1, 1, 1)
+			end
+		end
+		b:SetAttribute("On", color == STYLE.green)
+		return
+	end
 	local skin = b:FindFirstChild("Skin")
 	if skin and UI.fa then
 		skin.ImageContent = UI.fa.button(color)
@@ -877,189 +887,472 @@ local function pill(parent, size, name)
 	return f
 end
 
-local rail = new("Frame", { Name = "Rail", BackgroundTransparency = 1, Position = UDim2.fromOffset(12, 12), Size = UDim2.fromOffset(168, 300) }, hud)
-new("UIListLayout", { Padding = UDim.new(0, 8), SortOrder = Enum.SortOrder.LayoutOrder }, rail)
-do -- keep the rail below Roblox's top bar (it sat under the menu buttons and hid the level pill; UI Quality Bar gap 1)
+-- ===== HUD v2 (2026-10-28 rework): trainer card + purse top-left, icon dock left, run status top centre,
+-- Sol's-style roll bar bottom centre (AUTO | ROLL | QUICK), START WAVE + ULT dial bottom right. Same locals as v1,
+-- so the rest of the client keeps working. Icons are the uploaded UI Kit art (UIArt.ids); text-only fallback if missing.
+local function iconImg(parent, name, size, pos, anchor, z)
+	local img = UI.art and UI.art.has(name) and UI.art.image(name)
+	if not img then
+		return nil
+	end
+	return new("ImageLabel", { Name = "Icon", BackgroundTransparency = 1, Image = img, ScaleType = Enum.ScaleType.Fit, Size = size, Position = pos, AnchorPoint = anchor or Vector2.new(0.5, 0.5), ZIndex = z or 4 }, parent)
+end
+
+local function glowStroke(gui, color, thickness, transparency)
+	return new("UIStroke", { Color = color, Thickness = thickness or 2, Transparency = transparency or 0.2, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }, gui)
+end
+
+-- top-left: trainer card and purse
+local rail = new("Frame", { Name = "Rail", BackgroundTransparency = 1, Position = UDim2.fromOffset(12, 12), Size = UDim2.fromOffset(250, 160) }, hud)
+do -- keep below Roblox's top bar (UI Quality Bar gap 1)
 	local GuiService = game:GetService("GuiService")
 	local function placeRail()
 		local ok, inset = pcall(function() return GuiService.TopbarInset.Height end)
-		rail.Position = UDim2.fromOffset(12, 12 + (ok and inset or 58) / math.max(uiScale.Scale, 0.01))
+		rail.Position = UDim2.fromOffset(12, 8 + (ok and inset or 58) / math.max(uiScale.Scale, 0.01))
 	end
 	placeRail()
 	camera:GetPropertyChangedSignal("ViewportSize"):Connect(placeRail)
 	GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeRail)
 end
 
-local lvlPill = pill(rail, UDim2.new(1, 0, 0, 54), "Level")
-lvlPill.LayoutOrder = 0
-local lvlBadge = new("Frame", { BackgroundColor3 = STYLE.purple, Size = UDim2.fromOffset(38, 38), Position = UDim2.fromOffset(8, 8), Rotation = 45 }, lvlPill)
-round(lvlBadge, 8)
-gradient(lvlBadge, STYLE.purple)
-local lvlNum = label(lvlPill, "1", 24, STYLE.text, Vector2.new(0.5, 0.5), UDim2.fromOffset(27, 27), UDim2.fromOffset(38, 38), STYLE.fontB)
-lvlNum.ZIndex = 3
-local lvlTitle = label(lvlPill, "TRAINER", 14, STYLE.muted, Vector2.new(0, 0), UDim2.fromOffset(54, 6), UDim2.new(1, -60, 0, 16), STYLE.fontB)
+local lvlPill = pill(rail, UDim2.fromOffset(236, 58), "Level")
+lvlPill.Position = UDim2.fromOffset(10, 0)
+local lvlBadge = new("Frame", { Name = "Medallion", BackgroundColor3 = STYLE.purple, Size = UDim2.fromOffset(62, 62), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(18, 29), ZIndex = 4 }, lvlPill)
+round(lvlBadge, 31)
+new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(196, 150, 255), Color3.fromRGB(88, 40, 160)) }, lvlBadge)
+glowStroke(lvlBadge, STYLE.gold, 3, 0)
+local lvlNum = label(lvlBadge, "1", 30, STYLE.text, Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.54), UDim2.fromScale(1, 0.7), STYLE.fontB)
+lvlNum.ZIndex = 5
+local lvlTitle = label(lvlPill, "TRAINER", 15, STYLE.gold, Vector2.new(0, 0), UDim2.fromOffset(58, 5), UDim2.new(1, -66, 0, 18), STYLE.font)
 lvlTitle.TextXAlignment = Enum.TextXAlignment.Left
-local xpBg = new("Frame", { BackgroundColor3 = Color3.fromRGB(14, 16, 32), Position = UDim2.fromOffset(54, 28), Size = UDim2.new(1, -64, 0, 16) }, lvlPill)
-round(xpBg, 8)
-local xpFill = new("Frame", { BackgroundColor3 = STYLE.purple, Size = UDim2.fromScale(0, 1) }, xpBg)
-round(xpFill, 8)
-gradient(xpFill, STYLE.purple)
-local xpLabel = label(xpBg, "", 11, STYLE.text, nil, nil, nil, STYLE.fontB)
+local xpBg = new("Frame", { BackgroundColor3 = Color3.fromRGB(10, 10, 26), Position = UDim2.fromOffset(58, 28), Size = UDim2.new(1, -68, 0, 18), ZIndex = 3 }, lvlPill)
+round(xpBg, 9)
+glowStroke(xpBg, Color3.fromRGB(120, 90, 200), 1.5, 0.3)
+local xpFill = new("Frame", { BackgroundColor3 = STYLE.purple, Size = UDim2.fromScale(0, 1), ZIndex = 3 }, xpBg)
+round(xpFill, 9)
+new("UIGradient", { Color = ColorSequence.new(Color3.fromRGB(140, 90, 255), Color3.fromRGB(230, 170, 255)) }, xpFill)
+local xpLabel = label(xpBg, "", 13, STYLE.text, nil, nil, nil, STYLE.fontB)
 xpLabel.ZIndex = 4
 
-local function currencyPill(order, color, name)
-	local p = pill(rail, UDim2.new(1, 0, 0, 42), name)
-	p.LayoutOrder = order
-	local l = label(p, "0", 26, color, Vector2.new(0, 0.5), UDim2.new(0, 48, 0.5, 0), UDim2.new(1, -54, 1, 0), STYLE.fontB)
+local function currencyPill(y, color, name, icon)
+	local p = pill(rail, UDim2.fromOffset(176, 42), name)
+	p.Position = UDim2.fromOffset(24, y)
+	local back = new("Frame", { Name = "Back", BackgroundColor3 = Color3.fromRGB(10, 10, 24), BackgroundTransparency = 0.3, Size = UDim2.fromScale(1, 1), ZIndex = 1 }, p)
+	round(back, 21)
+	glowStroke(back, color, 1.5, 0.45)
+	local l = label(p, "0", 26, color, Vector2.new(0, 0.5), UDim2.new(0, 34, 0.5, 0), UDim2.new(1, -42, 1, 0), STYLE.fontB)
 	l.TextXAlignment = Enum.TextXAlignment.Left
 	local sc = new("UIScale", { Scale = 1 }, p)
-	return p, l, sc
+	-- the icon breaks the capsule's left edge, larger than the bar (reference: paid simulator HUDs)
+	local ic = iconImg(p, icon, UDim2.fromOffset(50, 50), UDim2.new(0, 2, 0.5, 0), nil, 5)
+	return p, l, sc, ic
+end
+local coinPill, coinLabel, coinScale, coinIcon = currencyPill(68, STYLE.gold, "Coins", "icon_coin")
+local gemPill, gemLabel, gemScale, gemIcon = currencyPill(116, STYLE.gem, "Gems", "icon_gem")
+for _, pair in { { coinPill, coinIcon, STYLE.gold }, { gemPill, gemIcon, STYLE.gem } } do
+	if not pair[2] then -- no art: a simple drawn token so the counter still has an icon
+		local t = new("Frame", { BackgroundColor3 = pair[3], Size = UDim2.fromOffset(26, 26), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 2, 0.5, 0), ZIndex = 5 }, pair[1])
+		round(t, 13)
+	end
 end
 
-local coinPill, coinLabel, coinScale = currencyPill(1, STYLE.gold, "Coins")
-local coinIcon = UI.artIcon(coinPill, "icon_coin", UDim2.fromOffset(34, 34), UDim2.fromOffset(8, 4))
-if not coinIcon then
-	coinIcon = new("Frame", { BackgroundColor3 = STYLE.gold, Size = UDim2.fromOffset(28, 28), Position = UDim2.fromOffset(10, 7) }, coinPill)
-	round(coinIcon, 14)
-	outline(coinIcon, 3, 0, Color3.fromRGB(200, 140, 20))
-	gradient(coinIcon, STYLE.gold)
-end
-
-local gemPill, gemLabel, gemScale = currencyPill(2, STYLE.gem, "Gems")
-local gemIcon = UI.artIcon(gemPill, "icon_gem", UDim2.fromOffset(34, 34), UDim2.fromOffset(8, 4))
-if not gemIcon then
-	gemIcon = new("Frame", { BackgroundColor3 = STYLE.gem, Size = UDim2.fromOffset(22, 22), Position = UDim2.fromOffset(14, 10), Rotation = 45 }, gemPill)
-	round(gemIcon, 5)
-	outline(gemIcon, 2, 0.2, Color3.fromRGB(30, 130, 180))
-	gradient(gemIcon, STYLE.gem)
-end
-
+-- left: icon dock (tiles with painted icons, label under, badge corner)
+local dock = new("Frame", { Name = "Dock", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 12, 0.5, 10), Size = UDim2.fromOffset(84, 300) }, hud)
+new("UIListLayout", { Padding = UDim.new(0, 10), SortOrder = Enum.SortOrder.LayoutOrder, HorizontalAlignment = Enum.HorizontalAlignment.Center }, dock)
+local DOCK_ICONS = { ["Progression"] = "icon_trophy", ["Skill Tree"] = "icon_star", ["Settings"] = "icon_gear" }
 local function railButton(text, order, color)
-	local holder = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 38), LayoutOrder = order }, rail)
-	local b = makeButton(holder, text, UDim2.fromScale(1, 1), UDim2.fromScale(0.5, 0.5), color or STYLE.blue)
-	b.TextSize = 20
+	local holder = new("Frame", { Name = text, BackgroundTransparency = 1, Size = UDim2.fromOffset(84, 92), LayoutOrder = order }, dock)
+	local b = makeButton(holder, "", UDim2.fromOffset(72, 72), UDim2.new(0.5, 0, 0, 36), color or STYLE.blue)
+	local ic = iconImg(b, DOCK_ICONS[text] or "icon_star", UDim2.fromOffset(54, 54), UDim2.fromScale(0.5, 0.5), nil, 6)
+	if not ic then
+		b.Text = string.sub(text, 1, 1)
+		b.TextSize = 30
+	end
+	local cap = label(holder, string.upper(text), 14, STYLE.text, Vector2.new(0.5, 1), UDim2.new(0.5, 0, 1, 0), UDim2.new(1, 16, 0, 18), STYLE.fontB)
+	cap.ZIndex = 4
 	return b
 end
-
 local progressBtn = railButton("Progression", 3, STYLE.purple)
-local skillsBtn = railButton("Skill Tree", 4, STYLE.blue)
-local quickBtn = railButton("Quick Roll: OFF", 5, STYLE.grey)
-quickBtn.TextSize = 15
-local spBadge = new("Frame", { BackgroundColor3 = STYLE.red, Size = UDim2.fromOffset(24, 24), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(1, -4, 0, 2), ZIndex = 4, Visible = false }, skillsBtn)
-round(spBadge, 12)
-outline(spBadge, 2, 0.2, Color3.new(1, 1, 1))
-local spBadgeLabel = label(spBadge, "0", 14)
-spBadgeLabel.ZIndex = 5
+local skillsBtn = railButton("Skill Tree", 2, STYLE.blue)
+local spBadge = new("Frame", { BackgroundColor3 = STYLE.red, Size = UDim2.fromOffset(26, 26), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(1, -4, 0, 4), ZIndex = 8, Visible = false }, skillsBtn)
+round(spBadge, 13)
+outline(spBadge, 2, 0.1, Color3.new(1, 1, 1))
+local spBadgeLabel = label(spBadge, "0", 15, STYLE.text, nil, nil, nil, STYLE.fontB)
+spBadgeLabel.ZIndex = 9
 
--- Top centre
-local stagePill = pill(hud, UDim2.fromOffset(200, 46), "Stage")
+-- top centre: stage plate, crystal bar under it, streak badge to the right
+local stagePill = pill(hud, UDim2.fromOffset(220, 46), "Stage")
 stagePill.AnchorPoint = Vector2.new(0.5, 0)
-stagePill.Position = UDim2.new(0.5, 0, 0, 12)
-local stageLabel = label(stagePill, "STAGE 1", 26, STYLE.text, nil, nil, nil, STYLE.fontB)
-local streakLabel = label(hud, "", 18, STYLE.gold, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 62), UDim2.fromOffset(340, 26))
-local bossBarBg = new("Frame", { BackgroundColor3 = STYLE.panelDark, Size = UDim2.fromOffset(260, 20), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 90), Visible = false }, hud)
+stagePill.Position = UDim2.new(0.5, 0, 0, 10)
+local stageLabel = label(stagePill, "STAGE 1", 28, STYLE.gold, nil, nil, nil, STYLE.fontB)
+
+local hpPill = new("Frame", { Name = "Crystal", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 62), Size = UDim2.fromOffset(280, 26) }, hud)
+local hpBg = new("Frame", { BackgroundColor3 = Color3.fromRGB(8, 12, 28), BackgroundTransparency = 0.15, Position = UDim2.fromOffset(18, 2), Size = UDim2.new(1, -18, 1, -4), ZIndex = 2 }, hpPill)
+round(hpBg, 11)
+glowStroke(hpBg, Color3.fromRGB(90, 170, 255), 1.5, 0.25)
+local hpFill = new("Frame", { BackgroundColor3 = STYLE.blue, Size = UDim2.fromScale(1, 1), ZIndex = 2 }, hpBg)
+round(hpFill, 11)
+new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(150, 220, 255), Color3.fromRGB(40, 110, 230)) }, hpFill)
+local hpLabel = label(hpBg, "", 16, STYLE.text, nil, nil, nil, STYLE.fontB)
+hpLabel.ZIndex = 4
+iconImg(hpPill, "icon_crystal", UDim2.fromOffset(40, 40), UDim2.new(0, 14, 0.5, 0), nil, 5)
+
+-- streak badge: flame icon, big multiplier, small gem bonus; hidden at 0
+local streakBadge = pill(hud, UDim2.fromOffset(150, 46), "Streak")
+streakBadge.AnchorPoint = Vector2.new(0, 0)
+streakBadge.Position = UDim2.new(0.5, 122, 0, 10)
+streakBadge.Visible = false
+do
+	local back = new("Frame", { Name = "Back", BackgroundColor3 = Color3.fromRGB(24, 12, 8), BackgroundTransparency = 0.25, Size = UDim2.fromScale(1, 1), ZIndex = 1 }, streakBadge)
+	round(back, 23)
+	glowStroke(back, STYLE.orange, 1.5, 0.35)
+end
+local streakScale = new("UIScale", { Scale = 1 }, streakBadge)
+local flame = iconImg(streakBadge, "icon_flame", UDim2.fromOffset(52, 52), UDim2.new(0, 14, 0.5, -4), nil, 6)
+local streakNum = label(streakBadge, "x1", 28, STYLE.orange, Vector2.new(0, 0), UDim2.fromOffset(42, -1), UDim2.fromOffset(100, 30), STYLE.fontB)
+streakNum.TextXAlignment = Enum.TextXAlignment.Left
+local streakSub = label(streakBadge, "", 15, STYLE.gem, Vector2.new(0, 1), UDim2.new(0, 43, 1, -2), UDim2.fromOffset(104, 18), STYLE.fontB)
+streakSub.TextXAlignment = Enum.TextXAlignment.Left
+local streakLabel = streakNum -- old name kept for code that reads it
+if flame then
+	TweenService:Create(flame, TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Rotation = 6, Size = UDim2.fromOffset(56, 58) }):Play()
+end
+local lastCombo = 0
+function UI.setStreak(combo, mult)
+	streakBadge.Visible = combo > 0
+	if combo <= 0 then
+		lastCombo = 0
+		return
+	end
+	streakNum.Text = "x" .. combo
+	streakSub.Text = string.format("GEMS x%.2f", mult)
+	if combo > lastCombo then -- pop on every new perfect stage
+		streakScale.Scale = 1.25
+		tween(streakScale, 0.35, { Scale = 1 }, Enum.EasingStyle.Back)
+	end
+	lastCombo = combo
+end
+
+local bossBarBg = new("Frame", { BackgroundColor3 = STYLE.panelDark, Size = UDim2.fromOffset(280, 20), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 94), Visible = false }, hud)
 round(bossBarBg, 10)
-outline(bossBarBg, 2, 0.4, STYLE.red)
+outline(bossBarBg, 2, 0.3, STYLE.red)
 local bossBar = new("Frame", { BackgroundColor3 = STYLE.red, Size = UDim2.fromScale(1, 1) }, bossBarBg)
 round(bossBar, 10)
 gradient(bossBar, STYLE.red)
 local bossBarLabel = label(bossBarBg, "", 13, STYLE.text, nil, nil, nil, STYLE.fontB)
 bossBarLabel.ZIndex = 4
 
--- Top right: crystal
-local hpPill = pill(hud, UDim2.fromOffset(176, 46), "Crystal")
-hpPill.AnchorPoint = Vector2.new(1, 0)
-hpPill.Position = UDim2.new(1, -12, 0, 12)
-local hpBg = new("Frame", { BackgroundColor3 = Color3.fromRGB(14, 16, 32), Size = UDim2.new(1, -12, 1, -12), Position = UDim2.fromOffset(6, 6) }, hpPill)
-round(hpBg, 9)
-local hpFill = new("Frame", { BackgroundColor3 = STYLE.blue, Size = UDim2.fromScale(1, 1) }, hpBg)
-round(hpFill, 9)
-gradient(hpFill, STYLE.blue)
-local hpLabel = label(hpBg, "", 20, STYLE.text, nil, nil, nil, STYLE.fontB)
-hpLabel.ZIndex = 4
-if UI.fa then
-	-- glossy glowing capsule fill instead of a flat bar
-	hpBg.BackgroundTransparency = 0.4
-	hpFill.BackgroundTransparency = 1
-	local c, sl, f = UI.fa.button(STYLE.blue, true)
-	new("ImageLabel", { Name = "Skin", BackgroundTransparency = 1, ImageContent = c, ScaleType = Enum.ScaleType.Slice, SliceCenter = sl, SliceScale = 0.6, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.new(1, f * 1.2, 1, f * 1.2), ZIndex = 3 }, hpFill)
-end
-
--- Bottom centre: roll (+ odds link)
-local rollBtn, rollScale = makeButton(hud, "ROLL", UDim2.fromOffset(250, 78), UDim2.new(0.5, 0, 1, -54), STYLE.green)
-rollBtn.Text = ""
-local rollText = label(rollBtn, "ROLL", 34, STYLE.text, Vector2.new(0, 0), UDim2.fromOffset(92, 6), UDim2.new(1, -100, 0, 40))
+-- bottom centre: the roll bar
+local rollBar = new("Frame", { Name = "RollBar", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -12), Size = UDim2.fromOffset(600, 92) }, hud)
+local rollBtn, rollScale = makeButton(rollBar, "", UDim2.fromOffset(250, 80), UDim2.new(0.5, 0, 1, -40), STYLE.green)
+local rollText = label(rollBtn, "ROLL", 36, STYLE.text, Vector2.new(0, 0), UDim2.fromOffset(88, 4), UDim2.new(1, -96, 0, 42))
 rollText.TextXAlignment = Enum.TextXAlignment.Left
--- summoning card icon (painted at runtime) instead of the old egg art
-local eggIcon = UI.fa and new("ImageLabel", { Name = "CardIcon", BackgroundTransparency = 1, ImageContent = UI.fa.cardIcon(), ScaleType = Enum.ScaleType.Fit, Size = UDim2.fromOffset(52, 68), Position = UDim2.fromOffset(22, 5), ZIndex = 3 }, rollBtn) or UI.artIcon(rollBtn, "icon_egg", UDim2.fromOffset(60, 66), UDim2.fromOffset(18, 6))
-if not eggIcon then
-	eggIcon = new("Frame", { BackgroundColor3 = Color3.fromRGB(250, 244, 228), Size = UDim2.fromOffset(46, 58), Position = UDim2.fromOffset(24, 10) }, rollBtn)
-	round(eggIcon, 24)
-	outline(eggIcon, 3, 0, Color3.fromRGB(190, 175, 150))
-end
-local rollCost = label(rollBtn, "", 20, STYLE.gem, Vector2.new(0, 1), UDim2.new(0, 92, 1, -6), UDim2.new(1, -100, 0, 22), STYLE.fontB)
+local eggIcon = UI.fa and new("ImageLabel", { Name = "CardIcon", BackgroundTransparency = 1, ImageContent = UI.fa.cardIcon(), ScaleType = Enum.ScaleType.Fit, Size = UDim2.fromOffset(54, 70), Position = UDim2.fromOffset(20, 5), ZIndex = 3 }, rollBtn)
+	or iconImg(rollBtn, "icon_gem", UDim2.fromOffset(60, 60), UDim2.fromOffset(48, 40), nil, 4)
+	or new("Frame", { BackgroundColor3 = STYLE.gem, Size = UDim2.fromOffset(40, 52), Position = UDim2.fromOffset(26, 12) }, rollBtn)
+local rollCost = label(rollBtn, "", 19, STYLE.gem, Vector2.new(0, 1), UDim2.new(0, 116, 1, -8), UDim2.new(1, -124, 0, 22), STYLE.fontB)
 rollCost.TextXAlignment = Enum.TextXAlignment.Left
-local oddsChip = makeButton(hud, "ODDS", UDim2.fromOffset(64, 30), UDim2.new(0.5, 136, 1, -16), STYLE.grey, Vector2.new(0, 1))
+iconImg(rollBtn, "icon_gem", UDim2.fromOffset(26, 26), UDim2.new(0, 102, 1, -19), nil, 5)
+local oddsChip = makeButton(rollBar, "ODDS", UDim2.fromOffset(62, 26), UDim2.new(0.5, 125, 1, -82), STYLE.gold, Vector2.new(1, 0.5))
 oddsChip.TextSize = 14
+local autoBtn = makeButton(rollBar, "AUTO: OFF", UDim2.fromOffset(160, 50), UDim2.new(0.5, -142, 1, -40), STYLE.grey, Vector2.new(1, 0.5))
+autoBtn.TextSize = 17
+iconImg(autoBtn, "icon_rebirth", UDim2.fromOffset(30, 30), UDim2.new(0, 18, 0.5, 0), nil, 6)
+local quickBtn = makeButton(rollBar, "QUICK: OFF", UDim2.fromOffset(160, 50), UDim2.new(0.5, 142, 1, -40), STYLE.grey, Vector2.new(0, 0.5))
+quickBtn.TextSize = 17
+iconImg(quickBtn, "icon_stopwatch", UDim2.fromOffset(30, 30), UDim2.new(0, 18, 0.5, 0), nil, 6)
 
--- Bottom left: start wave + auto
-local startWaveBtn = makeButton(hud, "START WAVE", UDim2.fromOffset(220, 64), UDim2.new(0, 12, 1, -12), STYLE.orange, Vector2.new(0, 1))
-startWaveBtn.TextSize = 26
-local autoBtn = makeButton(hud, "AUTO: OFF", UDim2.fromOffset(220, 38), UDim2.new(0, 12, 1, -84), STYLE.grey, Vector2.new(0, 1))
-autoBtn.TextSize = 18
+-- bottom right: START WAVE with the ULT charge dial above it
+local startWaveBtn = makeButton(hud, "START WAVE", UDim2.fromOffset(240, 66), UDim2.new(1, -12, 1, -12), STYLE.orange, Vector2.new(1, 1))
+startWaveBtn.TextSize = 22
+iconImg(startWaveBtn, "icon_sword", UDim2.fromOffset(44, 44), UDim2.new(0, 30, 0.5, 0), nil, 6)
 
--- Bottom right: ultimate with a ready glow
-local ultBtn, ultScale = makeButton(hud, "ULT", UDim2.fromOffset(90, 90), UDim2.new(1, -72, 1, -72), STYLE.grey)
-for _, c in ultBtn:GetChildren() do if c:IsA("UICorner") then c:Destroy() end end
-round(ultBtn, 6)
-local ultFill = new("Frame", { BackgroundColor3 = STYLE.gold, BackgroundTransparency = 0.3, AnchorPoint = Vector2.new(0, 1), Position = UDim2.fromScale(0, 1), Size = UDim2.fromScale(1, 0), ZIndex = 0 }, ultBtn)
-round(ultFill, 5)
+local ultBtn, ultScale = makeButton(hud, "ULT", UDim2.fromOffset(96, 96), UDim2.new(1, -74, 1, -136), STYLE.gold)
+for _, c in ultBtn:GetChildren() do -- strip the square glass skin: the dial is a circle with a gold ring
+	if c:IsA("UICorner") or c:IsA("UIStroke") or (c:IsA("ImageLabel") and c.Name ~= "Icon") then c:Destroy() end
+end
+ultBtn.BackgroundTransparency = 0.1
+ultBtn.BackgroundColor3 = Color3.fromRGB(18, 14, 34)
+round(ultBtn, 48)
+new("UIStroke", { Color = Color3.fromRGB(200, 160, 80), Thickness = 3, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }, ultBtn)
+ultBtn.ClipsDescendants = false
+ultBtn.TextYAlignment = Enum.TextYAlignment.Bottom
+ultBtn.TextSize = 18
+new("UIPadding", { PaddingBottom = UDim.new(0, 8) }, ultBtn)
+local ultClip = new("CanvasGroup", { Name = "Charge", BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 0 }, ultBtn) -- CanvasGroup clips to the round corner; ClipsDescendants would clip square
+round(ultClip, 48)
+local ultFill = new("Frame", { BackgroundColor3 = STYLE.gold, BackgroundTransparency = 0.35, AnchorPoint = Vector2.new(0, 1), Position = UDim2.fromScale(0, 1), Size = UDim2.fromScale(1, 0), ZIndex = 0 }, ultClip)
+iconImg(ultBtn, "icon_bolt", UDim2.fromOffset(50, 50), UDim2.new(0.5, 0, 0.42, 0), nil, 6)
 local ultGlow = new("UIStroke", { Color = STYLE.gold, Thickness = 6, Transparency = 1, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }, ultBtn)
 local ultPulse = new("UIScale", { Scale = 1 }, ultBtn)
 local ultTweens = {}
 
-do -- block scope keeps the phone layout's locals off the top level
--- Phone layout. Roblox puts the thumbstick bottom-left and the jump button bottom-right, so on a phone the three rail
--- buttons move to a right-hand column under the crystal bar, AUTO and START WAVE flank ROLL at the bottom centre,
--- and ULT sits above the jump button. Toggle by hand with gui:SetAttribute("PhoneLayout", true/false).
-local rightRail = new("Frame", { Name = "RightRail", BackgroundTransparency = 1, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -12, 0, 66), Size = UDim2.fromOffset(168, 170) }, hud)
-new("UIListLayout", { Padding = UDim.new(0, 8), SortOrder = Enum.SortOrder.LayoutOrder }, rightRail)
-local railHolders = { progressBtn.Parent, skillsBtn.Parent, quickBtn.Parent }
-local function applyLayout(phone)
-	rail.Position = UDim2.fromOffset(12, phone and 52 or 12) -- clear of Roblox's own top-left buttons on a phone
-	for i, holder in railHolders do
-		holder.Parent = phone and rightRail or rail
-		holder.Size = UDim2.new(1, 0, 0, phone and 50 or 38) -- 50 logical = about 44 px at the phone scale
-		holder.LayoutOrder = i + 2
+do -- phone layout: the dock moves to the right edge, START WAVE and ULT sit above the roll bar's sides
+	local function applyLayout(phone)
+		dock.AnchorPoint = phone and Vector2.new(1, 0.5) or Vector2.new(0, 0.5)
+		dock.Position = phone and UDim2.new(1, -8, 0.5, -20) or UDim2.new(0, 12, 0.5, 10)
+		if phone then
+			startWaveBtn.AnchorPoint = Vector2.new(1, 1)
+			startWaveBtn.Position = UDim2.new(1, -8, 1, -112)
+			startWaveBtn.Size = UDim2.fromOffset(200, 60)
+			ultBtn.Position = UDim2.new(0.5, 190, 0, 34) -- top, beside the stage plate: bottom-right is the jump button
+		else
+			startWaveBtn.AnchorPoint = Vector2.new(1, 1)
+			startWaveBtn.Position = UDim2.new(1, -12, 1, -12)
+			startWaveBtn.Size = UDim2.fromOffset(240, 66)
+			ultBtn.Position = UDim2.new(1, -74, 1, -136)
+		end
 	end
-	if phone then
-		autoBtn.AnchorPoint = Vector2.new(1, 1)
-		autoBtn.Position = UDim2.new(0.5, -142, 1, -12)
-		autoBtn.Size = UDim2.fromOffset(150, 52)
-		startWaveBtn.AnchorPoint = Vector2.new(0, 1)
-		startWaveBtn.Position = UDim2.new(0.5, 142, 1, -12)
-		startWaveBtn.Size = UDim2.fromOffset(190, 64)
-		oddsChip.AnchorPoint = Vector2.new(0.5, 1)
-		oddsChip.Position = UDim2.new(0.5, 0, 1, -104)
-		oddsChip.Size = UDim2.fromOffset(92, 50)
-		ultBtn.Position = UDim2.new(0.5, 184, 0, 52) -- top, beside the stage pill: bottom-right is the jump button
-	else
-		autoBtn.AnchorPoint = Vector2.new(0, 1)
-		autoBtn.Position = UDim2.new(0, 12, 1, -84)
-		autoBtn.Size = UDim2.fromOffset(220, 38)
-		startWaveBtn.AnchorPoint = Vector2.new(0, 1)
-		startWaveBtn.Position = UDim2.new(0, 12, 1, -12)
-		startWaveBtn.Size = UDim2.fromOffset(220, 64)
-		oddsChip.AnchorPoint = Vector2.new(0, 1)
-		oddsChip.Position = UDim2.new(0.5, 136, 1, -16)
-		oddsChip.Size = UDim2.fromOffset(64, 30)
-		ultBtn.Position = UDim2.new(1, -72, 1, -72)
+	applyLayout(IS_PHONE)
+	gui:GetAttributeChangedSignal("PhoneLayout"):Connect(function()
+		applyLayout(gui:GetAttribute("PhoneLayout") == true)
+	end)
+end
+
+-- ===== Victorian objects (2026-10-28). User: "all the buttons are the same uniform look". After Inscryption (every
+-- control is a physical object: a bell ends the turn) and Persona 5 (one signature colour, tilted shapes, motion with
+-- intent), each control here is its own object with its own motion. Art: UI Kit/art/out/obj_*.png (ComfyUI, ours).
+do -- block scope: the main chunk is near Luau's 200-local limit
+local OBJ = { tarot = 93758813189086, bell = 94301673165085, watch = 138594781895934, seal = 78303286285946, sign = 132850205596088, dial = 135064433494937, plaque = 83841573700983 }
+local function objImg(parent, key, size, pos, anchor, z, scaleType)
+	local img = new("ImageLabel", { Name = "Obj_" .. key, BackgroundTransparency = 1, Image = "rbxassetid://" .. OBJ[key], ScaleType = scaleType or Enum.ScaleType.Fit, Size = size, Position = pos, AnchorPoint = anchor or Vector2.new(0.5, 0.5), ZIndex = z or 1 }, parent)
+	img:SetAttribute("Tint", true)
+	return img
+end
+local function objectify(b) -- drop the shared glass skin; the object image becomes the button
+	local skin = b:FindFirstChild("Skin")
+	if skin then skin.Visible = false end
+	for _, c in b:GetChildren() do
+		if c:IsA("UIGradient") or (c:IsA("UIStroke") and c ~= ultGlow) then c:Destroy() end
+	end
+	b.BackgroundTransparency = 1
+	b:SetAttribute("ObjectButton", true)
+end
+local function hideIcon(b)
+	local ic = b:FindFirstChild("Icon")
+	if ic then ic.Visible = false end
+end
+
+-- stage: an iron street sign hanging from chains above the board, swaying a little
+do
+	local g = stagePill:FindFirstChild("Glass")
+	if g then g.Visible = false end
+	stagePill.Size = UDim2.fromOffset(176, 120)
+	stagePill.Position = UDim2.new(0.5, 0, 0, -30)
+	local sign = objImg(stagePill, "sign", UDim2.fromOffset(176, 158), UDim2.fromScale(0.5, 0), Vector2.new(0.5, 0), 2)
+	stageLabel.Parent = sign
+	stageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+	stageLabel.Position = UDim2.fromScale(0.5, 0.66)
+	stageLabel.Size = UDim2.fromScale(0.62, 0.2)
+	stageLabel.TextScaled = true
+	stageLabel.ZIndex = 4
+	TweenService:Create(sign, TweenInfo.new(2.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Rotation = 2.5 }):Play()
+	sign.Rotation = -2.5
+	hpPill.Position = UDim2.new(0.5, 0, 0, 124)
+	bossBarBg.Position = UDim2.new(0.5, 0, 0, 154)
+	streakBadge.Position = UDim2.new(0.5, 100, 0, 18)
+end
+
+-- ROLL: a tarot card you draw. Tilted at rest, straightens and lifts on hover, flips when pressed.
+do
+	objectify(rollBtn)
+	objImg(rollBtn, "plaque", UDim2.new(1, 26, 1, 14), UDim2.fromScale(0.5, 0.5), nil, 1, Enum.ScaleType.Stretch)
+	eggIcon.Visible = false
+	local card = objImg(rollBtn, "tarot", UDim2.fromOffset(78, 132), UDim2.new(0, 48, 0.5, -18), nil, 4)
+	card.Rotation = -9
+	local rest, lift = card.Position, UDim2.new(0, 48, 0.5, -30)
+	rollBtn.MouseEnter:Connect(function() tween(card, 0.2, { Rotation = 0, Position = lift }, Enum.EasingStyle.Back) end)
+	rollBtn.MouseLeave:Connect(function() tween(card, 0.25, { Rotation = -9, Position = rest }) end)
+	rollBtn.Activated:Connect(function()
+		tween(card, 0.09, { Size = UDim2.fromOffset(4, 132) }).Completed:Connect(function()
+			tween(card, 0.14, { Size = UDim2.fromOffset(78, 132) }, Enum.EasingStyle.Back)
+		end)
+	end)
+	rollText.Position = UDim2.fromOffset(100, 4)
+	rollCost.Position = UDim2.new(0, 124, 1, -8)
+	for _, c in rollBtn:GetChildren() do -- move the small gem beside the cost
+		if c.Name == "Icon" then c.Position = UDim2.new(0, 110, 1, -19) end
 	end
 end
-applyLayout(IS_PHONE)
-gui:GetAttributeChangedSignal("PhoneLayout"):Connect(function()
-	applyLayout(gui:GetAttribute("PhoneLayout") == true)
-end)
+
+-- START WAVE: a brass bell on a plate; ringing it starts the wave (Inscryption's bell)
+do
+	objectify(startWaveBtn)
+	hideIcon(startWaveBtn)
+	objImg(startWaveBtn, "plaque", UDim2.new(1, 24, 1, 14), UDim2.fromScale(0.5, 0.5), nil, 1, Enum.ScaleType.Stretch)
+	local bell = objImg(startWaveBtn, "bell", UDim2.fromOffset(48, 104), UDim2.new(0, 22, 0.5, -10), nil, 4)
+	local swinging = false
+	startWaveBtn.Activated:Connect(function()
+		if swinging then return end
+		swinging = true
+		task.spawn(function()
+			for _, r in { 22, -16, 10, -5, 0 } do
+				tween(bell, 0.12, { Rotation = r }, Enum.EasingStyle.Sine).Completed:Wait()
+			end
+			swinging = false
+		end)
+	end)
+end
+
+-- ULT: a pocket watch; a glowing hand sweeps once round as the ultimate charges
+do
+	for _, c in ultBtn:GetChildren() do
+		if c:IsA("UIStroke") and c ~= ultGlow then c:Destroy() end
+	end
+	ultBtn.BackgroundTransparency = 1
+	ultBtn:SetAttribute("ObjectButton", true)
+	hideIcon(ultBtn)
+	ultClip.Visible = false
+	local watch = objImg(ultBtn, "watch", UDim2.fromOffset(100, 130), UDim2.fromScale(0.5, 0.38), nil, 2)
+	local pivot = new("Frame", { BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.585), Size = UDim2.fromOffset(60, 60), ZIndex = 5 }, watch)
+	-- the hand sits on the top half of a square pivot, so turning the pivot turns the hand round the dial centre
+	local hand = new("Frame", { BackgroundColor3 = STYLE.gold, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(4, 28), ZIndex = 6 }, pivot)
+	round(hand, 2)
+	glowStroke(hand, Color3.fromRGB(255, 240, 180), 1.5, 0.2)
+	ultFill:GetPropertyChangedSignal("Size"):Connect(function()
+		pivot.Rotation = math.clamp(ultFill.Size.Y.Scale, 0, 1) * 360
+	end)
+	ultBtn.TextYAlignment = Enum.TextYAlignment.Bottom
+end
+
+-- AUTO / QUICK: brass dials on plates; the dial turns a quarter when switched on
+for _, b in { autoBtn, quickBtn } do
+	objectify(b)
+	hideIcon(b)
+	objImg(b, "plaque", UDim2.new(1, 20, 1, 12), UDim2.fromScale(0.5, 0.5), nil, 1, Enum.ScaleType.Stretch)
+	local dial = objImg(b, "dial", UDim2.fromOffset(46, 46), UDim2.new(0, 14, 0.5, 0), nil, 4)
+	local lamp = new("Frame", { BackgroundColor3 = Color3.fromRGB(60, 40, 30), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(1, -10, 0.5, 0), Size = UDim2.fromOffset(12, 12), ZIndex = 4 }, b)
+	round(lamp, 6)
+	b:GetAttributeChangedSignal("On"):Connect(function()
+		local on = b:GetAttribute("On") == true
+		tween(dial, 0.25, { Rotation = on and 90 or 0 }, Enum.EasingStyle.Back)
+		tween(lamp, 0.2, { BackgroundColor3 = on and STYLE.green or Color3.fromRGB(60, 40, 30) })
+	end)
+end
+
+-- dock tiles: crimson wax seals with the icon pressed into them
+function UI.sealButton(b)
+	objectify(b)
+	objImg(b, "seal", UDim2.new(1, 14, 1, 14), UDim2.fromScale(0.5, 0.5), nil, 1)
+end
+for _, holder in dock:GetChildren() do
+	local b = holder:IsA("Frame") and holder:FindFirstChildOfClass("TextButton")
+	if b then UI.sealButton(b) end
+end
+
+-- purse: brass plates behind the counters
+for _, p in { coinPill, gemPill } do
+	local back = p:FindFirstChild("Back")
+	if back then back.Visible = false end
+	objImg(p, "plaque", UDim2.new(1, 16, 1, 10), UDim2.fromScale(0.5, 0.5), nil, 1, Enum.ScaleType.Stretch)
+end
+-- the counter: one mahogany-and-brass desk along the bottom; the deck, dials, bell and watch sit on it instead of
+-- floating on separate plates (Inscryption's table, Hearthstone's board). 9-sliced so the carved corners keep their shape.
+do
+	local desk = new("ImageLabel", { Name = "Desk", BackgroundTransparency = 1, Image = "rbxassetid://110714108088884", ScaleType = Enum.ScaleType.Slice, SliceCenter = Rect.new(120, 95, 522, 300), SliceScale = 0.32, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, 8), Size = UDim2.new(1, 16, 0, 128), ZIndex = 0 }, hud)
+	desk:SetAttribute("Tint", true)
+	for _, b in { rollBtn, autoBtn, quickBtn, startWaveBtn } do
+		local plate = b:FindFirstChild("Obj_plaque")
+		if plate then plate.Visible = false end
+	end
+	-- the deck under the tarot card: ROLL draws its top card
+	local deck = new("ImageLabel", { Name = "Obj_deck", BackgroundTransparency = 1, Image = "rbxassetid://88735086829516", ScaleType = Enum.ScaleType.Fit, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 48, 0.5, 10), Size = UDim2.fromOffset(104, 108), ZIndex = 3 }, rollBtn)
+	deck:SetAttribute("Tint", true)
+end
+-- crystal life: a brass-capped glass vial of violet lamp-oil hanging under the stage sign (was a blue progress bar).
+-- The liquid shimmers; under 30% it turns red and the glass pulses. Trainer: a brass clock-bezel medallion with a
+-- flame behind the level, XP as a brass rail with an amber channel (same rail as the settings board).
+do
+	local GOLD, BRASS = Color3.fromRGB(255, 208, 110), Color3.fromRGB(190, 140, 60)
+	local SERIF = Font.fromName("Merriweather", Enum.FontWeight.Bold)
+	local function strip(g)
+		for _, c in g:GetChildren() do
+			if c:IsA("UIStroke") or c:IsA("UIGradient") then c:Destroy() end
+		end
+	end
+	-- the vial
+	strip(hpBg)
+	hpBg.BackgroundColor3, hpBg.BackgroundTransparency = Color3.fromRGB(20, 12, 30), 0.1
+	new("UIStroke", { Color = BRASS, Thickness = 2, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }, hpBg)
+	for _, x in { 0, 1 } do -- brass end caps
+		local cap = new("Frame", { Name = "Cap", BackgroundColor3 = BRASS, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(x, 0.5), Size = UDim2.new(0, 12, 1, 10), ZIndex = 6 }, hpBg)
+		round(cap, 4)
+		new("UIGradient", { Rotation = 90, Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 230, 160)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(190, 140, 60)), ColorSequenceKeypoint.new(1, Color3.fromRGB(110, 70, 30)) }) }, cap)
+	end
+	strip(hpFill)
+	hpFill.BackgroundColor3 = Color3.new(1, 1, 1)
+	local liquid = new("UIGradient", { Color = ColorSequence.new(Color3.fromRGB(120, 60, 220), Color3.fromRGB(200, 150, 255)) }, hpFill)
+	local glint = new("Frame", { Name = "Glint", BackgroundColor3 = Color3.new(1, 1, 1), Size = UDim2.fromScale(1, 1), ZIndex = 3 }, hpFill)
+	round(glint, 11)
+	local gg = new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.45, 1), NumberSequenceKeypoint.new(0.5, 0.55), NumberSequenceKeypoint.new(0.55, 1), NumberSequenceKeypoint.new(1, 1) }), Offset = Vector2.new(-1, 0) }, glint)
+	TweenService:Create(gg, TweenInfo.new(2.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1), { Offset = Vector2.new(1, 0) }):Play()
+	-- glass reflection along the top of the tube
+	local shine = new("Frame", { Name = "Shine", BackgroundColor3 = Color3.new(1, 1, 1), BackgroundTransparency = 0.82, Position = UDim2.new(0, 8, 0, 3), Size = UDim2.new(1, -16, 0, 3), ZIndex = 4 }, hpBg)
+	round(shine, 2)
+	for _, c in hpPill:GetChildren() do -- the crystal icon sits on top of the left cap
+		if c:IsA("ImageLabel") then c.ZIndex = 8 end
+	end
+	hpLabel.FontFace = SERIF
+	hpLabel.TextColor3 = Color3.fromRGB(255, 240, 210)
+	hpLabel.ZIndex = 7
+	local pulse
+	hpFill:GetPropertyChangedSignal("Size"):Connect(function()
+		local low = hpFill.Size.X.Scale < 0.3
+		liquid.Color = low and ColorSequence.new(Color3.fromRGB(170, 30, 40), Color3.fromRGB(255, 120, 110)) or ColorSequence.new(Color3.fromRGB(120, 60, 220), Color3.fromRGB(200, 150, 255))
+		if low and not pulse then
+			pulse = TweenService:Create(hpBg, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundColor3 = Color3.fromRGB(70, 14, 20) })
+			pulse:Play()
+		elseif not low and pulse then
+			pulse:Cancel()
+			pulse = nil
+			hpBg.BackgroundColor3 = Color3.fromRGB(20, 12, 30)
+		end
+	end)
+
+	-- the trainer medallion
+	strip(lvlBadge)
+	lvlBadge.BackgroundColor3 = Color3.fromRGB(44, 28, 20)
+	new("UIStroke", { Color = GOLD, Thickness = 3, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }, lvlBadge)
+	new("UIGradient", { Rotation = 45, Color = ColorSequence.new(Color3.fromRGB(255, 235, 200), Color3.fromRGB(120, 90, 70)) }, lvlBadge)
+	local inner = new("Frame", { Name = "Bezel", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.74, 0.74), ZIndex = 4 }, lvlBadge)
+	round(inner, 23)
+	new("UIStroke", { Color = BRASS, Thickness = 1.5, Transparency = 0.2 }, inner)
+	for i = 0, 11 do -- clock ticks round the bezel
+		local a = math.rad(i * 30)
+		local big = i % 3 == 0
+		new("Frame", { BackgroundColor3 = big and GOLD or BRASS, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5 + 0.43 * math.sin(a), 0.5 - 0.43 * math.cos(a)), Size = UDim2.fromOffset(2, big and 6 or 4), Rotation = i * 30, ZIndex = 5 }, lvlBadge)
+	end
+	local flame = new("ImageLabel", { Name = "Flame", BackgroundTransparency = 1, Image = "rbxassetid://108574647086501", ImageTransparency = 0.55, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.46), Size = UDim2.fromScale(0.62, 0.62), ZIndex = 4 }, lvlBadge)
+	TweenService:Create(flame, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { ImageTransparency = 0.35, Size = UDim2.fromScale(0.58, 0.66) }):Play()
+	lvlNum.FontFace = SERIF
+	lvlNum.TextColor3 = Color3.fromRGB(255, 236, 200)
+	lvlNum.ZIndex = 6
+	lvlTitle.FontFace = SERIF
+	-- XP rail
+	strip(xpBg)
+	xpBg.BackgroundColor3 = Color3.fromRGB(28, 18, 12)
+	new("UIStroke", { Color = BRASS, Thickness = 1.5 }, xpBg)
+	strip(xpFill)
+	xpFill.BackgroundColor3 = Color3.new(1, 1, 1)
+	new("UIGradient", { Color = ColorSequence.new(Color3.fromRGB(150, 60, 20), Color3.fromRGB(255, 220, 140)) }, xpFill)
+	for i = 1, 3 do
+		new("Frame", { BackgroundColor3 = BRASS, BackgroundTransparency = 0.3, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Size = UDim2.new(0, 2, 0.5, 0), Position = UDim2.fromScale(i / 4, 0.5), ZIndex = 4 }, xpBg)
+	end
+	xpLabel.FontFace = SERIF
+	xpLabel.TextColor3 = Color3.fromRGB(255, 240, 210)
+	xpLabel.ZIndex = 5
+end
+do -- abstract layer around the objects (AbstractLayer.luau)
+	local ok, err = pcall(function() UI.abstract = require(script.Parent:WaitForChild("AbstractLayer", 5))({ hud = hud, rollBtn = rollBtn, autoBtn = autoBtn, quickBtn = quickBtn, startWaveBtn = startWaveBtn, ultBtn = ultBtn, oddsChip = oddsChip, coinPill = coinPill, gemPill = gemPill, rail = rail, dock = dock, stagePill = stagePill, reducedMotion = function() return SETTINGS.reducedMotion end }) end)
+	if not ok then warn("AbstractLayer: " .. tostring(err)) end
+end
+UI.objectify, UI.objImg = objectify, objImg -- shared with screens built later (familiar ledger)
+-- text above the object art
+coinLabel.ZIndex, gemLabel.ZIndex, rollText.ZIndex, rollCost.ZIndex = 3, 3, 5, 5
+for _, b in { ultBtn, startWaveBtn, autoBtn, quickBtn } do
+	local t = b:FindFirstChild("Txt")
+	if t then t.ZIndex = 6 end
+end
 end
 
 local toast = label(hud, "", 24, STYLE.text, Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.7), UDim2.fromOffset(420, 36))
@@ -1118,6 +1411,33 @@ end
 local deleteBtn = makeButton(upBody, "Delete", UDim2.new(1, -20, 0, 44), UDim2.new(0.5, 0, 1, -10), STYLE.red, Vector2.new(0.5, 1))
 deleteBtn.TextSize = 18
 deleteBtn.ZIndex = 8
+-- familiar panel as a keeper's ledger (2026-10-28, /make-creative): each upgrade's level is a row of five little lamps
+-- that light one by one; the price is a brass coin plate; Delete becomes "Release" under a wax seal
+do
+	for _, r in upRows do
+		for _, pip in r.pips do
+			pip.Size = UDim2.fromOffset(14, 14)
+			pip.Position = pip.Position + UDim2.fromOffset(0, -4)
+			pip.BackgroundColor3 = Color3.fromRGB(40, 30, 24)
+			for _, c in pip:GetChildren() do if c:IsA("UICorner") or c:IsA("UIGradient") then c:Destroy() end end
+			round(pip, 7)
+			glowStroke(pip, Color3.fromRGB(150, 110, 50), 1.5, 0)
+			local fl = new("ImageLabel", { Name = "Flame", BackgroundTransparency = 1, Image = "rbxassetid://108574647086501", AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 0.75), Size = UDim2.fromOffset(14, 18), ZIndex = pip.ZIndex + 1, Visible = false }, pip)
+		end
+		UI.objectify(r.buy)
+		UI.objImg(r.buy, "plaque", UDim2.new(1, 10, 1, 6), UDim2.fromScale(0.5, 0.5), nil, 7, Enum.ScaleType.Stretch)
+		local coin = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://93007984461409", AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 6, 0.5, 0), Size = UDim2.fromOffset(24, 24), ZIndex = 9 }, r.buy)
+		coin:SetAttribute("Tint", true)
+		new("UIPadding", { PaddingLeft = UDim.new(0, 26) }, r.buy)
+		local t = r.buy:FindFirstChild("Txt")
+		if t then t.ZIndex = 9 end
+	end
+	UI.objectify(deleteBtn)
+	UI.objImg(deleteBtn, "plaque", UDim2.new(1, 12, 1, 8), UDim2.fromScale(0.5, 0.5), nil, 7, Enum.ScaleType.Stretch)
+	local seal = UI.objImg(deleteBtn, "seal", UDim2.fromOffset(40, 40), UDim2.new(0, 22, 0.5, 0), nil, 9)
+	local t = deleteBtn:FindFirstChild("Txt")
+	if t then t.ZIndex = 9 end
+end
 
 -- Odds panel
 local oddsPanel, oddsBody, oddsScale, oddsClose = makePanel(hud, UDim2.fromOffset(440, 360), "Roll Odds", STYLE.gold)
@@ -1149,22 +1469,66 @@ oddsNote.TextWrapped = true
 oddsNote.ZIndex = 10
 
 -- Progression panel
-local progPanel, progBody, progScale, progClose = makePanel(hud, UDim2.fromOffset(400, 380), "Trainer Progression", STYLE.purple)
+local progPanel, progBody, progScale, progClose = makePanel(hud, UDim2.fromOffset(780, 440), "Trainer Progression", STYLE.purple)
 UI.blurHolders[progPanel] = true
 progPanel.AnchorPoint = Vector2.new(0.5, 0.5)
 progPanel.Position = UDim2.fromScale(0.5, 0.5)
 progPanel.ZIndex = 9
-local progHead = label(progBody, "", 22, STYLE.text, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 10), UDim2.new(1, -20, 0, 30))
+-- Trainer Road (2026-10-28 rework): header with level, XP and what luck buys; a scrolling road of level cards
+-- (claimed / next / locked) with their rewards; a footer that says how XP is earned.
+local progHead = label(progBody, "", 24, STYLE.text, Vector2.new(0, 0), UDim2.fromOffset(28, 4), UDim2.fromOffset(330, 30), STYLE.font)
+progHead.TextXAlignment = Enum.TextXAlignment.Left
 progHead.ZIndex = 10
-local progXpBg = new("Frame", { BackgroundColor3 = Color3.fromRGB(14, 16, 32), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 46), Size = UDim2.new(1, -40, 0, 20), ZIndex = 10 }, progBody)
+local progXpBg = new("Frame", { BackgroundColor3 = Color3.fromRGB(14, 12, 30), Position = UDim2.fromOffset(28, 40), Size = UDim2.fromOffset(420, 20), ZIndex = 10 }, progBody)
 round(progXpBg, 10)
+glowStroke(progXpBg, Color3.fromRGB(140, 100, 220), 1.5, 0.3)
 local progXp = new("Frame", { BackgroundColor3 = STYLE.purple, Size = UDim2.fromScale(0, 1), ZIndex = 11 }, progXpBg)
 round(progXp, 10)
-gradient(progXp, STYLE.purple)
-local progList = label(progBody, "", 18, STYLE.muted, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 78), UDim2.new(1, -40, 0, 250), STYLE.fontB)
-progList.TextXAlignment = Enum.TextXAlignment.Left
-progList.TextYAlignment = Enum.TextYAlignment.Top
-progList.ZIndex = 10
+new("UIGradient", { Color = ColorSequence.new(Color3.fromRGB(140, 90, 255), Color3.fromRGB(230, 170, 255)) }, progXp)
+local progXpText = label(progXpBg, "", 13, STYLE.text, nil, nil, nil, STYLE.fontB)
+progXpText.ZIndex = 12
+local luckChip = pill(progBody, UDim2.fromOffset(270, 56), "Luck")
+luckChip.Position = UDim2.fromOffset(482, 4)
+iconImg(luckChip, "icon_star", UDim2.fromOffset(40, 40), UDim2.fromOffset(28, 28), nil, 11)
+local luckLine = label(luckChip, "", 18, STYLE.gold, Vector2.new(0, 0), UDim2.fromOffset(54, 6), UDim2.fromOffset(210, 22), STYLE.fontB)
+luckLine.TextXAlignment = Enum.TextXAlignment.Left
+luckLine.ZIndex = 11
+local luckSub = label(luckChip, "", 13, STYLE.muted, Vector2.new(0, 0), UDim2.fromOffset(54, 30), UDim2.fromOffset(210, 18), STYLE.fontB)
+luckSub.TextXAlignment = Enum.TextXAlignment.Left
+luckSub.ZIndex = 11
+
+local road = new("ScrollingFrame", { BackgroundTransparency = 1, BorderSizePixel = 0, Position = UDim2.fromOffset(14, 76), Size = UDim2.new(1, -28, 0, 230), ScrollingDirection = Enum.ScrollingDirection.X, ScrollBarThickness = 6, ScrollBarImageColor3 = STYLE.purple, CanvasSize = UDim2.fromOffset(Config.LEVEL_MAX * 118 + 20, 0), ZIndex = 10 }, progBody)
+local roadLine = new("Frame", { BackgroundColor3 = Color3.fromRGB(60, 50, 90), BorderSizePixel = 0, Position = UDim2.fromOffset(60, 104), Size = UDim2.fromOffset((Config.LEVEL_MAX - 1) * 118, 4), ZIndex = 10 }, road)
+local roadFill = new("Frame", { BackgroundColor3 = STYLE.gold, BorderSizePixel = 0, Size = UDim2.fromScale(0, 1), ZIndex = 11 }, roadLine)
+local roadCards = {}
+for lv = 1, Config.LEVEL_MAX do
+	local c = new("Frame", { Name = "L" .. lv, BackgroundColor3 = Color3.fromRGB(20, 16, 40), BackgroundTransparency = 0.1, Position = UDim2.fromOffset(12 + (lv - 1) * 118, 10), Size = UDim2.fromOffset(100, 196), ZIndex = 12 }, road)
+	round(c, 14)
+	local st = glowStroke(c, Color3.fromRGB(90, 80, 130), 2, 0.2)
+	local num = label(c, tostring(lv), 30, STYLE.text, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 6), UDim2.new(1, 0, 0, 34), STYLE.fontB)
+	num.ZIndex = 13
+	local gemI = iconImg(c, "icon_gem", UDim2.fromOffset(34, 34), UDim2.new(0.5, -22, 0, 66), nil, 13)
+	local gemT = label(c, "+" .. Config.levelGems(lv), 18, STYLE.gem, Vector2.new(0, 0.5), UDim2.new(0.5, -4, 0, 66), UDim2.fromOffset(50, 22), STYLE.fontB)
+	gemT.TextXAlignment = Enum.TextXAlignment.Left
+	gemT.ZIndex = 13
+	local spT = label(c, "+1 SKILL PT", 13, STYLE.blue, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 92), UDim2.new(1, -6, 0, 16), STYLE.fontB)
+	spT.ZIndex = 13
+	local luckT = label(c, string.format("LUCK +%d%%", math.floor(Config.luck(lv) * 100 + 0.5)), 13, STYLE.gold, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 112), UDim2.new(1, -6, 0, 16), STYLE.fontB)
+	luckT.ZIndex = 13
+	local special = lv == 3 and "AUTO ROLL" or (lv % 5 == 0 and "MILESTONE" or nil)
+	local sp
+	if special then
+		sp = label(c, special, 13, STYLE.green, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 134), UDim2.new(1, -6, 0, 16), STYLE.fontB)
+		sp.ZIndex = 13
+		iconImg(c, lv == 3 and "icon_rebirth" or "icon_chest", UDim2.fromOffset(32, 32), UDim2.new(0.5, 0, 0, 170), nil, 13)
+	end
+	local stateT = label(c, "", 12, STYLE.muted, Vector2.new(0.5, 1), UDim2.new(0.5, 0, 1, -4), UDim2.new(1, 0, 0, 16), STYLE.fontB)
+	stateT.ZIndex = 13
+	roadCards[lv] = { frame = c, stroke = st, num = num, state = stateT }
+end
+local progFoot = label(progBody, "Earn XP:  defeat monsters  ·  clear stages  ·  beat bosses", 16, STYLE.muted, Vector2.new(0.5, 1), UDim2.new(0.5, 0, 1, -10), UDim2.new(1, -40, 0, 22), STYLE.fontB)
+progFoot.ZIndex = 10
+local progList = progFoot -- old name kept
 
 -- Tutorial card
 local tutCard = new("Frame", { BackgroundColor3 = STYLE.panelDark, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 112), Size = UDim2.fromOffset(480, 82), Visible = false, ZIndex = 6 }, hud)
@@ -1182,38 +1546,176 @@ if UI.fa then
 else
 	UI.scroll(tutCard, STYLE.gold, true)
 end
+-- the tutorial is a note from the Lamplighter (/make-creative 2026-10-28): parchment, ink that writes itself in, a wax
+-- seal with the lamp's flame as the guide's portrait, a signature, and Skip as a small brass tag
+do
+	local g = tutCard:FindFirstChild("Glass")
+	if g then g.Visible = false end
+	tutCard.BackgroundTransparency = 0
+	tutCard.BackgroundColor3 = Color3.fromRGB(236, 222, 190)
+	tutCard.Size = UDim2.fromOffset(540, 92)
+	for _, c in tutCard:GetChildren() do if c:IsA("UIStroke") then c.Color = Color3.fromRGB(150, 110, 60); c.Thickness = 2 end end
+	new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(250, 240, 216), Color3.fromRGB(208, 188, 150)) }, tutCard)
+	local seal = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://78303286285946", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 6, 0.5, 0), Size = UDim2.fromOffset(78, 78), ZIndex = 8 }, tutCard)
+	local fl = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://108574647086501", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.45), Size = UDim2.fromScale(0.5, 0.6), ZIndex = 9 }, seal)
+	TweenService:Create(fl, TweenInfo.new(0.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Rotation = 6 }):Play()
+	tutText.Position = UDim2.new(0, 52, 0.5, -6)
+	tutText.Size = UDim2.new(1, -150, 1, -26)
+	tutText.TextColor3 = Color3.fromRGB(58, 40, 26)
+	tutText.TextStroke.Transparency = 1
+	local sig = label(tutCard, "- the Lamplighter", 14, Color3.fromRGB(120, 40, 30), Vector2.new(1, 1), UDim2.new(1, -104, 1, -4), UDim2.fromOffset(160, 18), STYLE.font)
+	sig.ZIndex = 8
+	sig.TextXAlignment = Enum.TextXAlignment.Right
+	sig.TextStroke.Transparency = 1
+	-- ink writes itself in whenever the step changes
+	tutText:GetPropertyChangedSignal("Text"):Connect(function()
+		if SETTINGS.reducedMotion then tutText.MaxVisibleGraphemes = -1 return end
+		tutText.MaxVisibleGraphemes = 0
+		if tutText.Text ~= "" and UI.play then UI.play("menu_open", { pitch = 0.75, volume = 0.6 }) end
+		local n = utf8.len(tutText.Text) or #tutText.Text
+		local t0 = os.clock()
+		task.spawn(function()
+			while tutText.MaxVisibleGraphemes ~= -1 do
+				local k = math.floor((os.clock() - t0) * 60)
+				if k >= n then tutText.MaxVisibleGraphemes = -1 break end
+				tutText.MaxVisibleGraphemes = k
+				task.wait()
+			end
+		end)
+	end)
+	UI.objectify(tutSkip) -- Skip as a small brass tag
+	UI.objImg(tutSkip, "plaque", UDim2.new(1, 8, 1, 6), UDim2.fromScale(0.5, 0.5), nil, 6, Enum.ScaleType.Stretch)
+	local st = tutSkip:FindFirstChild("Txt")
+	if st then st.ZIndex = 8; st.TextColor3 = Color3.fromRGB(255, 224, 150) end
+end
 
 -- Start screen
-local startScreen = new("Frame", { BackgroundColor3 = Color3.fromRGB(10, 12, 28), BackgroundTransparency = 0.2, Size = UDim2.fromScale(1, 1), ZIndex = 10 }, gui)
-local startCard = new("Frame", { BackgroundColor3 = STYLE.panel, Size = UDim2.fromOffset(460, 310), Position = UDim2.fromScale(0.5, 0.5), AnchorPoint = Vector2.new(0.5, 0.5), ZIndex = 11 }, startScreen)
-round(startCard, 10)
-outline(startCard, 3, 0.15, STYLE.gold)
-UI.brackets(startCard, 20, 3, 5)
-new("UIGradient", { Color = ColorSequence.new(shade(STYLE.panel, 0.08), STYLE.panelDark), Rotation = 90 }, startCard)
+-- ===== Start menu (2026-10-28 rework): the world stays visible behind a left-side shade; logo, tagline and a big PLAY
+-- on the left; a featured Legendary familiar turns on a glowing pedestal on the right. Same locals as before
+-- (startScreen, startCard, startScale, startSub, startBtn) so the flashes notice and the Start flow keep working.
+local startScreen = new("Frame", { Name = "StartMenu", BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 10 }, gui)
+local menuShade = new("Frame", { BackgroundColor3 = Color3.fromRGB(6, 4, 16), BackgroundTransparency = 0, Size = UDim2.fromScale(1, 1), ZIndex = 10 }, startScreen)
+new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.05), NumberSequenceKeypoint.new(0.45, 0.35), NumberSequenceKeypoint.new(1, 0.75) }) }, menuShade)
+UI.blurHolders[startScreen] = true
+
+-- holder carries the screen-fit scale; the card's own UIScale is left for popIn
+local menuHolder = new("Frame", { Name = "MenuHolder", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromScale(0.07, 0.52), Size = UDim2.fromOffset(470, 420), ZIndex = 11 }, startScreen)
+local fitScale = new("UIScale", { Scale = 1 }, menuHolder)
+local startCard = new("Frame", { Name = "Menu", BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 11 }, menuHolder)
 local startScale = new("UIScale", { Scale = 1 }, startCard)
-label(startCard, "GUARDIAN GRID", 50, STYLE.gold, Vector2.new(0.5, 0), UDim2.fromScale(0.5, 0.07), UDim2.new(1, -20, 0, 60), STYLE.display).ZIndex = 12
-local startSub = label(startCard, "Summon familiars, merge three that touch, and push the stage as far as you can. You can't lose, but every leak costs your streak.", 18, STYLE.muted, Vector2.new(0.5, 0), UDim2.fromScale(0.5, 0.29), UDim2.new(1, -50, 0, 100), STYLE.fontB)
-startSub.TextWrapped = true
-startSub.ZIndex = 12
-local startBtn = makeButton(startCard, "PLAY", UDim2.fromOffset(240, 70), UDim2.fromScale(0.5, 0.8), STYLE.green)
-startBtn.ZIndex = 12
-if UI.fa then
-	UI.glass(startCard, STYLE.gold)
-	UI.motes(startCard, STYLE.gold, 9)
-	UI.emblem(startCard, STYLE.gold, "crown", 112, UDim2.new(0.5, 0, 0, 0), 14)
-	for _, c in startCard:GetChildren() do
-		if c:IsA("TextLabel") and c.Text == "GUARDIAN GRID" then
-			c.Position = UDim2.fromScale(0.5, 0.17)
-			c.FontFace = UI.TITLE_FONT
-			c.TextSize = 40
-			c.TextColor3 = Color3.fromRGB(255, 226, 150)
-		end
+do -- the menu keeps its size relative to the screen height (same rule as the HUD)
+	local function fit()
+		fitScale.Scale = math.clamp(camera.ViewportSize.Y / 780, 0.6, 1.2)
 	end
-	startSub.Position = UDim2.fromScale(0.5, 0.4)
-	UI.divider(startCard, STYLE.gold, UDim2.fromScale(0.5, 0.36), UDim2.new(0.8, 0, 0, 12), 12)
-	UI.blurHolders[startCard] = true
-else
-	UI.scroll(startCard, STYLE.gold)
+	fit()
+	camera:GetPropertyChangedSignal("ViewportSize"):Connect(fit)
+end
+local crownImg = iconImg(startCard, "icon_crown", UDim2.fromOffset(96, 96), UDim2.fromOffset(48, 22), nil, 13)
+local logo1 = label(startCard, "GUARDIAN", 64, Color3.fromRGB(255, 226, 150), Vector2.new(0, 0), UDim2.fromOffset(0, 70), UDim2.fromOffset(470, 70), STYLE.display)
+local logo2 = label(startCard, "GRID", 92, Color3.fromRGB(255, 200, 90), Vector2.new(0, 0), UDim2.fromOffset(0, 128), UDim2.fromOffset(470, 96), STYLE.display)
+for _, l in { logo1, logo2 } do
+	l.TextXAlignment = Enum.TextXAlignment.Left
+	l.TextScaled = true
+	l.ZIndex = 12
+	l.TextStroke.Thickness = 3
+	l.TextStroke.Transparency = 0
+	l.TextStroke.Color = Color3.fromRGB(40, 18, 6)
+	new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(255, 244, 210), Color3.fromRGB(226, 150, 50)) }, l)
+end
+local startSub = label(startCard, "Summon familiars. Merge three that touch. Hold the lamplit lane.", 20, Color3.fromRGB(214, 206, 236), Vector2.new(0, 0), UDim2.fromOffset(4, 228), UDim2.fromOffset(440, 30), STYLE.fontB)
+startSub.TextXAlignment = Enum.TextXAlignment.Left
+startSub.ZIndex = 12
+local rule = new("Frame", { BackgroundColor3 = STYLE.gold, BorderSizePixel = 0, Position = UDim2.fromOffset(4, 266), Size = UDim2.fromOffset(300, 2), ZIndex = 12 }, startCard)
+new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) }) }, rule)
+
+local startBtn = makeButton(startCard, "PLAY", UDim2.fromOffset(300, 84), UDim2.fromOffset(154, 332), STYLE.green)
+startBtn.ZIndex = 12
+startBtn.TextSize = 40
+iconImg(startBtn, "icon_sword", UDim2.fromOffset(54, 54), UDim2.new(0, 42, 0.5, 0), nil, 14)
+
+do -- what's new: a short changelog like Sol's title screen
+	local news = pill(startCard, UDim2.fromOffset(300, 112), "News")
+	news.Position = UDim2.fromOffset(330, 284) -- right of PLAY, clear of the flashes notice below
+	local head = label(news, "WHAT'S NEW", 16, STYLE.gold, Vector2.new(0, 0), UDim2.fromOffset(14, 8), UDim2.fromOffset(270, 20), STYLE.fontB)
+	head.TextXAlignment = Enum.TextXAlignment.Left
+	head.ZIndex = 13
+	local body = label(news, "New look: tarot summons, the brass bell and the pocket-watch ultimate\nTrainer Road: see every level's reward\nSkill tree paths light up as you grow", 14, Color3.fromRGB(210, 204, 230), Vector2.new(0, 0), UDim2.fromOffset(14, 30), UDim2.fromOffset(276, 76), STYLE.fontB)
+	body.TextXAlignment = Enum.TextXAlignment.Left
+	body.TextYAlignment = Enum.TextYAlignment.Top
+	body.TextWrapped = true
+	body.ZIndex = 13
+	-- the news is a notice pinned to the board: parchment, ink, a red pin, a slight tilt (/make-creative 2026-10-28)
+	local g = news:FindFirstChild("Glass")
+	if g then g.Visible = false end
+	news.BackgroundTransparency = 0
+	news.BackgroundColor3 = Color3.fromRGB(232, 218, 186)
+	news.Rotation = -2.5
+	round(news, 4)
+	new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(248, 238, 214), Color3.fromRGB(205, 186, 150)) }, news)
+	head.Text, head.TextColor3, head.FontFace = "THE LAMPWICK GAZETTE", Color3.fromRGB(110, 30, 30), UI.TITLE_FONT
+	head.TextStroke.Transparency = 1
+	body.TextColor3 = Color3.fromRGB(60, 44, 30)
+	body.TextStroke.Transparency = 1
+	local pin = new("Frame", { BackgroundColor3 = Color3.fromRGB(190, 30, 40), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0, 2), Size = UDim2.fromOffset(14, 14), ZIndex = 14 }, news)
+	round(pin, 7)
+end
+
+-- PLAY is "Light the lamp": a brass plate with a gas flame that grows when you hover and flares when you press
+do
+	UI.objectify(startBtn)
+	UI.objImg(startBtn, "plaque", UDim2.new(1, 16, 1, 10), UDim2.fromScale(0.5, 0.5), nil, 11, Enum.ScaleType.Stretch)
+	local ic = startBtn:FindFirstChild("Icon")
+	if ic then ic.Visible = false end
+	local flame = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://108574647086501", AnchorPoint = Vector2.new(0.5, 0.75), Position = UDim2.new(0, 46, 0.5, 0), Size = UDim2.fromOffset(44, 58), ZIndex = 14 }, startBtn)
+	TweenService:Create(flame, TweenInfo.new(0.45, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Rotation = 5 }):Play()
+	startBtn.Text = "LIGHT THE LAMP"
+	startBtn.TextSize = 30
+	local t = startBtn:FindFirstChild("Txt")
+	if t then -- text right of the flame (UIPadding does not move the glass skin's text label)
+		t.ZIndex = 14
+		t.TextColor3 = Color3.fromRGB(255, 224, 150)
+		t.Size = UDim2.new(1, -78, 1, 0)
+		t.Position = UDim2.fromOffset(72, 0)
+	end
+	startBtn.MouseEnter:Connect(function() tween(flame, 0.2, { Size = UDim2.fromOffset(60, 80) }, Enum.EasingStyle.Back) end)
+	startBtn.MouseLeave:Connect(function() tween(flame, 0.2, { Size = UDim2.fromOffset(44, 58) }) end)
+	startBtn.Activated:Connect(function() tween(flame, 0.15, { Size = UDim2.fromOffset(90, 120) }) end)
+end
+
+-- featured familiar: a Legendary turning on a glowing pedestal (ViewportFrame + WorldModel)
+do
+	local legend = Config.petsOfRarity("Legendary")[1] or next(Config.PETS)
+	local stage = new("Frame", { Name = "Featured", BackgroundTransparency = 1, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.fromScale(0.95, 0.52), Size = UDim2.fromScale(0.36, 0.64), ZIndex = 11 }, startScreen)
+	new("UIAspectRatioConstraint", { AspectRatio = 0.9 }, stage)
+	local halo = new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.52), Size = UDim2.fromScale(0.62, 0.55), BackgroundColor3 = Config.RARITIES.Legendary.color, BackgroundTransparency = 0.8, ZIndex = 11 }, stage)
+	new("UICorner", { CornerRadius = UDim.new(1, 0) }, halo)
+	new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(0.7, 0.85), NumberSequenceKeypoint.new(1, 1) }) }, halo)
+	TweenService:Create(halo, TweenInfo.new(1.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundTransparency = 0.9 }):Play()
+	local vpf = new("ViewportFrame", { BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 12, Ambient = Color3.fromRGB(150, 140, 170), LightColor = Color3.fromRGB(255, 230, 190), LightDirection = Vector3.new(-1, -1, -0.6) }, stage)
+	local world = new("WorldModel", {}, vpf)
+	local vcam = new("Camera", { FieldOfView = 30 }, vpf)
+	vpf.CurrentCamera = vcam
+	local ok, model = pcall(function() return (Models.buildPet(legend, 3)) end)
+	if ok and model then
+		model.Parent = world
+		local cf, size = model:GetBoundingBox()
+		local radius = math.max(size.X, size.Y, size.Z)
+		local focus = cf.Position
+		local spin = 0
+		local conn
+		conn = RunService.RenderStepped:Connect(function(dt)
+			if not startScreen.Parent then conn:Disconnect() return end
+			if not startScreen.Visible then return end
+			spin += dt * 0.6
+			model:PivotTo(CFrame.new(focus) * CFrame.Angles(0, spin, 0) * (cf - cf.Position))
+			vcam.CFrame = CFrame.lookAt(focus + Vector3.new(0, radius * 0.35, radius * 2.6), focus)
+		end)
+		pcall(function() Models.playClip(model, "Idle") end)
+	end
+	local name = label(stage, string.upper(Config.PETS[legend].name), 30, Color3.fromRGB(255, 236, 190), Vector2.new(0.5, 1), UDim2.fromScale(0.5, 0.97), UDim2.fromScale(1, 0.08), STYLE.display)
+	name.ZIndex = 13
+	local tag = label(stage, "FEATURED  ·  LEGENDARY", 15, Config.RARITIES.Legendary.color, Vector2.new(0.5, 1), UDim2.fromScale(0.5, 1.03), UDim2.fromScale(1, 0.05), STYLE.fontB)
+	tag.ZIndex = 13
 end
 
 local tutScale = new("UIScale", { Scale = 1 }, tutCard)
@@ -1323,6 +1825,22 @@ local camZoom = 1
 local shake = { t = 0, amp = 0 }
 -- Impact kit (ImpactFX, AbilityFX). One table to stay under Luau's 200-local limit; missing modules just skip the extras.
 local FXK = { lastRend = 0 }
+-- one cutscene at a time: busy while any cutscene holds the camera or a summon reveal covers the screen
+function FXK.cineOff() -- the Cutscenes setting (Off) or Reduced Motion
+	return SETTINGS.reducedMotion or SETTINGS.cinematics == "off"
+end
+function FXK.cineShort() -- Short cutscenes, or 2x speed
+	return SETTINGS.gameSpeed == 2 or SETTINGS.cinematics == "short"
+end
+function FXK.busy()
+	return FXK.camOverride ~= nil or (FXK.hatchRunning ~= nil and FXK.hatchRunning())
+end
+-- wait (up to `limit` s) for the screen to be free; true if it is
+function FXK.waitFree(limit)
+	local t0 = os.clock()
+	while FXK.busy() and os.clock() - t0 < limit do task.wait(0.1) end
+	return not FXK.busy()
+end
 do
 	local ok1, m1 = pcall(function() return require(ReplicatedStorage:WaitForChild("ImpactFX", 5)) end)
 	local ok2, m2 = pcall(function() return require(ReplicatedStorage:WaitForChild("AbilityFX", 5)) end)
@@ -1377,6 +1895,7 @@ function FXK.applySettings(s)
 		FXK.flashToggle.Text = SETTINGS.flashes and "Flashes: ON" or "Flashes: OFF"
 	end
 	SETTINGS.gameSpeed = s.gameSpeed == 2 and 2 or 1 -- CutsceneFX skips signatures by itself at 2x
+	SETTINGS.cinematics = (s.cinematics == "short" or s.cinematics == "off") and s.cinematics or "full"
 	local particles = s.particles == "low" and "Low" or (s.particles == "high" and "High" or "Default")
 	-- Low effects detail: the Lampwick Lane lamps stop casting shadows (10 shadowed lights are the costliest part of the set)
 	FXK.lowGfx = s.particles == "low"
@@ -1451,6 +1970,23 @@ function FXK.play(name, o)
 	if FXK.sfx then
 		pcall(FXK.sfx.play, name, o or {})
 	end
+end
+UI.play = FXK.play -- for UI code that runs above FXK (tutorial note)
+do
+	local lastClick = 0
+	local function hook(b)
+		if not b:IsA("GuiButton") or b:GetAttribute("ClickSfx") == false then return end
+		b.Activated:Connect(function()
+			if os.clock() - lastClick < 0.05 then return end
+			lastClick = os.clock()
+			if b == rollBtn then FXK.play("card_flip")
+			elseif b == startWaveBtn then FXK.play("bell_toll", { volume = 0.8 })
+			else FXK.play("brass_click") end
+		end)
+	end
+	local pg = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+	for _, d in pg:GetDescendants() do hook(d) end
+	pg.DescendantAdded:Connect(hook)
 end
 
 -- Free placement: "slot" is now a unit id; its position comes from the server (snapshot, Roll and Move events).
@@ -1616,6 +2152,20 @@ local function killEnemy(data)
 		end
 		task.delay(1.1, function() FXK.coinsLive -= 1 end)
 	end
+	if os.clock() - (FXK.lastPoofSfx or 0) > 0.06 then
+		FXK.lastPoofSfx = os.clock()
+		FXK.play("enemy_poof", { pitch = e.kind == "Boss" and 0.6 or 1 })
+	end
+	if os.clock() - (FXK.lastCoinSfx or 0) > 0.12 then -- the coins land a beat later
+		FXK.lastCoinSfx = os.clock()
+		task.delay(0.25, FXK.play, "coin_clink")
+	end
+	-- a wisp of lamp smoke rises from where it fell
+	if not SETTINGS.reducedMotion and liveFx < 30 then
+		local wisp = new("Part", { Shape = Enum.PartType.Ball, Anchored = true, CanCollide = false, CanQuery = false, CastShadow = false, Material = Enum.Material.Neon, Color = Color3.fromRGB(215, 210, 255), Transparency = 0.35, Size = Vector3.one * (e.kind == "Boss" and 3 or 1.2), Position = at }, visuals)
+		tween(wisp, 0.7, { Position = at + Vector3.new(0, e.kind == "Boss" and 8 or 4.5, 0), Size = wisp.Size * 2.6, Transparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		Debris:AddItem(wisp, 0.75)
+	end
 	floatText(at, "+" .. data.coins, STYLE.gold, 20)
 	floatText(at + Vector3.new(2.5, 0, 0), "+" .. data.gems, STYLE.gem, 20)
 	if (data.sp or 0) > 0 then
@@ -1625,7 +2175,7 @@ local function killEnemy(data)
 	if bar then
 		bar:Destroy()
 	end
-	table.insert(dying, { model = e.model, pivot = e.model:GetPivot(), t = 0, spin = e.kind == "Boss" and 4 or 9 })
+	table.insert(dying, { model = e.model, pivot = e.model:GetPivot(), t = 0, spin = e.kind == "Boss" and 4 or 9, hl = e.hl })
 	if e.kind == "Boss" then
 		screenFlash(Color3.fromRGB(255, 240, 200), 0.6)
 		shake.t, shake.amp = 0.5, 2
@@ -1636,6 +2186,92 @@ local function killEnemy(data)
 	end
 end
 
+-- ===== Boss plate "The Wick" (2026-10-28; user: "a more unique boss bar"). An iron-framed plate swings down on its
+-- chains when a boss walks in: the boss's name, its life as a blood-red ribbon with a pale trail that catches up after
+-- each hit, and the escape timer as a lamp wick burning down toward the left with a live flame. Under 10 s the flame
+-- turns red and a pocket watch ticks every second. The old bar stays as the data source (applySnapshot sets it).
+do
+	local B = { last = -1, shown = false, ghost = 1, hp = 1, t = 1, drop = 0 }
+	B.titles = { "THE GASLIGHT WARDEN", "THE BRASS LEVIATHAN", "THE HOLLOW BISHOP" } -- same names as the boss cutscene
+	B.serif = Font.fromName("Merriweather", Enum.FontWeight.Bold)
+	for _, c in bossBarBg:GetChildren() do
+		if c:IsA("UIStroke") or c:IsA("UICorner") or c:IsA("UIGradient") then c:Destroy() end
+	end
+	for _, c in bossBar:GetChildren() do
+		if c:IsA("UIStroke") or c:IsA("UICorner") or c:IsA("UIGradient") then c:Destroy() end
+	end
+	bossBarBg.BackgroundTransparency, bossBar.BackgroundTransparency, bossBarLabel.Visible = 1, 1, false
+	bossBarBg.Size = UDim2.fromOffset(320, 78) -- compact: the top lane stays visible
+	B.plate = new("Frame", { Name = "Plate", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0), Size = UDim2.fromScale(1, 1), ZIndex = 2 }, bossBarBg)
+	for _, x in { 0.2, 0.8 } do -- the chains it hangs from
+		new("Frame", { BackgroundColor3 = Color3.fromRGB(40, 36, 40), BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(x, 0.08), Size = UDim2.fromOffset(3, 22), ZIndex = 1 }, B.plate)
+	end
+	B.art = UI.objImg(B.plate, "plaque", UDim2.fromScale(1, 1), UDim2.fromScale(0.5, 0.5), nil, 2, Enum.ScaleType.Stretch)
+	B.art.ImageColor3 = Color3.fromRGB(175, 95, 90)
+	B.title = new("TextLabel", { BackgroundTransparency = 1, FontFace = B.serif, TextScaled = true, TextColor3 = Color3.fromRGB(255, 200, 160), Text = "", AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 8), Size = UDim2.new(0.8, 0, 0, 17), ZIndex = 5 }, B.plate)
+	new("UIStroke", { Color = Color3.fromRGB(30, 8, 8), Thickness = 1.5 }, B.title)
+	-- life ribbon
+	B.rib = new("Frame", { BackgroundColor3 = Color3.fromRGB(30, 8, 10), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 29), Size = UDim2.new(0.84, 0, 0, 14), ZIndex = 3 }, B.plate)
+	new("UIStroke", { Color = Color3.fromRGB(190, 140, 60), Thickness = 1.5 }, B.rib)
+	B.ribScale = new("UIScale", { Scale = 1 }, B.rib)
+	B.ghostF = new("Frame", { BackgroundColor3 = Color3.fromRGB(255, 225, 205), BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 3 }, B.rib)
+	B.fill = new("Frame", { BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 4 }, B.rib)
+	new("UIGradient", { Rotation = 90, Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 110, 100)), ColorSequenceKeypoint.new(0.45, Color3.fromRGB(190, 20, 40)), ColorSequenceKeypoint.new(1, Color3.fromRGB(90, 0, 20)) }) }, B.fill)
+	for i = 1, 3 do
+		new("Frame", { BackgroundColor3 = Color3.fromRGB(190, 140, 60), BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(i / 4, 0.5), Size = UDim2.new(0, 2, 1, 0), ZIndex = 5 }, B.rib)
+	end
+	B.hpText = new("TextLabel", { BackgroundTransparency = 1, FontFace = B.serif, TextScaled = true, TextColor3 = Color3.fromRGB(255, 240, 225), Text = "", Size = UDim2.fromScale(1, 0.85), Position = UDim2.fromScale(0, 0.08), ZIndex = 6 }, B.rib)
+	new("UIStroke", { Color = Color3.fromRGB(40, 0, 0), Thickness = 1.2 }, B.hpText)
+	-- the wick: charred trail behind, rope ahead, flame at the burning end
+	B.ash = new("Frame", { BackgroundColor3 = Color3.fromRGB(40, 30, 28), BackgroundTransparency = 0.3, BorderSizePixel = 0, Position = UDim2.new(0.08, 0, 0, 51), Size = UDim2.new(0.84, 0, 0, 3), ZIndex = 3 }, B.plate)
+	B.wick = new("Frame", { BackgroundColor3 = Color3.fromRGB(225, 205, 160), BorderSizePixel = 0, Position = UDim2.new(0.08, 0, 0, 50), Size = UDim2.new(0.84, 0, 0, 5), ZIndex = 4 }, B.plate)
+	round(B.wick, 2)
+	new("UIGradient", { Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.fromRGB(240, 225, 190)), ColorSequenceKeypoint.new(0.93, Color3.fromRGB(200, 170, 120)), ColorSequenceKeypoint.new(1, Color3.fromRGB(60, 30, 20)) }) }, B.wick)
+	B.flame = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://108574647086501", AnchorPoint = Vector2.new(0.5, 0.85), Size = UDim2.fromOffset(18, 25), ZIndex = 6 }, B.plate)
+	TweenService:Create(B.flame, TweenInfo.new(0.18, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Size = UDim2.fromOffset(15, 29), Rotation = 6 }):Play()
+	B.timer = new("TextLabel", { BackgroundTransparency = 1, FontFace = B.serif, TextScaled = true, TextColor3 = Color3.fromRGB(255, 220, 170), Text = "", AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 58), Size = UDim2.new(0.6, 0, 0, 13), ZIndex = 5 }, B.plate)
+	RunService.Heartbeat:Connect(function(dt)
+		if not bossBarBg.Visible then
+			B.shown = false
+			return
+		end
+		if not B.shown then -- entrance: the plate swings down on its chains with an iron clank
+			B.shown, B.ghost, B.hp, B.t, B.last = true, 1, 1, 1, -1
+			B.title.Text = B.titles[math.clamp(math.ceil(((lastSnap and lastSnap.stage) or 5) / 5), 1, #B.titles)]
+			B.plate.Position, B.plate.Rotation = UDim2.new(0.5, 0, 0, -110), -9
+			tween(B.plate, 0.6, { Position = UDim2.fromScale(0.5, 0), Rotation = 0 }, Enum.EasingStyle.Back)
+			FXK.play("iron_clank")
+		end
+		local boss
+		for _, e in enemies do
+			if e.big then boss = e break end
+		end
+		local hp = boss and math.clamp(boss.hp / boss.maxHp, 0, 1) or B.hp
+		if hp < B.hp - 0.001 then -- a hit: the ribbon jolts and the pale trail waits a beat before catching up
+			B.drop = os.clock()
+			B.ribScale.Scale = 1.06
+			tween(B.ribScale, 0.18, { Scale = 1 })
+		end
+		B.hp = hp
+		if os.clock() - B.drop > 0.35 then B.ghost = math.max(hp, B.ghost - dt * 0.8) end
+		B.fill.Size = UDim2.fromScale(hp, 1)
+		B.ghostF.Size = UDim2.fromScale(math.max(hp, B.ghost), 1)
+		B.hpText.Text = boss and (fmt(math.clamp(math.ceil(boss.hp), 0, math.ceil(boss.maxHp))) .. " / " .. fmt(math.ceil(boss.maxHp))) or ""
+		B.t += (bossBar.Size.X.Scale - B.t) * math.min(1, dt * 6) -- the wick burns smoothly between snapshots
+		B.wick.Size = UDim2.new(0.84 * B.t, 0, 0, 5)
+		B.flame.Position = UDim2.new(0.08 + 0.84 * B.t, 0, 0, 53)
+		local secs = math.max(0, math.ceil(bossBar.Size.X.Scale * Config.BOSS_TIME))
+		B.timer.Text = "ESCAPES IN " .. secs .. "s"
+		if secs ~= B.last then
+			if secs <= 10 and B.last ~= -1 then FXK.play("clock_tick", { pitch = secs % 2 == 0 and 1 or 0.8 }) end
+			B.last = secs
+		end
+		local low = secs <= 10
+		B.flame.ImageColor3 = low and Color3.fromRGB(255, 90, 70) or Color3.new(1, 1, 1)
+		B.timer.TextColor3 = low and Color3.fromRGB(255, 120, 110) or Color3.fromRGB(255, 220, 170)
+	end)
+end
+
 local function shotFx(data)
 	local e = enemies[data.id]
 	local entry = petParts[data.slot]
@@ -1644,6 +2280,7 @@ local function shotFx(data)
 	end
 	e.hp -= data.dmg
 	e.flash = 1
+	entry.aim, entry.aimT = e.model:GetPivot().Position, os.clock() -- the familiar turns to face what it shoots
 	if entry.model:GetAttribute("MeshPet") then
 		entry.atk = entry.atk or Models.playClip(entry.model, "Attack")
 		if entry.atk and not entry.atk.IsPlaying then
@@ -1695,6 +2332,10 @@ local function shotFx(data)
 		end)
 	end
 	task.delay(shotDur, function() liveFx -= 1 end)
+	if os.clock() - (FXK.lastHitSfx or 0) > 0.07 then -- hits land audibly, at most about 14 a second
+		FXK.lastHitSfx = os.clock()
+		task.delay(shotDur, FXK.play, "enemy_hit", { pitch = data.crit and 0.75 or 1 })
+	end
 	if data.crit then
 		floatText(to, fmt(data.dmg) .. "!", STYLE.gold, 26)
 	elseif data.dmg >= 25 then
@@ -1706,7 +2347,7 @@ end
 -- ===== Camera: close, Bloons-style three-quarter view, with shake for big moments =====
 RunService:BindToRenderStep("GuardianCamera", Enum.RenderPriority.Camera.Value + 1, function(dt)
 	camera.CameraType = Enum.CameraType.Scriptable
-	camera.FieldOfView = 60
+	camera.FieldOfView = FXK.fovOverride or 60 -- cutscenes may key the lens
 	local vp = camera.ViewportSize
 	local aspect = math.max(vp.X / math.max(vp.Y, 1), 0.3)
 	local need = 96 / (2 * math.tan(math.rad(30)) * aspect)
@@ -1724,10 +2365,68 @@ RunService:BindToRenderStep("GuardianCamera", Enum.RenderPriority.Camera.Value +
 		local off = FXK.impact and FXK.impact.shakeOffset(os.clock(), math.sqrt(a)) or Vector3.new((math.random() - 0.5) * a, (math.random() - 0.5) * a, 0)
 		cf = cf * CFrame.new(off)
 	end
+	-- inspect view (2026-10-28): while a familiar's panel is open the camera leans in on it (about a third of the way),
+	-- keeping it left of the panel; eases back when the panel closes. Off with Reduced Motion.
+	FXK.inspectK = FXK.inspectK or 0
+	local want = (FXK.inspect and FXK.inspectPos and not SETTINGS.reducedMotion) and 1 or 0
+	FXK.inspectK += (want - FXK.inspectK) * math.min(1, dt * 4)
+	if FXK.inspectK > 0.005 and FXK.inspectPos then
+		local tp = FXK.inspectPos + Vector3.new(0, 2, 0)
+		local icf = CFrame.lookAt(tp + (cf.Position - tp).Unit * 22 + Vector3.new(0, -5, 0), tp + cf.RightVector * 6)
+		cf = cf:Lerp(icf, FXK.inspectK * 0.85)
+	end
 	FXK.gameCF = cf
 	-- a signature cutscene drives the camera while it plays
 	camera.CFrame = FXK.camOverride or cf
 end)
+
+-- Start-menu camera (2026-10-28, after Sol's RNG and the Roblox main-menu tutorials): a street-level shot down the
+-- lane that leans a little toward the mouse (clamped parallax), then a 1.2 s sweep into the game view after PLAY.
+do
+	local UIS = game:GetService("UserInputService")
+	local MENU_EYE, MENU_AT = Vector3.new(-58, 9, 62), Vector3.new(4, 3, -2)
+	local PARALLAX = 3 -- studs at the screen edge
+	local lean, blend, wasMenu, fromCF = Vector2.zero, 1, false, nil
+	RunService:BindToRenderStep("MenuCamera", Enum.RenderPriority.Camera.Value + 2, function(dt)
+		local menu = startScreen.Visible and not FXK.camOverride
+		if menu then
+			local vp, m = camera.ViewportSize, UIS:GetMouseLocation()
+			local want = Vector2.new(math.clamp((m.X / vp.X - 0.5) * 2, -1, 1), math.clamp((m.Y / vp.Y - 0.5) * 2, -1, 1))
+			lean = lean:Lerp(want, math.min(1, dt * 3))
+			local base = CFrame.lookAt(MENU_EYE, MENU_AT)
+			local cf = base * CFrame.new(lean.X * PARALLAX, -lean.Y * PARALLAX * 0.5, 0)
+			cf = CFrame.lookAt(cf.Position, MENU_AT)
+			camera.CFrame = cf
+			wasMenu, blend, fromCF = true, 0, cf
+		elseif wasMenu and blend < 1 and fromCF then
+			-- first PLAY of a session: a 4 s establishing crane (high over the rooftops, down along the lane, settle on the
+			-- board); later PLAYs and Reduced Motion keep the 1.2 s sweep
+			local dur = (FXK.introDone or FXK.cineOff() or FXK.cineShort()) and 1.2 or 4
+			blend = math.min(1, blend + dt / dur)
+			local e = blend < 0.5 and 4 * blend ^ 3 or 1 - (-2 * blend + 2) ^ 3 / 2
+			if dur > 2 then
+				local game0 = camera.CFrame
+				local p0 = fromCF.Position
+				local p1 = Vector3.new(-70, 70, 90) -- above the rooftops, the whole street below
+				local p2 = Vector3.new(30, 26, 60)
+				local p3 = game0.Position
+				local u = 1 - e
+				local pos = u ^ 3 * p0 + 3 * u ^ 2 * e * p1 + 3 * u * e ^ 2 * p2 + e ^ 3 * p3
+				local tgt = (fromCF.Position + fromCF.LookVector * 40):Lerp(game0.Position + game0.LookVector * 60, e)
+				camera.CFrame = CFrame.lookAt(pos, tgt)
+			else
+				camera.CFrame = fromCF:Lerp(camera.CFrame, 1 - (1 - blend) ^ 3)
+			end
+			if blend >= 1 then
+				wasMenu = false
+				FXK.introDone = true
+			end
+		end
+	end)
+	startBtn.Activated:Connect(function()
+		screenFlash(Color3.new(1, 1, 1), 0.55) -- Sol's ends its title with a flash
+	end)
+end
 
 -- ===== Input helpers =====
 local function toScreen(position)
@@ -1808,6 +2507,7 @@ local function closePanel()
 	hidePanel(upPanel, upScale)
 	UI.hideRange()
 	selectedSlot = nil
+	FXK.inspect = nil
 	deleteArmed = 0
 end
 
@@ -1827,7 +2527,13 @@ local function refreshPanel()
 	for kind, r in upRows do
 		local level = lastSnap.upgrades[entry.pet][kind]
 		for p, pip in r.pips do
-			pip.BackgroundColor3 = p <= level and STYLE.gold or STYLE.grey
+			local fl = pip:FindFirstChild("Flame")
+			if fl then -- ledger lamps: lit up to the level
+				pip.BackgroundColor3 = p <= level and Color3.fromRGB(120, 70, 20) or Color3.fromRGB(40, 30, 24)
+				fl.Visible = p <= level
+			else
+				pip.BackgroundColor3 = p <= level and STYLE.gold or STYLE.grey
+			end
 		end
 		if level >= Config.UPGRADE_MAX then
 			r.buy.Text = "MAX"
@@ -1839,13 +2545,14 @@ local function refreshPanel()
 		end
 	end
 	if os.clock() - deleteArmed > 3 then
-		deleteBtn.Text = "Delete  (+" .. Config.recycleValue(entry.pet, entry.tier) .. " coins)"
+		deleteBtn.Text = "Release  (+" .. Config.recycleValue(entry.pet, entry.tier) .. " coins)"
 		setButtonColor(deleteBtn, STYLE.red)
 	end
 end
 
 local function openPanel(slot)
 	selectedSlot = slot
+	FXK.inspect, FXK.inspectPos = slot, slotPos(slot)
 	deleteArmed = 0
 	local e = petParts[slot]
 	if e then
@@ -1893,6 +2600,53 @@ local function updateOdds()
 		l.Text = string.format("%s   %.1f%%", r:upper(), pct[r])
 	end
 	oddsNote.Text = string.format("Luck bonus +%d%% from trainer level. Epic or better is guaranteed within %d rolls.", math.floor(luck * 100 + 0.5), Config.PITY_EVERY)
+	if UI.oddsSpread then UI.oddsSpread(pct) end
+end
+
+-- Odds as a fortune-teller's spread (2026-10-28, /make-creative): four tarot cards fanned on the panel, one per rarity,
+-- tinted in its colour; the chance is written under each card; rarer cards glow and sway. The text rows stay hidden.
+do
+	local cards, tweens = {}, {}
+	local n = #Config.RARITY_ORDER
+	for i, r in Config.RARITY_ORDER do
+		oddsRows[r].Visible = false
+		local nameL = oddsRows[r]
+		for _, c in oddsBody:GetChildren() do
+			if c:IsA("TextLabel") and c ~= nameL and c ~= oddsNote and c.Position.Y.Offset == 36 + (i - 1) * 62 then c.Visible = false end
+			if c:IsA("ImageLabel") and c.ZIndex == 9 then c.Visible = false end -- old row dividers
+		end
+		local color = Config.RARITIES[r].color
+		local slot = new("Frame", { BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new((i - 0.5) / n, 0, 0, 8), Size = UDim2.fromOffset(92, 200), ZIndex = 10 }, oddsBody)
+		local glow = new("Frame", { BackgroundColor3 = color, BackgroundTransparency = 0.7 + 0.05 * (n - i), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(46, 70), Size = UDim2.fromOffset(100, 150), ZIndex = 10 }, slot)
+		round(glow, 18)
+		local card = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://93758813189086", ImageColor3 = color:Lerp(Color3.new(1, 1, 1), 0.1), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(46, 70 + math.abs(i - (n + 1) / 2) * 6), Size = UDim2.fromOffset(78, 132), Rotation = (i - (n + 1) / 2) * 9, ZIndex = 11 }, slot)
+		card:SetAttribute("NoStagger", true)
+		local nm = label(slot, string.upper(r), 15, color, Vector2.new(0.5, 0), UDim2.fromOffset(46, 142), UDim2.fromOffset(100, 20), STYLE.fontB)
+		nm.ZIndex = 12
+		local pc = label(slot, "", 22, STYLE.text, Vector2.new(0.5, 0), UDim2.fromOffset(46, 162), UDim2.fromOffset(100, 26), STYLE.fontB)
+		pc.ZIndex = 12
+		cards[r] = { card = card, pc = pc }
+		if i >= 3 then -- rarer cards breathe
+			table.insert(tweens, TweenService:Create(card, TweenInfo.new(1.4 - 0.3 * (i - 3), Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Rotation = card.Rotation + 4 }))
+			table.insert(tweens, TweenService:Create(glow, TweenInfo.new(1.1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundTransparency = 0.45 }))
+		end
+	end
+	for _, t in tweens do t:Play() end
+	oddsNote.Position = UDim2.new(0.5, 0, 1, -4)
+	function UI.oddsSpread(pct)
+		for r, c in cards do
+			c.pc.Text = string.format(pct[r] < 10 and "%.1f%%" or "%d%%", pct[r] < 10 and pct[r] or math.floor(pct[r] + 0.5))
+		end
+	end
+	-- the ODDS chip becomes a small crystal ball on the desk
+	UI.objectify(oddsChip)
+	local ball = new("Frame", { BackgroundColor3 = Color3.fromRGB(150, 110, 255), BackgroundTransparency = 0.25, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 2, 0.5, 0), Size = UDim2.fromOffset(26, 26), ZIndex = 7 }, oddsChip)
+	round(ball, 13)
+	new("UIGradient", { Rotation = 45, Color = ColorSequence.new(Color3.fromRGB(240, 220, 255), Color3.fromRGB(80, 40, 160)) }, ball)
+	glowStroke(ball, Color3.fromRGB(255, 210, 120), 2, 0)
+	TweenService:Create(ball, TweenInfo.new(1.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundTransparency = 0 }):Play()
+	local t = oddsChip:FindFirstChild("Txt")
+	if t then t.ZIndex = 8; t.TextColor3 = STYLE.gold end
 end
 
 oddsChip.Activated:Connect(function()
@@ -1913,40 +2667,100 @@ local function updateProgress()
 		return
 	end
 	local s = lastSnap
-	progHead.Text = string.format("LEVEL %d   (Luck +%d%%)", s.level, math.floor(s.luck * 100 + 0.5))
-	progXp.Size = UDim2.fromScale(math.clamp(s.xp / s.xpNeed, 0, 1), 1)
-	local lines = { string.format("%d / %d XP to level %d", s.xp, s.xpNeed, math.min(s.level + 1, Config.LEVEL_MAX)), "" }
-	for lv = s.level + 1, math.min(s.level + 6, Config.LEVEL_MAX) do
-		table.insert(lines, string.format("Level %d:  +%d gems,  Luck +%d%%", lv, Config.levelGems(lv), math.floor(Config.luck(lv) * 100 + 0.5)))
+	progHead.Text = "TRAINER LEVEL " .. s.level
+	local frac = s.level >= Config.LEVEL_MAX and 1 or math.clamp(s.xp / s.xpNeed, 0, 1)
+	progXp.Size = UDim2.fromScale(frac, 1)
+	progXpText.Text = s.level >= Config.LEVEL_MAX and "MAX LEVEL" or string.format("%s / %s XP", fmt(s.xp), fmt(s.xpNeed))
+	local pct = Config.rarityPercents(s.luck)
+	luckLine.Text = string.format("LUCK +%d%%", math.floor(s.luck * 100 + 0.5))
+	luckSub.Text = string.format("Legendary %.1f%%  ·  Epic %.1f%%", pct.Legendary or 0, pct.Epic or 0)
+	for lv, card in roadCards do
+		local done, nextUp = lv <= s.level, lv == s.level + 1
+		card.frame.BackgroundTransparency = 0 -- opaque so the road line passes behind the cards
+		card.frame.BackgroundColor3 = done and Color3.fromRGB(14, 30, 26) or (nextUp and Color3.fromRGB(40, 30, 14) or Color3.fromRGB(20, 16, 40))
+		card.stroke.Color = nextUp and STYLE.gold or (done and Color3.fromRGB(110, 200, 150) or Color3.fromRGB(90, 80, 130))
+		card.stroke.Thickness = nextUp and 3 or 2
+		card.num.TextColor3 = nextUp and STYLE.gold or (done and Color3.fromRGB(170, 230, 190) or STYLE.text)
+		card.state.Text = done and "CLAIMED" or (nextUp and "NEXT" or "")
+		card.state.TextColor3 = nextUp and STYLE.gold or Color3.fromRGB(120, 200, 150)
 	end
-	table.insert(lines, "")
-	table.insert(lines, "XP comes from defeating monsters and clearing stages.")
-	table.insert(lines, "Level 3 unlocks auto-rolling when AUTO is on.")
-	progList.Text = table.concat(lines, "\n")
+	roadFill.Size = UDim2.fromScale(math.clamp((s.level - 1 + frac) / (Config.LEVEL_MAX - 1), 0, 1), 1)
+	road.CanvasPosition = Vector2.new(math.max(0, (s.level - 2) * 118), 0)
 end
 
-progressBtn.Activated:Connect(function()
-	if progPanel.Visible then
+do -- Progression: first-person walk along the Trainer's Road (TrainerRoad module), then the panel opens over it
+	local okR, RoadMod = pcall(function() return require(script.Parent:WaitForChild("TrainerRoad", 3)) end)
+	local Road = okR and RoadMod and RoadMod({
+		Config = Config, settings = SETTINGS, sfx = FXK.play, short = FXK.cineShort,
+		setCamera = function(cf) FXK.camOverride = cf end,
+		setFov = function(f) FXK.fovOverride = f end,
+	}) or nil
+	if Road then
+		UI.blurHolders[progPanel] = nil -- the road stays sharp behind the panel
+	end
+	local busy, hidden = false, {}
+	local function closeProg()
+		if not progPanel.Visible or busy then return end
 		hidePanel(progPanel, progScale)
-	else
+		if Road and next(hidden) then
+			busy = true
+			task.spawn(function()
+				Road.close(function()
+					for g in hidden do g.Visible = true end
+					table.clear(hidden)
+				end)
+				busy = false
+			end)
+		end
+	end
+	progressBtn.Activated:Connect(function()
+		if busy then return end
+		if progPanel.Visible then
+			closeProg()
+			return
+		end
 		progPanel.Position = UDim2.new(0.5, 0, 0.5, tutCard.Visible and 48 or 0)
 		updateProgress()
-		UI.intro(gui, STYLE.purple, function()
-			progPanel.Visible = true
-			popIn(progScale, 0.85)
-		end, SETTINGS.reducedMotion)
-	end
-end)
-progClose.Activated:Connect(function() hidePanel(progPanel, progScale) end)
+		if Road and lastSnap and not FXK.cineOff() then
+			busy = true
+			for _, c in hud:GetChildren() do
+				if c:IsA("GuiObject") and c.Visible and c ~= progPanel then
+					hidden[c] = true
+					c.Visible = false
+				end
+			end
+			task.spawn(function()
+				Road.open(lastSnap, function()
+					progPanel.Visible = true
+					popIn(progScale, 0.85)
+				end)
+				busy = false
+			end)
+		else
+			UI.intro(gui, STYLE.purple, function()
+				progPanel.Visible = true
+				popIn(progScale, 0.85)
+			end, SETTINGS.reducedMotion)
+		end
+	end)
+	progClose.Activated:Connect(closeProg)
+end
 
 do -- settings panel: shell here, content in the SettingsPanel module
 	local settingsBtn = railButton("Settings", 6, STYLE.grey)
+	if UI.sealButton then UI.sealButton(settingsBtn) end
 	UI.SYMS["Settings"] = "star"
 	UI.SUBS["Settings"] = "SOUND  ·  DISPLAY  ·  ACCESS"
-	local panel, body, scale, close = makePanel(hud, UDim2.fromOffset(420, 540), "Settings", STYLE.blue)
+	local panel, body, scale, close = makePanel(hud, UDim2.fromOffset(440, 560), "Settings", STYLE.blue)
 	UI.blurHolders[panel] = true
-	panel.AnchorPoint = Vector2.new(0.5, 0.5)
-	panel.Position = UDim2.fromScale(0.5, 0.5)
+	panel.AnchorPoint = Vector2.new(0.5, 0)
+	panel.Position = UDim2.new(0.5, 0, 0, 70) -- top-anchored so the reset seal clears the desk at the bottom
+	panel:GetPropertyChangedSignal("Visible"):Connect(function() -- the desk steps aside while the board is open
+		for _, n in { "RollBar", "Desk" } do
+			local d = hud:FindFirstChild(n)
+			if d then d.Visible = not panel.Visible end
+		end
+	end)
 	panel.ZIndex = 9
 	local Defaults = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("SettingsDefaults"))
 	FXK.settingsPanel = require(script.Parent:WaitForChild("SettingsPanel"))({
@@ -1972,7 +2786,7 @@ local lastSp = 0
 -- ===== Skill tree: honeycomb of permanent upgrades =====
 local SQ3 = math.sqrt(3)
 local HEX_R = 48
-local HEX_GAP = 1.07
+local HEX_GAP = 1.3 -- room between hexes so the path lines show
 local blur = new("BlurEffect", { Size = 0 }, game:GetService("Lighting"))
 
 treeGui = new("Frame", { Name = "Tree", BackgroundColor3 = Color3.fromRGB(6, 8, 22), BackgroundTransparency = 0.04, Size = UDim2.fromScale(1, 1), Visible = false, ZIndex = 12, Active = true }, hud)
@@ -1986,13 +2800,21 @@ local treeScale = new("UIScale", { Scale = 1 }, treeGui)
 local detail = new("Frame", { BackgroundColor3 = STYLE.panelDark, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -68), Size = UDim2.fromOffset(540, 92), ZIndex = 14 }, treeGui)
 round(detail, 16)
 local detailStroke = outline(detail, 3, 0.3, STYLE.gold)
-local detName = label(detail, "", 22, STYLE.text, Vector2.new(0, 0), UDim2.fromOffset(14, 6), UDim2.new(1, -190, 0, 28))
+detail.Size = UDim2.fromOffset(600, 104)
+detIcon = new("ImageLabel", { BackgroundTransparency = 1, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 14, 0.5, 0), Size = UDim2.fromOffset(72, 72), ScaleType = Enum.ScaleType.Fit, ZIndex = 15 }, detail)
+detPips = {}
+for i = 1, 5 do
+	local pip = new("Frame", { BackgroundColor3 = Color3.fromRGB(50, 46, 70), Position = UDim2.fromOffset(98 + (i - 1) * 26, 84), Size = UDim2.fromOffset(22, 8), ZIndex = 15 }, detail)
+	round(pip, 4)
+	detPips[i] = pip
+end
+local detName = label(detail, "", 24, STYLE.text, Vector2.new(0, 0), UDim2.fromOffset(98, 4), UDim2.new(1, -280, 0, 30))
 detName.TextXAlignment = Enum.TextXAlignment.Left
 detName.ZIndex = 15
-local detDesc = label(detail, "", 14, STYLE.muted, Vector2.new(0, 0), UDim2.fromOffset(14, 36), UDim2.new(1, -190, 0, 20), STYLE.fontB)
+local detDesc = label(detail, "", 15, STYLE.muted, Vector2.new(0, 0), UDim2.fromOffset(98, 34), UDim2.new(1, -280, 0, 20), STYLE.fontB)
 detDesc.TextXAlignment = Enum.TextXAlignment.Left
 detDesc.ZIndex = 15
-local detLevel = label(detail, "", 14, STYLE.gold, Vector2.new(0, 0), UDim2.fromOffset(14, 58), UDim2.new(1, -190, 0, 24), STYLE.fontB)
+local detLevel = label(detail, "", 16, STYLE.gold, Vector2.new(0, 0), UDim2.fromOffset(98, 56), UDim2.new(1, -280, 0, 22), STYLE.fontB)
 detLevel.TextXAlignment = Enum.TextXAlignment.Left
 detLevel.ZIndex = 15
 local buyBtn = makeButton(detail, "BUY", UDim2.fromOffset(160, 64), UDim2.new(1, -12, 0.5, 0), STYLE.green, Vector2.new(1, 0.5))
@@ -2040,6 +2862,23 @@ end
 
 nodeUI = {}
 local selectedNode = "Claws"
+NODE_ICONS = {
+	damage = "icon_sword", coins = "icon_coin", crystal = "icon_crystal", ultNeed = "icon_bolt", luck = "icon_star", gems = "icon_gem",
+	bossDamage = "icon_skull", merge = "icon_chest", bossTime = "icon_stopwatch", ultDamage = "icon_bolt", rollDiscount = "icon_gem",
+	streakGuard = "icon_shield", crit = "icon_sword", xp = "icon_trophy", pity = "icon_crown", ultRefund = "icon_bolt", Start = "icon_crown",
+}
+-- soft glow behind the tree and faint stars, so the tree sits in a scene instead of on a flat sheet
+do
+	local g = new("Frame", { BackgroundColor3 = Color3.fromRGB(150, 110, 255), BackgroundTransparency = 0.82, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(620, 520), ZIndex = 13 }, treeArea)
+	round(g, 300)
+	new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.2), NumberSequenceKeypoint.new(0.7, 0.9), NumberSequenceKeypoint.new(1, 1) }) }, g)
+	for i = 1, 40 do
+		local sz = math.random(2, 4)
+		local st = new("Frame", { BackgroundColor3 = Color3.fromRGB(255, 236, 200), BackgroundTransparency = 0.4 + math.random() * 0.4, BorderSizePixel = 0, Position = UDim2.fromScale(math.random(), math.random()), Size = UDim2.fromOffset(sz, sz), ZIndex = 13 }, treeGui)
+		round(st, 2)
+		TweenService:Create(st, TweenInfo.new(1 + math.random() * 2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundTransparency = 0.95 }):Play()
+	end
+end
 
 for _, node in Config.TREE do
 	local x = HEX_R * SQ3 * HEX_GAP * (node.q + node.r / 2)
@@ -2056,6 +2895,15 @@ for _, node in Config.TREE do
 	outline(icon, 2, 0.3, Color3.new(0, 0, 0))
 	local code = label(icon, node.short, #node.short > 3 and 11 or 15, STYLE.text)
 	code.ZIndex = 19
+	local art = iconImg(icon, NODE_ICONS[node.kind] or NODE_ICONS[node.id] or "", UDim2.fromOffset(46, 46), UDim2.fromScale(0.5, 0.5), nil, 19)
+	if art then -- painted icon on a dark disc ringed in the skill's colour, instead of a 3-letter code
+		code.Visible = false
+		icon.BackgroundColor3 = Color3.fromRGB(16, 14, 30)
+		icon.Size = UDim2.fromOffset(44, 44)
+		round(icon, 22)
+		local st = icon:FindFirstChildOfClass("UIStroke")
+		if st then st.Color = node.color; st.Transparency = 0; st.Thickness = 2.5 end
+	end
 	local plate = new("Frame", { BackgroundColor3 = Color3.fromRGB(10, 12, 26), BackgroundTransparency = 0.1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.78), Size = UDim2.fromOffset(HEX_R * 1.55, 17), ZIndex = 18 }, cont)
 	round(plate, 8)
 	local nameLabel = label(plate, node.name, 12, STYLE.text)
@@ -2075,6 +2923,19 @@ for _, node in Config.TREE do
 		selectedNode = node.id
 		if refreshTree then refreshTree() end
 	end)
+end
+
+local treeLinks = {}
+for id, ui in nodeUI do
+	for _, n in Config.TREE_NEIGHBORS[id] or {} do
+		local other = nodeUI[n]
+		if other and id < n then
+			local dx, dy = other.x - ui.x, other.y - ui.y
+			local line = new("Frame", { BackgroundColor3 = Color3.fromRGB(80, 70, 120), BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, (ui.x + other.x) / 2, 0.5, (ui.y + other.y) / 2), Size = UDim2.fromOffset(math.sqrt(dx * dx + dy * dy), 5), Rotation = math.deg(math.atan2(dy, dx)), ZIndex = 13 }, treeArea)
+			round(line, 3)
+			table.insert(treeLinks, { a = id, b = n, line = line })
+		end
+	end
 end
 
 local function nodeState(id, snap)
@@ -2126,6 +2987,9 @@ function refreshTree()
 	local snap = lastSnap
 	if not snap then
 		return
+	end
+	if Grove and treeGui.Visible then
+		Grove.refresh(snap)
 	end
 	treeSp.Text = string.format("Skill Points: %d     (level-ups, bosses and the tutorial give points)", snap.sp)
 	for id, ui in nodeUI do
@@ -2182,9 +3046,25 @@ function refreshTree()
 			ui.badgeLabel.TextColor3 = Color3.fromRGB(20, 20, 30)
 		end
 	end
+	for _, l in treeLinks do -- paths: gold once both ends are owned, dim while one end is still open
+		local sa, sb = nodeState(l.a, snap), nodeState(l.b, snap)
+		local ownA = sa == "owned" or sa == "maxed" or sa == "start"
+		local ownB = sb == "owned" or sb == "maxed" or sb == "start"
+		l.line.Visible = nodeUI[l.a].cont.Visible and nodeUI[l.b].cont.Visible
+		l.line.BackgroundColor3 = (ownA and ownB) and STYLE.gold or ((ownA or ownB) and Color3.fromRGB(150, 130, 210) or Color3.fromRGB(60, 54, 90))
+		l.line.BackgroundTransparency = (ownA and ownB) and 0 or 0.35
+	end
 	local node = Config.TREE_BY_ID[selectedNode]
 	local state = nodeState(selectedNode, snap)
 	local lvl = snap.tree[selectedNode] or 0
+	if detIcon then
+		detIcon.Image = (UI.art and UI.art.has(NODE_ICONS[node.kind] or NODE_ICONS[node.id] or "") and UI.art.image(NODE_ICONS[node.kind] or NODE_ICONS[node.id])) or ""
+		detIcon.Visible = state ~= "locked"
+	end
+	for i, pip in detPips do
+		pip.Visible = state ~= "locked" and state ~= "start" and i <= node.max
+		pip.BackgroundColor3 = i <= lvl and node.color or Color3.fromRGB(50, 46, 70)
+	end
 	detailStroke.Color = state == "locked" and STYLE.grey or node.color
 	if state == "locked" then
 		detName.Text = "???"
@@ -2201,7 +3081,8 @@ function refreshTree()
 	else
 		detName.Text = node.name
 		detDesc.Text = node.desc
-		detLevel.Text = string.format("Level %d / %d     Now: %s", lvl, node.max, lvl > 0 and fmtEffect(node, node.per * lvl) or "none")
+		detLevel.Text = lvl >= node.max and string.format("MAX  ·  %s", fmtEffect(node, node.per * lvl))
+			or string.format("Now %s   >   Next %s", lvl > 0 and fmtEffect(node, node.per * lvl) or "none", fmtEffect(node, node.per * (lvl + 1)))
 		if state == "maxed" then
 			buyBtn.Text = "MAXED"
 			setButtonColor(buyBtn, STYLE.gold)
@@ -2229,30 +3110,59 @@ function uiSparks(parent, pos, color, count, far)
 	end
 end
 
+local groveBusy, groveHidden = false, {}
 local function setTreeOpen(open)
-	if open == treeGui.Visible then
+	if open == treeGui.Visible or groveBusy then
 		return
 	end
-	tween(blur, 0.25, { Size = open and 14 or 0 })
 	if not open then
 		hidePanel(treeGui, treeScale)
+		if Grove and next(groveHidden) then
+			-- walk back out: fade, camera home, then the rest of the HUD returns
+			groveBusy = true
+			task.spawn(function()
+				Grove.close(function()
+					for g in groveHidden do g.Visible = true end
+					table.clear(groveHidden)
+				end)
+				groveBusy = false
+			end)
+		else
+			tween(blur, 0.25, { Size = 0 })
+		end
 		return
 	end
-	treeGui.Visible = true
-	if open then
-		for _, id in { "Claws", "Magnet", "Armor", "Charge", "Charm", "Finder" } do
-			if nodeState(id, lastSnap) == "available" and lastSnap.sp >= Config.skillCost(Config.TREE_BY_ID[id], 0) then
-				selectedNode = id
-				break
+	for _, id in { "Claws", "Magnet", "Armor", "Charge", "Charm", "Finder" } do
+		if nodeState(id, lastSnap) == "available" and lastSnap.sp >= Config.skillCost(Config.TREE_BY_ID[id], 0) then
+			selectedNode = id
+			break
+		end
+	end
+	refreshTree()
+	treeInit = true
+	if Grove and not FXK.cineOff() then
+		-- first person: hide the HUD, walk up to the living tree as it grows, then the skill panel opens over it
+		groveBusy = true
+		for _, c in hud:GetChildren() do
+			if c:IsA("GuiObject") and c.Visible and c ~= treeGui then
+				groveHidden[c] = true
+				c.Visible = false
 			end
 		end
-		treeGui.Visible = false
+		treeGui.BackgroundTransparency = 0.62 -- let the grove show behind the hexes
+		task.spawn(function()
+			Grove.open(lastSnap, function()
+				treeGui.Visible = true
+				popIn(treeScale, 0.9)
+			end)
+			groveBusy = false
+		end)
+	else
+		tween(blur, 0.25, { Size = 14 })
 		UI.intro(gui, STYLE.blue, function()
 			treeGui.Visible = true
 			popIn(treeScale, 0.9)
 		end, SETTINGS.reducedMotion)
-		refreshTree()
-		treeInit = true
 	end
 end
 
@@ -2268,7 +3178,17 @@ end
 -- ===== Full-screen hatch: the code lives in the RevealSection module (T14) =====
 local quickRoll = false
 local autoOn = false
+Grove = (function() -- first-person walk to the living skill tree (SkillGrove module); nil if it is missing
+	local ok, mod = pcall(function() return require(script.Parent:WaitForChild("SkillGrove", 3)) end)
+	if not ok or not mod then return nil end
+	return mod({
+		Config = Config, settings = SETTINGS, sfx = FXK.play, short = FXK.cineShort,
+		setCamera = function(cf) FXK.camOverride = cf end,
+		setFov = function(f) FXK.fovOverride = f end,
+	})
+end)()
 local Hatch = require(script.Parent.RevealSection)({
+	cineLite = function() return FXK.cineOff() or FXK.cineShort() end,
 	new = new, label = label, round = round, tween = tween, fadeLabel = fadeLabel, setLabelVisible = setLabelVisible,
 	STYLE = STYLE, UI = UI, FXK = FXK, Config = Config, Models = Models, burst = burst, ring = ring, pillar = pillar,
 	groundOf = groundOf, screenFlash = screenFlash, flushBanners = flushBanners, shake = shake, pending = pending,
@@ -2279,6 +3199,7 @@ local Hatch = require(script.Parent.RevealSection)({
 	auto = function() return autoOn end,
 })
 local revealGui, revealQueue, playRoll = Hatch.gui, Hatch.queue, Hatch.playRoll
+FXK.hatchRunning = Hatch.running
 
 local function ease(a, style, dir)
 	return TweenService:GetValue(a, style, dir)
@@ -2481,8 +3402,14 @@ RunService.RenderStepped:Connect(function(dt)
 		local p = Path.positionAt(math.min(d, Path.length))
 		local ahead = Path.positionAt(math.min(d + 1, Path.length))
 		local dir = Vector3.new(ahead.X - p.X, 0, ahead.Z - p.Z)
-		local pos = Vector3.new(p.X, 0.8 + math.abs(math.sin(clock * 7 + id)) * 0.35, p.Z)
-		local roll = math.sin(clock * 7 + id) * 0.08
+		local ph = clock * (4 + e.speed * 0.5) + id -- stride rate follows walk speed
+		local hop = math.abs(math.sin(ph))
+		local pos = Vector3.new(p.X, 0.8 + hop * (e.big and 0.2 or 0.4), p.Z)
+		local further = Path.positionAt(math.min(d + 3, Path.length))
+		local dir2 = Vector3.new(further.X - ahead.X, 0, further.Z - ahead.Z)
+		local turn = (dir.Magnitude > 0.01 and dir2.Magnitude > 0.01) and dir.Unit:Cross(dir2.Unit).Y or 0
+		local roll = math.sin(ph) * 0.08 - turn * 0.35 -- sway, and bank into the corner ahead
+		local lean = -0.08 - (1 - hop) * 0.07 -- leans into the walk and dips on each landing
 		local cf = dir.Magnitude > 0.01 and CFrame.lookAt(pos, pos + dir) or CFrame.new(pos)
 		local r = e.react
 		if r then
@@ -2504,7 +3431,7 @@ RunService.RenderStepped:Connect(function(dt)
 				e.flash = math.max(e.flash, 0.5) -- frost and burn tints stay on a moment
 			end
 		end
-		e.model:PivotTo(cf * CFrame.Angles(0, 0, roll))
+		e.model:PivotTo(cf * CFrame.Angles(lean, 0, roll))
 		if e.popT < 1 then
 			e.popT = math.min(1, e.popT + dt / (e.big and 0.6 or 0.28))
 			e.model:ScaleTo(math.max(0.05, ease(e.popT, Enum.EasingStyle.Back, Enum.EasingDirection.Out)))
@@ -2517,23 +3444,34 @@ RunService.RenderStepped:Connect(function(dt)
 	for i = #dying, 1, -1 do
 		local d = dying[i]
 		d.t += dt
-		local k = d.t / 0.32
+		local k = d.t / 0.46
 		if k >= 1 then
 			d.model:Destroy()
 			table.remove(dying, i)
 		else
-			d.model:ScaleTo(math.max(0.05, 1 - k * k))
-			d.model:PivotTo(d.pivot * CFrame.new(0, k * 2.5, 0) * CFrame.Angles(0, k * d.spin, k * 1.2))
+			local sc, rise, spin = 1, 0, 0
+			if k < 0.22 then -- anticipation: it flashes white and swells
+				sc = 1 + 0.18 * math.sin(k / 0.22 * math.pi / 2)
+			else -- then shrinks, rises and spins away, accelerating
+				local b = (k - 0.22) / 0.78
+				sc, rise, spin = 1.18 * (1 - b * b), b * b * 3, b * d.spin
+			end
+			d.model:ScaleTo(math.max(0.05, sc))
+			d.model:PivotTo(d.pivot * CFrame.new(0, rise, 0) * CFrame.Angles(0, spin, spin * 0.13))
+			if d.hl then
+				d.hl.FillColor = Color3.new(1, 1, 1)
+				d.hl.FillTransparency = math.clamp(k / 0.5, 0, 1)
+			end
 		end
 	end
 	for i = #flying, 1, -1 do
 		local f = flying[i]
 		f.t += dt
-		local k = math.min(1, f.t / 0.24)
+		local k = math.min(1, math.max(0, f.t - (f.delay or 0)) / (f.dur or 0.24))
 		local e2 = k * k
-		local pos = f.from:Lerp(f.to, e2) + Vector3.new(0, math.sin(k * math.pi) * 3, 0)
-		f.model:PivotTo(CFrame.new(pos) * CFrame.Angles(0, math.pi + k * 6, 0))
-		f.model:ScaleTo(math.max(0.1, 1 - 0.6 * e2))
+		local pos = f.from:Lerp(f.to, f.dur and k or e2) + Vector3.new(0, math.sin(k * math.pi) * (f.arc or 3), 0)
+		f.model:PivotTo(CFrame.new(pos) * CFrame.Angles(f.flip and k * math.pi * 2 or 0, math.pi + k * (f.spin or 6), 0))
+		f.model:ScaleTo(math.max(0.1, 1 - (f.shrink or 0.6) * e2))
 		if k >= 1 then
 			f.model:Destroy()
 			table.remove(flying, i)
@@ -2564,7 +3502,14 @@ RunService.RenderStepped:Connect(function(dt)
 		entry.kick = math.max(0, (entry.kick or 0) - dt * 8)
 		local bob = math.sin(clock * 2.2 + slot) * 0.08 + entry.kick * 0.35
 		local pos = Vector3.new(target.X, GROUND + bob + lift + (entry.model:GetAttribute("CutsceneLift") or 0), target.Z)
-		local pivot = CFrame.new(pos) * CFrame.Angles(0, math.pi, 0)
+		local want = math.pi -- face the camera when idle
+		if entry.aim and os.clock() - entry.aimT < 1.4 and not (drag and drag.active and drag.from == slot) then
+			local dv = entry.aim - target
+			if dv.Magnitude > 0.5 then want = math.atan2(-dv.X, -dv.Z) end
+		end
+		entry.yaw = entry.yaw or math.pi
+		entry.yaw += ((want - entry.yaw + math.pi) % (2 * math.pi) - math.pi) * math.min(1, dt * 12)
+		local pivot = CFrame.new(pos) * CFrame.Angles(0, entry.yaw, 0) * CFrame.Angles(entry.kick * 0.22, 0, 0) -- recoil leans back
 		entry.model:PivotTo(pivot)
 		for _, fn in entry.anims do
 			fn(clock, pivot)
@@ -2693,17 +3638,35 @@ do -- photosensitivity notice on the start screen (T42): the game has flashes; o
 	round(toggle, 6)
 	outline(toggle, 1.5, 0.3, STYLE.muted)
 	FXK.flashToggle = toggle
+	toggle.BackgroundTransparency = 1 -- brass plate instead of a dark pill
+	toggle.TextColor3 = Color3.fromRGB(255, 224, 150)
+	local plate = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://83841573700983", ScaleType = Enum.ScaleType.Stretch, Size = UDim2.new(1, 10, 1, 8), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), ZIndex = 12 }, toggle)
+	-- children draw over the button's own text, so the text moves to a label above the plate
+	local tl = new("TextLabel", { BackgroundTransparency = 1, Size = UDim2.fromScale(0.9, 0.8), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), TextScaled = true, Font = STYLE.fontB, TextColor3 = Color3.fromRGB(255, 224, 150), Text = toggle.Text, ZIndex = 13 }, toggle)
+	toggle.TextTransparency = 1
+	toggle:GetPropertyChangedSignal("Text"):Connect(function() tl.Text = toggle.Text end)
 	toggle.Activated:Connect(function()
 		local off = SETTINGS.flashes ~= false
 		ActionRemote:FireServer("Setting", { flashes = not off, reducedMotion = off and true or SETTINGS.reducedMotion })
 		toggle.Text = off and "Flashes: OFF" or "Flashes: ON"
 	end)
 end
-startWaveBtn.Activated:Connect(function() ActionRemote:FireServer("StartWave") end)
+startWaveBtn.Activated:Connect(function()
+	local ready = lastSnap and lastSnap.state == "ready"
+	ActionRemote:FireServer("StartWave")
+	if ready and FXK.bellCut then FXK.bellCut(lastSnap.stage) end
+end)
+require(script.Parent:WaitForChild("ActionCuts"))({ -- per-action cutscenes live in their own module (script size limit)
+	FXK = FXK, SETTINGS = SETTINGS, Config = Config, Path = Path, GROUND = GROUND, camera = camera,
+	enemies = enemies, petParts = petParts, groundOf = groundOf, STYLE = STYLE, floatText = floatText, rarityColor = rarityColor, new = new,
+	snap = function() return lastSnap end,
+	crystal = function() return crystalPart end,
+	hitCrystal = function() crystalHit = 1 end,
+})
 
 quickBtn.Activated:Connect(function()
 	quickRoll = not quickRoll
-	quickBtn.Text = quickRoll and "Quick Roll: ON" or "Quick Roll: OFF"
+	quickBtn.Text = quickRoll and "QUICK: ON" or "QUICK: OFF"
 	setButtonColor(quickBtn, quickRoll and STYLE.green or STYLE.grey)
 end)
 
@@ -2756,7 +3719,7 @@ local function applySnapshot(s)
 	xpLabel.Text = s.level >= Config.LEVEL_MAX and "MAX" or (s.xp .. "/" .. s.xpNeed)
 	tween(xpFill, 0.25, { Size = UDim2.fromScale(math.clamp(s.xp / s.xpNeed, 0, 1), 1) })
 	stageLabel.Text = "STAGE " .. s.stage .. (Config.isBossStage(s.stage) and "  BOSS" or "")
-	streakLabel.Text = s.combo > 0 and string.format("PERFECT STREAK x%d   gems x%.2f", s.combo, Config.comboMult(s.combo)) or ""
+	UI.setStreak(s.combo, Config.comboMult(s.combo))
 	if s.state == "ready" then
 		startWaveBtn.Text = "START WAVE"
 		setButtonColor(startWaveBtn, STYLE.orange)
@@ -2863,6 +3826,7 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 		applySnapshot(data)
 	elseif kind == "Denied" then
 		showToast(data.reason or "Can't do that")
+		FXK.play("merge_fail", { pitch = 1.25, volume = 0.6 })
 		tween(rollScale, 0.1, { Scale = 0.95 })
 		task.delay(0.1, function() tween(rollScale, 0.15, { Scale = 1 }, Enum.EasingStyle.Back) end)
 	elseif kind == "Roll" then
@@ -2874,33 +3838,99 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 		end
 		playRoll(data.slot, data.pet, data.rarity)
 	elseif kind == "Merge" then
+		-- Merge cutscene (2026-10-28, user: "every action a cutscene"): the camera drops to a low orbit, the three
+		-- familiars crouch and leap together, collide in a burst of light above the target, the new one drops and lands
+		-- with a stomp. Full (2.1 s) for the first two merges and tier 3+; short (0.9 s, no camera) after that or at 2x.
 		pending[data.to] = true
-		local target = groundOf(data.to) + Vector3.new(0, 1, 0)
+		FXK.merges = (FXK.merges or 0) + 1
+		local full = FXK.cut and not FXK.cineOff() and not FXK.cineShort() and (FXK.merges <= 2 or data.tier >= 3)
+		local base = groundOf(data.to)
+		local color = rarityColor(data.pet)
+		local fxColor = (color.R + color.G + color.B > 2.6) and STYLE.gold or color -- white rarity washed the frame out
+		local apex = base + Vector3.new(0, full and 7 or 1, 0)
+		local leapT = full and 0.7 or 0.24
+		local i = 0
 		for _, sl in data.from do
 			local entry = petParts[sl]
 			if entry then
 				petParts[sl] = nil
-				table.insert(flying, { model = entry.model, from = entry.model:GetPivot().Position, to = target, t = 0 })
+				i += 1
+				if full then -- the brass footprint plates stay on the ground (v1 flipped up with the familiars)
+					for _, n in { "Footprint", "FootprintRim" } do
+						local fp = entry.model:FindFirstChild(n)
+						if fp then fp:Destroy() end
+					end
+				end
+				table.insert(flying, { model = entry.model, from = entry.model:GetPivot().Position, to = apex, t = 0,
+					dur = full and leapT or nil, delay = full and 0.25 + i * 0.05 or nil, arc = full and 6 or nil,
+					spin = full and 10 or nil, flip = full, shrink = full and 0.4 or nil })
 			end
 		end
-		task.delay(0.24, function()
+		local land = function()
 			pending[data.to] = nil
 			setPet(data.to, data.pet, data.tier, true)
-			burst(groundOf(data.to) + Vector3.new(0, 3, 0), Color3.new(1, 1, 1), 24, nil, true)
-			ring(groundOf(data.to), rarityColor(data.pet), 10 + data.tier * 2, 0.6)
+			burst(base + Vector3.new(0, 3, 0), Color3.new(1, 1, 1), 24, nil, true)
+			ring(base, color, 10 + data.tier * 2, 0.6)
 			local sheet = FXK.sheetReady("upgrade")
 			if sheet then
-				FXK.pfx.play(sheet, CFrame.new(groundOf(data.to) + Vector3.new(0, 3, 0)), { color = rarityColor(data.pet) })
+				FXK.pfx.play(sheet, CFrame.new(base + Vector3.new(0, 3, 0)), { color = color })
 			elseif FXK.td then
-				FXK.td.upgrade(groundOf(data.to), rarityColor(data.pet), data.tier) -- light column + one chevron per tier
+				FXK.td.upgrade(base, color, data.tier) -- light column + one chevron per tier
 			end
-			floatText(groundOf(data.to) + Vector3.new(0, 7, 0), data.tier >= 4 and "EVOLVED!" or "MERGE!", STYLE.gold, 26)
-		end)
+			floatText(base + Vector3.new(0, 7, 0), data.tier >= 4 and "EVOLVED!" or "MERGE!", STYLE.gold, 26)
+		end
+		if not full then
+			task.delay(0.24, land)
+		else
+			local K = FXK.cut.kit
+			local cctx = { gameCamera = function() return FXK.gameCF or camera.CFrame end, setCamera = function(cf) FXK.camOverride = cf end, settings = SETTINGS }
+			local stage = K.stage()
+			local ov = K.overlay()
+			ov.open(0.08)
+			local cam = K.camera(cctx)
+			local side = Vector3.new(1, 0, 0.35).Unit
+			-- 1. drop to a low three-quarter shot beside the target
+			cam.to(CFrame.lookAt(base + side * 13 + Vector3.new(0, 3.5, 6), base + Vector3.new(0, 3, 0)), 0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+			FXK.play("anticipation", { pitch = 0.9 })
+			task.spawn(function()
+				task.wait(0.3)
+				-- 2. leap: slow orbit up toward the apex while they fly
+				cam.to(CFrame.lookAt(base - side * 6 + Vector3.new(0, 5, 13), apex), leapT, Enum.EasingStyle.Sine)
+				K.gather(stage, apex, fxColor, 14, 6, leapT)
+				task.wait(leapT)
+				-- 3. collide: flash, orb, shockwave, shake
+				FXK.play("ring", { pitch = 1.1 })
+				K.flash(ov, cctx, Color3.new(1, 1, 1), 0.55, 0.2)
+				local orb = Instance.new("Part")
+				orb.Shape, orb.Anchored, orb.CanCollide, orb.CanQuery, orb.Material = Enum.PartType.Ball, true, false, false, Enum.Material.Neon
+				orb.Color, orb.Size, orb.Position, orb.Parent = fxColor:Lerp(Color3.new(1, 1, 1), 0.3), Vector3.one * 1.5, apex, stage
+				tween(orb, 0.2, { Size = Vector3.one * 3.2 }, Enum.EasingStyle.Back)
+				K.shockwave(stage, apex - Vector3.new(0, 0.2, 0), fxColor, 9, 0.45)
+				shake.t, shake.amp = 0.3, 1.2
+				task.wait(0.28)
+				-- 4. drop and land with a stomp
+				tween(orb, 0.22, { Position = base + Vector3.new(0, 1.2, 0), Size = Vector3.one * 1.2 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+				cam.to(CFrame.lookAt(base + side * 9 + Vector3.new(0, 2.2, 5), base + Vector3.new(0, 2.5, 0)), 0.22, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+				task.wait(0.22)
+				orb:Destroy()
+				land()
+				K.impact(stage, base, fxColor, 0.8 + data.tier * 0.1)
+				cam.shake(0.6, 0.35)
+				FXK.play("summon")
+				-- 5. hold on the new familiar, then back to the board
+				cam.to(CFrame.lookAt(base + side * 8 + Vector3.new(0, 3, 6), base + Vector3.new(0, 3, 0)), 0.55, Enum.EasingStyle.Sine)
+				task.wait(0.55)
+				ov.close()
+				cam.done(0.4)
+				task.wait(0.45)
+				stage:Destroy()
+			end)
+		end
 		if (data.coins or 0) > 0 then
-			floatText(groundOf(data.to) + Vector3.new(2.5, 5, 0), "+" .. data.coins, STYLE.gold, 20)
+			floatText(base + Vector3.new(2.5, 5, 0), "+" .. data.coins, STYLE.gold, 20)
 		end
 		if data.tier >= 4 then
-			screenFlash(rarityColor(data.pet), 0.25)
+			screenFlash(color, 0.25)
 		end
 	elseif kind == "Move" then
 		FXK.pos[data.id] = Vector3.new(data.x, GROUND, data.z)
@@ -2908,10 +3938,18 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 			UI.showRange(slotPos(data.id), Config.PETS[petParts[data.id].pet].range, Color3.fromRGB(235, 240, 255))
 		end
 		ring(slotPos(data.id), Color3.fromRGB(235, 240, 255), 7, 0.35)
+		FXK.play("place_thud")
 	elseif kind == "Recycle" then
-		removePet(data.slot, true)
-		floatText(groundOf(data.slot) + Vector3.new(0, 4, 0), "+" .. data.coins, STYLE.gold, 24)
+		local farewell = FXK.recycleCut and FXK.recycleCut(data)
+		if not farewell then
+			FXK.play("echo", { pitch = 0.9 })
+			removePet(data.slot, true)
+			floatText(groundOf(data.slot) + Vector3.new(0, 4, 0), "+" .. data.coins, STYLE.gold, 24)
+		end
 	elseif kind == "Upgrade" then
+		if data.level >= Config.UPGRADE_MAX and FXK.maxCut then FXK.maxCut(data) end
+		FXK.play("bank")
+		task.delay(0.08, FXK.play, "coin_clink", { pitch = 0.9 })
 		for slot, e in petParts do
 			if e.pet == data.pet then
 				burst(groundOf(slot) + Vector3.new(0, 2, 0), STYLE.gold, 8)
@@ -2921,6 +3959,7 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 	elseif kind == "Spawn" then
 		spawnEnemy(data)
 		if data.kind == "Boss" then
+			if FXK.bossCut then FXK.bossCut(data) end
 			shake.t, shake.amp = 0.6, 2.5
 			ring(Path.positionAt(0), STYLE.red, 40, 0.8)
 			pillar(Path.positionAt(0), STYLE.red, 0.8, 5)
@@ -2935,6 +3974,8 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 			killEnemy(data)
 		end
 	elseif kind == "Leak" then
+		FXK.play("glass_crack")
+		if FXK.leakCut then FXK.leakCut(data) end
 		local e = enemies[data.id]
 		if e then
 			e.model:Destroy()
@@ -2950,24 +3991,37 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 			showBanner(data.boss and "BOSS STAGE " .. data.stage or "STAGE " .. data.stage, data.boss and STYLE.red or STYLE.gold)
 		end
 	elseif kind == "Clear" then
+		if FXK.clearCut then FXK.clearCut(data) end
 		showBanner(data.perfect and "PERFECT!" or "STAGE CLEAR", data.perfect and STYLE.green or STYLE.gold, "+" .. data.bonus .. " gems")
 	elseif kind == "LevelUp" then
+		if FXK.levelCut then FXK.levelCut(data) end
 		showBanner("LEVEL UP!  " .. data.level, STYLE.purple, string.format("+%d gems   +1 Skill Point   Luck +%d%%", data.gems, math.floor(data.luck * 100 + 0.5)))
 		screenFlash(STYLE.purple, 0.25)
 		badgeScale.Scale = 1.6
 		tween(badgeScale, 0.5, { Scale = 1 }, Enum.EasingStyle.Back)
 		tween(xpFill, 0.15, { BackgroundColor3 = Color3.new(1, 1, 1) })
-		task.delay(0.2, function() tween(xpFill, 0.4, { BackgroundColor3 = STYLE.purple }) end)
+		task.delay(0.2, function() tween(xpFill, 0.4, { BackgroundColor3 = Color3.new(1, 1, 1) }) end)
 	elseif kind == "Overrun" then
+		if FXK.darkCut then FXK.darkCut("[ OVERRUN · BACK TO STAGE " .. data.stage .. " ]") end
 		clearEnemies()
 		screenFlash(STYLE.red, 0.4)
 		showBanner("OVERRUN!", STYLE.red, string.format("Pushed back to stage %d  (-%s coins)", data.stage, fmt(data.lostCoins)))
 	elseif kind == "BossEscaped" then
+		if FXK.darkCut then FXK.darkCut("[ THE BOSS ESCAPED · BACK TO STAGE " .. data.stage .. " ]") end
 		clearEnemies()
 		showBanner("BOSS ESCAPED", STYLE.red, "Back to stage " .. data.stage .. " - streak lost")
 	elseif kind == "Ult" then
-		local entry = data.signature and petParts[data.slot]
-		if entry and FXK.cut and FXK.cut.signatures[data.signature] and not SETTINGS.reducedMotion then
+		-- the caster is the most powerful familiar on the board (the server's Ult event names none)
+		local slot, entry, best = nil, nil, -1
+		for sl, en in petParts do
+			local score = (en.cool or 0) * 10 + (en.tier or 1)
+			if score > best then slot, entry, best = sl, en, score end
+		end
+		local def = entry and Config.PETS[entry.pet]
+		-- user, 2026-10-28: the ultimate is always seen in first person; the older signature cutscenes stay in
+		-- CutsceneFX for later (def.signature) but every cast now uses the first-person one
+		local sig = "FirstPerson"
+		if entry and FXK.cut and FXK.cut.signatures[sig] and not FXK.cineOff() and not FXK.busy() then -- busy: the board-view ultimate instead
 			local targets = {}
 			for _, e in enemies do
 				local p = e.model:GetPivot().Position
@@ -2980,21 +4034,33 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 					table.insert(targets, Vector3.new(p.X, GROUND - 0.2, p.Z))
 				end
 			end
-			local def = Config.PETS[data.pet]
-			local dur = FXK.cut.play(data.signature, {
-				model = entry.model, origin = groundOf(data.slot), targets = targets, color = rarityColor(data.pet),
-				title = string.upper(def.name), ability = def.signatureName or data.signature,
+			local allies = {}
+			for sl in petParts do
+				if sl ~= slot then table.insert(allies, groundOf(sl)) end
+			end
+			-- repeats get the short cut: full the first two times, then 1.7 s (and always at 2x game speed)
+			FXK.ultCasts = (FXK.ultCasts or 0) + 1
+			FXK.cut.play(sig, {
+				model = entry.model, origin = groundOf(slot), targets = targets, color = rarityColor(entry.pet),
+				title = string.upper(def.name), ability = def.signatureName or "ULTIMATE", allies = allies,
+				short = FXK.ultCasts > 2 or FXK.cineShort(),
 				setCamera = function(cf) FXK.camOverride = cf end,
+				setFov = function(f) FXK.fovOverride = f end,
 				gameCamera = function() return FXK.gameCF or camera.CFrame end,
 				settings = SETTINGS, sfx = FXK.play,
-				onSkip = function() ultHoldUntil = 0 end, -- a skipped cutscene releases the held enemy deaths at once
+				onHit = function() ultHoldUntil = 0 end, -- enemy deaths show when the orb lands
+				onSkip = function() ultHoldUntil = 0; FXK.fovOverride = nil end,
 			})
-			-- hold enemy death visuals until the hits land in the cutscene
-			ultHoldUntil = os.clock() + dur * 0.65
+			-- deaths are held until the orb lands (1.9 s full, 1.15 s short), not the whole cutscene
+			ultHoldUntil = os.clock() + ((FXK.ultCasts > 2 or FXK.cineShort()) and 1.15 or 1.9)
 		else
 			playUlt()
 		end
 	elseif kind == "SkillBought" then
+		FXK.play("charge_ready")
+		if Grove and lastSnap then
+			task.delay(0.1, function() Grove.light(data.id, lastSnap) end) -- after the snapshot carries the new level
+		end
 		local ui = nodeUI[data.id]
 		if ui then
 			ui.scale.Scale = 1.3
@@ -3005,6 +4071,7 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 			refreshTree()
 		end
 	elseif kind == "TutorialDone" then
+		FXK.play("milestone")
 		showBanner("TUTORIAL COMPLETE", STYLE.green, "+" .. data.gems .. " gems and +" .. data.sp .. " Skill Points! Open the Skill Tree.")
 		screenFlash(STYLE.green, 0.3)
 		clearHighlights()

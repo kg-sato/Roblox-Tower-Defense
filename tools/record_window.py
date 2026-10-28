@@ -3,7 +3,7 @@ No ffmpeg needed. Run with the Hunyuan3D venv in isolated mode:
    Hunyuan3D/.venv/Scripts/python.exe -I tools/record_window.py <out.mp4> <seconds> [fps=30] [title_contains="Roblox Studio"]
 Then make contact sheets: tools/video_sheets.py <out.mp4> <dir> 0.1
 Notes: uses PrintWindow, so the window can be behind others but not minimised (add --screen to grab the screen
-area instead, which needs the window in front). Real rate is about 20 fps for a 1080p Studio window. Prints the real
+area instead, which needs the window in front). Add --front for Studio Edit mode: the viewport only redraws while Studio is active. Real rate is about 20 fps for a 1080p Studio window. Prints the real
 captured fps, because screen grabbing can fall below the target on a busy PC; the file is written at that real rate
 so playback speed is correct. Frames are held as JPEG in memory (about 0.3 MB each) until the clip ends. Local only: nothing is uploaded."""
 import sys, time, ctypes
@@ -63,6 +63,13 @@ def grab():
     img = ImageGrab.grab(bbox=box, all_screens=True)  # fallback: screen area (needs the window in front)
     return cv2.cvtColor(np.asarray(img)[:h, :w], cv2.COLOR_RGB2BGR)
 
+# Studio only redraws its viewport while it is the active window, so a background recording repeats one stale frame
+# (the cause of the identical-frame clips on 2026-10-27). --front activates the window for the clip and gives focus back.
+prev = user32.GetForegroundWindow()
+if "--front" in sys.argv:
+    user32.keybd_event(0x12, 0, 0, 0); user32.keybd_event(0x12, 0, 2, 0)  # an Alt tap lets a background process take focus
+    user32.SetForegroundWindow(hwnd)
+    time.sleep(0.4)
 frames, stamps = [], []
 t0 = time.perf_counter()
 nxt = t0
@@ -74,6 +81,8 @@ while time.perf_counter() - t0 < seconds:
     delay = nxt - time.perf_counter()
     if delay > 0:
         time.sleep(delay)
+if "--front" in sys.argv and prev:
+    user32.SetForegroundWindow(prev)
 real = (len(frames) - 1) / (stamps[-1] - stamps[0]) if len(frames) > 1 else fps
 vw = cv2.VideoWriter(out, cv2.VideoWriter_fourcc(*"mp4v"), real, (w, h))
 for f in frames:

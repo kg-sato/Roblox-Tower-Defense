@@ -16,6 +16,7 @@ local RULES: { [string]: Rule } = {
 	backdrop = { kind = "enum", values = { "moving", "still" } },
 	numberFormat = { kind = "enum", values = { "short", "grouped", "scientific" } },
 	gameSpeed = { kind = "choice", values = { 1, 2 } },
+	cinematics = { kind = "enum", values = { "full", "short", "off" } },
 }
 
 SettingsDefaults.defaults = {
@@ -28,6 +29,7 @@ SettingsDefaults.defaults = {
 	backdrop = "moving",
 	numberFormat = "short",
 	gameSpeed = 1,
+	cinematics = "full",
 }
 
 SettingsDefaults.MIN_SAVE_GAP = 1 -- seconds between accepted settings saves per player

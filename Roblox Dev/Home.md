@@ -27,6 +27,9 @@ Start here. Claude reads this vault at the start of every session. Layout: root 
 - **Process and Tools** (3): How we build and test, and tools or skills that speed us up. [[Dev Process Playbook]], [[Workflow Gaps and Game Feel]], [[Workflow Tools and Skills]]
 - **Outside examples** (what other developers do, found 2026-10-27): [[Research/UI/Community UI Approaches|UI]], [[Research/VFX and Animation/Community VFX Techniques|VFX]], [[Research/3D and Art/Community 3D Pipelines|3D]], [[Research/Process and Tools/Community Vaults and Workflows|vaults and LLM workflows]]
 
+## Quick commands
+- `/make-creative <thing>`: tell Claude something is generic; it researches, rebuilds it as a themed object or cutscene, checks it in Studio and logs it in [[Research/UI/Creative Fix Method]].
+
 ## Current focus
 - Phase: **Polish and content.** Core loop, free placement, familiars, Lampwick Lane, signature cutscenes and ProfileStore saving are built.
 - Next: see "Next up" in [[Backlog]] (stage sets 2 to 5, settings panel, more signature cutscenes).

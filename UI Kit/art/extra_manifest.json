@@ -327,5 +327,55 @@
     "file": "icon_chevron.png",
     "w": 256,
     "h": 256
+  },
+  "icon_flame": {
+    "file": "icon_flame.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_obj_bell": {
+    "file": "icon_obj_bell.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_obj_dial": {
+    "file": "icon_obj_dial.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_obj_plaque": {
+    "file": "icon_obj_plaque.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_obj_seal": {
+    "file": "icon_obj_seal.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_obj_sign": {
+    "file": "icon_obj_sign.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_obj_tarot": {
+    "file": "icon_obj_tarot.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_obj_watch": {
+    "file": "icon_obj_watch.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_obj_deck": {
+    "file": "icon_obj_deck.png",
+    "w": 256,
+    "h": 256
+  },
+  "icon_obj_desk": {
+    "file": "icon_obj_desk.png",
+    "w": 256,
+    "h": 256
   }
 }

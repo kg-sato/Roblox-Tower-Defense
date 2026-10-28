@@ -12,3 +12,6 @@ Untested shortcut: `StudioService:PromptImportFilesAsync()` run from the command
 
 ## What will and will not be verified afterwards
 The existing checks confirm each id loads and its length matches the files. Nobody has listened to any of these; Roblox's moderation may still reject or flag a file (CC0 does not guarantee acceptance).
+
+## Added 2026-10-28 (not uploaded yet)
+Ten new game sounds in `sfx/`: brass_click, card_flip, bell_toll, coin_clink, enemy_hit, enemy_poof, glass_crack, clock_tick, place_thud, iron_clank. Until they are uploaded and their ids added to `../asset_ids.json` (then `python Audio/apply_ids.py`), they play only in this PC's Studio from `rbxasset://sounds/vfx/`; a published game is silent for these ten.

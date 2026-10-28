@@ -110,6 +110,12 @@ local function emitterFrom(spec)
 	if spec.timeScale then
 		pe.TimeScale = spec.timeScale
 	end
+	-- Brightness above 1 pushes additive layers past the Lighting bloom threshold (0.92) so they glow; Yuruzuu's
+	-- layers use 4 to 5. Default 2.5 for glow layers, 1 for smoke and dark layers (user feedback 2026-10-28: effects flat).
+	pe.Brightness = spec.brightness or (pe.LightEmission >= 0.5 and 2.5 or 1)
+	if spec.flipLoop then -- reference layers that cycle their 4x4 grid for the whole lifetime
+		pe.FlipbookMode = Enum.ParticleFlipbookMode.Loop
+	end
 	pe:SetAttribute("EmitCount", spec.emitCount or 1)
 	pe:SetAttribute("EmitDelay", spec.emitDelay or 0)
 	pe:SetAttribute("EmitDuration", spec.emitDuration or 0)

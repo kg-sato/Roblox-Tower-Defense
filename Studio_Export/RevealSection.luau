@@ -88,13 +88,16 @@ return function(ctx)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			if revealState.phase == "anim" then
 				revealState.skip = true
-			elseif revealState.phase == "hold" then
+			elseif revealState.phase == "hold" or revealState.phase == "turn" then -- "turn": the player turns the card
 				revealState.dismiss = true
 			end
 		end
 	end)
 
 	local timeScale = 1
+	task.spawn(function() -- the Reading's card art must be ready before the first draw (it showed blank on the first reveal)
+		pcall(function() game:GetService("ContentProvider"):PreloadAsync({ "rbxassetid://93758813189086", "rbxassetid://78270426727572" }) end)
+	end)
 
 	local function animate(duration, fn)
 		duration *= timeScale
@@ -207,150 +210,123 @@ return function(ctx)
 			setLabelVisible(l, false)
 		end
 
-		-- ===== THE ORRERY (our summon; no competitor uses one) =====
-		-- Four brass gimbal rings spin around a dark glass core. One by one they slow and lock with a clack.
-		-- A ring that catches lights up in the next rarity's colour; the first ring that fails goes dark and
-		-- drops away, and the rest drop with it. Rings caught = rarity (Common 1 ... Legendary 4).
+		-- ===== THE READING (2026-10-28, replaces the orrery; user: "rolling animation still too generic") =====
+		-- From the summon study (Roblox Dev/Research/VFX and Animation/Summon References): a seated first-person view of a
+		-- fortune-teller's table; a tarot card is drawn and lands face down over a chalk circle; its rim climbs the rarity
+		-- colours one tier at a time (the "tell", like FGO's gold card and Genshin's meteor colour); Epic and above wait for
+		-- the player to turn the card (Hearthstone's flip) and the card shatters; then hero cuts on the familiar.
+		local TAROT, RINGTEX = "rbxassetid://93758813189086", "rbxassetid://78270426727572"
 		local spin = TweenService:Create(rays, TweenInfo.new(10, Enum.EasingStyle.Linear, Enum.EasingDirection.In, -1), { Rotation = 360 })
-		local orr, rings, core, fill = Models.buildOrrery()
-		orr.Parent = vpf
-		local CENTER = CFrame.new(0, 2.6, 0)
-		local axes = { Vector3.new(1, 0.2, 0).Unit, Vector3.new(0, 1, 0.3).Unit, Vector3.new(0.6, 0.8, 0).Unit, Vector3.new(0.2, 0.4, 1).Unit }
-		local ang = { 0.4, 1.3, 2.2, 3.1 }
-		local speed = { 9, -11, 13, -15 }
-		local locked, dropped = {}, {}
-		local orrScale = 0.3
-		local function poseRings(dt)
-			for i, r in rings do
-				if dropped[i] then
-					continue
-				end
-				if not locked[i] then
-					ang[i] += speed[i] * dt
-				end
-				r:PivotTo(CENTER * CFrame.fromAxisAngle(axes[i], ang[i]))
+		local stageM = Instance.new("Model")
+		stageM.Name = "Reading"
+		stageM.Parent = vpf
+		local function vp(props)
+			local p = Instance.new("Part")
+			p.Anchored, p.CanCollide, p.CastShadow = true, false, false
+			for k, v in props do
+				p[k] = v
 			end
-			core.CFrame = CENTER
-			fill.CFrame = CENTER
+			p.Parent = stageM
+			return p
 		end
-		local last = os.clock()
-		local function tick()
-			local now = os.clock()
-			local dt = math.min(now - last, 0.05) / math.max(timeScale, 0.01)
-			last = now
-			poseRings(dt)
+		vp({ Size = Vector3.new(16, 0.2, 9), Color = Color3.fromRGB(46, 14, 34), Material = Enum.Material.Fabric, CFrame = CFrame.new(0, -0.12, -1.5) })
+		local circle = vp({ Size = Vector3.new(6.5, 0.02, 6.5), Transparency = 1, CFrame = CFrame.new(0, 0.02, 0) })
+		local chalk = Instance.new("Decal")
+		chalk.Texture, chalk.Face, chalk.Color3, chalk.Transparency = RINGTEX, Enum.NormalId.Top, Color3.fromRGB(255, 214, 140), 0.25
+		chalk.Parent = circle
+		for _, x in { -4.2, 4.2 } do
+			vp({ Shape = Enum.PartType.Cylinder, Size = Vector3.new(1.6, 0.55, 0.55), Color = Color3.fromRGB(236, 226, 200), Material = Enum.Material.SmoothPlastic, CFrame = CFrame.new(x, 0.8, -1.2) * CFrame.Angles(0, 0, math.pi / 2) })
+			vp({ Shape = Enum.PartType.Ball, Size = Vector3.new(0.32, 0.5, 0.32), Color = Color3.fromRGB(255, 190, 90), Material = Enum.Material.Neon, CFrame = CFrame.new(x, 1.9, -1.2) })
 		end
-		local function setRingColor(r, color, neon)
-			for _, p in r:GetChildren() do
-				if p:IsA("BasePart") then
-					p.Color = color
-					p.Material = neon and Enum.Material.Neon or Enum.Material.Metal
-				end
-			end
+		local card = vp({ Size = Vector3.new(2.4, 4, 0.06), Color = Color3.fromRGB(30, 16, 50), Material = Enum.Material.SmoothPlastic })
+		local back = Instance.new("Decal")
+		back.Texture, back.Face = TAROT, Enum.NormalId.Back
+		back.Parent = card
+		local front = Instance.new("Decal")
+		front.Texture, front.Face, front.Color3 = TAROT, Enum.NormalId.Front, rcolor:Lerp(Color3.new(1, 1, 1), 0.3)
+		front.Parent = card
+		local rim = vp({ Size = Vector3.new(2.75, 4.35, 0.03), Material = Enum.Material.Neon, Color = Color3.new(1, 1, 1), Transparency = 0.6 })
+		local HOME = CFrame.new(0, 2.6, 0)
+		local function poseCard(cf)
+			card.CFrame = cf
+			rim.CFrame = cf.Rotation + cf.Position + Vector3.new(0, 0, -0.06) -- always on the far side, even after the flip
 		end
-		orr:ScaleTo(orrScale)
+		vcam.CFrame = CFrame.lookAt(Vector3.new(0, 4.4, 9.5), Vector3.new(0, 2.1, 0)) -- seated at the table
 		FXK.play("wish_pull")
-		-- 1. it forms out of the fog, spinning fast
-		animate(0.45, function(a)
-			local s = 0.3 + 0.7 * ease(a, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
-			orr:ScaleTo(s)
-			tick()
+		-- 1. draw: the card arcs up from the deck below the frame and lands face down over the circle
+		animate(0.5, function(a)
+			local e = ease(a, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+			poseCard(CFrame.new(0, -3.4 + 6 * e, 6 * (1 - e)) * CFrame.Angles(math.rad(-75 * (1 - e)), 0, math.rad(-14 * (1 - e))))
 		end)
-		animate(0.35, function()
-			tick()
-		end)
-		-- 2. lock the rings one by one
-		local failed = false
-		for i = 1, 4 do
-			local catches = i <= order
-			local r = rings[i]
-			if catches then
-				-- decelerate to the nearest full turn, with a little overshoot, then clack
-				local from = ang[i]
-				local target = math.ceil(from / (math.pi * 2) + 0.35) * math.pi * 2
-				locked[i] = true
-				if i >= 2 then
-					FXK.play("anticipation", { pitch = 0.9 + i * 0.08 })
-				end
-				animate(0.32 + i * 0.06, function(a)
-					ang[i] = from + (target - from) * ease(a, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
-					tick()
-				end)
-				ang[i] = target
-				local tierColor = Config.RARITIES[Config.RARITY_ORDER[i]].color
-				setRingColor(r, tierColor, true)
-				FXK.play("ring", { pitch = 0.8 + i * 0.12 })
-				fill.Color = tierColor:Lerp(Color3.new(1, 1, 1), 0.35)
-				fill.Size = Vector3.one * (0.5 + i * 0.4)
-				revealGlow.BackgroundColor3 = tierColor
-				revealGlow.BackgroundTransparency = 0.85 - 0.08 * i
-				shake.t, shake.amp = 0.12, 0.3 * i
-				sparkBurst(tierColor, 4 + i * 3, 160 + i * 40)
-				-- hold a beat: will the next ring catch?
-				animate(i < 4 and (0.18 + i * 0.05) or 0.1, function()
-					tick()
-				end)
-			else
-				failed = true
-				break
+		-- 2. the tell: the rim climbs the tiers, each step a clack, a pulse and a harder tremble
+		for i = 1, order do
+			local tierColor = Config.RARITIES[Config.RARITY_ORDER[i]].color
+			if i >= 2 then
+				FXK.play("anticipation", { pitch = 0.9 + i * 0.08 })
 			end
-		end
-		if failed then
-			-- the remaining rings stall, go dark and drop out of frame together
-			local falling = {}
-			for i = order + 1, 4 do
-				setRingColor(rings[i], Color3.fromRGB(70, 60, 50), false)
-				table.insert(falling, i)
-			end
-			local base = {}
-			for _, i in falling do
-				base[i] = rings[i]:GetPivot()
-				dropped[i] = true
-			end
-			animate(0.35, function(a)
-				for k, i in falling do
-					rings[i]:PivotTo(base[i] * CFrame.new(0, -a * a * (9 + k * 2), 0) * CFrame.Angles(a * 1.5, 0, a * k))
-				end
-				tick()
-			end)
-			for _, i in falling do
-				rings[i]:Destroy()
-			end
-		else
-			-- all four caught: the orrery hums and the core swells (legendary)
-			FXK.play("legendary_gather")
-			spin:Play()
-			animate(0.7, function(a)
-				fill.Size = Vector3.one * (2.1 + a * 0.5 + math.sin(a * 40) * 0.08)
-				revealGlow.BackgroundTransparency = 0.5 - 0.25 * a
-				tick()
+			FXK.play("ring", { pitch = 0.8 + i * 0.12 })
+			rim.Color = tierColor
+			rim.Transparency = 0.1
+			revealGlow.BackgroundColor3 = tierColor
+			revealGlow.BackgroundTransparency = 0.85 - 0.08 * i
+			shake.t, shake.amp = 0.12, 0.3 * i
+			sparkBurst(tierColor, 4 + i * 3, 160 + i * 40)
+			animate(0.2 + i * 0.12, function(a)
+				local tr = 0.035 * i * (1 - a * 0.3)
+				poseCard(HOME * CFrame.new(math.sin(a * 70) * tr, math.sin(a * math.pi) * 0.12, 0) * CFrame.Angles(0, 0, math.sin(a * 55) * tr * 0.6))
 			end)
 		end
-		-- 3. the core cracks; the caught rings expand into a halo and fade
+		-- 3. turn the card: Epic and above wait for the player (up to 2.5 s); the rest turn by themselves
+		if order >= 3 and not ctx.quick() then
+			revealHint.Text = "Tap to turn the card"
+			setLabelVisible(revealHint, true)
+			revealState.phase, revealState.dismiss = "turn", false
+			local w0 = os.clock()
+			while not revealState.dismiss and os.clock() - w0 < 2.5 do
+				local a = os.clock() - w0
+				poseCard(HOME * CFrame.new(math.sin(a * 60) * 0.05, math.sin(a * 3) * 0.1, 0))
+				RunService.RenderStepped:Wait()
+			end
+			revealState.dismiss, revealState.phase = false, "anim"
+			setLabelVisible(revealHint, false)
+			revealHint.Text = "Tap to continue"
+		end
 		FXK.play("summon")
-		local haloBase = {}
-		for i, r in rings do
-			if r.Parent and not dropped[i] then
-				haloBase[i] = r
-			end
-		end
-		core:Destroy()
-		fill:Destroy()
-		task.spawn(function()
-			animate(0.5, function(a)
-				for i, r in haloBase do
-					if r.Parent then
-						r:ScaleTo(math.max(0.05, 1 + a * 1.4))
-						for _, p in r:GetChildren() do
-							if p:IsA("BasePart") then
-								p.Transparency = a
-							end
-						end
-					end
-				end
-			end)
-			orr:Destroy()
+		animate(0.3, function(a)
+			poseCard(HOME * CFrame.Angles(0, math.pi * ease(a, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), 0))
 		end)
+		if order >= 3 then
+			-- the card shatters: shards of the face fly out in the rarity colour
+			card.Transparency, back.Transparency, front.Transparency, rim.Transparency = 1, 1, 1, 1
+			local shards = {}
+			for k = 1, 12 do
+				local s = vp({ Size = Vector3.new(0.5 + math.random() * 0.5, 0.7 + math.random() * 0.7, 0.05), Material = Enum.Material.Neon, Color = k % 3 == 0 and Color3.new(1, 1, 1) or rcolor, CFrame = HOME * CFrame.new((math.random() - 0.5) * 2, (math.random() - 0.5) * 3.4, 0) })
+				local dir = (s.Position - HOME.Position + Vector3.new(0, 0, 1.5)).Unit
+				shards[k] = { s, s.CFrame, dir, Vector3.new(math.random(), math.random(), math.random()) * 8 }
+			end
+			task.spawn(function()
+				animate(0.6, function(a)
+					for _, sh in shards do
+						sh[1].CFrame = sh[2] + sh[3] * (a * 9) + Vector3.new(0, -a * a * 4, 0)
+						sh[1].CFrame *= CFrame.Angles(sh[4].X * a, sh[4].Y * a, sh[4].Z * a)
+						sh[1].Transparency = a
+					end
+				end)
+				stageM:Destroy()
+			end)
+		else
+			task.spawn(function()
+				animate(0.35, function(a)
+					card.Transparency, rim.Transparency = a, 0.1 + a * 0.9
+					back.Transparency, front.Transparency = a, a
+				end)
+				stageM:Destroy()
+			end)
+		end
+		vcam.CFrame = CFrame.lookAt(Vector3.new(0, 3.2, 12.5), Vector3.new(0, 2.6, 0))
+		if order >= 4 then
+			spin:Play()
+		end
 
 		-- burst: flash, sparks, the familiar pops in
 		FXK.play(({ "common", "rare", "epic", "legendary_burst" })[order])
@@ -377,6 +353,133 @@ return function(ctx)
 		end
 		revealState.skip = false
 		animate(0.45, function(a) placePetVp(1.5 * ease(a, Enum.EasingStyle.Back, Enum.EasingDirection.Out), 0) end)
+		if order >= 4 and not ctx.quick() and not (ctx.cineLite and ctx.cineLite()) then
+			-- ===== LEGENDARY: manga cinematic (2026-10-28). The user sent a "manga animated" edit (Tokyo Ghoul, Arima):
+			-- iridescent flash into a white page, a drifting title wiped by a vivid butterfly, slow push-ins on ink panels,
+			-- a back view in a field of red spider lilies framed by red brush arcs with a line of text, a white flash to
+			-- the hand reaching for the butterfly, a hard cut to black. Ours: the moth drawn to the lamp (Lampwick Lane).
+			local MOTH, ARC, DOT = "rbxassetid://86247178900555", "rbxassetid://80931642223090", "rbxassetid://74135098013493"
+			local _, msize = model:GetBoundingBox()
+			local h = msize.Y
+			local WIDE = vcam.CFrame
+			local saved = { vpf.Ambient, vpf.LightColor, vpf.LightDirection }
+			local page = new("Frame", { Name = "Page", BackgroundColor3 = Color3.fromRGB(248, 245, 238), BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 16 }, revealGui)
+			local tone = new("ImageLabel", { BackgroundTransparency = 1, Image = DOT, ScaleType = Enum.ScaleType.Tile, TileSize = UDim2.fromOffset(9, 9), ImageColor3 = Color3.fromRGB(40, 36, 40), ImageTransparency = 0.9, Size = UDim2.fromScale(1, 1), ZIndex = 18 }, revealGui)
+			local iris = new("Frame", { BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 21 }, revealGui)
+			new("UIGradient", { Rotation = 25, Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 140, 220)), ColorSequenceKeypoint.new(0.35, Color3.fromRGB(150, 220, 255)), ColorSequenceKeypoint.new(0.7, Color3.fromRGB(255, 240, 200)), ColorSequenceKeypoint.new(1, Color3.fromRGB(190, 150, 255)) }) }, iris)
+			local moth = new("ImageLabel", { BackgroundTransparency = 1, Image = MOTH, AnchorPoint = Vector2.new(0.5, 0.5), Size = UDim2.fromOffset(110, 58), ZIndex = 20, Visible = false }, revealGui)
+			local line = label(revealGui, "", 84, Color3.fromRGB(70, 58, 56), Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.45), UDim2.fromOffset(1100, 110))
+			line.ZIndex = 19
+			line.TextScaled = false
+			line.TextStroke.Transparency = 1
+			vpf.Ambient, vpf.LightColor, vpf.LightDirection = Color3.fromRGB(215, 210, 210), Color3.fromRGB(255, 250, 240), Vector3.new(-0.2, -1, -0.3)
+			model.Parent = nil -- hidden during the title page
+			local function mothPath(p0, p1, t, wobble)
+				moth.Visible = true
+				animate(t, function(a)
+					local e = ease(a, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+					moth.Position = UDim2.fromScale(p0.X + (p1.X - p0.X) * e, p0.Y + (p1.Y - p0.Y) * e + math.sin(a * 9) * wobble)
+					moth.Size = UDim2.fromOffset(110 * (0.35 + 0.65 * math.abs(math.cos(a * 22))), 58) -- wingbeat
+					moth.Rotation = math.deg(math.atan2(p1.Y - p0.Y, p1.X - p0.X)) * 0.3 + math.sin(a * 13) * 8
+				end)
+			end
+			-- 1. iridescent flash into the white page; the name drifts in
+			FXK.play("summon")
+			line.Text = string.upper(Config.PETS[pet].name)
+			line.TextTransparency = 1
+			tween(iris, 0.6, { BackgroundTransparency = 1 })
+			tween(line, 0.8, { TextTransparency = 0.05 })
+			tween(line, 2.4, { Position = UDim2.fromScale(0.53, 0.45) }, Enum.EasingStyle.Linear)
+			task.wait(0.6)
+			-- 2. the moth crosses the page and wipes the name
+			task.delay(0.55, function() tween(line, 0.35, { TextTransparency = 1 }) end)
+			mothPath(Vector2.new(1.08, 0.62), Vector2.new(-0.08, 0.36), 1.4, 0.03)
+			moth.Visible = false
+			-- 3. close panel: slow push-in on the face, screentone, gold sparks
+			model.Parent = vpf
+			placePetVp(1.5, 0.15)
+			local face0 = CFrame.lookAt(Vector3.new(0.4, h * 0.85, h * 2.1), Vector3.new(0, h * 0.72, 0)) -- head and shoulders, not wings filling the frame
+			sparkBurst(Color3.fromRGB(255, 205, 110), 10, 260)
+			animate(1.5, function(a)
+				vcam.CFrame = face0 * CFrame.new(0, 0, -0.5 * a)
+				placePetVp(1.5, 0.15)
+			end)
+			-- 4. back view in a field of red spider lilies, red brush arcs, one line of text
+			screenFlash(Color3.new(1, 1, 1), 0.5)
+			local field = Instance.new("Model")
+			field.Parent = vpf
+			local rng = Random.new(11)
+			for i = 1, 55 do
+				local c = Vector3.new(rng:NextNumber(-9, 9), 0, rng:NextNumber(-12, 2))
+				for k = 0, 5 do
+					local a = k / 6 * math.pi * 2
+					local p = Instance.new("Part")
+					p.Anchored, p.Material, p.Color = true, Enum.Material.Neon, Color3.fromRGB(215, 30, 45)
+					p.Size = Vector3.new(0.08, 0.08, 0.7)
+					p.CFrame = CFrame.lookAt(c + Vector3.new(0, 0.55, 0), c + Vector3.new(math.cos(a), 1.1, math.sin(a)))
+					p.Parent = field
+				end
+			end
+			local arcs = {}
+			for i, spec in { { 0.18, 0.2, -30 }, { 0.82, 0.24, 30 } } do
+				arcs[i] = new("ImageLabel", { BackgroundTransparency = 1, Image = ARC, ImageColor3 = Color3.fromRGB(225, 60, 60), ImageTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(spec[1], spec[2]), Size = UDim2.fromOffset(300, 300), Rotation = 180 + spec[3], ZIndex = 19 }, revealGui)
+				tween(arcs[i], 0.5, { ImageTransparency = 0.15 })
+				tween(arcs[i], 1.9, { Position = UDim2.fromScale(spec[1] + (i == 1 and -0.03 or 0.03), spec[2] - 0.02) }, Enum.EasingStyle.Linear)
+			end
+			line.Text = "...the lamp has a new keeper."
+			line.TextSize = 46
+			line.Position = UDim2.fromScale(0.5, 0.2)
+			tween(line, 0.6, { TextTransparency = 0.05 })
+			local back0 = CFrame.lookAt(Vector3.new(0.8, h * 0.9, h * 1.9), Vector3.new(0, h * 0.7, -h * 6)) -- behind the familiar, looking past it over the lilies
+			animate(1.9, function(a)
+				vcam.CFrame = back0 * CFrame.new(0, a * 0.3, 0.6 * a)
+				placePetVp(1.5, math.pi)
+			end)
+			-- 5. white flash: the familiar turns, the moth lands beside it
+			screenFlash(Color3.new(1, 1, 1), 0.7)
+			tween(line, 0.2, { TextTransparency = 1 })
+			for _, a in arcs do a:Destroy() end
+			local front0 = CFrame.lookAt(Vector3.new(h * 0.9, h * 0.75, h * 1.8), Vector3.new(0, h * 0.6, 0))
+			task.spawn(function() mothPath(Vector2.new(0.95, 0.15), Vector2.new(0.6, 0.42), 1.1, 0.02) end)
+			animate(1.3, function(a)
+				vcam.CFrame = front0 * CFrame.new(-0.4 * a, 0, -0.3 * a)
+				placePetVp(1.5, 0.35)
+			end)
+			-- 6. hard cut to black, then the usual title card
+			page.BackgroundColor3 = Color3.new(0, 0, 0)
+			moth.Visible, line.Visible, tone.Visible = false, false, false
+			model.Parent = nil
+			field.Parent = nil
+			page.ZIndex = 22 -- above the viewport for the black beat
+			task.wait(0.3)
+			field:Destroy()
+			for _, g in { page, tone, iris, moth, line } do g:Destroy() end
+			model.Parent = vpf
+			vpf.Ambient, vpf.LightColor, vpf.LightDirection = saved[1], saved[2], saved[3]
+			vcam.CFrame = WIDE
+			screenFlash(Color3.fromRGB(255, 220, 140), 0.5)
+		end
+		if order == 3 and not ctx.quick() and not (ctx.cineLite and ctx.cineLite()) then
+			-- hero cuts: face, low angle, side; each pushes in a little, white flash between (Anime Vanguards intro)
+			local _, size = model:GetBoundingBox()
+			local h = size.Y
+			local WIDE = vcam.CFrame
+			for _, cut in {
+				{ Vector3.new(0.6, h * 0.8, h * 1.5), Vector3.new(0, h * 0.72, 0) },
+				{ Vector3.new(-h * 0.9, h * 0.15, h * 1.4), Vector3.new(0, h * 0.4, 0) },
+				{ Vector3.new(h * 1.6, h * 0.6, h * 0.6), Vector3.new(0, h * 0.55, 0) },
+			} do
+				screenFlash(Color3.new(1, 1, 1), 0.35)
+				FXK.play("ring", { pitch = 1.3 })
+				local cf = CFrame.lookAt(cut[1], cut[2])
+				animate(0.3, function(a)
+					vcam.CFrame = cf * CFrame.new(0, 0, -0.35 * a)
+					placePetVp(1.5, 0)
+				end)
+			end
+			screenFlash(Color3.new(1, 1, 1), 0.45)
+			vcam.CFrame = WIDE
+		end
 
 		local sizes = { 38, 46, 58, 72 }
 		revealTitle.Text = rarity:upper()
