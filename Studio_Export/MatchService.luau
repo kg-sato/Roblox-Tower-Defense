@@ -272,6 +272,10 @@ if RunService:IsStudio() then
 					toClient:FireClient(player, "State", snap(sessions[player]))
 				end
 			end
+			if type(cmd) == "string" and cmd:sub(1, 3) == "sp:" and sessions[player] then -- QA: set skill points (2026-10-28, skill tree tests)
+				sessions[player].sim.sp = math.clamp(math.floor(tonumber(cmd:sub(4)) or 0), 0, 99)
+				toClient:FireClient(player, "State", snap(sessions[player]))
+			end
 			if cmd == "reset" then
 				-- QA: back to a brand-new player; the tutorial flag stops syncProfile overwriting it on leave
 				for k, v in TEMPLATE do

@@ -4,6 +4,11 @@
 -- grow ring by ring as you approach; buying a skill flares its lantern. 2026-10-28 abstract pass: lines, points and
 -- circles only (see Roblox Dev/Research/UI/Abstract HUD.md, round 4). User: "When you click the skill tree, you go
 -- into first person and see the actual tree grow before walking towards it and upgrading."
+-- 2026-10-28 v3 (the user: "improve the cutscene for the tree and the tree itself"): the painted tree of light from the
+-- loading screen (ReplicatedStorage.ArtIds.tree) replaces the line-drawn trunk, canopy and side trees. It stands on
+-- a lit plane behind the lanterns (the camera walks straight at it, so a plane holds up; a generate_mesh tree was
+-- tried and rejected as blocky). As you walk in it grows from the roots up in eight slices, a light column and a
+-- ring of light climb it, and it breathes softly once grown.
 -- Installed as StarterPlayerScripts.SkillGrove (client only, visual only). GameClient:
 --   local Grove = require(script.Parent.SkillGrove)({ Config = Config, setCamera = fn(cf|nil), setFov = fn(f|nil),
 --                                                     settings = SETTINGS, sfx = FXK.play })
@@ -55,10 +60,34 @@ return function(ctx)
 		return p
 	end
 
+	local meshTree, slices, treeSG = nil, {}, nil -- meshTree: the painted tree's plane (name kept from the mesh try)
 	local function build()
 		folder = Instance.new("Folder")
 		folder.Name = "SkillGrove"
 		folder.Parent = workspace
+		local okA, A = pcall(function() return require(game:GetService("ReplicatedStorage"):WaitForChild("ArtIds", 2)) end)
+		if okA and A and A.tree then
+			local H = 30
+			meshTree = part({ Transparency = 1, Size = Vector3.new(H, H, 0.05), CFrame = CFrame.new(G + Vector3.new(0, H / 2 - 0.4, -9)) })
+			treeSG = Instance.new("SurfaceGui")
+			treeSG.Face, treeSG.LightInfluence, treeSG.Brightness, treeSG.CanvasSize = Enum.NormalId.Back, 0, 1.6, Vector2.new(768, 768)
+			treeSG.Parent = meshTree
+			local halo = Instance.new("ImageLabel")
+			halo.BackgroundTransparency, halo.Image, halo.ImageColor3, halo.ImageTransparency = 1, A.glow, Color3.fromRGB(140, 190, 255), 0.55
+			halo.AnchorPoint, halo.Position, halo.Size = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.38), UDim2.fromScale(1.1, 0.9)
+			halo.Parent = treeSG
+			for k = 0, 7 do -- eight slices so it can grow from the roots up
+				local im = Instance.new("ImageLabel")
+				im.BackgroundTransparency, im.Image = 1, A.tree
+				im.ImageRectOffset, im.ImageRectSize = Vector2.new(0, 96 * k), Vector2.new(768, 96)
+				im.Position, im.Size = UDim2.fromScale(0, k / 8), UDim2.fromScale(1, 1 / 8)
+				im.Parent = treeSG
+				slices[k] = im
+			end
+			local l = Instance.new("PointLight")
+			l.Color, l.Range, l.Brightness, l.Shadows = Color3.fromRGB(170, 210, 255), 30, 1.5, false
+			l.Parent = meshTree
+		end
 		-- ground: a dark ink disc; the path: one gold line with a point every 6 studs
 		part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.SmoothPlastic, Color = INK, Size = Vector3.new(1, 90, 90), CFrame = CFrame.new(G + Vector3.new(0, -0.47, 10)) * CFrame.Angles(0, 0, math.pi / 2) })
 		part({ Material = Enum.Material.Neon, Color = GOLD, Transparency = 0.3, Size = Vector3.new(0.12, 0.05, 66), CFrame = CFrame.new(G + Vector3.new(0, 0.05, 39)) })
@@ -102,7 +131,7 @@ return function(ctx)
 		local pts = {}
 		for i = 0, 6 do pts[i] = curve(i / 6) end
 		pts[6] = crown
-		for s = 0, 6 do -- seven strands, spread at the root, braided at the crown
+		for s = 0, meshTree and -1 or 6 do -- the painted tree replaces the woven trunk; seven strands, spread at the root, braided at the crown
 			local a0 = s / 7 * math.pi * 2
 			local spread = Vector3.new(math.cos(a0) * 1.8, 0, math.sin(a0) * 1.2)
 			local prev
@@ -115,7 +144,7 @@ return function(ctx)
 				prev = p
 			end
 		end
-		for k = 0, 8 do -- roots: gold lines running out along the ground
+		for k = 0, meshTree and -1 or 8 do -- roots: gold lines running out along the ground
 			local a = k / 9 * math.pi * 2 + 0.2
 			local mid = G + Vector3.new(math.cos(a) * 2.6, 0.08, math.sin(a) * 2.6)
 			local tip = G + Vector3.new(math.cos(a + 0.25) * (5 + (k % 3) * 1.5), 0.08, math.sin(a + 0.25) * (5 + (k % 3) * 1.5))
@@ -143,7 +172,7 @@ return function(ctx)
 				limb(b, d, len * 0.74, thick * 0.68, depth - 1, maxD, ghost)
 			end
 		end
-		for _, ang in { -1.15, -0.58, 0, 0.58, 1.15 } do
+		for _, ang in meshTree and {} or { -1.15, -0.58, 0, 0.58, 1.15 } do
 			limb(crown, Vector3.new(math.sin(ang), math.cos(ang), -0.08).Unit, 4.8, 0.2, 4, 4, true)
 		end
 		-- backdrop: a stepped halo sun behind the crown (four stacked circles = a soft glow), a gold horizon line,
@@ -161,7 +190,7 @@ return function(ctx)
 			disc:SetAttribute("Leaf", disc.Size)
 		end
 		glowLine(G + Vector3.new(-80, 0.06, -30), G + Vector3.new(80, 0.06, -30), 0.08, GOLD, 0.3)
-		for _, spec in { { -20, -10, 1 }, { 20, -10, 1 }, { -34, -20, 0.7 }, { 34, -20, 0.7 } } do
+		for _, spec in meshTree and {} or { { -20, -10, 1 }, { 20, -10, 1 }, { -34, -20, 0.7 }, { 34, -20, 0.7 } } do
 			local base = G + Vector3.new(spec[1], 0, spec[2])
 			local top = base + Vector3.new(0, 6 * spec[3], 0)
 			branch(base, top, 0.12, DIM).Transparency = 0.4
@@ -195,7 +224,7 @@ return function(ctx)
 		end
 		-- canopy: three concentric af Klint circles behind the branches (violet, gold, violet), plus drifting motes
 		-- drawn on a SurfaceGui so the edges are true circles (a 24-stud cylinder shows facets)
-		for i, spec in { { 24, VIOLET, 0.93 }, { 16, GOLD, 0.92 }, { 8, VIOLET, 0.88 } } do
+		for i, spec in meshTree and {} or { { 24, VIOLET, 0.93 }, { 16, GOLD, 0.92 }, { 8, VIOLET, 0.88 } } do
 			local leaf = part({ Transparency = 1, Size = Vector3.new(spec[1], spec[1], 0.05), CFrame = CFrame.new(G + Vector3.new(0, 12, -6 + i * 0.3)) })
 			local sg = Instance.new("SurfaceGui")
 			sg.Face, sg.LightInfluence, sg.CanvasSize = Enum.NormalId.Back, 0, Vector2.new(400, 400)
@@ -270,6 +299,26 @@ return function(ctx)
 					task.delay(total * (0.5 + math.random() * 0.4), function() tw(p, 0.5, { Size = leaf }, Enum.EasingStyle.Back) end)
 				end
 			end
+		end
+		if meshTree then -- the painted tree grows from the roots up, slice by slice; a ring of light climbs it
+			local foot = G + Vector3.new(0, 0, -9)
+			for k, im in slices do
+				im.ImageTransparency = 1
+				im.Size = UDim2.fromScale(0.2, 1 / 8)
+				im.Position = UDim2.fromScale(0.4, k / 8)
+				task.delay((7 - k) / 8 * total * 0.7, function()
+					tw(im, total * 0.3, { ImageTransparency = 0, Size = UDim2.fromScale(1, 1 / 8), Position = UDim2.fromScale(0, k / 8) }, Enum.EasingStyle.Quint)
+				end)
+			end
+			treeSG.Brightness = 1.6
+			task.delay(total, function()
+				if treeSG then TweenService:Create(treeSG, TweenInfo.new(2.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Brightness = 2.4 }):Play() end
+			end)
+			local ringP = part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.Neon, Color = Color3.fromRGB(190, 220, 255), Transparency = 0.3, Size = Vector3.new(0.15, 6, 6), CFrame = CFrame.new(foot + Vector3.new(0, 0.2, 0)) * CFrame.Angles(0, 0, math.pi / 2) })
+			tw(ringP, total * 0.9, { Size = Vector3.new(0.05, 30, 30), CFrame = CFrame.new(foot + Vector3.new(0, 22, 0)) * CFrame.Angles(0, 0, math.pi / 2), Transparency = 1 }, Enum.EasingStyle.Sine)
+			local col = part({ Material = Enum.Material.Neon, Color = Color3.fromRGB(200, 230, 255), Transparency = 0.55, Size = Vector3.new(2.5, 0.1, 2.5), CFrame = CFrame.new(foot) })
+			tw(col, total * 0.5, { Size = Vector3.new(1.2, 60, 1.2), CFrame = CFrame.new(foot + Vector3.new(0, 30, 0)), Transparency = 0.8 })
+			task.delay(total + 0.6, function() tw(col, 0.8, { Transparency = 1 }) end)
 		end
 		for _, nd in nodes do
 			local full = nd.core.Size

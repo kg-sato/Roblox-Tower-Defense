@@ -102,3 +102,7 @@ Also said: "I want absolute immersion when doing anything in the game."
 ### Settings too generic + a quick fix tool (2026-10-28)
 **Said:** the settings buttons are too generic; research creative ones; create something I can use to instantly tell you to fix and make more creative, and record how to do it in Obsidian.
 **Done:** settings rebuilt as an instrument board; `/make-creative` skill (`.claude/skills/make-creative/`) and [[Research/UI/Creative Fix Method]] (loop, metaphor table, pitfalls, log).
+
+### Font, loading, start menu, skill tree refine (2026-10-28)
+**Said:** use Beyond Wonderland (smeared, inky) across the game; a higher-quality loading screen (detailed eyes, steampunk clocks, a real tree); rework the start menu so nothing overlaps and it fits Roblox's top bar; refine the skill tree like the grader (small icons, animated outside, good hover popup, no question marks). Mid-way: "chains and SP don't make sense with our game; make it original and match our themes; review Obsidian."
+**Done:** see the 2026-10-28 UI refine line in [[Session Log]] and [[Research/UI/Captures 2026-10-28/Grading Report]]. Chains became a ticking brass watch-track, the gargoyle frame a pocket-watch frame, "SP" became a gas flame with "skill points to kindle".

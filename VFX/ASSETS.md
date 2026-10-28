@@ -62,3 +62,94 @@ Outputs in `flipbooks/`: `ul_candlesmoke01_loop`, `ul_cloud01_loop`, `ul_explosi
 |---|---|---|---|
 | `textures/*.png` (lightning_ring, bolts_4x4, dot, dot_4x4, wisps, disc, ray_burst, swirl, crescent, glow, spark4, streak, ring, shard, plus, dot_corner and their `_v2`/`_v3` revisions) | painted by `tools/fx_tex.py` (original, shapes chosen to match the roles of Yuruzuu's layers; no pixels copied) | ours | uploaded via Studio MCP `upload_image`; ids in `textures/ids.json` |
 | `flipbooks/egg_hatch_8x8.png`, `flipbooks/coin_drop_8x8.png` (also `textures/*_v2_8x8.png`) | drawn by `tools/fx_craft.py` (original; beats and sizes measured from the ParticleFX Pet Egg Hatch and Enemy Defeat Coin Drop sheets, no pixels copied) | ours | uploaded: egg 85571191205476, coin 113999797256109 |
+
+## 3D art replacement (2026-10-28, uploads pre-approved; see Roblox Dev/Research/Harsh Grading.md)
+| Asset id | What | Source | Notes |
+|---|---|---|---|
+| 120185955605848 | Ward crystal v1 (crystal + brass base) | `Blender/crystal.py`, uploaded with `tools/upload_asset.py` | superseded |
+| 93399647350739 | Ward lantern v2 (crystal, base, frame, roof, plinth) | `Blender/crystal.py` | brass baked black on DIFFUSE; superseded |
+| 77261672208725 | Ward lantern v3 | `Blender/crystal.py` | metal maps added; colours too pale; superseded |
+| 112766505371699 | Ward lantern v4 | `Blender/crystal.py` | linear colour values; superseded |
+| 76204623222152 | Ward lantern v5 | `Blender/crystal.py` | crystal baked all white (pointiness); superseded |
+| 74543193086211 | Ward lantern v6 (in use as `ServerStorage.WardLanternMesh`) | `Blender/crystal.py` | blue gradient, violet veins, facet shading; MapBuilder drops its Frame and Roof |
+| MaterialVariant `LampwickCobble` | wet Victorian cobblestone for the lanes | Studio `generate_material` (MaterialService) | used by MapBuilder Lane parts |
+| 131281399801647 | Lampwick ward lantern v1 (steampunk; reference `UI Kit/art/comfy_out/ref_steamlantern_s22.png`) | `Blender/lantern.py` | superseded |
+| 134037403181473 | Lampwick ward lantern v2 (in use as `ServerStorage.WardLampwickMesh`) | `Blender/lantern.py` | arches, ribs, gauge; Frame's MetalnessMap set to metal_white in Studio |
+| 84849520457882 (Decal) -> Image 113939783761668 | metal_white (64 px white) | generated | full metalness map; SurfaceAppearance needs the Image id (Bug Log #4, fixed) |
+`ServerStorage.WardCosmicMesh` = ward lantern v6 (74543193086211), the cosmic area's protected item; MapBuilder picks by `workspace` attribute `WardStyle` ("Lampwick" default, "Cosmic").
+
+## Start menu, loading v4, skill tree v2 (2026-10-28; uploads pre-approved)
+Image ids are what the game uses (`ReplicatedStorage.ArtIds`, `LoadingScreen.ART`); Open Cloud returns Decal ids, so each was resolved to its Image id with `InsertService:LoadAsset`. Lists: `UI Kit/art/upload_1028/ids.txt` and `decal_ids.txt`. Font: Beyond Wonderland by Chris Hansen, free for commercial use (`UI Kit/art/fonts/readme.txt`).
+
+| Image id | Decal id | What | Made by |
+|---|---|---|---|
+| 78095108445645 | 81951385346241 | chain_h | make_tree_art.py (superseded: chains copied the grader) |
+| 70834831890882 | 113586759451743 | chain_v | make_tree_art.py (superseded) |
+| 83067528514085 | 108848076903475 | clock | make_menu_art.py (FLUX, local) |
+| 127862980270309 | 112877483486495 | clock_ring | clock with open centre |
+| 131758437384858 | 76032266141964 | eye | make_menu_art.py |
+| 115869383084851 | 134147767234997 | gear | make_menu_art.py |
+| 132587429943671 | 113618693890173 | icon_Armor | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 83135358400661 | 125901917677449 | icon_Charge | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 72200280602044 | 87078114072083 | icon_Charm | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 122715046021819 | 82294338754658 | icon_Claws | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 85973341372074 | 86903850016375 | icon_Clock | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 95190043211232 | 117884264424370 | icon_Discount | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 98783772172926 | 77949934179674 | icon_Double | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 101208984352143 | 71039706092535 | icon_Eye | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 93278222280997 | 97015804869112 | icon_Finder | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 76986838593820 | 96414088466857 | icon_Guard | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 126301702537000 | 70472643565366 | icon_Haste | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 75872818879476 | 86762153608309 | icon_Heavy | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 94908048227581 | 90301019983453 | icon_Learner | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 138049968188793 | 86352518452153 | icon_Magnet | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 91000723193153 | 126198379350540 | icon_Mega | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 71649983959162 | 95281820501214 | icon_Merger | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 131749614277191 | 83548424681003 | icon_Pity | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 106723402135207 | 138424502082300 | icon_Refund | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 138097784651551 | 109692389113998 | icon_Start | make_tree_art.py (skill icon, Segoe UI Symbol glyph) |
+| 94334077296250 | 98961936779795 | lamp | render_title.py (Beyond Wonderland, gold) |
+| 122630907915085 | 107692221233371 | node_glow | make_tree_art.py |
+| 93070811178616 | 71920803080086 | node_hex | make_tree_art.py |
+| 78626271822523 | 129038426339034 | popup_frame | make_menu_art.py (superseded: gargoyle crest copied the grader) |
+| 120194527521745 | 113232462668821 | popup_frame2 | make_menu_art.py (brass, pocket-watch crest) |
+| 86659767236471 | 134238466034722 | script_tile | make_tree_art.py (Beyond Wonderland letters) |
+| 136306198395346 | 75960799774428 | title | render_title.py (Beyond Wonderland) |
+| 119584167252020 | 138763836868416 | track_h | make_tree_art.py (brass watch minute-track) |
+| 124538258907272 | 97850482067616 | track_v | make_tree_art.py |
+| 135946607416458 | 84635643689560 | tree | make_menu_art.py |
+| 105036517742599 | 128065470535258 | lamp, ivory first try | superseded by the gold one above |
+| 135311272420663 | | generate_mesh grove tree | rejected (blocky low-poly look); not used |
+| 100063243281092 | Lampwick ward lantern v3 | `Blender/lantern.py` | explicit metal map per material; superseded |
+| 88659025197038 | Lampwick ward lantern v4 (in use as `ServerStorage.WardLampwickMesh`) | `Blender/lantern.py` | darker smooth bronze, canopy ledge, ball finial + hook, filigree, gauge rim |
+| 93103454854302 (Decal) -> 91012164983471 | metal_55 (55% metal map) | generated | test only, not used |
+| 105011236898361 | Brass Sentinel v1 (Tank enemy) | `Blender/sentinel.py`, ref `UI Kit/art/comfy_out/ref_sentinel_s33.png` | superseded |
+| 73592234803470 | Brass Sentinel v2 (in use as `ReplicatedStorage.EnemyTankMesh`, built by Models.buildEnemy("Tank")) | `Blender/sentinel.py` | gunmetal iron, neon eye, steam |
+| 98056643283584 | Lampwick ward lantern v5 | `Blender/lantern.py` | full-metal bronze with sheen, 3 gauges, rivet bands, square stone blocks, teal glass; not yet in Studio |
+| 105163622904187 | Brass Sentinel v3 (Hunyuan3D shape + concept projected and baked) | `Hunyuan3D/generate.py` from `ref_sentinel_s33.png`, then `Blender/sentinel_hy.py` | 15k tris, separate Eye; not yet in Studio |
+
+### Round 3 (2026-10-28): lantern nodes and bolder icons (in use; the round-2 icon ids above are superseded, list in `UI Kit/art/upload_1028/superseded_icons_r2.txt`)
+| Image id | Decal id | What | Made by |
+|---|---|---|---|
+| 84696083304599 | 85206420526679 | icon_Armor | make_tree_art.py |
+| 102557630158124 | 123143233041802 | icon_Charge | make_tree_art.py |
+| 79498195782930 | 87213836874208 | icon_Charm | make_tree_art.py |
+| 83002283263394 | 95237764489459 | icon_Claws | make_tree_art.py |
+| 133488510332821 | 133012536455621 | icon_Clock | make_tree_art.py |
+| 102329521688504 | 115183098910215 | icon_Discount | make_tree_art.py |
+| 136660895505047 | 118787051767217 | icon_Double | make_tree_art.py |
+| 73157585265818 | 137247988279635 | icon_Eye | make_tree_art.py |
+| 125537248369851 | 99831743650429 | icon_Finder | make_tree_art.py |
+| 86342211842204 | 116054423691988 | icon_Guard | make_tree_art.py |
+| 109241686486651 | 76087102038040 | icon_Haste | make_tree_art.py |
+| 137509362007629 | 80707714516895 | icon_Heavy | make_tree_art.py |
+| 140598923994129 | 127590421777843 | icon_Learner | make_tree_art.py |
+| 136063335194451 | 134912908584173 | icon_Magnet | make_tree_art.py |
+| 117189048769174 | 98847324659157 | icon_Mega | make_tree_art.py |
+| 139016441206778 | 107299499492323 | icon_Merger | make_tree_art.py |
+| 78474840683865 | 75859947414304 | icon_Pity | make_tree_art.py |
+| 89149739623615 | 125717209998078 | icon_Refund | make_tree_art.py |
+| 99146977814113 | 104779651356201 | icon_Start | make_tree_art.py |
+| 86057593341535 | 113377141576674 | lantern_frame | make_tree_art.py |
+| 111449519715306 | 119952060714159 | lantern_glass | make_tree_art.py |
+| 94380979849766 | 108628251203855 | eye_soft (eye cut by brightness, no halo) | make_menu_art eye + Pillow |
