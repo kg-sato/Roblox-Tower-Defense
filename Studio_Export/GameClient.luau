@@ -1343,8 +1343,10 @@ do
 	xpLabel.ZIndex = 5
 end
 do -- abstract layer around the objects (AbstractLayer.luau)
-	local ok, err = pcall(function() UI.abstract = require(script.Parent:WaitForChild("AbstractLayer", 5))({ hud = hud, rollBtn = rollBtn, autoBtn = autoBtn, quickBtn = quickBtn, startWaveBtn = startWaveBtn, ultBtn = ultBtn, oddsChip = oddsChip, coinPill = coinPill, gemPill = gemPill, rail = rail, dock = dock, stagePill = stagePill, reducedMotion = function() return SETTINGS.reducedMotion end }) end)
+	local ok, err = pcall(function() UI.abstract = require(script.Parent:WaitForChild("AbstractLayer", 5))({ hud = hud, rollBtn = rollBtn, autoBtn = autoBtn, quickBtn = quickBtn, startWaveBtn = startWaveBtn, ultBtn = ultBtn, oddsChip = oddsChip, coinPill = coinPill, gemPill = gemPill, rail = rail, dock = dock, stagePill = stagePill, abstractHUD = true, reducedMotion = function() return SETTINGS.reducedMotion end }) end)
 	if not ok then warn("AbstractLayer: " .. tostring(err)) end
+	local ok2, err2 = pcall(function() require(script.Parent:WaitForChild("AbstractHUD", 5))({ rollBtn = rollBtn, rollCost = rollCost, autoBtn = autoBtn, quickBtn = quickBtn, oddsChip = oddsChip, startWaveBtn = startWaveBtn, ultBtn = ultBtn, ultFill = ultFill, coinPill = coinPill, coinLabel = coinLabel, gemPill = gemPill, gemLabel = gemLabel, lvlPill = lvlPill, lvlNum = lvlNum, xpFill = xpFill, stagePill = stagePill, stageLabel = stageLabel, hpPill = hpPill, hpFill = hpFill, hpLabel = hpLabel, dock = dock, reducedMotion = function() return SETTINGS.reducedMotion end }) end)
+	if not ok2 then warn("AbstractHUD: " .. tostring(err2)) end
 end
 UI.objectify, UI.objImg = objectify, objImg -- shared with screens built later (familiar ledger)
 -- text above the object art
@@ -1593,6 +1595,10 @@ end
 -- ===== Start menu (2026-10-28 rework): the world stays visible behind a left-side shade; logo, tagline and a big PLAY
 -- on the left; a featured Legendary familiar turns on a glowing pedestal on the right. Same locals as before
 -- (startScreen, startCard, startScale, startSub, startBtn) so the flashes notice and the Start flow keep working.
+do -- abstract forms for the start menu, panels, tutorial note and banners (needs tutCard, banner, toast above)
+	local ok3, err3 = pcall(function() UI.abstractScreens = require(script.Parent:WaitForChild("AbstractScreens", 5))({ gui = gui, hud = hud, tutCard = tutCard, tutText = tutText, banner = banner, subBanner = subBanner, toast = toast, reducedMotion = function() return SETTINGS.reducedMotion end }) end)
+	if not ok3 then warn("AbstractScreens: " .. tostring(err3)) end
+end
 local startScreen = new("Frame", { Name = "StartMenu", BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 10 }, gui)
 local menuShade = new("Frame", { BackgroundColor3 = Color3.fromRGB(6, 4, 16), BackgroundTransparency = 0, Size = UDim2.fromScale(1, 1), ZIndex = 10 }, startScreen)
 new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.05), NumberSequenceKeypoint.new(0.45, 0.35), NumberSequenceKeypoint.new(1, 0.75) }) }, menuShade)
@@ -3864,6 +3870,9 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 				table.insert(flying, { model = entry.model, from = entry.model:GetPivot().Position, to = apex, t = 0,
 					dur = full and leapT or nil, delay = full and 0.25 + i * 0.05 or nil, arc = full and 6 or nil,
 					spin = full and 10 or nil, flip = full, shrink = full and 0.4 or nil })
+				if not SETTINGS.reducedMotion then -- multiples: three fading copies trail the leap (Animation Craft note)
+					require(ReplicatedStorage.Shared.Motion).echoModel(entry.model, { count = 3, gap = 2 })
+				end
 			end
 		end
 		local land = function()

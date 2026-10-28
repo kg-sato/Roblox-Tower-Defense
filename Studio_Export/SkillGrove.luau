@@ -1,7 +1,8 @@
 --!nocheck
 -- SkillGrove (2026-10-28): opening the Skill Tree walks you, in first person, up a lamplit path to a living tree whose
 -- branches mirror the skill hexes (one lantern per skill: lit = owned, pulsing = can buy, bud = hidden). The branches
--- grow ring by ring as you approach; buying a skill flares its lantern. User: "When you click the skill tree, you go
+-- grow ring by ring as you approach; buying a skill flares its lantern. 2026-10-28 abstract pass: lines, points and
+-- circles only (see Roblox Dev/Research/UI/Abstract HUD.md, round 4). User: "When you click the skill tree, you go
 -- into first person and see the actual tree grow before walking towards it and upgrading."
 -- Installed as StarterPlayerScripts.SkillGrove (client only, visual only). GameClient:
 --   local Grove = require(script.Parent.SkillGrove)({ Config = Config, setCamera = fn(cf|nil), setFov = fn(f|nil),
@@ -40,9 +41,14 @@ return function(ctx)
 		local x, y = SQ3 * (n.q + n.r / 2), 1.5 * n.r
 		return G + Vector3.new(x * SPREAD, 12 - y * SPREAD, -ring(n) * 0.9)
 	end
+	-- abstract pass (2026-10-28): no wood, cobbles, gas lamps or brick. The tree is a constellation of lines and points
+	-- over a dark ground; the canopy is three af Klint circles; the path is one gold line with points.
+	local INK, DIM = Color3.fromRGB(14, 12, 22), Color3.fromRGB(110, 100, 140)
+	local GOLD, VIOLET = Color3.fromRGB(255, 214, 130), Color3.fromRGB(150, 110, 230)
+	local FACE = CFrame.Angles(0, math.pi / 2, 0) -- turns a cylinder's flat side to face the walker (+Z)
 	local function branch(a, b, thick, color)
 		local len = (b - a).Magnitude
-		local p = part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.Wood, Color = color or Color3.fromRGB(74, 50, 38), Size = Vector3.new(len, thick, thick), CFrame = CFrame.lookAt(a:Lerp(b, 0.5), b) * CFrame.Angles(0, math.pi / 2, 0) })
+		local p = part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.Neon, Color = color or DIM, Transparency = 0.5, Size = Vector3.new(len, thick, thick), CFrame = CFrame.lookAt(a:Lerp(b, 0.5), b) * CFrame.Angles(0, math.pi / 2, 0) })
 		p:SetAttribute("Full", p.Size)
 		p:SetAttribute("From", a)
 		p:SetAttribute("To", b)
@@ -53,40 +59,115 @@ return function(ctx)
 		folder = Instance.new("Folder")
 		folder.Name = "SkillGrove"
 		folder.Parent = workspace
-		-- courtyard: dark ground, cobbled path, two gas lamps, a low wall ring
-		part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.Slate, Color = Color3.fromRGB(32, 30, 40), Size = Vector3.new(1, 90, 90), CFrame = CFrame.new(G + Vector3.new(0, -0.5, 10)) * CFrame.Angles(0, 0, math.pi / 2) })
-		for z = 6, 72, 3 do
-			part({ Material = Enum.Material.Cobblestone, Color = Color3.fromRGB(96, 88, 84), Size = Vector3.new(5, 0.2, 2.8), CFrame = CFrame.new(G + Vector3.new(math.sin(z * 0.08) * 0.6, 0.05, z)) })
+		-- ground: a dark ink disc; the path: one gold line with a point every 6 studs
+		part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.SmoothPlastic, Color = INK, Size = Vector3.new(1, 90, 90), CFrame = CFrame.new(G + Vector3.new(0, -0.47, 10)) * CFrame.Angles(0, 0, math.pi / 2) })
+		part({ Material = Enum.Material.Neon, Color = GOLD, Transparency = 0.3, Size = Vector3.new(0.12, 0.05, 66), CFrame = CFrame.new(G + Vector3.new(0, 0.05, 39)) })
+		for z = 6, 72, 6 do
+			part({ Shape = Enum.PartType.Ball, Material = Enum.Material.Neon, Color = GOLD, Size = Vector3.one * 0.35, CFrame = CFrame.new(G + Vector3.new(0, 0.15, z)) })
 		end
+		-- lamps: floating amber points on a faint vertical line
 		for _, side in { -1, 1 } do
 			for _, z in { 14, 38, 60 } do
 				local base = G + Vector3.new(side * 5, 0, z)
-				part({ Material = Enum.Material.Metal, Color = Color3.fromRGB(30, 30, 34), Size = Vector3.new(0.35, 7, 0.35), CFrame = CFrame.new(base + Vector3.new(0, 3.5, 0)) })
-				local head = part({ Material = Enum.Material.Neon, Color = Color3.fromRGB(255, 186, 110), Transparency = 0.35, Size = Vector3.new(0.5, 0.7, 0.5), CFrame = CFrame.new(base + Vector3.new(0, 7.3, 0)) }) -- smaller, half-clear head: v1 blew out to white blocks
+				part({ Material = Enum.Material.Neon, Color = DIM, Transparency = 0.6, Size = Vector3.new(0.06, 7, 0.06), CFrame = CFrame.new(base + Vector3.new(0, 3.5, 0)) })
+				local head = part({ Shape = Enum.PartType.Ball, Material = Enum.Material.Neon, Color = Color3.fromRGB(255, 186, 110), Size = Vector3.one * 0.35, CFrame = CFrame.new(base + Vector3.new(0, 7.3, 0)) })
 				local l = Instance.new("PointLight")
-				l.Color, l.Range, l.Brightness, l.Shadows = Color3.fromRGB(255, 190, 110), 16, 1.6, false
+				l.Color, l.Range, l.Brightness, l.Shadows = Color3.fromRGB(255, 190, 110), 16, 1.2, false
 				l.Parent = head
 			end
 		end
+		-- the courtyard edge: a ring of 24 violet points instead of a brick wall
 		for i = 0, 23 do
 			local a = i / 24 * math.pi * 2
-			local p = G + Vector3.new(math.cos(a) * 30, 0.9, math.sin(a) * 30 - 4)
 			if math.sin(a) <= 0.8 then -- leave a gap where the path enters
-				part({ Material = Enum.Material.Brick, Color = Color3.fromRGB(70, 56, 60), Size = Vector3.new(8, 1.8, 1.4), CFrame = CFrame.lookAt(p, G + Vector3.new(0, 0.9, -4)) })
+				part({ Shape = Enum.PartType.Ball, Material = Enum.Material.Neon, Color = VIOLET, Transparency = 0.2, Size = Vector3.one * 0.5, CFrame = CFrame.new(G + Vector3.new(math.cos(a) * 30, 0.6, math.sin(a) * 30 - 4)) })
 			end
 		end
-		-- trunk: an S-curve of segments, root flares
+		-- THE MAIN TREE (user: "a really majestic main tree"): a trunk woven from seven strands of light that rise
+		-- from spread roots and braid into one at the crown, then a fractal canopy of five limbs. Every decor line has
+		-- two ghost copies, thicker, fainter and nudged a hair off, so it blooms like a long-exposure photo (user:
+		-- "duplicate objects and slightly move them so the animations have more glare / blur").
+		local PALE = Color3.fromRGB(236, 228, 255)
+		local function glowLine(a, b, thick, color, tr)
+			local main = branch(a, b, thick, color)
+			main.Transparency = tr
+			for k, g in { { 2.6, 0.84, Vector3.new(0.05, 0.03, -0.08) }, { 5, 0.94, Vector3.new(-0.06, -0.02, -0.16) } } do
+				local p = branch(a + g[3], b + g[3], thick * g[1], color)
+				p.Transparency = 1 - (1 - tr) * (1 - g[2])
+			end
+			return main
+		end
+		local crown = G + Vector3.new(0, 12, -0.6)
+		local function curve(t) return G + Vector3.new(math.sin(t * 3) * 0.9, t * 12, math.sin(t * 2) * -0.6) end
 		local pts = {}
-		for i = 0, 6 do
-			local t = i / 6
-			pts[i] = G + Vector3.new(math.sin(t * 3) * 0.9, t * 12, math.sin(t * 2) * -0.6)
+		for i = 0, 6 do pts[i] = curve(i / 6) end
+		pts[6] = crown
+		for s = 0, 6 do -- seven strands, spread at the root, braided at the crown
+			local a0 = s / 7 * math.pi * 2
+			local spread = Vector3.new(math.cos(a0) * 1.8, 0, math.sin(a0) * 1.2)
+			local prev
+			for i = 0, 8 do
+				local t = i / 8
+				local twist = a0 + t * 2.2
+				local p = curve(t):Lerp(crown, t ^ 3) + Vector3.new(math.cos(twist) * 1.8, 0, math.sin(twist) * 1.2) * (1 - t) ^ 1.4
+				if i == 0 then p = G + spread end
+				if prev then glowLine(prev, p, 0.11, PALE:Lerp(GOLD, t), 0.35) end
+				prev = p
+			end
 		end
-		for i = 1, 6 do
-			branch(pts[i - 1], pts[i], 3.4 - i * 0.3)
+		for k = 0, 8 do -- roots: gold lines running out along the ground
+			local a = k / 9 * math.pi * 2 + 0.2
+			local mid = G + Vector3.new(math.cos(a) * 2.6, 0.08, math.sin(a) * 2.6)
+			local tip = G + Vector3.new(math.cos(a + 0.25) * (5 + (k % 3) * 1.5), 0.08, math.sin(a + 0.25) * (5 + (k % 3) * 1.5))
+			glowLine(G + Vector3.new(math.cos(a) * 1.4, 0.08, math.sin(a) * 1.0), mid, 0.1, GOLD, 0.25)
+			glowLine(mid, tip, 0.07, GOLD, 0.45)
 		end
-		for k = 0, 4 do
-			local a = k / 5 * math.pi * 2 + 0.3
-			branch(G + Vector3.new(0, 1.6, 0), G + Vector3.new(math.cos(a) * 3.4, -0.2, math.sin(a) * 3.4), 0.9)
+		-- canopy: five limbs from the crown, each splitting four times; gold points at the tips
+		local rngC = Random.new(3)
+		local function limb(a, dir, len, thick, depth, maxD, ghost)
+			local b = a + dir * len
+			local k = 1 - depth / maxD
+			if ghost then
+				glowLine(a, b, thick, VIOLET:Lerp(GOLD, k), 0.5 + k * 0.25) -- tinted and fainter than the lanterns, which stay the focus
+			else
+				branch(a, b, thick, DIM).Transparency = 0.45 + k * 0.3
+			end
+			if depth == 0 then
+				local tip = part({ Shape = Enum.PartType.Ball, Material = Enum.Material.Neon, Color = ghost and GOLD or VIOLET, Size = Vector3.one * (ghost and 0.3 or 0.2), CFrame = CFrame.new(b) })
+				tip:SetAttribute("Leaf", tip.Size)
+				return
+			end
+			for _, sgn in { -1, 1 } do
+				local r = sgn * (0.38 + rngC:NextNumber() * 0.22)
+				local d = Vector3.new(dir.X * math.cos(r) - dir.Y * math.sin(r), dir.X * math.sin(r) + dir.Y * math.cos(r), dir.Z - 0.04).Unit
+				limb(b, d, len * 0.74, thick * 0.68, depth - 1, maxD, ghost)
+			end
+		end
+		for _, ang in { -1.15, -0.58, 0, 0.58, 1.15 } do
+			limb(crown, Vector3.new(math.sin(ang), math.cos(ang), -0.08).Unit, 4.8, 0.2, 4, 4, true)
+		end
+		-- backdrop: a stepped halo sun behind the crown (four stacked circles = a soft glow), a gold horizon line,
+		-- and four smaller violet trees far off on either side so the main tree has a court
+		for i, spec in { { 50, 0.96 }, { 40, 0.94 }, { 30, 0.92 }, { 20, 0.88 } } do
+			local s = spec[1]
+			local disc = part({ Transparency = 1, Size = Vector3.new(s, s, 0.05), CFrame = CFrame.new(G + Vector3.new(0, 13, -16 + i * 0.2)) })
+			local sg = Instance.new("SurfaceGui")
+			sg.Face, sg.LightInfluence, sg.CanvasSize = Enum.NormalId.Back, 0, Vector2.new(400, 400)
+			local c = Instance.new("Frame")
+			c.BackgroundColor3, c.BackgroundTransparency, c.BorderSizePixel, c.Size = Color3.fromRGB(255, 196, 120), spec[2], 0, UDim2.fromScale(1, 1)
+			Instance.new("UICorner", c).CornerRadius = UDim.new(0.5, 0)
+			c.Parent = sg
+			sg.Parent = disc
+			disc:SetAttribute("Leaf", disc.Size)
+		end
+		glowLine(G + Vector3.new(-80, 0.06, -30), G + Vector3.new(80, 0.06, -30), 0.08, GOLD, 0.3)
+		for _, spec in { { -20, -10, 1 }, { 20, -10, 1 }, { -34, -20, 0.7 }, { 34, -20, 0.7 } } do
+			local base = G + Vector3.new(spec[1], 0, spec[2])
+			local top = base + Vector3.new(0, 6 * spec[3], 0)
+			branch(base, top, 0.12, DIM).Transparency = 0.4
+			for _, ang in { -0.7, 0, 0.7 } do
+				limb(top, Vector3.new(math.sin(ang), math.cos(ang), 0).Unit, 3 * spec[3], 0.09, 3, 3, false)
+			end
 		end
 		-- skill branches and lanterns: each node hangs off its neighbour one ring nearer the centre
 		for _, n in Config.TREE do
@@ -100,22 +181,32 @@ return function(ctx)
 						break
 					end
 				end
-				nodes[n.id] = { branch = branch(parentPos, pos, ring(n) == 1 and 1.25 or 0.75) } -- v1 read thin and spindly
+				nodes[n.id] = { branch = branch(parentPos, pos, ring(n) == 1 and 0.16 or 0.1) }
 			else
 				nodes[n.id] = {}
 			end
-			local glass = part({ Shape = Enum.PartType.Ball, Material = Enum.Material.Glass, Transparency = 0.55, Color = Color3.fromRGB(220, 220, 255), Size = Vector3.one * 1.3, CFrame = CFrame.new(pos) })
+			-- the lantern: a point inside a faint circle that faces the walker
+			local glass = part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.Neon, Transparency = 0.8, Color = n.color, Size = Vector3.new(0.04, 1.6, 1.6), CFrame = CFrame.new(pos + Vector3.new(0, 0, -0.1)) * FACE })
 			local core = part({ Shape = Enum.PartType.Ball, Material = Enum.Material.Neon, Color = n.color, Size = Vector3.one * 0.75, CFrame = CFrame.new(pos) })
 			local light = Instance.new("PointLight")
 			light.Color, light.Range, light.Brightness, light.Shadows = n.color, 9, 0, false
 			light.Parent = core
 			nodes[n.id].glass, nodes[n.id].core, nodes[n.id].light, nodes[n.id].pos = glass, core, light, pos
 		end
-		-- canopy: soft violet-gold leaf clouds and drifting motes
-		local rng = Random.new(7)
-		for i = 1, 90 do
-			local around = nodePos(Config.TREE[rng:NextInteger(1, #Config.TREE)])
-			local leaf = part({ Shape = Enum.PartType.Ball, Material = Enum.Material.Neon, Color = (i % 3 == 0) and Color3.fromRGB(255, 210, 140) or Color3.fromRGB(150, 110, 230), Transparency = 0.72, Size = Vector3.one * rng:NextNumber(3, 5.5), CFrame = CFrame.new(around + Vector3.new(rng:NextNumber(-1.6, 1.6), rng:NextNumber(-0.8, 1.6), rng:NextNumber(-2, 0.5))) })
+		-- canopy: three concentric af Klint circles behind the branches (violet, gold, violet), plus drifting motes
+		-- drawn on a SurfaceGui so the edges are true circles (a 24-stud cylinder shows facets)
+		for i, spec in { { 24, VIOLET, 0.93 }, { 16, GOLD, 0.92 }, { 8, VIOLET, 0.88 } } do
+			local leaf = part({ Transparency = 1, Size = Vector3.new(spec[1], spec[1], 0.05), CFrame = CFrame.new(G + Vector3.new(0, 12, -6 + i * 0.3)) })
+			local sg = Instance.new("SurfaceGui")
+			sg.Face, sg.LightInfluence, sg.CanvasSize = Enum.NormalId.Back, 0, Vector2.new(400, 400)
+			local c = Instance.new("Frame")
+			c.BackgroundColor3, c.BackgroundTransparency, c.BorderSizePixel, c.Size = spec[2], spec[3], 0, UDim2.fromScale(1, 1)
+			Instance.new("UICorner", c).CornerRadius = UDim.new(0.5, 0)
+			local st = Instance.new("UIStroke")
+			st.Color, st.Thickness, st.Transparency = spec[2], 3, 0.35
+			st.Parent = c
+			c.Parent = sg
+			sg.Parent = leaf
 			leaf:SetAttribute("Leaf", leaf.Size)
 		end
 		local emitterPart = part({ Transparency = 1, Size = Vector3.new(16, 1, 6), CFrame = CFrame.new(G + Vector3.new(0, 15, -1)) })
@@ -149,13 +240,13 @@ return function(ctx)
 			nd.state = st
 			nd.core.Transparency = st == "locked" and 1 or (st == "available" and 0.45 or 0)
 			nd.core.Color = st == "locked" and Color3.fromRGB(60, 40, 30) or n.color
-			nd.glass.Transparency = st == "locked" and 1 or 0.55
+			nd.glass.Transparency = st == "locked" and 1 or (st == "available" and 0.86 or 0.78)
 			nd.light.Brightness = (st == "owned" or st == "maxed") and 1.4 or 0
 			nd.core.Size = Vector3.one * (st == "maxed" and 0.95 or 0.75)
-			if nd.branch then
-				nd.branch.Color = (st == "owned" or st == "maxed") and n.color:Lerp(Color3.fromRGB(74, 50, 38), 0.55) or Color3.fromRGB(74, 50, 38)
-				nd.branch.Material = (st == "owned" or st == "maxed") and Enum.Material.Neon or Enum.Material.Wood
-				nd.branch.Transparency = (st == "owned" or st == "maxed") and 0.2 or 0
+			if nd.branch then -- a lit line in the skill's colour once owned; a faint grey line before
+				local lit = st == "owned" or st == "maxed"
+				nd.branch.Color = lit and n.color or DIM
+				nd.branch.Transparency = lit and 0 or (st == "locked" and 0.75 or 0.5)
 			end
 		end
 	end
@@ -175,7 +266,7 @@ return function(ctx)
 				end
 				local leaf = p:GetAttribute("Leaf")
 				if leaf then
-					p.Size = Vector3.one * 0.1
+					p.Size = Vector3.new(0.1, 0.1, leaf.Z)
 					task.delay(total * (0.5 + math.random() * 0.4), function() tw(p, 0.5, { Size = leaf }, Enum.EasingStyle.Back) end)
 				end
 			end
@@ -186,7 +277,7 @@ return function(ctx)
 			local delay = math.clamp((nd.pos - G).Magnitude / 22, 0, 1) * total * 0.6 + total * 0.35
 			task.delay(delay, function()
 				tw(nd.core, 0.35, { Size = full }, Enum.EasingStyle.Back)
-				tw(nd.glass, 0.35, { Size = Vector3.one * 1.3 }, Enum.EasingStyle.Back)
+				tw(nd.glass, 0.35, { Size = Vector3.new(0.04, 1.6, 1.6) }, Enum.EasingStyle.Back)
 			end)
 		end
 	end

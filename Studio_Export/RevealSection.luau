@@ -96,7 +96,7 @@ return function(ctx)
 
 	local timeScale = 1
 	task.spawn(function() -- the Reading's card art must be ready before the first draw (it showed blank on the first reveal)
-		pcall(function() game:GetService("ContentProvider"):PreloadAsync({ "rbxassetid://93758813189086", "rbxassetid://78270426727572" }) end)
+		pcall(function() game:GetService("ContentProvider"):PreloadAsync({ "rbxassetid://93758813189086", "rbxassetid://78270426727572", "rbxassetid://128142388272489", "rbxassetid://140628629392455" }) end)
 	end)
 
 	local function animate(duration, fn)
@@ -229,21 +229,22 @@ return function(ctx)
 			p.Parent = stageM
 			return p
 		end
-		vp({ Size = Vector3.new(16, 0.2, 9), Color = Color3.fromRGB(46, 14, 34), Material = Enum.Material.Fabric, CFrame = CFrame.new(0, -0.12, -1.5) })
+		-- abstract (2026-10-28, "everything abstract"): no tablecloth and no candles; the card is an abstract plate: the
+		-- af Klint spiral on its back, the vesica (two circles meeting) on its face, tinted with the rarity
+		local SPIRAL, VESICA = "rbxassetid://128142388272489", "rbxassetid://140628629392455"
 		local circle = vp({ Size = Vector3.new(6.5, 0.02, 6.5), Transparency = 1, CFrame = CFrame.new(0, 0.02, 0) })
 		local chalk = Instance.new("Decal")
 		chalk.Texture, chalk.Face, chalk.Color3, chalk.Transparency = RINGTEX, Enum.NormalId.Top, Color3.fromRGB(255, 214, 140), 0.25
 		chalk.Parent = circle
-		for _, x in { -4.2, 4.2 } do
-			vp({ Shape = Enum.PartType.Cylinder, Size = Vector3.new(1.6, 0.55, 0.55), Color = Color3.fromRGB(236, 226, 200), Material = Enum.Material.SmoothPlastic, CFrame = CFrame.new(x, 0.8, -1.2) * CFrame.Angles(0, 0, math.pi / 2) })
-			vp({ Shape = Enum.PartType.Ball, Size = Vector3.new(0.32, 0.5, 0.32), Color = Color3.fromRGB(255, 190, 90), Material = Enum.Material.Neon, CFrame = CFrame.new(x, 1.9, -1.2) })
+		for _, x in { -4.2, 4.2 } do -- two small points of light where the candles were
+			vp({ Shape = Enum.PartType.Ball, Size = Vector3.new(0.35, 0.35, 0.35), Color = Color3.fromRGB(255, 190, 90), Material = Enum.Material.Neon, CFrame = CFrame.new(x, 1.6, -1.2) })
 		end
 		local card = vp({ Size = Vector3.new(2.4, 4, 0.06), Color = Color3.fromRGB(30, 16, 50), Material = Enum.Material.SmoothPlastic })
 		local back = Instance.new("Decal")
-		back.Texture, back.Face = TAROT, Enum.NormalId.Back
+		back.Texture, back.Face, back.Color3 = SPIRAL, Enum.NormalId.Back, Color3.fromRGB(255, 214, 130)
 		back.Parent = card
 		local front = Instance.new("Decal")
-		front.Texture, front.Face, front.Color3 = TAROT, Enum.NormalId.Front, rcolor:Lerp(Color3.new(1, 1, 1), 0.3)
+		front.Texture, front.Face, front.Color3 = VESICA, Enum.NormalId.Front, rcolor:Lerp(Color3.new(1, 1, 1), 0.3)
 		front.Parent = card
 		local rim = vp({ Size = Vector3.new(2.75, 4.35, 0.03), Material = Enum.Material.Neon, Color = Color3.new(1, 1, 1), Transparency = 0.6 })
 		local HOME = CFrame.new(0, 2.6, 0)
@@ -367,7 +368,43 @@ return function(ctx)
 			local tone = new("ImageLabel", { BackgroundTransparency = 1, Image = DOT, ScaleType = Enum.ScaleType.Tile, TileSize = UDim2.fromOffset(9, 9), ImageColor3 = Color3.fromRGB(40, 36, 40), ImageTransparency = 0.9, Size = UDim2.fromScale(1, 1), ZIndex = 18 }, revealGui)
 			local iris = new("Frame", { BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 21 }, revealGui)
 			new("UIGradient", { Rotation = 25, Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 140, 220)), ColorSequenceKeypoint.new(0.35, Color3.fromRGB(150, 220, 255)), ColorSequenceKeypoint.new(0.7, Color3.fromRGB(255, 240, 200)), ColorSequenceKeypoint.new(1, Color3.fromRGB(190, 150, 255)) }) }, iris)
-			local moth = new("ImageLabel", { BackgroundTransparency = 1, Image = MOTH, AnchorPoint = Vector2.new(0.5, 0.5), Size = UDim2.fromOffset(110, 58), ZIndex = 20, Visible = false }, revealGui)
+			-- abstract pass (2026-10-28): the moth is an ink point with two line wings that open and close (no moth art)
+			local INK = Color3.fromRGB(40, 36, 40)
+			local moth = new("Frame", { Name = "AF_moth", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Size = UDim2.fromOffset(110, 58), ZIndex = 20, Visible = false }, revealGui)
+			local body = new("Frame", { BackgroundColor3 = INK, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(12, 12), ZIndex = 21 }, moth)
+			new("UICorner", { CornerRadius = UDim.new(0.5, 0) }, body)
+			local wings = {}
+			for i, sgn in { -1, 1 } do -- each wing is a line on one half of a pivot frame, so rotating the pivot swings it from the body
+				local pivot = new("Frame", { BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(96, 3), ZIndex = 20 }, moth)
+				new("Frame", { BackgroundColor3 = INK, BorderSizePixel = 0, Position = UDim2.fromScale(sgn > 0 and 0.5 or 0, 0), Size = UDim2.fromScale(0.5, 1), ZIndex = 20 }, pivot)
+				wings[i] = pivot
+			end
+			local function wingbeat(open) -- open 0..1: 0 = wings folded up, 1 = spread flat
+				wings[1].Rotation = 70 * (1 - open)
+				wings[2].Rotation = -70 * (1 - open)
+			end
+			-- echo trail: three fainter copies replay where the moth was 2, 4 and 6 frames ago (a drawn smear / motion blur)
+			local echoes, hist = {}, {}
+			for k = 1, 3 do
+				local g = moth:Clone()
+				for _, d in g:GetDescendants() do
+					if d:IsA("Frame") and d.BackgroundTransparency < 1 then d.BackgroundTransparency = 0.45 + k * 0.15; d.ZIndex = 19 end
+				end
+				g.Name, g.Parent = "AF_mothEcho", revealGui
+				echoes[k] = g
+			end
+			local function echo(show)
+				for k, g in echoes do
+					local h = hist[#hist - k * 2]
+					g.Visible = show and h ~= nil
+					if h then
+						g.Position, g.Rotation = h[1], h[2]
+						local piv = {}
+						for _, c in g:GetChildren() do if c.Size.Y.Offset == 3 then table.insert(piv, c) end end
+						if piv[1] then piv[1].Rotation, piv[2].Rotation = h[3], -h[3] end
+					end
+				end
+			end
 			local line = label(revealGui, "", 84, Color3.fromRGB(70, 58, 56), Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.45), UDim2.fromOffset(1100, 110))
 			line.ZIndex = 19
 			line.TextScaled = false
@@ -379,9 +416,13 @@ return function(ctx)
 				animate(t, function(a)
 					local e = ease(a, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
 					moth.Position = UDim2.fromScale(p0.X + (p1.X - p0.X) * e, p0.Y + (p1.Y - p0.Y) * e + math.sin(a * 9) * wobble)
-					moth.Size = UDim2.fromOffset(110 * (0.35 + 0.65 * math.abs(math.cos(a * 22))), 58) -- wingbeat
-					moth.Rotation = math.deg(math.atan2(p1.Y - p0.Y, p1.X - p0.X)) * 0.3 + math.sin(a * 13) * 8
+					wingbeat(math.abs(math.cos(a * 22)))
+					moth.Rotation = math.sin(a * 13) * 8 -- no heading tilt: it turned the line-wing V lopsided
+					table.insert(hist, { moth.Position, moth.Rotation, wings[1].Rotation })
+					echo(true)
 				end)
+				table.clear(hist)
+				echo(false)
 			end
 			-- 1. iridescent flash into the white page; the name drifts in
 			FXK.play("summon")
@@ -453,7 +494,7 @@ return function(ctx)
 			page.ZIndex = 22 -- above the viewport for the black beat
 			task.wait(0.3)
 			field:Destroy()
-			for _, g in { page, tone, iris, moth, line } do g:Destroy() end
+			for _, g in { page, tone, iris, moth, line, echoes[1], echoes[2], echoes[3] } do g:Destroy() end
 			model.Parent = vpf
 			vpf.Ambient, vpf.LightColor, vpf.LightDirection = saved[1], saved[2], saved[3]
 			vcam.CFrame = WIDE

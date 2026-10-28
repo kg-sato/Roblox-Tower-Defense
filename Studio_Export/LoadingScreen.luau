@@ -80,9 +80,12 @@ local function ring(scale, thick, dashes, speed)
 end
 ring(0.92, 2, 4, 14)
 ring(0.72, 1.5, 6, -10)
-local crown = new("ImageLabel", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.5, 0.5), BackgroundTransparency = 1, Image = CROWN, ImageTransparency = 1, ZIndex = 6 }, holder)
-tw(crown, 0.8, { ImageTransparency = 0 })
-TweenService:Create(crown, TweenInfo.new(1.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Size = UDim2.fromScale(0.55, 0.55) }):Play()
+-- abstract (2026-10-28): the crown art is gone; a single amber point breathes at the centre of the orbits
+local crown = new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.16, 0.16), BackgroundColor3 = GOLD, BackgroundTransparency = 1, BorderSizePixel = 0, ZIndex = 6 }, holder)
+new("UICorner", { CornerRadius = UDim.new(1, 0) }, crown)
+new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(255, 235, 170), Color3.fromRGB(235, 130, 40)) }, crown)
+tw(crown, 0.8, { BackgroundTransparency = 0 })
+TweenService:Create(crown, TweenInfo.new(1.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Size = UDim2.fromScale(0.2, 0.2) }):Play()
 
 local title = new("TextLabel", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.6), Size = UDim2.fromScale(0.6, 0.09), BackgroundTransparency = 1, Text = "GUARDIAN GRID", TextScaled = true, Font = Enum.Font.GrenzeGotisch, TextColor3 = GOLD, TextTransparency = 1, ZIndex = 6 }, bg)
 new("UIStroke", { Color = Color3.fromRGB(40, 20, 8), Thickness = 2, Transparency = 1 }, title)
@@ -108,9 +111,8 @@ end)
 
 -- skip button after 2 s (Sol's RNG added one to its loading screen); it ends the wait once the game has loaded
 local skipped = false
-local skip = new("TextButton", { AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -24, 1, -24), Size = UDim2.fromOffset(120, 40), BackgroundColor3 = Color3.fromRGB(30, 22, 50), BackgroundTransparency = 0.2, Text = "SKIP  >", TextColor3 = GOLD, Font = Enum.Font.Fondamento, TextSize = 22, Visible = false, ZIndex = 9, AutoButtonColor = true }, bg)
-new("UICorner", { CornerRadius = UDim.new(0, 10) }, skip)
-new("UIStroke", { Color = GOLD_DIM, Thickness = 1.5, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }, skip)
+local skip = new("TextButton", { AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -24, 1, -24), Size = UDim2.fromOffset(120, 40), BackgroundColor3 = Color3.fromRGB(30, 22, 50), BackgroundTransparency = 1, Text = "SKIP  >", TextColor3 = GOLD, Font = Enum.Font.Fondamento, TextSize = 22, Visible = false, ZIndex = 9, AutoButtonColor = true }, bg)
+new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 1, -6), Size = UDim2.fromOffset(70, 1), BackgroundColor3 = GOLD_DIM, BorderSizePixel = 0, ZIndex = 9 }, skip) -- abstract: underlined text, no box
 skip.Activated:Connect(function() skipped = true end)
 task.delay(2, function() if skip.Parent then skip.Visible = true end end)
 

@@ -5,6 +5,8 @@ Every research note, grouped by area. Add new notes to the right folder and list
 ## UI
 - [[Research/UI/Creative Fix Method|Creative Fix Method]]: the loop for turning anything generic into a themed object or cutscene, the metaphor table, pitfalls and a log of every fix; run it with /make-creative (2026-10-28)
 - [[Research/UI/Abstract UI|Abstract UI]]: Hilma af Klint, Kandinsky, Bauhaus, Mini Metro and Persona research turned into seven rules; the HUD's abstract layer (2026-10-28)
+- [[Research/UI/Abstract HUD|Abstract HUD]]: every HUD control replaced by its own abstract form (spiral, orbit, triangle, ring of points, moon...), a UI checklist and `tools/ui_quality.py` (boxy controls 7 -> 1 of 14, lookalikes 2 -> 0) (2026-10-28)
+- [[Research/VFX and Animation/Effect Quality|Effect Quality]]: why our 1:1 effects looked worse though the numbers matched (painted temperature fields, gradient maps, alpha erosion, held frames); quality metrics and per-effect checklists (2026-10-28)
 - [[Research/UI/Start Menu - Sol's RNG and Tutorials|Start Menu - Sol's RNG and Tutorials]]: how Sol's title flow works, the common menu techniques (scene camera, clamped parallax, blur, flash), Claude + Studio MCP workflow, what we applied (2026-10-28)
 - [[Research/UI/UI Rework 2026-10-28|UI Rework 2026-10-28]]: loading screen, start menu, Victorian object controls, Trainer Road, skill tree paths (2026-10-28)
 Screens, kits, art pipeline, and what other games' UI does.
@@ -22,6 +24,7 @@ Screens, kits, art pipeline, and what other games' UI does.
 - [[Research/UI/UI Recreation Coverage|UI Recreation Coverage]]: which screenshot UIs are built and the suggested build order
 
 ## VFX and Animation
+- [[Research/VFX and Animation/Animation Craft and Capabilities|Animation Craft and Capabilities]]: smears and multiples (glare and blur by duplicate copies), second-order springs, the 12 principles for games, Roblox animation tools, what Claude can and cannot animate; Motion module and /make-motion skill (2026-10-28)
 - [[Research/VFX and Animation/Summon References|Summon References]]: how FGO, Hearthstone, Honkai Star Rail and Anime Vanguards stage summons (frame study) and our tarot-table reveal The Reading (2026-10-28)
 - [[Research/VFX and Animation/Cinematic Cutscenes|Cinematic Cutscenes]]: how high-quality Roblox cutscenes are made (reference-part cameras, splines, first-person from Blender, impact frames, speed lines) and our first-person ultimate (2026-10-28)
 - [[Research/VFX and Animation/Effect Recreation 1to1 - Index|Effect Recreation 1to1 - Index]]: measured 1:1 recreation pipeline (in-engine reference rebuild, side-by-side capture, per-layer test, texture painter, sheet and UI comparison) and results for Hollow Purple, Healing, Egg Hatch, Coin Drop, Sol's roll screen (2026-10-28)

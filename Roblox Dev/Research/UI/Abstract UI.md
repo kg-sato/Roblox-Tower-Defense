@@ -43,5 +43,21 @@ Images: ![[Creative Fixes/abstract_before.png]] ![[Creative Fixes/abstract_after
 
 Asset ids (in `UI Kit/art/ids.json`): abs_vesica 140628629392455, abs_spiral 128142388272489 (not used yet), abs_orbits 133077605323965, abs_eye 137981105271928, abs_rays 106824495648529.
 
+## Panels (built 2026-10-28, second session)
+Each panel gets one big shape under its glass that spills past one edge, plus the same gold edge line with two points on its left:
+| Panel | Shape | Why |
+|---|---|---|
+| Trainer Progression | af Klint spiral, violet | growth / evolution |
+| Roll Odds | vesica, amber | fate, where two chances meet |
+| Settings | orbits, cyan | the mechanism |
+| Familiar ledger | violet disc | the calm "this one" shape |
+Fixed on the way: closing Settings used to bring the old desk back, and the roll-bar shapes stayed on screen while Settings hid the roll bar. Only panel-sized frames are decorated (the Dock's captions also say PROGRESSION and SETTINGS). Images: `Creative Fixes/panels_abstract_before.jpg`, `panel_*_abstract_after.png`.
+
+## Progression road as a constellation (built 2026-10-28)
+The level cards lost their boxes. The road line now runs through one point per level: claimed = filled green point, next = gold ring with an amber orbit and a small moon, locked = faint ring. Rewards float underneath. The line is gold up to your level (the existing fill). It keeps working because it follows the colours `updateProgress` already sets. Image: `Creative Fixes/prog_constellation_after.png`.
+
+## Start menu (built 2026-10-28)
+The featured familiar gets the one big calm shape: a violet disc with amber orbits turning slowly, centred on the familiar's body so the orbit's centre point hides behind it, and faint rays behind. A faint vesica sits behind the title. A gold spine with points at the crown, the rule, the lamp button and the flashes plate ties the left column together. First pass fixed: the orbit's centre dot sat on the familiar's platform, the rays crowded its name, and the vesica rings cut through the title. Images: `Creative Fixes/start_abstract_before.png`, `start_abstract_after.png`.
+
 ## Next ideas (not built)
-Panels (skill tree, progression, settings) could get the same treatment: one big shape behind each, af Klint spiral behind the skill tree, orbits for progression. The reveal and the start menu could use the vesica as a frame.
+The skill tree (first-person grove) and the reveal could use the vesica as a frame; the reveal still uses plain frames.

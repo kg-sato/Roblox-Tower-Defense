@@ -33,37 +33,47 @@ return function(ctx)
 		folder = Instance.new("Folder")
 		folder.Name = "TrainerRoad"
 		folder.Parent = workspace
+		-- abstract pass (2026-10-28): no slate, cobbles or carved stones. The road is one gold line over dark ground; each
+		-- milestone is its numeral floating in a thin ring, with a point of light on a faint line beside it.
+		local SERIF = Font.fromName("Merriweather", Enum.FontWeight.Bold)
 		local max = Config.LEVEL_MAX
-		part({ Material = Enum.Material.Slate, Color = Color3.fromRGB(26, 24, 34), Size = Vector3.new(60, 1, max * GAP + 60), CFrame = CFrame.new(O + Vector3.new(0, -0.5, -(max * GAP) / 2)) })
+		part({ Material = Enum.Material.SmoothPlastic, Color = Color3.fromRGB(14, 12, 22), Size = Vector3.new(60, 1, max * GAP + 60), CFrame = CFrame.new(O + Vector3.new(0, -0.47, -(max * GAP) / 2)) }) -- top sits just above the baseplate (they z-fought)
 		for lv = 0, max do
 			local a, b = at(math.max(lv, 0.5)), at(lv + 1)
 			local mid = a:Lerp(b, 0.5)
-			part({ Material = Enum.Material.Cobblestone, Color = Color3.fromRGB(100, 92, 88), Size = Vector3.new(5.5, 0.2, (b - a).Magnitude + 0.4), CFrame = CFrame.lookAt(mid + Vector3.new(0, 0.05, 0), b + Vector3.new(0, 0.05, 0)) })
+			part({ Material = Enum.Material.Neon, Color = Color3.fromRGB(255, 214, 130), Transparency = 0.3, Size = Vector3.new(0.12, 0.05, (b - a).Magnitude + 0.1), CFrame = CFrame.lookAt(mid + Vector3.new(0, 0.05, 0), b + Vector3.new(0, 0.05, 0)) })
 		end
 		for lv = 1, max do
 			local p = at(lv)
 			local side = (lv % 2 == 0) and 1 or -1
 			local base = p + Vector3.new(side * 4.2, 0, 0)
-			local stone = part({ Material = Enum.Material.Slate, Color = Color3.fromRGB(110, 104, 112), Size = Vector3.new(2.2, 3.2, 0.9), CFrame = CFrame.new(base + Vector3.new(0, 1.6, 0)) * CFrame.Angles(0, -side * 0.5, 0) })
+			local stone = part({ Transparency = 1, Size = Vector3.new(2.2, 3.2, 0.9), CFrame = CFrame.new(base + Vector3.new(0, 1.6, 0)) * CFrame.Angles(0, -side * 0.5, 0) })
 			local sg = Instance.new("SurfaceGui")
 			sg.Face, sg.LightInfluence, sg.CanvasSize = Enum.NormalId.Back, 0, Vector2.new(220, 320) -- the walker comes from +Z, so the back face greets them
 			sg.Parent = stone
+			local ringF = Instance.new("Frame")
+			ringF.BackgroundTransparency, ringF.AnchorPoint, ringF.Position, ringF.Size = 1, Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.3), UDim2.fromOffset(170, 170)
+			Instance.new("UICorner", ringF).CornerRadius = UDim.new(0.5, 0)
+			local ringS = Instance.new("UIStroke")
+			ringS.Thickness = 4
+			ringS.Parent = ringF
+			ringF.Parent = sg
 			local t = Instance.new("TextLabel")
-			t.BackgroundTransparency, t.Size, t.Text, t.TextScaled = 1, UDim2.fromScale(1, 0.6), tostring(lv), true
-			t.Font, t.TextColor3 = Enum.Font.GrenzeGotisch, Color3.fromRGB(240, 230, 210)
+			t.BackgroundTransparency, t.AnchorPoint, t.Position, t.Size, t.Text, t.TextScaled = 1, Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.3), UDim2.fromOffset(120, 110), tostring(lv), true
+			t.FontFace, t.TextColor3 = SERIF, Color3.fromRGB(240, 230, 210)
 			t.Parent = sg
 			local r = Instance.new("TextLabel")
 			r.BackgroundTransparency, r.Position, r.Size, r.TextScaled = 1, UDim2.fromScale(0.05, 0.62), UDim2.fromScale(0.9, 0.3), true
-			r.Font, r.TextColor3 = Enum.Font.TitilliumWeb, Color3.fromRGB(150, 220, 255)
+			r.FontFace, r.TextColor3 = SERIF, Color3.fromRGB(150, 220, 255)
 			r.Text = "+" .. Config.levelGems(lv) .. " gems" .. (lv == 3 and "\nAUTO ROLL" or (lv % 5 == 0 and "\nMILESTONE" or ""))
 			r.Parent = sg
-			-- lantern on a post beside the stone
-			part({ Material = Enum.Material.Metal, Color = Color3.fromRGB(30, 30, 34), Size = Vector3.new(0.25, 4.6, 0.25), CFrame = CFrame.new(base + Vector3.new(side * 1.6, 2.3, 0)) })
-			local lamp = part({ Material = Enum.Material.Neon, Color = Color3.fromRGB(60, 50, 60), Transparency = 0.35, Size = Vector3.new(0.4, 0.55, 0.4), CFrame = CFrame.new(base + Vector3.new(side * 1.6, 4.9, 0)) })
+			-- a point of light on a faint line beside the numeral
+			part({ Material = Enum.Material.Neon, Color = Color3.fromRGB(110, 100, 140), Transparency = 0.6, Size = Vector3.new(0.06, 4.6, 0.06), CFrame = CFrame.new(base + Vector3.new(side * 1.6, 2.3, 0)) })
+			local lamp = part({ Shape = Enum.PartType.Ball, Material = Enum.Material.Neon, Color = Color3.fromRGB(60, 50, 60), Size = Vector3.one * 0.5, CFrame = CFrame.new(base + Vector3.new(side * 1.6, 4.9, 0)) })
 			local l = Instance.new("PointLight")
 			l.Range, l.Brightness, l.Shadows = 12, 0, false
 			l.Parent = lamp
-			stones[lv] = { stone = stone, lamp = lamp, light = l, text = t }
+			stones[lv] = { stone = stone, lamp = lamp, light = l, text = t, ring = ringS }
 		end
 	end
 
@@ -75,6 +85,8 @@ return function(ctx)
 			s.light.Color = color
 			s.light.Brightness = (done or nextUp) and 1.8 or 0
 			s.text.TextColor3 = nextUp and Color3.fromRGB(255, 220, 140) or (done and Color3.fromRGB(220, 200, 255) or Color3.fromRGB(140, 130, 140))
+			s.ring.Color = s.text.TextColor3
+			s.ring.Transparency = (done or nextUp) and 0 or 0.6
 		end
 	end
 

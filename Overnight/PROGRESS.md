@@ -91,3 +91,4 @@
 - 21:43 T15 DONE (gate-verified): Repo hygiene check passes at the end of the run
 - 21:44 Run ended: all tasks done or blocked
 - 05:29 CHECKPOINT d329d5e on overnight/2026-10-27: Add the overnight work: settings, game speed, effect kit and sheets, stage sets two and three, cutscene upgrades and tests.
+- 11:49 CHECKPOINT 4197bef on overnight/2026-10-27: Add the themed HUD, start menu, odds panel, boss bar, new sounds and the abstract layer from the UI and FX research.
