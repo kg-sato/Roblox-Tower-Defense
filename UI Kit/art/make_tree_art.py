@@ -117,6 +117,42 @@ def lantern(w=128, h=168):
     return out(fr), out(glass)
 
 
+def coin(size=128):
+    """Brass coin with a gear-tooth rim and a small flame stamped in the middle (our lamplit theme)."""
+    s = 4; W = size * s; c = W / 2
+    im = Image.new("RGBA", (W, W), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    teeth = []
+    for k in range(16):  # gear rim: 16 square teeth
+        for f, r in ((0.0, .43), (0.12, .48), (0.38, .48), (0.5, .43), (1.0, .43)):
+            a = (k + f) / 16 * math.tau
+            teeth.append((c + math.cos(a) * W * r, c + math.sin(a) * W * r))
+    d.polygon(teeth, fill=(120, 74, 26, 255))
+    for r, col in ((0.42, (176, 112, 36)), (0.39, (238, 182, 86)), (0.33, (196, 132, 50)), (0.30, (250, 206, 120))):
+        d.ellipse((c - W * r, c - W * r, c + W * r, c + W * r), fill=col + (255,))
+    # highlight on the upper left, shade lower right
+    hl = Image.new("L", (W, W), 0); ImageDraw.Draw(hl).ellipse((c - W * .28, c - W * .3, c + W * .05, c - W * .02), fill=150)
+    hl = hl.filter(ImageFilter.GaussianBlur(W * .05)); white = Image.new("RGBA", (W, W), (255, 248, 220, 255)); white.putalpha(hl)
+    im = Image.alpha_composite(im, white); d = ImageDraw.Draw(im)
+    fl = [(c, c - W * .19), (c + W * .09, c - W * .02), (c + W * .07, c + W * .1), (c, c + W * .16), (c - W * .07, c + W * .1), (c - W * .09, c - W * .02)]
+    d.polygon(fl, fill=(120, 60, 16, 255)); d.polygon([(c, c - W * .08), (c + W * .04, c + W * .05), (c, c + W * .1), (c - W * .04, c + W * .05)], fill=(255, 226, 150, 255))
+    return im.resize((size, size), Image.LANCZOS)
+
+
+def gem(size=128):
+    """Faceted cyan crystal, light from the upper left."""
+    s = 4; W = size * s
+    im = Image.new("RGBA", (W, W), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    P = lambda x, y: (x * W, y * W)
+    top, l, r, bl, br, bot, ml, mr = P(.5, .1), P(.16, .38), P(.84, .38), P(.3, .38), P(.7, .38), P(.5, .92), P(.36, .22), P(.64, .22)
+    facets = [((ml, mr, br, bl), (150, 236, 255)), ((top, mr, ml), (220, 250, 255)), ((ml, l, bl), (110, 210, 245)), ((mr, r, br), (60, 160, 220)),
+              ((l, bl, bot), (70, 180, 235)), ((bl, br, bot), (40, 140, 210)), ((br, r, bot), (24, 100, 180))]
+    for pts, col in facets:
+        d.polygon(pts, fill=col + (255,))
+    d.line([l, ml, top, mr, r, bot, l], fill=(14, 50, 90, 255), width=s * 3)
+    d.line([bl, br], fill=(230, 252, 255, 200), width=s * 2)
+    return im.resize((size, size), Image.LANCZOS)
+
+
 def watch_track(period=60, h=30):
     """Tileable brass minute-track rail (our clocks, not the grader's chains): two engraved brass rules with minute
     ticks between them, a long tick and a rivet every fifth. Period = 5 ticks, so it scrolls tick by tick."""
@@ -166,6 +202,7 @@ if __name__ == "__main__":
     hexagon().save(os.path.join(OUT, "node_hex.png"))
     glow().save(os.path.join(OUT, "node_glow.png"))
     chain().save(os.path.join(OUT, "chain_h.png"))
+    coin().save(os.path.join(OUT, "coin.png")); gem().save(os.path.join(OUT, "gem.png"))
     lf, lg = lantern()
     lf.save(os.path.join(OUT, "lantern_frame.png")); lg.save(os.path.join(OUT, "lantern_glass.png"))
     watch_track().save(os.path.join(OUT, "track_h.png"))

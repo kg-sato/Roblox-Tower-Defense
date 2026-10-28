@@ -31,7 +31,7 @@ local AMBER, VIOLET, PALE = Color3.fromRGB(255, 176, 70), Color3.fromRGB(150, 11
 local SERIF = Font.new("rbxasset://fonts/families/AccanthisADFStd.json", Enum.FontWeight.Bold)
 local ART = {
 	title = "rbxassetid://136306198395346", clock = "rbxassetid://83067528514085", gear = "rbxassetid://115869383084851",
-	tree = "rbxassetid://135946607416458", ring = "rbxassetid://127862980270309", eye = "rbxassetid://94380979849766", glow = "rbxassetid://122630907915085",
+	tree = "rbxassetid://135946607416458", ring = "rbxassetid://127862980270309", eye = "rbxassetid://94380979849766", socket = "rbxassetid://133137332599356", iris = "rbxassetid://123781250890962", glow = "rbxassetid://122630907915085",
 }
 task.spawn(function() -- fetch the art first thing; the tunnel fades its faces in, so a late image never pops
 	local list = {}
@@ -334,6 +334,31 @@ task.delay(SL * 0.07 + 0.35, function()
 	whole.ImageTransparency = 0
 	for _, c in treeBox:GetChildren() do if c ~= whole then c.Visible = false end end
 end)
+-- 2026-10-28 night (the user: "the intro tree is 2D"): the tree lives. A soft halo breathes behind it, the crown sways
+-- a little, the camera pushes in slowly, and sparks of light lift off the branches and drift up
+local halo = new("ImageLabel", { BackgroundTransparency = 1, Image = ART.glow, ImageColor3 = Color3.fromRGB(140, 200, 255), ImageTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.42), Size = UDim2.fromScale(1.1, 0.9), ZIndex = 20 }, treeBox)
+task.delay(0.5, function()
+	tw(halo, 0.8, { ImageTransparency = 0.55 })
+	tw(treeBox, 2.6, { Size = UDim2.fromScale(0.74, 0.74) }, Enum.EasingStyle.Sine) -- the slow push-in
+end)
+local sparks = {}
+for i = 1, 22 do
+	local sp = new("Frame", { BackgroundColor3 = i % 3 == 0 and Color3.fromRGB(255, 230, 170) or Color3.fromRGB(190, 230, 255), BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Size = UDim2.fromScale(0.008, 0.008), BackgroundTransparency = 1, ZIndex = 24 }, treeBox)
+	new("UICorner", { CornerRadius = UDim.new(1, 0) }, sp)
+	sparks[i] = { f = sp, x = 0.2 + math.random() * 0.6, y = 0.15 + math.random() * 0.4, t = math.random(), v = 0.25 + math.random() * 0.3 }
+end
+local treeT0 = os.clock()
+local treeLife = RunService.RenderStepped:Connect(function(dt)
+	local t = os.clock() - treeT0
+	whole.Rotation = math.sin(t * 1.3) * 1.2 -- the crown sways (pivot is the image centre; small enough to read as wind)
+	whole.Position = UDim2.fromScale(math.sin(t * 1.3) * 0.006, 0)
+	for _, S in sparks do
+		S.t = (S.t + dt * S.v) % 1
+		S.f.Position = UDim2.fromScale(S.x + math.sin(S.t * 6 + S.x * 9) * 0.02, S.y - S.t * 0.25)
+		S.f.BackgroundTransparency = t < 0.9 and 1 or (1 - math.sin(S.t * math.pi) * 0.85)
+	end
+end)
+stage.Destroying:Connect(function() treeLife:Disconnect() end)
 for k = 0, SL - 1 do
 	local y0 = k / SL
 	local slice = new("ImageLabel", { BackgroundTransparency = 1, Image = ART.tree, ImageRectOffset = Vector2.new(0, TREE_PX * y0), ImageRectSize = Vector2.new(TREE_PX, TREE_PX / SL), Position = UDim2.fromScale((math.random() - 0.5) * 0.3, y0), Size = UDim2.fromScale(1, 1 / SL), ImageTransparency = 1, ZIndex = 22 }, treeBox)
@@ -382,13 +407,26 @@ local eyes = {}
 for k, spec in ipairs({ { 0.5, 0.17, 0.46 }, { 0.1, 0.36, 0.3 }, { 0.9, 0.36, 0.3 }, { 0.12, 0.72, 0.24 }, { 0.88, 0.72, 0.24 } }) do
 	local w = spec[3]
 	local eye = new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(spec[1], spec[2]), Size = UDim2.fromScale(w, w * 0.5), BackgroundTransparency = 1, ClipsDescendants = true, ZIndex = 22 }, stage)
-	local img = new("ImageLabel", { BackgroundTransparency = 1, Image = ART.eye, ImageRectOffset = Vector2.new(0, EYE_PX * 0.15), ImageRectSize = Vector2.new(EYE_PX, EYE_PX * 0.66), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1, 1.32), ZIndex = 22 }, eye)
-	-- round 3: the eye opens through a soft gradient slit that widens (review: dark lid boxes showed mid-opening)
+	local img = new("ImageLabel", { BackgroundTransparency = 1, Image = ART.socket, ImageRectOffset = Vector2.new(0, EYE_PX * 0.15), ImageRectSize = Vector2.new(EYE_PX, EYE_PX * 0.66), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1, 1.32), ZIndex = 22 }, eye)
+	-- the iris: 424 px of the 1024 source, centred on the socket; tinted a little differently per eye so they are
+	-- not five copies (review round 3: "identical stamped copies")
+	local TINTS = { Color3.fromRGB(255, 255, 255), Color3.fromRGB(255, 226, 170), Color3.fromRGB(190, 220, 255), Color3.fromRGB(230, 200, 255), Color3.fromRGB(255, 210, 190) }
+	local iris = new("ImageLabel", { BackgroundTransparency = 1, Image = ART.iris, ImageColor3 = TINTS[k], AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.506, 0.5), Size = UDim2.fromScale(424 / 1024, 424 / 676), Rotation = math.random(0, 359), ZIndex = 23 }, img)
+	img.ImageColor3 = TINTS[k]:Lerp(Color3.new(1, 1, 1), 0.6)
+	-- round 3: the eye opens through a soft gradient slit that widens (review: dark lid boxes showed mid-opening);
+	-- the iris gets the same slit, mapped into its own smaller box
 	local slit = new("UIGradient", { Rotation = 90, Transparency = NumberSequence.new(1) }, img)
+	local islit = new("UIGradient", { Rotation = 90, Transparency = NumberSequence.new(1) }, iris)
+	local function seq(a, b)
+		local e = math.min(0.06, math.max(0.002, (b - a) / 3))
+		if b - a < 0.01 then return NumberSequence.new(1) end
+		return NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(a, 1), NumberSequenceKeypoint.new(a + e, 0), NumberSequenceKeypoint.new(b - e, 0), NumberSequenceKeypoint.new(b, 1), NumberSequenceKeypoint.new(1, 1) })
+	end
 	local function open(v) -- v: 0 closed .. 0.5 fully open
 		local a, b = math.clamp(0.5 - v, 0.002, 0.49), math.clamp(0.5 + v, 0.51, 0.998)
-		local e = math.min(0.06, (b - a) / 3)
-		slit.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(a, 1), NumberSequenceKeypoint.new(a + e, 0), NumberSequenceKeypoint.new(b - e, 0), NumberSequenceKeypoint.new(b, 1), NumberSequenceKeypoint.new(1, 1) })
+		slit.Transparency = seq(a, b)
+		local lo, span = 0.5 - 0.5 * 424 / 676, 424 / 676 -- the iris box inside the eye image
+		islit.Transparency = seq(math.clamp((a - lo) / span, 0.002, 0.49), math.clamp((b - lo) / span, 0.51, 0.998))
 	end
 	open(0)
 	local openV = Instance.new("NumberValue")
@@ -396,13 +434,31 @@ for k, spec in ipairs({ { 0.5, 0.17, 0.46 }, { 0.1, 0.36, 0.3 }, { 0.9, 0.36, 0.
 	eyes[k] = eye
 	task.delay(0.08 + k * 0.07, function()
 		tw(openV, 0.5, { Value = 0.5 }, Enum.EasingStyle.Quart).Completed:Connect(function()
-			slit.Transparency = NumberSequence.new(0)
 			eye.ClipsDescendants = false -- the image's own soft edge is enough; clipping breaks once the stage rotates
+			-- alive: the iris looks at the tree, glances away now and then, and the eye blinks
+			local look = Vector2.new(0.5 - spec[1], 0.55 - spec[2]).Unit * 0.035
+			local glanceAt, blinkAt = os.clock() + 0.6 + math.random(), os.clock() + 0.8 + math.random() * 1.2
+			local conn
+			conn = RunService.RenderStepped:Connect(function(dt)
+				if not iris.Parent then conn:Disconnect() return end
+				iris.Rotation += dt * (k % 2 == 0 and -24 or 24) -- the clock iris ticks round
+				local now = os.clock()
+				if now > glanceAt then -- a quick glance somewhere else, then back to the tree
+					glanceAt = now + 1 + math.random() * 1.5
+					local away = Vector2.new(math.random() - 0.5, (math.random() - 0.5) * 0.5) * 0.06
+					tw(iris, 0.12, { Position = UDim2.fromScale(0.506 + away.X, 0.5 + away.Y) }, Enum.EasingStyle.Quad)
+					task.delay(0.45, function() if iris.Parent then tw(iris, 0.18, { Position = UDim2.fromScale(0.506 + look.X, 0.5 + look.Y) }) end end)
+				end
+				if now > blinkAt then
+					blinkAt = now + 1.6 + math.random() * 2
+					tw(openV, 0.07, { Value = 0.02 }).Completed:Connect(function() tw(openV, 0.12, { Value = 0.5 }) end)
+				end
+			end)
 		end)
-		tw(img, 1.2, { Position = UDim2.fromScale(0.5 + (0.5 - spec[1]) * 0.08, 0.5 + (0.6 - spec[2]) * 0.05) }, Enum.EasingStyle.Sine)
+		tw(img, 1.2, { Position = UDim2.fromScale(0.5 + (0.5 - spec[1]) * 0.04, 0.5 + (0.6 - spec[2]) * 0.03) }, Enum.EasingStyle.Sine)
 	end)
 end
-task.wait(1.25)
+task.wait(2.1) -- long enough to see the eyes look around and blink
 -- 4) the vortex: the tunnel, tree and eyes spiral into the centre; the screen goes dark and opens on the game
 local spinT = 1.0
 for _, holder in { stage, tunnel } do

@@ -60,11 +60,19 @@ return function(env)
 	for _, g in treeGui:GetChildren() do if g:IsA("UIGradient") then g.Enabled = false end end
 
 	-- 1) background: near-black with a faint handwritten wallpaper (the grader's patterned black) and a vignette
-	local bg = new("Frame", { Name = "TreeBackdrop", BackgroundColor3 = INK, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 12, ClipsDescendants = true }, treeGui)
-	local wall = new("ImageLabel", { BackgroundTransparency = 1, Image = A.script, ScaleType = Enum.ScaleType.Tile, TileSize = UDim2.fromOffset(512, 512), ImageColor3 = Color3.fromRGB(175, 165, 195), ImageTransparency = 0.72, Size = UDim2.new(1, 512, 1, 512), ZIndex = 12 }, bg)
-	for _, rot in { 0, 90 } do -- two crossed gradients darken all four edges (a cheap vignette)
+	local bg = new("Frame", { Name = "TreeBackdrop", BackgroundColor3 = Color3.fromRGB(10, 14, 34), BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 12, ClipsDescendants = true }, treeGui)
+	-- 2026-10-28 night (the user: "the background for the skill tree and the cutscene should match"): the same night
+	-- sky as the Skill Grove (deep blue at the top to ink below) and the grove's painted tree standing huge and dim
+	-- behind the lanterns, so opening the panel reads as stepping closer to the tree you just walked up to
+	-- (a vertical colour gradient here rendered as hard bands in Play; one solid night blue instead)
+	-- tree_clean: the faint haze around the painting showed as bands over the blue sky
+	local ghostTree = new("ImageLabel", { Name = "GroveTree", BackgroundTransparency = 1, Image = A.tree_clean or A.tree, ImageColor3 = Color3.fromRGB(150, 190, 255), ImageTransparency = 0.82, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 1.04), Size = UDim2.fromScale(1.15, 1.15), ZIndex = 12 }, bg)
+	new("UIAspectRatioConstraint", { AspectRatio = 1 }, ghostTree)
+	TweenService:Create(ghostTree, TweenInfo.new(5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { ImageTransparency = 0.74 }):Play()
+	local wall = new("ImageLabel", { BackgroundTransparency = 1, Image = A.script, ScaleType = Enum.ScaleType.Tile, TileSize = UDim2.fromOffset(512, 512), ImageColor3 = Color3.fromRGB(175, 185, 225), ImageTransparency = 0.86, Size = UDim2.new(1, 512, 1, 512), ZIndex = 12 }, bg)
+	for _, rot in {} do -- (edge vignette off: it banded too)
 		local v = new("Frame", { Name = "Vignette", BackgroundColor3 = Color3.new(0, 0, 0), BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 12 }, bg)
-		new("UIGradient", { Rotation = rot, Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(0.3, 0.85), NumberSequenceKeypoint.new(0.7, 0.85), NumberSequenceKeypoint.new(1, 0.1) }) }, v)
+		new("UIGradient", { Rotation = rot, Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.35), NumberSequenceKeypoint.new(0.3, 1), NumberSequenceKeypoint.new(0.7, 1), NumberSequenceKeypoint.new(1, 0.35) }) }, v)
 	end
 	TweenService:Create(wall, TweenInfo.new(90, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), { Position = UDim2.fromOffset(-512, -512) }):Play() -- the script drifts very slowly
 
@@ -86,10 +94,10 @@ return function(env)
 	-- centre burst: many faint rays fanning out in every path colour, and a white star
 	local burst = new("Frame", { Name = "Burst", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(0, 0), ZIndex = 13 }, area)
 	local rays = {}
-	for k = 0, 35 do
-		local a = k / 36 * math.pi * 2 + 0.05
+	for k = 0, 23 do -- (the user: "the paths are overlapped so it looks buggy": rays now end inside the first ring)
+		local a = k / 24 * math.pi * 2 + math.pi / 24
 		local c = BRANCH[(k % 6) + 1][1]:Lerp(Color3.new(1, 1, 1), 0.55)
-		local len = 260 + (k * 37 % 5) * 70
+		local len = 70 + (k % 3) * 20
 		local r = seg(Vector2.zero, Vector2.new(math.cos(a), math.sin(a)) * len, 1, c, 0.86, 13, burst)
 		new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) }) }, r)
 		rays[k] = { f = r, len = len, a = a }
@@ -113,7 +121,7 @@ return function(env)
 		local glass = new("ImageLabel", { Name = "V2glass", BackgroundTransparency = 1, Image = A.lantern_glass, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, -2), Size = UDim2.fromOffset(LW, LH), Visible = id ~= "Start", ZIndex = 20 }, ui.cont)
 		local hex = new("ImageLabel", { Name = "V2hex", BackgroundTransparency = 1, Image = A.lantern_frame, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, -2), Size = UDim2.fromOffset(LW, LH), Visible = id ~= "Start", ZIndex = 22 }, ui.cont)
 		-- the glyph art has a margin: 44 px shows about 30 px of symbol
-		local glyph = new("ImageLabel", { Name = "V2glyph", BackgroundTransparency = 1, Image = A.icons[id] or "", AnchorPoint = Vector2.new(0.5, 0.5), Position = id == "Start" and UDim2.fromScale(0.5, 0.5) or UDim2.new(0.5, 0, 0.5, 1), Size = UDim2.fromOffset(id == "Start" and 46 or 38, id == "Start" and 46 or 38), ImageColor3 = node.color, ZIndex = 21 }, ui.cont)
+		local glyph = new("ImageLabel", { Name = "V2glyph", BackgroundTransparency = 1, Image = A.icons[id] or "", AnchorPoint = Vector2.new(0.5, 0.5), Position = id == "Start" and UDim2.fromScale(0.5, 0.5) or UDim2.new(0.5, 0, 0.5, 1), Size = UDim2.fromOffset(id == "Start" and 46 or 46, id == "Start" and 46 or 46), ImageColor3 = node.color, ZIndex = 21 }, ui.cont)
 		N[id] = { ui = ui, btn = btn, glow = glow, hex = hex, glass = glass, glyph = glyph, node = node, lvl = nil }
 	end
 	-- branches: one line per link in the outer node's colour, with a wide faint ghost copy (glow by duplication)
@@ -129,7 +137,9 @@ return function(env)
 			l.line.Rotation = math.deg(math.atan2(d.Y, d.X))
 			for _, c in l.line:GetChildren() do if c:IsA("UICorner") then c:Destroy() end end
 			local ghost = seg(a, b, 9, Config.TREE_BY_ID[outer].color, 0.9, 13)
-			table.insert(B, { l = l, ghost = ghost, outer = outer, inner = inner })
+			local cross = inner ~= "Start" and Config.TREE_BY_ID[outer].color ~= Config.TREE_BY_ID[inner].color -- spokes from the centre always show
+			if cross then l.line.Size = UDim2.fromOffset(d.Magnitude, 1) end
+			table.insert(B, { l = l, ghost = ghost, outer = outer, inner = inner, cross = cross })
 		else
 			l.line:Destroy()
 			l.dead = true
@@ -138,8 +148,8 @@ return function(env)
 	for i = #links, 1, -1 do if links[i].dead then table.remove(links, i) end end
 	-- each path runs on past its last skill and fades out: there is more beyond (mystery, like the grader's edges)
 	local tails = {}
-	for id, p in pos do
-		if ring[id] == 2 and (Config.TREE_BY_ID[id].q == 0 or Config.TREE_BY_ID[id].r == 0 or Config.TREE_BY_ID[id].q == -Config.TREE_BY_ID[id].r) then
+	for id, p in pos do -- (review round 4: tails past the last lantern read as stray lines; off)
+		if false and ring[id] == 2 and (Config.TREE_BY_ID[id].q == 0 or Config.TREE_BY_ID[id].r == 0 or Config.TREE_BY_ID[id].q == -Config.TREE_BY_ID[id].r) then
 			local u = p.Unit
 			local t = seg(p + u * 26, p + u * 380, 2, Config.TREE_BY_ID[id].color, 0.55, 13)
 			new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) }) }, t)
@@ -374,7 +384,7 @@ return function(env)
 				d.hex.ImageColor3, d.hex.ImageTransparency = seen and Color3.fromRGB(104, 98, 110) or Color3.fromRGB(70, 66, 78), seen and 0 or 0.3
 				d.glass.ImageColor3, d.glass.ImageTransparency = Color3.fromRGB(26, 24, 32), seen and 0 or 0.3
 				d.glyph.ImageColor3 = seen and node.color:Lerp(Color3.fromRGB(80, 76, 90), 0.55) or Color3.fromRGB(80, 76, 90)
-				d.glyph.ImageTransparency = seen and 0.05 or 0.6
+				d.glyph.ImageTransparency = seen and 0 or 0.45
 				d.glow.ImageTransparency = 1
 			elseif st == "available" then -- ready to kindle: brass frame, a faint glow behind the glass
 				d.hex.ImageColor3, d.hex.ImageTransparency = Color3.fromRGB(176, 150, 112), 0
@@ -395,6 +405,13 @@ return function(env)
 			local lit = (so == "owned" or so == "maxed")
 			local open = so == "available"
 			local c = Config.TREE_BY_ID[b.outer].color
+			if b.cross then -- a link between two paths: hidden (it crossed other lines) until one of its lanterns is lit
+				local si = stateOf(b.inner)
+				local show = lit or si == "owned" or si == "maxed"
+				b.l.line.Visible, b.ghost.Visible = show, false
+				b.l.line.BackgroundColor3, b.l.line.BackgroundTransparency = c:Lerp(Color3.fromRGB(60, 58, 70), 0.5), 0.55
+				continue
+			end
 			b.l.line.Visible = true
 			-- every path keeps its colour (the grader's rays are all coloured); brightness says how far you are along it
 			b.l.line.BackgroundColor3 = lit and c or c:Lerp(Color3.fromRGB(40, 38, 48), open and 0.35 or 0.6)
@@ -412,6 +429,7 @@ return function(env)
 	-- open path, kindled lanterns flicker like gas flames, and a few motes drift up through the dark
 	local runners = {}
 	for _, b in B do
+		if b.cross then continue end
 		local r = new("ImageLabel", { BackgroundTransparency = 1, Image = A.glow, AnchorPoint = Vector2.new(0.5, 0.5), Size = UDim2.fromOffset(18, 18), ImageTransparency = 1, ZIndex = 18 }, area)
 		table.insert(runners, { img = r, b = b, t = math.random() })
 	end

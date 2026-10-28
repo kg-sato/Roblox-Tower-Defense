@@ -3828,14 +3828,12 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 		applySnapshot(data.snapshot)
 		if tut.active then
 			setTutStep(1)
-			if not FXK.tourDone and not FXK.cineOff() then -- first-time captioned camera tour (IntroTour), after the crane
+			if not FXK.tourDone and not FXK.cineOff() then -- first-time captioned camera tour (IntroTour), blended out of the crane
 				FXK.tourDone = true
 				local okT, Tour = pcall(require, script.Parent:WaitForChild("IntroTour", 2))
 				if okT and Tour then
 					tutCard.Visible = false
-					task.spawn(function()
-						local w = os.clock()
-						repeat task.wait() until FXK.introDone or os.clock() - w > 5
+					task.spawn(function() -- at once: the tour blends out of the opening crane (one move, not crane then cut)
 						Tour.play({ hud = hud, camera = camera, sfx = FXK.play }, function() tutCard.Visible = tut.active end)
 					end)
 				end

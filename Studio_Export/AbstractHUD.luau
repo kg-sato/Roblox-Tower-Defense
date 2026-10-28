@@ -255,15 +255,39 @@ return function(env)
 		local f = holder(pill)
 		form(f)
 	end
+	-- 2026-10-28 night (the user: "the currencies need more indication as to what they are"): a drawn brass gear coin
+	-- and a faceted gem instead of a dot and a diamond, each with its name in small letters under the number
+	local okA, A = pcall(function() return require(game:GetService("ReplicatedStorage"):WaitForChild("ArtIds", 3)) end)
+	local function badge(f, image, fallback, name, color, label)
+		if okA and A and A[image] then
+			new("ImageLabel", { Name = "AF_icon", BackgroundTransparency = 1, Image = A[image], AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 14, 0.5, 0), Size = UDim2.fromOffset(30, 30), ZIndex = 5 }, f)
+		else
+			fallback()
+		end
+		if label then
+			label.TextColor3 = color
+			local cap = new("TextLabel", { Name = "AF_name", BackgroundTransparency = 1, Text = name, TextColor3 = color:Lerp(Color3.fromRGB(200, 190, 210), 0.45), TextSize = 14, TextXAlignment = Enum.TextXAlignment.Left, AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 34, 1, -6), Size = UDim2.fromOffset(90, 16), ZIndex = 6 }, f)
+			cap.FontFace = Font.new("rbxasset://fonts/families/AccanthisADFStd.json", Enum.FontWeight.Bold)
+		end
+	end
 	purse(env.coinPill, env.coinLabel, function(f)
-		local c = circle(f, UDim2.fromOffset(24, 24), UDim2.new(0, 14, 0.5, 0), AMBER, 0, 5)
-		new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(255, 220, 140), Color3.fromRGB(220, 130, 40)) }, c)
-		if env.coinLabel then env.coinLabel.TextColor3 = GOLD end
+		badge(f, "coin", function()
+			local c = circle(f, UDim2.fromOffset(24, 24), UDim2.new(0, 14, 0.5, 0), AMBER, 0, 5)
+			new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(255, 220, 140), Color3.fromRGB(220, 130, 40)) }, c)
+		end, "COINS", GOLD, env.coinLabel)
 	end)
 	purse(env.gemPill, env.gemLabel, function(f)
-		local d = new("Frame", { Name = "AF_diamond", BackgroundColor3 = CYAN, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 14, 0.5, 0), Size = UDim2.fromOffset(17, 17), Rotation = 45, ZIndex = 5 }, f)
-		new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(200, 245, 255), Color3.fromRGB(60, 160, 230)) }, d)
-		if env.gemLabel then env.gemLabel.TextColor3 = CYAN end
+		badge(f, "gem", function()
+			local d = new("Frame", { Name = "AF_diamond", BackgroundColor3 = CYAN, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 14, 0.5, 0), Size = UDim2.fromOffset(17, 17), Rotation = 45, ZIndex = 5 }, f)
+			new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(200, 245, 255), Color3.fromRGB(60, 160, 230)) }, d)
+		end, "GEMS", CYAN, env.gemLabel)
+	end)
+	-- counting numbers roll upward with a vertical smear (Motion.rollSmear; reference set 2, neildegracce)
+	pcall(function()
+		local Motion = require(game:GetService("ReplicatedStorage").Shared.Motion)
+		for _, l in { env.coinLabel, env.gemLabel } do
+			if l then Motion.rollSmear(l, env.reducedMotion) end
+		end
 	end)
 
 	-- Level: the vesica holding the number; XP as a line of ten points

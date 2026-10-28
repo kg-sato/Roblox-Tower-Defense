@@ -87,6 +87,17 @@ return function(ctx)
 			local l = Instance.new("PointLight")
 			l.Color, l.Range, l.Brightness, l.Shadows = Color3.fromRGB(170, 210, 255), 30, 1.5, false
 			l.Parent = meshTree
+			if A.ring then
+				local sky = part({ Transparency = 1, Size = Vector3.new(44, 44, 0.05), CFrame = CFrame.new(G + Vector3.new(0, 15, -18)) })
+				local sg = Instance.new("SurfaceGui")
+				sg.Face, sg.LightInfluence, sg.Brightness, sg.CanvasSize = Enum.NormalId.Back, 0, 1, Vector2.new(512, 512)
+				sg.Parent = sky
+				local ring = Instance.new("ImageLabel")
+				ring.BackgroundTransparency, ring.Image, ring.ImageColor3, ring.ImageTransparency = 1, A.ring, Color3.fromRGB(210, 176, 120), 0.45
+				ring.Size, ring.AnchorPoint, ring.Position = UDim2.fromScale(1, 1), Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5)
+				ring.Parent = sg
+				TweenService:Create(ring, TweenInfo.new(180, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), { Rotation = 360 }):Play()
+			end
 		end
 		-- ground: a dark ink disc; the path: one gold line with a point every 6 studs
 		part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.SmoothPlastic, Color = INK, Size = Vector3.new(1, 90, 90), CFrame = CFrame.new(G + Vector3.new(0, -0.47, 10)) * CFrame.Angles(0, 0, math.pi / 2) })
@@ -177,7 +188,7 @@ return function(ctx)
 		end
 		-- backdrop: a stepped halo sun behind the crown (four stacked circles = a soft glow), a gold horizon line,
 		-- and four smaller violet trees far off on either side so the main tree has a court
-		for i, spec in { { 50, 0.96 }, { 40, 0.94 }, { 30, 0.92 }, { 20, 0.88 } } do
+		for i, spec in meshTree and {} or { { 50, 0.96 }, { 40, 0.94 }, { 30, 0.92 }, { 20, 0.88 } } do -- the stepped halo sun only behind the old line tree
 			local s = spec[1]
 			local disc = part({ Transparency = 1, Size = Vector3.new(s, s, 0.05), CFrame = CFrame.new(G + Vector3.new(0, 13, -16 + i * 0.2)) })
 			local sg = Instance.new("SurfaceGui")
@@ -189,7 +200,7 @@ return function(ctx)
 			sg.Parent = disc
 			disc:SetAttribute("Leaf", disc.Size)
 		end
-		glowLine(G + Vector3.new(-80, 0.06, -30), G + Vector3.new(80, 0.06, -30), 0.08, GOLD, 0.3)
+		if not meshTree then glowLine(G + Vector3.new(-80, 0.06, -30), G + Vector3.new(80, 0.06, -30), 0.08, GOLD, 0.3) end -- (review: the gold horizon line cut the painted scene)
 		for _, spec in meshTree and {} or { { -20, -10, 1 }, { 20, -10, 1 }, { -34, -20, 0.7 }, { 34, -20, 0.7 } } do
 			local base = G + Vector3.new(spec[1], 0, spec[2])
 			local top = base + Vector3.new(0, 6 * spec[3], 0)
@@ -221,6 +232,24 @@ return function(ctx)
 			light.Color, light.Range, light.Brightness, light.Shadows = n.color, 9, 0, false
 			light.Parent = core
 			nodes[n.id].glass, nodes[n.id].core, nodes[n.id].light, nodes[n.id].pos = glass, core, light, pos
+			if okA and A and A.lantern_frame and n.id ~= "Start" then
+				-- 2026-10-28 night (the user: the skill screen and this cutscene should match): the same gas lantern as
+				-- the skill screen hangs here for every skill, facing the walker; the neon ball and disc only carry the light
+				local bb = Instance.new("BillboardGui")
+				bb.Size, bb.LightInfluence, bb.Brightness, bb.AlwaysOnTop, bb.MaxDistance = UDim2.new(1.5, 0, 1.95, 0), 0, 1.3, false, 400
+				bb.Adornee, bb.Parent = core, core
+				local function img(image, z)
+					local i = Instance.new("ImageLabel")
+					i.BackgroundTransparency, i.Image, i.Size, i.ZIndex = 1, image, UDim2.fromScale(1, 1), z
+					i.Parent = bb
+					return i
+				end
+				local gl = img(A.lantern_glass, 1)
+				local gy = img(A.icons[n.id] or "", 2)
+				gy.AnchorPoint, gy.Position, gy.Size = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.53), UDim2.fromScale(0.6, 0.46)
+				local fr = img(A.lantern_frame, 3)
+				nodes[n.id].bb = { glass = gl, glyph = gy, frame = fr }
+			end
 		end
 		-- canopy: three concentric af Klint circles behind the branches (violet, gold, violet), plus drifting motes
 		-- drawn on a SurfaceGui so the edges are true circles (a 24-stud cylinder shows facets)
@@ -272,6 +301,14 @@ return function(ctx)
 			nd.glass.Transparency = st == "locked" and 1 or (st == "available" and 0.86 or 0.78)
 			nd.light.Brightness = (st == "owned" or st == "maxed") and 1.4 or 0
 			nd.core.Size = Vector3.one * (st == "maxed" and 0.95 or 0.75)
+			if nd.bb then -- lantern states as on the skill screen: dark iron, brass ready, lit glass
+				nd.core.Transparency, nd.glass.Transparency = 1, 1
+				local lit = st == "owned" or st == "maxed"
+				nd.bb.frame.ImageColor3 = lit and Color3.fromRGB(220, 176, 100) or (st == "available" and Color3.fromRGB(176, 150, 112) or Color3.fromRGB(90, 86, 100))
+				nd.bb.glass.ImageColor3 = lit and n.color or (st == "available" and n.color:Lerp(Color3.fromRGB(30, 26, 30), 0.55) or Color3.fromRGB(26, 24, 32))
+				nd.bb.glyph.ImageColor3 = lit and Color3.fromRGB(255, 244, 232) or n.color:Lerp(Color3.fromRGB(80, 76, 90), st == "available" and 0.2 or 0.6)
+				nd.bb.glyph.ImageTransparency = st == "locked" and 0.4 or 0
+			end
 			if nd.branch then -- a lit line in the skill's colour once owned; a faint grey line before
 				local lit = st == "owned" or st == "maxed"
 				nd.branch.Color = lit and n.color or DIM
@@ -314,11 +351,7 @@ return function(ctx)
 			task.delay(total, function()
 				if treeSG then TweenService:Create(treeSG, TweenInfo.new(2.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Brightness = 2.4 }):Play() end
 			end)
-			local ringP = part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.Neon, Color = Color3.fromRGB(190, 220, 255), Transparency = 0.3, Size = Vector3.new(0.15, 6, 6), CFrame = CFrame.new(foot + Vector3.new(0, 0.2, 0)) * CFrame.Angles(0, 0, math.pi / 2) })
-			tw(ringP, total * 0.9, { Size = Vector3.new(0.05, 30, 30), CFrame = CFrame.new(foot + Vector3.new(0, 22, 0)) * CFrame.Angles(0, 0, math.pi / 2), Transparency = 1 }, Enum.EasingStyle.Sine)
-			local col = part({ Material = Enum.Material.Neon, Color = Color3.fromRGB(200, 230, 255), Transparency = 0.55, Size = Vector3.new(2.5, 0.1, 2.5), CFrame = CFrame.new(foot) })
-			tw(col, total * 0.5, { Size = Vector3.new(1.2, 60, 1.2), CFrame = CFrame.new(foot + Vector3.new(0, 30, 0)), Transparency = 0.8 })
-			task.delay(total + 0.6, function() tw(col, 0.8, { Transparency = 1 }) end)
+			-- (review round 4: the climbing neon ring and light column read as a flat white disc and a grey beam; removed)
 		end
 		for _, nd in nodes do
 			local full = nd.core.Size

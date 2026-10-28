@@ -37,6 +37,15 @@ ART = {
                "thin art nouveau filigree along the sides, Victorian gaslight style, the frame is thin and elegant, the inside "
                "of the frame is completely empty pure black, pure black background outside, symmetrical, flat front view, "
                "no text, no picture inside, no faces, no creatures", "frame", (576, 768)),
+    "road_lane": ("wide panoramic painting of a Victorian gaslit city skyline at night seen from a cobbled lane, rows of "
+                  "rooftops and chimneys, a distant brass clock tower, warm lit windows, gas lamps, thin fog, a large pale "
+                  "moon, deep blue night sky with stars, painterly, atmospheric, no people, no text", "none", (1024, 512)),
+    "road_veil": ("wide panoramic painting of a misty violet valley at night where magic shows itself, floating stones with "
+                  "glowing runes, ruined arches, soft purple fog, glowing motes, deep violet sky, painterly, atmospheric, "
+                  "no people, no text", "none", (1024, 512)),
+    "road_stars": ("wide panoramic painting of deep space seen from a stairway of light, a vast galaxy band, nebula clouds "
+                   "in pale blue and white, a faint glowing rune circle in the sky, countless stars, cosmic, serene, "
+                   "painterly, no planets close up, no people, no text", "none", (1024, 512)),
 }
 
 
@@ -44,6 +53,8 @@ def cut(png, mask):
     im = Image.open(io.BytesIO(png)).convert("RGB")
     w, h = im.size
     lum = im.convert("L")
+    if mask == "none":
+        return im.convert("RGBA")
     if mask == "lum":
         a = lum.point(lambda v: 0 if v < 12 else min(255, int((v - 12) * 1.6)))
     elif mask == "frame":  # metal is mid-bright; the empty inside and outside are near black

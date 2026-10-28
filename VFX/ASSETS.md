@@ -153,3 +153,19 @@ Image ids are what the game uses (`ReplicatedStorage.ArtIds`, `LoadingScreen.ART
 | 86057593341535 | 113377141576674 | lantern_frame | make_tree_art.py |
 | 111449519715306 | 119952060714159 | lantern_glass | make_tree_art.py |
 | 94380979849766 | 108628251203855 | eye_soft (eye cut by brightness, no halo) | make_menu_art eye + Pillow |
+| 105163622904187 / 114712957649223 | Brass Sentinel v3 / v3b (Hunyuan + paint; v3 baked, v3b projected) | `Blender/sentinel_hy.py` | superseded |
+| 130297520521948 | Lampwick ward lantern v5b (primitives, 0.85 metal) | `Blender/lantern.py` | superseded |
+| 88575378535516 | Lampwick ward lantern v6 (in use as `ServerStorage.WardLampwickMesh`) | Hunyuan3D from `ref_steamlantern_s22.png` + `Blender/sentinel_hy.py` | reviewer 8/7/6/5/6 |
+| 138630723685732 | Brass Sentinel v4 (in use as `ReplicatedStorage.EnemyTankMesh`) | Hunyuan3D from `ref_sentinel_s33.png` + `Blender/sentinel_hy.py` | reviewer 6/4/4/4/3 |
+
+### Round 4 (2026-10-28 night, user feedback round)
+| Image id | Decal id | What |
+|---|---|---|
+| 74748169702520 | 76620136303235 | coin: make_tree_art.py brass gear coin |
+| 123781250890962 | 88951244412072 | eye_iris: eye_soft, iris cut out (turns and looks) |
+| 133137332599356 | 96351845847287 | eye_socket: eye_soft with the iris painted out |
+| 139036559395065 | 80877214144827 | gem: make_tree_art.py faceted gem |
+| 112373119685454 | 115706748369785 | road_lane: make_menu_art.py, progression horizon 1 |
+| 99544291548389 | 139847034960914 | road_stars: make_menu_art.py, progression horizon 3 |
+| 93038594791730 | 78210865840707 | road_veil: make_menu_art.py, progression horizon 2 |
+| 102117649984377 | Brass Sentinel v5 (in use; slate steel + brass repaint of the concept) | Hunyuan3D + `Blender/sentinel_hy.py` | |

@@ -80,6 +80,18 @@ return function(ctx)
 		UI.motes(revealGui, STYLE.gold, 12)
 		UI.blurHolders[revealGui] = true
 	end
+	-- 2026-10-28 night (the user: "the rolling animation needs a lot of work"): the summon is staged in our world. A
+	-- painted Lampwick Lane night sits behind it, a brass clock ring turns behind the card and takes each rarity colour
+	-- as the tell climbs, the card's back is a pocket watch, and at the end the familiar flies down to its pad as a
+	-- streak of light instead of the screen fading out.
+	local okArt, ART = pcall(function() return require(ReplicatedStorage:WaitForChild("ArtIds", 3)) end)
+	ART = okArt and ART or {}
+	local scene = new("ImageLabel", { Name = "Scene", BackgroundTransparency = 1, Image = ART.road_lane or "", ImageColor3 = Color3.fromRGB(150, 160, 200), ImageTransparency = 0.35, ScaleType = Enum.ScaleType.Crop, Size = UDim2.fromScale(1, 1), ZIndex = 15 }, revealGui)
+	local shade = new("Frame", { Name = "SceneShade", BackgroundColor3 = Color3.fromRGB(4, 5, 12), BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 15 }, revealGui)
+	new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.15), NumberSequenceKeypoint.new(0.5, 0.75), NumberSequenceKeypoint.new(1, 0.15) }) }, shade)
+	local clockRing = new("ImageLabel", { Name = "ClockRing", BackgroundTransparency = 1, Image = ART.ring or "", ImageColor3 = Color3.fromRGB(220, 180, 120), ImageTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.46), Size = UDim2.fromScale(0.62, 0.62), SizeConstraint = Enum.SizeConstraint.RelativeYY, ZIndex = 16 }, revealGui)
+	local ringSpin = TweenService:Create(clockRing, TweenInfo.new(24, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), { Rotation = 360 })
+	ringSpin:Play()
 	local revealState = { phase = "idle", skip = false, dismiss = false }
 	local revealQueue = {}
 	local revealRunning = false
@@ -203,6 +215,11 @@ return function(ctx)
 		revealGui.Visible = true
 		revealGui.BackgroundTransparency = 1
 		tween(revealGui, 0.2, { BackgroundTransparency = 0.12 })
+		scene.ImageTransparency, shade.BackgroundTransparency = 1, 1
+		tween(scene, 0.35, { ImageTransparency = 0.35 })
+		tween(shade, 0.35, { BackgroundTransparency = 0 })
+		clockRing.ImageColor3, clockRing.ImageTransparency, clockRing.Size = Color3.fromRGB(220, 180, 120), 1, UDim2.fromScale(0.4, 0.4)
+		tween(clockRing, 0.5, { ImageTransparency = 0.25, Size = UDim2.fromScale(0.62, 0.62) }, Enum.EasingStyle.Quint)
 		revealGlow.BackgroundColor3 = Color3.fromRGB(60, 64, 96)
 		revealGlow.BackgroundTransparency = 0.8
 		rays.Visible = false
@@ -234,14 +251,14 @@ return function(ctx)
 		local SPIRAL, VESICA = "rbxassetid://128142388272489", "rbxassetid://140628629392455"
 		local circle = vp({ Size = Vector3.new(6.5, 0.02, 6.5), Transparency = 1, CFrame = CFrame.new(0, 0.02, 0) })
 		local chalk = Instance.new("Decal")
-		chalk.Texture, chalk.Face, chalk.Color3, chalk.Transparency = RINGTEX, Enum.NormalId.Top, Color3.fromRGB(255, 214, 140), 0.25
+		chalk.Texture, chalk.Face, chalk.Color3, chalk.Transparency = ART.ring or RINGTEX, Enum.NormalId.Top, Color3.fromRGB(255, 214, 140), 0.15 -- a brass clock ring on the table
 		chalk.Parent = circle
-		for _, x in { -4.2, 4.2 } do -- two small points of light where the candles were
+		for _, x in {} do -- (removed 2026-10-28 night: the two candle points read as stray dots beside the card)
 			vp({ Shape = Enum.PartType.Ball, Size = Vector3.new(0.35, 0.35, 0.35), Color = Color3.fromRGB(255, 190, 90), Material = Enum.Material.Neon, CFrame = CFrame.new(x, 1.6, -1.2) })
 		end
 		local card = vp({ Size = Vector3.new(2.4, 4, 0.06), Color = Color3.fromRGB(30, 16, 50), Material = Enum.Material.SmoothPlastic })
 		local back = Instance.new("Decal")
-		back.Texture, back.Face, back.Color3 = SPIRAL, Enum.NormalId.Back, Color3.fromRGB(255, 214, 130)
+		back.Texture, back.Face, back.Color3 = ART.clock or SPIRAL, Enum.NormalId.Back, ART.clock and Color3.new(1, 1, 1) or Color3.fromRGB(255, 214, 130) -- the card's back: a pocket watch
 		back.Parent = card
 		local front = Instance.new("Decal")
 		front.Texture, front.Face, front.Color3 = VESICA, Enum.NormalId.Front, rcolor:Lerp(Color3.new(1, 1, 1), 0.3)
@@ -268,6 +285,9 @@ return function(ctx)
 			FXK.play("ring", { pitch = 0.8 + i * 0.12 })
 			rim.Color = tierColor
 			rim.Transparency = 0.1
+			tween(clockRing, 0.25, { ImageColor3 = tierColor:Lerp(Color3.fromRGB(220, 180, 120), 0.35), ImageTransparency = 0.15 - i * 0.03 })
+			clockRing.Size = UDim2.fromScale(0.66, 0.66)
+			tween(clockRing, 0.3, { Size = UDim2.fromScale(0.62, 0.62) }, Enum.EasingStyle.Back)
 			revealGlow.BackgroundColor3 = tierColor
 			revealGlow.BackgroundTransparency = 0.85 - 0.08 * i
 			shake.t, shake.amp = 0.12, 0.3 * i
@@ -283,7 +303,7 @@ return function(ctx)
 			setLabelVisible(revealHint, true)
 			revealState.phase, revealState.dismiss = "turn", false
 			local w0 = os.clock()
-			while not revealState.dismiss and os.clock() - w0 < 2.5 do
+			while not revealState.dismiss and os.clock() - w0 < 1.2 do -- (review: a long wait read as dead time)
 				local a = os.clock() - w0
 				poseCard(HOME * CFrame.new(math.sin(a * 60) * 0.05, math.sin(a * 3) * 0.1, 0))
 				RunService.RenderStepped:Wait()
@@ -541,14 +561,29 @@ return function(ctx)
 			RunService.RenderStepped:Wait()
 		end
 
-		-- close and let the pet land on its pad in the world
+		-- close: the familiar becomes a streak of light that flies down to its pad, while the summon scene fades away
 		revealState.phase = "idle"
 		for _, l in { revealTitle, revealName, revealOdds, revealHint } do
 			fadeLabel(l, 0.2)
 		end
-		tween(revealGui, 0.25, { BackgroundTransparency = 1 })
+		local okP, pad = pcall(function() local v, on = camera:WorldToViewportPoint(groundOf(slot)) return on and Vector2.new(v.X, v.Y) or nil end)
+		local vs = camera.ViewportSize
+		local comet = new("ImageLabel", { BackgroundTransparency = 1, Image = ART.glow or "", ImageColor3 = rcolor:Lerp(Color3.new(1, 1, 1), 0.5), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(160, 160), ZIndex = 22 }, revealGui.Parent)
+		local tail = new("Frame", { BackgroundColor3 = rcolor:Lerp(Color3.new(1, 1, 1), 0.6), BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 0.5), Size = UDim2.fromOffset(0, 4), ZIndex = 22 }, comet)
+		new("UIGradient", { Transparency = NumberSequence.new(0, 1) }, tail)
+		local to = (okP and pad) and UDim2.fromOffset(pad.X, pad.Y) or UDim2.fromScale(0.5, 0.9)
+		local dir = ((okP and pad) or Vector2.new(vs.X / 2, vs.Y * 0.9)) - vs / 2
+		tail.Position, tail.Rotation = UDim2.fromScale(0.5, 0.5), math.deg(math.atan2(-dir.Y, -dir.X))
+		tween(vcam, 0.25, { CFrame = vcam.CFrame * CFrame.new(0, 0, 6) }) -- the familiar shrinks away
+		tween(scene, 0.3, { ImageTransparency = 1 })
+		tween(shade, 0.3, { BackgroundTransparency = 1 })
+		tween(clockRing, 0.3, { ImageTransparency = 1, Size = UDim2.fromScale(0.3, 0.3) })
+		tween(revealGui, 0.3, { BackgroundTransparency = 1 })
 		tween(revealGlow, 0.25, { BackgroundTransparency = 1 })
-		task.wait(0.25)
+		tween(tail, 0.2, { Size = UDim2.fromOffset(math.min(260, dir.Magnitude), 4) })
+		tween(comet, 0.42, { Position = to, Size = UDim2.fromOffset(60, 60) }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+		task.delay(0.42, function() tween(comet, 0.2, { ImageTransparency = 1, Size = UDim2.fromOffset(140, 140) }); Debris:AddItem(comet, 0.25) end)
+		task.wait(0.4)
 		spin:Cancel()
 		rays.Rotation = 0
 		rays.Visible = false
