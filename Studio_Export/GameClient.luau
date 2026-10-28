@@ -1723,6 +1723,10 @@ do
 	local tag = label(stage, "FEATURED  ·  LEGENDARY", 15, Config.RARITIES.Legendary.color, Vector2.new(0.5, 1), UDim2.fromScale(0.5, 1.03), UDim2.fromScale(1, 0.05), STYLE.fontB)
 	tag.ZIndex = 13
 end
+do -- refined start menu (StartMenuArt, 2026-10-28): Beyond Wonderland title, one clean column, lamp plate
+	local okM, errM = pcall(function() require(script.Parent:WaitForChild("StartMenuArt", 3))({ startScreen = startScreen, startBtn = startBtn, reduced = function() return SETTINGS.reducedMotion end }) end)
+	if not okM then warn("StartMenuArt: " .. tostring(errM)) end
+end
 
 local tutScale = new("UIScale", { Scale = 1 }, tutCard)
 local badgeScale = new("UIScale", { Scale = 1 }, lvlBadge)
@@ -2943,6 +2947,12 @@ for id, ui in nodeUI do
 		end
 	end
 end
+do -- the many-branch magical layout and vibrant backdrop (SkillTreeArt, the user's 2026-10-28 design)
+	local okA, errA = pcall(function() UI.treeArt = require(script.Parent:WaitForChild("SkillTreeArt", 3))({ treeGui = treeGui, treeArea = treeArea, nodeUI = nodeUI, treeLinks = treeLinks, Config = Config,
+		treeTitle = treeTitle, treeSp = treeSp, detail = detail, treeClose = treeClose, reduced = function() return SETTINGS.reducedMotion end,
+		buy = function(id) ActionRemote:FireServer("Skill", id) end }) end) -- v2 look: radial lantern tree, ticking brass border, hover popup
+	if not okA then warn("SkillTreeArt: " .. tostring(errA)) end
+end
 
 local function nodeState(id, snap)
 	if id == "Start" then
@@ -3098,6 +3108,7 @@ function refreshTree()
 			setButtonColor(buyBtn, snap.sp >= cost and STYLE.green or STYLE.grey)
 		end
 	end
+	if UI.treeArt then UI.treeArt.sync(snap) end
 end
 
 buyBtn.Activated:Connect(function()
@@ -3817,6 +3828,18 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 		applySnapshot(data.snapshot)
 		if tut.active then
 			setTutStep(1)
+			if not FXK.tourDone and not FXK.cineOff() then -- first-time captioned camera tour (IntroTour), after the crane
+				FXK.tourDone = true
+				local okT, Tour = pcall(require, script.Parent:WaitForChild("IntroTour", 2))
+				if okT and Tour then
+					tutCard.Visible = false
+					task.spawn(function()
+						local w = os.clock()
+						repeat task.wait() until FXK.introDone or os.clock() - w > 5
+						Tour.play({ hud = hud, camera = camera, sfx = FXK.play }, function() tutCard.Visible = tut.active end)
+					end)
+				end
+			end
 		end
 	elseif kind == "SharedSummon" then
 		-- another player in this server pulled a Legendary: a short shared banner (their reveal itself stays on their screen)

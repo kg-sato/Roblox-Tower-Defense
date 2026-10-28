@@ -3,6 +3,8 @@
 Every research note, grouped by area. Add new notes to the right folder and list them here. Related: [[Home]], [[Backlog]]
 
 ## UI
+- [[Research/UI/Skill Tree Grader|Skill Tree Grader]]: what makes the user's HUD and skill tree references refined; what we built from it (ours, not copied); grades in [[Research/UI/Captures 2026-10-28/Grading Report|Grading Report]] (2026-10-28)
+- [[Research/UI/Loading, Intro and UI References 2|Loading, Intro and UI References 2]]: the user's 9 recordings, 7 TikToks and gfxcomet studied; loading screen v2, first-time intro tour, rolling counters and cutscene core/glint/slam built (2026-10-28)
 - [[Research/UI/Creative Fix Method|Creative Fix Method]]: the loop for turning anything generic into a themed object or cutscene, the metaphor table, pitfalls and a log of every fix; run it with /make-creative (2026-10-28)
 - [[Research/UI/Abstract UI|Abstract UI]]: Hilma af Klint, Kandinsky, Bauhaus, Mini Metro and Persona research turned into seven rules; the HUD's abstract layer (2026-10-28)
 - [[Research/UI/Abstract HUD|Abstract HUD]]: every HUD control replaced by its own abstract form (spiral, orbit, triangle, ring of points, moon...), a UI checklist and `tools/ui_quality.py` (boxy controls 7 -> 1 of 14, lookalikes 2 -> 0) (2026-10-28)

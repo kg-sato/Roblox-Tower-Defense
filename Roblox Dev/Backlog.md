@@ -24,6 +24,10 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [~] (old) Vertical slice built 2026-10-24 (Shared/Config, Path, MatchSim; ServerScriptService/MatchService; StarterPlayerScripts/GameClient; Workspace/Map). Verified: headless logic tests, scripted Play run with no errors from our scripts. NOT verified: real drag input, visuals by eye, phone layout. Next: user plays it once.
 
 ## Next
+- [ ] **Needs the user:** judge loading v4, start menu v2 and skill tree v2 (captures in `Research/UI/Captures 2026-10-28/`; reviewer FAIL on all three, reasons in [[Research/UI/Captures 2026-10-28/Grading Report]])
+- [ ] Skill tree: draw the nodes as small lanterns (unlit silhouette, warm flicker when kindled) and a lighter popup frame that matches the flat tree
+- [ ] Loading: continuous falling motion with blur through the clock tunnel; a true spiral swallow; photoreal eye art
+- [ ] Start menu: give the featured familiar real shading (its neon gold reads flat); fill the lower third
 - [ ] **Needs the user:** play the 2026-10-28 UI rework and the 1:1 effects, judge the look ([[Research/UI/UI Rework 2026-10-28]], [[Research/VFX and Animation/Effect Recreation 1to1 - Index]])
 - [ ] Wire the crafted egg hatch and coin drop sheets and the 1:1 Hollow Purple / Healing ports into real game moments; run the same 1:1 method on merge burst, hit spark, Starfall
 - [ ] Phone check of the new HUD (dock moves right, START WAVE above the roll bar)
