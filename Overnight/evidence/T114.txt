@@ -1,0 +1,1 @@
+T114 attempt 1: edits in Studio and Studio_Export (StageSets music field, MusicFX harbour/cathedral states, StageSetClient Music.play). Play check: QAProfile stage:6 and stage:11 did not switch the visible stage set and logged no TrackStarted events. Not passed.

@@ -1,0 +1,26 @@
+PASS
+T125 headless test for the MatchService argument rules, moved to ReplicatedStorage.Shared.ActionArgs (Studio_Export/ActionArgs.luau; test Tests/ActionArgs.test.luau, run in Studio Edit mode through the local Tests server).
+ok   slot 1 accepted
+ok   slot 1e7 accepted
+ok   slot 0 rejected
+ok   slot negative rejected
+ok   slot fraction rejected
+ok   slot above 1e7 rejected
+ok   slot NaN rejected
+ok   slot inf rejected
+ok   slot string rejected
+ok   slot nil rejected
+ok   coord 0 accepted
+ok   coord -999.5 accepted
+ok   coord 1000 rejected
+ok   coord NaN rejected
+ok   coord inf rejected
+ok   coord string rejected
+ok   single key becomes a map
+ok   batch capped at 16 keys (16)
+ok   nil key rejected
+ok   number key rejected
+ok   empty batch gives an empty map
+ok   small batch keeps every key
+Moved out of MatchService: isSlot and isCoord (now aliases of ActionArgs), and the Setting shape rule (ActionArgs.settingChanges).
+Play check after the change: a Setting batch {sfxVolume, flashes} was accepted and the server replied with the Settings event; values restored to sfxVolume 0.8, flashes true.

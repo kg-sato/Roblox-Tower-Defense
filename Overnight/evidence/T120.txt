@@ -1,0 +1,13 @@
+BLOCKED (not a pass). Before table, Play, HUD screen, TextLabels with text, contrast vs nearest opaque frame (WCAG ratio); 277 labels, 9 below 4.5:
+ratio | label | text | background
+1.01 | TextLabel | 1 | world (no frame found: approximate)
+1.39 | TextLabel | x2 | Frame
+2.97 | TextLabel | 0 | Frame
+3.09 | TextLabel | SPD | Frame
+4.23 | AF_text | AUTO | world (approximate)
+4.23 | AF_text | QUICK | world (approximate)
+4.23 | TextLabel | OFF | world (approximate)
+4.23 | TextLabel | OFF | world (approximate)
+4.23 | Txt | Skip | world (approximate)
+NotPlay: NowPlaying 4 labels, 0 below. Background of world assumed dark (10,9,20); labels on images or gradients are not measured.
+Fixes not made: the labels live in GameClient, which is at 199,873 of 200,000 characters, and fixing them needs a colour choice per label.

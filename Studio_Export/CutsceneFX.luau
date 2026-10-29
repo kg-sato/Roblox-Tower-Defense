@@ -155,14 +155,14 @@ function K.camera(ctx)
 end
 
 -- Anime-style cut-in: a slanted glass band slides across with the familiar's portrait and the ability name.
-function K.cutIn(ov, ctx, hold)
+function K.cutIn(ov, ctx, hold, bandAlpha)
 	local band = Instance.new("Frame")
 	band.AnchorPoint = Vector2.new(0.5, 0.5)
 	band.Position = UDim2.fromScale(-0.6, 0.5)
 	band.Size = UDim2.fromScale(1.6, 0.26)
 	band.Rotation = -7
 	band.BackgroundColor3 = Color3.fromRGB(10, 8, 22)
-	band.BackgroundTransparency = 0.08
+	band.BackgroundTransparency = bandAlpha or 0.08 -- Starfall passes a see-through band so the drake's rise shows
 	band.BorderSizePixel = 0
 	band.ZIndex = 21
 	band.Parent = ov.gui
@@ -577,6 +577,21 @@ CutsceneFX.signatures.Starfall = function(ctx)
 	ov.open(0.11)
 	ctx.sfx("legendary_gather")
 
+	-- gold ring and sparks instead of K.impact's flat white discs
+	local function starImpact(pos)
+		K.shockwave(stage, pos, gold, 7, 0.45)
+		local ring = part({ Shape = Enum.PartType.Cylinder, Color = gold, Transparency = 0.2, Size = Vector3.new(0.1, 3, 3), CFrame = CFrame.new(pos + Vector3.new(0, 0.15, 0)) * CFrame.Angles(0, 0, math.pi / 2) }, stage)
+		tw(ring, 0.6, { Size = Vector3.new(0.1, 12, 12), Transparency = 1 }, Enum.EasingStyle.Quint)
+		Debris:AddItem(ring, 0.65)
+		for k = 1, 8 do
+			local a = k / 8 * math.pi * 2 + math.random() * 0.3
+			local dir = Vector3.new(math.cos(a), 0, math.sin(a))
+			local spark = part({ Shape = Enum.PartType.Wedge, Material = Enum.Material.Neon, Color = gold, Size = Vector3.new(0.1, 0.5, 0.25), CFrame = CFrame.lookAt(pos + Vector3.new(0, 0.6, 0), pos + Vector3.new(0, 0.6, 0) + dir) }, stage)
+			tw(spark, 0.35, { Position = pos + dir * 6 + Vector3.new(0, 0.6, 0), Transparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+			Debris:AddItem(spark, 0.45)
+		end
+	end
+
 	-- 0.0 low angle push-in
 	local side = Vector3.new(1, 0, 0.35).Unit
 	cam.to(CFrame.lookAt(o + side * 14 + Vector3.new(0, 3, 0), o + Vector3.new(0, 3, 0)), 0)
@@ -587,7 +602,7 @@ CutsceneFX.signatures.Starfall = function(ctx)
 
 	-- the drake rises on a column of light
 	K.caption(ov, "[ STARS GATHER ]", gold)
-	local column = K.beam(anchorAt(stage, o + Vector3.new(0, 38, 0)), anchorAt(stage, o), gold, 2.4)
+	local column = K.beam(anchorAt(stage, o + Vector3.new(0, 38, 0)), anchorAt(stage, o), Color3.fromRGB(190, 150, 84), 1.1)
 	column.grow(0.8)
 	local model = ctx.model
 	local home = model and model:GetPivot()
@@ -608,7 +623,7 @@ CutsceneFX.signatures.Starfall = function(ctx)
 	end
 	wait(0.45)
 	ctx.sfx("summon")
-	K.cutIn(ov, ctx, 0.75)
+	K.cutIn(ov, ctx, 0.75, 0.55)
 	cam.shake(0.25, 1.0)
 	wait(1.15)
 
@@ -625,7 +640,7 @@ CutsceneFX.signatures.Starfall = function(ctx)
 	for i = 1, n do
 		local a = i / n * math.pi * 2
 		local p = center + Vector3.new(math.cos(a) * 22, 42 + math.sin(i * 1.7) * 4, math.sin(a) * 14 - 8)
-		local s = part({ Shape = Enum.PartType.Ball, Color = Color3.fromRGB(255, 244, 205), Size = Vector3.one * 0.2, Position = p }, stage)
+		local s = part({ Shape = Enum.PartType.Ball, Color = gold, Size = Vector3.one * 0.2, Position = p }, stage)
 		local l = Instance.new("PointLight")
 		l.Color, l.Range, l.Brightness = gold, 10, 2
 		l.Parent = s
@@ -645,7 +660,7 @@ CutsceneFX.signatures.Starfall = function(ctx)
 		a0.Parent, a1.Parent = s, s
 		local tr = Instance.new("Trail")
 		tr.Attachment0, tr.Attachment1 = a0, a1
-		tr.Color = ColorSequence.new(Color3.fromRGB(255, 250, 220), gold)
+		tr.Color = ColorSequence.new(gold, Color3.fromRGB(200, 150, 70))
 		tr.Transparency = NumberSequence.new(0, 1)
 		tr.Lifetime = 0.35
 		tr.LightEmission = 1
@@ -666,7 +681,7 @@ CutsceneFX.signatures.Starfall = function(ctx)
 					cam.shake(1.0, 0.8)
 				end
 				strike.fade(0.35)
-				K.impact(stage, target, gold, 1)
+				starImpact(target)
 				if IF then IF.scorch(target, 2.5, 2.2) end
 				s:Destroy()
 			end)
@@ -674,7 +689,7 @@ CutsceneFX.signatures.Starfall = function(ctx)
 	end
 	wait(0.32 + n * 0.07)
 	K.flash(ov, ctx, gold, 0.35, 0.4)
-	K.shockwave(stage, center, Color3.fromRGB(255, 250, 230), 30, 0.7)
+	K.shockwave(stage, center, Color3.fromRGB(255, 220, 140), 30, 0.7)
 	wait(0.45)
 
 	-- 3.3 return
@@ -914,6 +929,19 @@ CutsceneFX.signatures.WintersHush = function(ctx)
 		IF.impactFrame(ctx.settings)
 	end
 	cam.shake(1.0, 0.6)
+	-- frost ring and glass shards instead of K.impact's soft white balls
+	local function frostRing(pos)
+		local ring = part({ Shape = Enum.PartType.Cylinder, Color = ice, Transparency = 0.2, Size = Vector3.new(0.1, 2.5, 2.5), CFrame = CFrame.new(pos + Vector3.new(0, 0.15, 0)) * CFrame.Angles(0, 0, math.pi / 2) }, stage)
+		tw(ring, 0.6, { Size = Vector3.new(0.1, 10, 10), Transparency = 1 }, Enum.EasingStyle.Quint)
+		Debris:AddItem(ring, 0.65)
+		for k = 1, 6 do
+			local a = k / 6 * math.pi * 2 + math.random() * 0.3
+			local dir = Vector3.new(math.cos(a), 0, math.sin(a))
+			local shard = part({ Material = Enum.Material.Glass, Color = ice, Transparency = 0.1, Size = Vector3.new(0.12, 0.6, 0.3), CFrame = CFrame.lookAt(pos + Vector3.new(0, 0.6, 0), pos + Vector3.new(0, 0.6, 0) + dir) }, stage)
+			tw(shard, 0.4, { Position = pos + dir * 5 + Vector3.new(0, 0.6, 0), Transparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+			Debris:AddItem(shard, 0.5)
+		end
+	end
 	for _, cluster in blocks do
 		local b = cluster[1]
 		local p = b.Position
@@ -927,7 +955,7 @@ CutsceneFX.signatures.WintersHush = function(ctx)
 		end
 		b:Destroy()
 		K.shockwave(stage, p - Vector3.new(0, 1.8, 0), ice, 7, 0.5)
-		K.impact(stage, p - Vector3.new(0, 1.8, 0), ice, 0.7)
+		frostRing(p - Vector3.new(0, 1.8, 0))
 	end
 	K.flash(ov, ctx, Color3.fromRGB(220, 245, 255), 0.4, 0.45)
 	K.caption(ov, "[ SHATTERED ]", ice)

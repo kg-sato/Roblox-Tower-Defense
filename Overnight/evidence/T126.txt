@@ -1,0 +1,11 @@
+PASS
+T126 one test runner: Tests/RunAll.luau, run in Studio Edit mode against the local Tests server (every Tests/*.test.luau found in the listing, each on a fresh copy of Shared).
+ActionArgs.test.luau               PASS
+Balance.test.luau                  PASS balance baseline ran (numbers are a baseline, not assertions)
+GameSpeed.test.luau                PASS
+MatchSim.test.luau                 PASS
+NumberFormat.test.luau             PASS
+SettingsDefaults.test.luau         PASS
+StageSets.test.luau                PASS
+SUMMARY 7 of 7 suites PASS
+Note: the runner reads the test list from the server's folder listing, so a new suite is picked up without editing RunAll.

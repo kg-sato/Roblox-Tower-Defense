@@ -1,0 +1,4 @@
+PARTIAL (not ticked)
+Headless SettingsDefaults test extended (damageNumbers default on, off accepted, string rejected) and run in Studio with the test body inline: PASS, 42 checks ok.
+Code: damageNumbers in SettingsDefaults (validated server-side by RULES), SettingsPanel toggle, GameClient skips the damage float texts when SETTINGS.damageNumbers == false (crit and damage numbers).
+NOT VERIFIED: Play check that no float text appears when Off (needs a fight with a float-text count).

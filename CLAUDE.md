@@ -17,13 +17,13 @@ Solo, one-month Roblox game. Place file: `Claude.rbxl`. Studio is connected thro
 2. When work is done, update the vault: tick items in `Backlog.md`, add or close bugs in `Bug Log.md`, update statuses in `Systems.md`, and add one line to `Roblox Dev/Session Log.md`.
 
 ## Vault notes (in `Roblox Dev/`)
-- `Game Design Doc.md`: pitch, core loop, progression, scope
+- `Design/Game Design Doc.md`: pitch, core loop, progression, scope (`Design/` also holds Feature Pipeline, How to Add a Character, User Inputs, 3D Assets)
 - `Session Log.md`: one line per work session; `Research/Index.md`: research notes by area; `Planning/`: early plans
 - `Systems.md`: every system and its status
 - `Bug Log.md`: open and fixed bugs
 - `Backlog.md`: what's next
 - `Analytics/`: weekly analytics notes (template in `Templates/Weekly Analytics.md`)
-- `3D Assets.md`: 3D pipeline and asset list; model files in `Assets/3D/`
+- `Design/3D Assets.md`: 3D pipeline and asset list; model files in `Assets/3D/`
 
 Use Obsidian `[[wikilinks]]` when linking notes.
 

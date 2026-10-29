@@ -19,6 +19,13 @@ ART = {
     # mask: "lum" = alpha from brightness, "round" = soft circle, "oval" = soft eye-shaped oval
     "eye": ("extreme close-up of a single wide open human eye, the iris is an intricate clockwork dial with tiny roman numerals "
             "and a glowing sigil at the pupil, long detailed eyelashes, wet glossy highlights, veins, " + INK, "oval"),
+    # 2026-10-28 night (review: "a human-eye engraving, not brass clockwork"): the loading screen's great eye
+    "brasseye": ("front view of a single giant mechanical steampunk automaton eye, almond shaped, the eyeball is polished ivory "
+                 "enamel and the iris is an intricate brass clockwork dial with roman numerals, tiny gears and a glowing amber "
+                 "pupil, set in a socket of riveted polished brass and copper plates with engraved filigree, warm golden rim "
+                 "light, photorealistic, symmetrical, centred, wide aspect, pure black background, no text, no face, no skin", "oval", (1024, 640)),
+    "brassplate": ("close-up of a smooth curved polished brass armour plate with fine engraved filigree and a row of small rivets "
+                   "along one edge, warm golden light, photorealistic, fills the whole frame edge to edge, no background, no text", "none"),
     "clock": ("front view of an ornate antique steampunk pocket watch face without hands, aged polished brass and copper, "
               "exposed interlocking gears and cogs visible through cut-outs in the dial, engraved roman numerals on an ivory "
               "enamel chapter ring, rivets, filigree, warm golden rim light, photorealistic, perfectly circular, centred, fills the frame, "

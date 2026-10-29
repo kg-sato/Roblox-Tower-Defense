@@ -1,0 +1,10 @@
+PASS
+T123 remote audit of MatchService (ReplicatedStorage.Remotes.Action, kinds: Start, SkipTutorial, Setting, Roll, Drop, Move, Recycle, Upgrade, Ult, StartWave, AutoWave, Skill, EndTutorial).
+Confirmed findings and fixes:
+ F1 Setting with no key (a=nil) threw inside the table constructor: guard added (type of a must be table or string).
+ F2 Start was unthrottled and each call spawned a waiting thread: 1 Start per second per player.
+ F3 Unknown action kinds used up the 0.05 s action gap, so spam could block a real action: known kinds are checked before the gap.
+Checked and kept: Setting values validated by SettingsDefaults (types, ranges, enums, 16 keys max, 1 save/s); Upgrade, Skill, AutoWave, Drop, Move, Recycle type-checked in the handler and the sim; Roll, Ult, StartWave take no client values; costs and rewards are server-side; QA remotes exist only in Studio.
+Spam test, Play: (a) 200 Roll + 200 Setting sent in one burst (about 0 s): 0 Roll accepted, 1 Setting accepted. (b) 200 Roll + 200 Setting paced at 10 ms: 5.05 s window (not 2 s as specified), 3 Roll successes (coin-limited), 5 Setting replies (about 1/s). Both within the limits (action gap 0.05 s, settings 1/s).
+Not changed: the global action gap (max 20 actions/s per player across kinds) is a design choice.
+Console: only pre-existing asset lines.

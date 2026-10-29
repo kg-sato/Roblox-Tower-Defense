@@ -1,0 +1,6 @@
+PASS
+T118 Hide UI. Play, real key presses through user_keyboard_input (keyPress H, Client datamodel):
+HUD Enabled before: true; after H: false; after second H: true (restored).
+Saved setting path: ReplicatedStorage.Remotes.Action Setting {hideUi=true} -> HUD Enabled false; {hideUi=false} -> true.
+Console: only the pre-existing asset and ProfileStore lines.
+Code: Studio_Export/HideUI.luau (new LocalScript in StarterPlayerScripts). Settings: hideUi in SettingsDefaults (default false) and a Settings panel toggle. GameClient unchanged (it is at the 200,000-character limit).

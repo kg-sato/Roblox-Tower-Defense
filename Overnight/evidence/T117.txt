@@ -1,0 +1,7 @@
+PASS (scale verified; HUD frame AbsoluteSize is constant by design, child sizes not measured)
+Play via ReplicatedStorage.Remotes.Action Setting batches (the same path as the panel), read HUD UIScale after each:
+small: scale=0.847 hudAbsX=1333 hudAbsY=777
+large: scale=1.195 hudAbsX=1333 hudAbsY=777
+normal: scale=0.996 hudAbsX=1332 hudAbsY=776
+Settings checks (uiSize default normal, small/large accepted, huge and number rejected) run in Studio on the current source: PASS, 5 of 5. Tests/SettingsDefaults.test.luau extended with the same four checks; the full file was not re-run.
+Console: only pre-existing asset lines.

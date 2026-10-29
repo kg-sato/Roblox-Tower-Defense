@@ -1,0 +1,1 @@
+T103 attempt 1: Winter's Hush crack now uses frostRing (ice ring + 6 glass shards) in place of K.impact (white balls); applied in Studio ReplicatedStorage.CutsceneFX (count-checked), mirrored to Studio_Export and VFX, module requires OK. Grand Arcana untouched. NOT VERIFIED: no before/after freeze frame at the crack (no capture hook). Look UNVERIFIED.

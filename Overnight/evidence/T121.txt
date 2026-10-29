@@ -1,0 +1,4 @@
+PARTIAL (not ticked)
+NavFocus LocalScript (Studio_Export/NavFocus.luau) added. Play: real arrow key presses (Right, Down, Right) moved GuiService.SelectedObject from the start menu's first button to FlashToggle (Flashes: ON).
+Not shown: the HUD main buttons. In Play the start-menu button (Return) hid the menu and left 0 visible HUD buttons in the test, and only 2 of 2 visible buttons had links (the link pass runs every 2 s from positions).
+Settings panel not opened in the test. Look and feel UNVERIFIED.

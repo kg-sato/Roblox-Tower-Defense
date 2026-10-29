@@ -94,3 +94,42 @@
 - 11:49 CHECKPOINT 4197bef on overnight/2026-10-27: Add the themed HUD, start menu, odds panel, boss bar, new sounds and the abstract layer from the UI and FX research.
 - 20:27 CHECKPOINT ae6d65c on overnight/2026-10-27: Overnight prep: UI reviews, FX and stage-set work, settings and tools. Videos stay on disk only.
 - 20:27 CHECKPOINT 1ebec4f on overnight/2026-10-27: Overnight prep: Models mirror and progress log. Videos stay on disk only.
+- 20:39 CHECKPOINT 500aa93 on overnight/2026-10-27: Obsidian graph view state and overnight tooling.
+
+## Run 2026-10-28 20:39 on overnight/2026-10-27 (8.0 h, 220 loops)
+- 20:42 T101 BLOCKED: freeze frames need a timed capture hook not available; code edits in place (evidence/T101.txt).
+- 20:42 T102 BLOCKED: changed-area % needs freeze frames; no capture hook (same blocker as T101).
+- 20:44 T104 attempt 1: capture shows ship hull + crane in top band; path-lightness check missing, so not ticked.
+- 20:44 T104 DONE (attested): path lightness measured (137.9 vs quay 68, ship 26); ship and crane in top band.
+- 20:44 T104 verify FAILED (attempt 1): needs Overnight/evidence/T104.txt whose first line is PASS, followed by the real test output
+- 20:44 T104 DONE (attested):  Harbour of Brass far ring inside the frame: bring one steamship and one crane into the top band of the default camera view
+- 20:45 T105 DONE (attested): Silent Cathedral: stained-glass windows visible at the default camera (side-wall windows near the board) and the nearest covered statue in frame
+- 20:45 T106 BLOCKED: skill tree files belong to menu-tree-rework (local_4ab7e161); not edited overnight.
+- 20:45 T107 BLOCKED: FXRecipes not wired into game; hit-stop needs a design call (what a freeze pauses) and GameClient edits.
+- 20:46 T108 BLOCKED: UltFX meteor-only; FXRecipes recipes not wired; Play captures unavailable.
+- 20:46 T109 BLOCKED: UIFlipbooks not wired into reveal/pet panel; Play captures unavailable.
+- 20:46 T110 BLOCKED: UIFlipbooks not wired to level pill; Play capture unavailable.
+- 20:46 T111 BLOCKED: spawn-time capture in Play unavailable; GameClient wiring needed.
+- 20:46 T112 BLOCKED: no cues for placement, splash, boss intro, cutscene skip; call sites in GameClient needed.
+- 20:47 T113 BLOCKED: LoadingScreen v4 (user-shaped) already runs; LoadingFX would replace it. User decision.
+- 20:48 T114 BLOCKED: stage jump via QAProfile did not switch set; State path unclear.
+- 20:49 T115 BLOCKED: backdrop setting unread; reveal fog emitters not located; GameClient settings hook needed.
+- 20:49 T116 PARTIAL: headless PASS; Play float-text check not run.
+- 20:51 T117 DONE (attested): UI size Small/Normal/Large scales HUD UIScale 0.847/0.996/1.195.
+- 20:51 T117 DONE (attested): UI size setting (Small / Normal / Large) scaling the HUD UIScale, saved with the other settings
+- 20:52 T118 DONE (attested): H toggles HUD via real key press; saved hideUi setting works live. GameClient is at 199873 of 200000 chars: further GameClient edits will fail in Studio.
+- 20:52 T118 DONE (attested): Hide-UI toggle for recording (keyboard H and a Settings toggle), restores on press
+- 20:53 T119 DONE (attested): three settings read back after a second Play start.
+- 20:53 T119 DONE (attested): Settings survive a rejoin: change three settings, stop Play, start Play, values come back from ProfileStore
+- 20:54 T120 BLOCKED: audit ran (9 HUD labels below 4.5, approximate); fixes sit in GameClient at its size limit.
+- 20:55 T121 BLOCKED/partial: arrow keys move selection on the start menu; HUD buttons not visible in the test.
+- 20:55 T122 BLOCKED: needs the in-game HUD visible (not reached in Play tests, see T121); layout fixes sit in GameClient at its size limit.
+- 20:57 T123 DONE (attested): 3 confirmed findings fixed in MatchService (Setting nil key, Start spam, unknown kinds using the gap); spam test within limits.
+- 20:57 T123 DONE (attested): Remote security audit with the roblox-dev:roblox-security skill on MatchService (every Action kind): type checks, rate limits, no client-trusted values; fix confirmed findings
+- 20:58 T124 DONE (attested): profile fields clamped on load; version stamped; MatchSim and SettingsDefaults tests PASS.
+- 20:58 T124 DONE (attested): Profile data audit with the roblox-dev:roblox-datastores skill: template version bump path, Reconcile, sanitize on load for every field, BindToClose behaviour
+- 21:00 T125 DONE (attested): ActionArgs module with 22 headless checks PASS; MatchService uses it.
+- 21:00 T125 DONE (attested): Headless test for MatchService helpers that can be pure (isSlot, isCoord, batch Setting handling) moved into a Shared module with tests
+- 21:00 T126 DONE (attested): Tests/RunAll runs all 7 suites, 7 of 7 PASS.
+- 21:00 T126 DONE (attested): One test runner: `Tests/RunAll` executes every Tests/*.test.luau in Studio and writes one summary line per suite
+- 21:01 T127 PARTIAL: Foundry set built and captured in Edit, test PASS; stage-16 Play check not done (stage jumps unreliable, T114).

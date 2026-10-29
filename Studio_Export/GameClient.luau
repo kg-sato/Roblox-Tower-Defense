@@ -24,7 +24,7 @@ local map = workspace:WaitForChild("Map")
 map:WaitForChild("Crystal")
 
 -- Stand-in for the future Settings panel (see Game Design Doc). Flashes Off softens every full-screen flash.
-local SETTINGS = { flashes = true, reducedMotion = false, shake = true }
+local SETTINGS = { flashes = true, reducedMotion = false, shake = true, damageNumbers = true, uiSize = "normal" }
 local GROUND = 1.0 -- top of the pads
 local IS_PHONE = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 
@@ -861,12 +861,14 @@ if UI.fa then
 	new("ImageLabel", { Name = "Vignette", BackgroundTransparency = 1, ImageContent = UI.fa.vignette(), Size = UDim2.fromScale(1, 1), ZIndex = 0, Active = false }, gui)
 	task.spawn(UI.blurLoop)
 end
+local UI_SIZE_MUL = { small = 0.85, normal = 1, large = 1.2 }
 local hud = new("Frame", { Name = "Hud", BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), Visible = false }, gui)
 local uiScale = new("UIScale", { Scale = 1 }, hud)
 
 local function relayout()
 	local vp = camera.ViewportSize
 	local sc = IS_PHONE and math.clamp(vp.Y / 420, 0.8, 1.0) or math.clamp(vp.Y / 780, 0.6, 1.2)
+	sc *= UI_SIZE_MUL[SETTINGS.uiSize] or 1 -- T117: Small / Normal / Large from the settings
 	uiScale.Scale = sc
 	hud.Size = UDim2.fromScale(1 / sc, 1 / sc)
 end
@@ -1904,6 +1906,8 @@ function FXK.applySettings(s)
 	if FXK.flashToggle then
 		FXK.flashToggle.Text = SETTINGS.flashes and "Flashes: ON" or "Flashes: OFF"
 	end
+	SETTINGS.uiSize = UI_SIZE_MUL[s.uiSize] and s.uiSize or "normal"
+	relayout() -- T117: the HUD scale follows the UI size
 	SETTINGS.gameSpeed = s.gameSpeed == 2 and 2 or 1 -- CutsceneFX skips signatures by itself at 2x
 	SETTINGS.cinematics = (s.cinematics == "short" or s.cinematics == "off") and s.cinematics or "full"
 	local particles = s.particles == "low" and "Low" or (s.particles == "high" and "High" or "Default")
@@ -2346,7 +2350,9 @@ local function shotFx(data)
 		FXK.lastHitSfx = os.clock()
 		task.delay(shotDur, FXK.play, "enemy_hit", { pitch = data.crit and 0.75 or 1 })
 	end
-	if data.crit then
+	if SETTINGS.damageNumbers == false then
+		-- Damage numbers Off (T116): no damage float text at all
+	elseif data.crit then
 		floatText(to, fmt(data.dmg) .. "!", STYLE.gold, 26)
 	elseif data.dmg >= 25 then
 		floatText(to, fmt(data.dmg), color, 18)

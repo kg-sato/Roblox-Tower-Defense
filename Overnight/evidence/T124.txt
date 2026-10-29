@@ -1,0 +1,8 @@
+PASS
+T124 profile audit (PlayerData_v1, TEMPLATE version 1, Reconcile, sanitize, BindToClose).
+Findings and fixes:
+ F1 only settings were sanitized on load; level, xp, sp, gems, tutorialDone and tree were trusted. Now clamped and typed on load; tree keeps only known skill ids (Start forced to 1, levels 0..99).
+ F2 no version stamp on load: d.version = TEMPLATE.version now, with a comment marking where a migration goes before a bump.
+Checked and kept: Reconcile runs before the sanitize step; BindToClose is handled by the vendored ProfileStore (Vendor/ProfileStore.luau lines 2199 and 2208), so MatchService needs no extra hook; session locking via StartSessionAsync and the OnSessionEnd kick stay.
+Tests: MatchSim.test.luau PASS. SettingsDefaults.test.luau PASS (all checks, including the uiSize and damageNumbers ones). An earlier FAIL came from Edit-mode module caching, not the code; a fresh module clone cleared it.
+Play: profile loaded after restart with version 1, level 1, xp 0, sp 0, gems 0, tree Start 1, tutorialDone false. Test settings restored to musicVolume 0.7 afterwards.

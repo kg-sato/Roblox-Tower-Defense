@@ -1,0 +1,6 @@
+PARTIAL (not ticked)
+T127 Clockwork Foundry (stage set 4, stages 16-20).
+Code: Studio_Export/BackdropFoundry.luau (new server script, builds workspace.StageSets.ClockworkFoundry: 6 furnaces with orange mouths, PointLights and sparks; 4 gear wheels; rails and sleepers across the back; kerb and 8 warm lamps at the board edge). StageSets entry added (id ClockworkFoundry, 5 stages, lighting set, music "play"). Studio: ServerScriptService.BackdropFoundry created; StageSets (Shared) synced.
+Test: Tests/StageSets.test.luau updated (stages 16-20 Foundry, 21 wraps to Lampwick, 26 Harbour, 1e6 maps to Foundry). Run through Tests/RunAll: PASS.
+Capture: Edit-mode build, default board camera (0,49.2,39.2 looking at 0,0,5): furnace flues and mouths at the back, the rail line, the kerb and lamps at the board edge are visible. Look UNVERIFIED. The build was removed from the place afterwards.
+NOT VERIFIED: stage 16 in Play (the stage jump via QAProfile did not switch sets earlier, see T114). Console check in Play not run.

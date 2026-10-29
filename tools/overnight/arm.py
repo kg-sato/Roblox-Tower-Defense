@@ -12,6 +12,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--hours", type=float, default=8)
 ap.add_argument("--max-iter", type=int, default=60)
 ap.add_argument("--off", action="store_true")
+ap.add_argument("--confirm-tonight", action="store_true", help="the user's yes for tonight; required every night")
 a = ap.parse_args()
 
 
@@ -24,6 +25,8 @@ if a.off:
     print("disarmed")
     sys.exit(0)
 
+if not a.confirm_tonight:
+    sys.exit("refusing: arming needs the user's confirmation for tonight. Run with --confirm-tonight, yourself, each night.")
 dirty = [l for l in git("status", "--porcelain", "--untracked-files=no").splitlines() if "Claude.rbxl" not in l and "Overnight/PROGRESS.md" not in l]  # checkpoint.py appends to PROGRESS.md after each commit
 if dirty:
     sys.exit("uncommitted tracked changes, commit or stash first:\n" + "\n".join(dirty[:20]))
@@ -45,7 +48,7 @@ for rel in guard:
         hashes[rel] = hashlib.sha256(f.read_bytes()).hexdigest()
         shutil.copy2(f, store / rel.replace("/", "__"))
 now = time.time()
-cfg = {"start": now, "deadline": now + a.hours * 3600, "max_iterations": a.max_iter, "branch": git("branch", "--show-current"), "base": git("rev-parse", "HEAD"), "hashes": hashes}
+cfg = {"night": time.strftime("%Y-%m-%d"), "start": now, "deadline": now + a.hours * 3600, "max_iterations": a.max_iter, "branch": git("branch", "--show-current"), "base": git("rev-parse", "HEAD"), "hashes": hashes}
 (ov / "ACTIVE").write_text(json.dumps(cfg, indent=1), encoding="utf-8")
 (ov / "state.json").write_text(json.dumps({"iter": 0, "attempts": {}, "verified": {}}), encoding="utf-8")
 (ov / "evidence").mkdir(exist_ok=True)

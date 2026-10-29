@@ -225,6 +225,9 @@ return function(ctx)
 	toggle("flashes", "Flashes")
 	toggle("reducedMotion", "Reduced motion")
 	toggle("shake", "Screen shake")
+	toggle("damageNumbers", "Damage numbers")
+	toggle("hideUi", "Hide UI (H key also toggles)")
+	choice("uiSize", "UI size", { { label = "Small", value = "small" }, { label = "Normal", value = "normal" }, { label = "Large", value = "large" } })
 
 	order += 1
 	local resetRow = gui("Frame", { BackgroundTransparency = 1, Size = UDim2.fromScale(0.9, 0.08), LayoutOrder = order, ZIndex = 8, AnchorPoint = Vector2.new(0, 0) }, body)

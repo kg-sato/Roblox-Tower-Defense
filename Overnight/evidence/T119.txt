@@ -1,0 +1,5 @@
+PASS
+T119 settings survive a rejoin. Play 1: sent Setting {musicVolume=0.35, damageNumbers=false, uiSize=large} through ReplicatedStorage.Remotes.Action; read back from the profile (QAProfile): all three saved.
+Stopped Play, started Play 2 (fresh server, profile loaded from ProfileStore). Read back after 6 s: musicVolume=0.35, damageNumbers=false, uiSize=large (plus the other saved keys unchanged).
+Afterwards restored musicVolume=0.7, damageNumbers=true, uiSize=normal, then stopped Play.
+Console: only the pre-existing asset lines and the ProfileStore line.

@@ -176,3 +176,13 @@ Image ids are what the game uses (`ReplicatedStorage.ArtIds`, `LoadingScreen.ART
 | 73478931319348 / 116076795526880 | Brass Sentinel v9 / v9b hard-surface rebuild (v9 in use as `ReplicatedStorage.EnemyTankMesh`; parts joined by material, so limbs can't move yet; v9b: one dial + vent, deeper brass, bigger head, not inserted) | `Blender/sentinel_hs.py` | not reviewed |
 | 78294245385172 | Brass Sentinel v10 (in use as `ReplicatedStorage.EnemyTankMesh`): hard-surface, 10 parts (Body, Eye, Arm/Leg L/R Upper/Lower) so Models.luau can walk it | `Blender/sentinel_hs.py` | |
 | 98742361543875 / 100036524167793 | Brass Sentinel v11 / v11b (v11b in use as `ReplicatedStorage.EnemyTankMesh`): square copper pauldrons, tighter bevels, orange-gold brass (v11 read lime in the lantern's cyan light) | `Blender/sentinel_hs.py` | v11b reviewer 6/4/5/5/6 |
+| 126424928512371 | 94971387475577 | tree_glitch: haze-free cut of tree.png (lit branches only) for the loading-screen glitch bands |
+| 116085173525728 | 124961483788709 | eyelid_upper: make_eyelids.py, brass lid for the loading screen's great eye (v1 Image 134236186916976 superseded) |
+| 119106061812770 | 112157058826647 | eyelid_lower: make_eyelids.py (v1 Image 104814287012401 superseded) |
+| 108973641961739 | 139867308010154 | brass_eye: make_menu_art.py brasseye s43 (ComfyUI FLUX, local), the loading screen's great eye |
+| 108916853756921 | 83927624271063 | brass_rim: make_brass_eye.py, the eye with its opening cut out plus a dark occluder |
+| 73029784679990 | 119128236012573 | brass_lid_up: make_brass_eye.py, riveted shutter from brassplate s44 |
+| 97141457319980 | 85540292646891 | brass_lid_down: make_brass_eye.py |
+| 129711096701406 | 86968654690830 | brass_rim v2: soft elliptical shadow instead of a box (v1 108916853756921 superseded) |
+| 112008873412775 | 110707533897263 | bloom_rays: make_brass_eye.py, gold rays for the dive's bloom |
+| 83413513375766 / 112596667131794 / 83519131280569 | 86186853388556 / 128141392993924 / 110387929458894 | eye_lids_0..2: make_eye_lids_flip.py, 18-frame brass eyelid flipbook (6 per sheet), replaces the shutters |

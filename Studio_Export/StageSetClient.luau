@@ -6,6 +6,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Lighting = game:GetService("Lighting")
 local StageSets = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("StageSets"))
+local Music = require(ReplicatedStorage:WaitForChild("MusicFX"))
 local events = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Event")
 local setsFolder = workspace:WaitForChild("StageSets")
 
@@ -25,6 +26,7 @@ local function apply(stage)
 		return
 	end
 	current = set.id
+	Music.play(set.music) -- crossfades (Music.fade) to this set's track state
 	for _, s in StageSets.list do
 		local f = find(s.id)
 		if f then

@@ -1,0 +1,6 @@
+PASS
+T105 Silent Cathedral, default camera capture (pos 0,49.2,39.2 look 0,0,5, FOV 60), Edit-mode build of BackdropCathedral after lowering the far stained-glass lancets from y 18 to 11 (tips 30 to 23).
+Visual check: coloured glass strips (blue, red, purple, gold) and a blue pointed tip are in the top band; two side statues and a back statue are in frame. Look UNVERIFIED.
+Command: python PIL, share of saturated coloured pixels in the top 90 px band:
+top_band_coloured_glass_share_pct 9.64
+Set removed after capture. Studio source and Studio_Export both carry the lowered windows.
