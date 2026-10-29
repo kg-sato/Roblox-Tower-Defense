@@ -110,8 +110,12 @@ end
 ---------------------------------------------------------------------------------------------------
 -- opts: position (ground point), name, odds, modifier, settings (overrides), timeScale (slow motion, for stills),
 --       forceTouch (test the 100/s cap), headless (no GUI/world: used by audit), sfx = function(name), onDone
+-- Mythic and Celestial (added 2026-10-29) reuse the two biggest reveals until they get their own: Mythic plays the Legendary reveal, Celestial the Ultimate one
+local TIER_ALIAS = { Mythic = "Legendary", Celestial = "Ultimate" }
+
 function RevealFX.play(tier, opts)
 	opts = opts or {}
+	tier = TIER_ALIAS[tier] or tier
 	local def = RevealFX.tiers[tier]
 	assert(def, "unknown tier " .. tostring(tier))
 	local S = mergedSettings(opts.settings)

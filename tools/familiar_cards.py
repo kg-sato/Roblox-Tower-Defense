@@ -15,7 +15,7 @@ W, H = 630, 880
 BRASS = [(236, 205, 120), (201, 162, 75), (140, 104, 40), (201, 162, 75)]
 INK = (24, 22, 30)
 PARCH = (238, 226, 196)
-RARITY = {"Common": 1, "Rare": 2, "Epic": 3, "Legendary": 4}
+RARITY = {"Common": 1, "Rare": 2, "Epic": 3, "Legendary": 4, "Mythic": 5, "Celestial": 6}
 
 
 def font(name, size):

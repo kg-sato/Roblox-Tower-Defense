@@ -15,4 +15,8 @@ return {
 	MirrorChorister = { cutout = "rbxassetid://96396719497732", lore = "rbxassetid://107058401699564" },
 	StarDrake = { cutout = "rbxassetid://82994176657771", lore = "rbxassetid://132036339360229" },
 	GreyVeilWraith = { cutout = "rbxassetid://103551510119405", lore = "rbxassetid://120712544891289" },
+	CantorVesper = { cutout = "rbxassetid://125039662758754", lore = "rbxassetid://116153168894815" },
+	DameOrrery = { cutout = "rbxassetid://137449843426989", lore = "rbxassetid://91845640375322" },
+	TheLamplighter = { cutout = "rbxassetid://72732600075469", lore = "rbxassetid://103172307593224" },
+	VeilWalker = { cutout = "rbxassetid://101589900928916", lore = "rbxassetid://117306350227537" },
 }

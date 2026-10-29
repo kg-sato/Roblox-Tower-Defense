@@ -29,7 +29,7 @@ return function(Shared)
 	local ok, err = pcall(function()
 		-- enemy scaling per stage (T150)
 		check("hpScale(1) is 1", near(Config.hpScale(1), 1))
-		check("hpScale(25) is 1.2^24", near(Config.hpScale(25), 1.2 ^ 24, 1e-6), Config.hpScale(25))
+		check("hpScale(25) is HP_GROWTH^24", near(Config.hpScale(25), Config.HP_GROWTH ^ 24, 1e-6), Config.hpScale(25))
 		local mono = true
 		for s = 2, 25 do
 			if Config.hpScale(s) <= Config.hpScale(s - 1) then
@@ -71,7 +71,13 @@ return function(Shared)
 			check("rarity percents sum to 100 at luck " .. luck, near(sum, 100, 1e-6), sum)
 		end
 		local p0, p5 = Config.rarityPercents(0), Config.rarityPercents(0.5)
-		check("luck 0 gives 60 percent Common", near(p0.Common, 60, 1e-6), p0.Common)
+		local oddsTotal = 0
+		for _, r in Config.RARITY_ORDER do
+			if #Config.petsOfRarity(r) > 0 then
+				oddsTotal += Config.RARITIES[r].odds
+			end
+		end
+		check("luck 0 gives Common its odds share (60 over the odds of rarities that have familiars)", near(p0.Common, 100 * 60 / oddsTotal, 1e-6), p0.Common)
 		check("luck raises Legendary", p5.Legendary > p0.Legendary)
 		check("luck lowers Common", p5.Common < p0.Common)
 		check("trainer luck is clamped at 0.5", near(Config.luck(25), 0.5) and near(Config.luck(1), 0))
@@ -130,6 +136,12 @@ return function(Shared)
 		end
 		check("mean tier-1 dps climbs Common < Rare < Epic < Legendary", mean.Common < mean.Rare and mean.Rare < mean.Epic and mean.Epic < mean.Legendary)
 		check("a Legendary is under 30x a Common at tier 1 (dps ratio)", mean.Legendary / mean.Common < 30, string.format("%.1f", mean.Legendary / mean.Common))
+		if mean.Mythic then
+			check("Mythic familiars out-damage Legendary on average and stay under 80x Common", mean.Mythic > mean.Legendary and mean.Mythic / mean.Common < 80, string.format("%.1f", mean.Mythic))
+		end
+		if mean.Celestial then
+			check("Celestial familiars out-damage Mythic on average and stay under 160x Common", mean.Celestial > (mean.Mythic or mean.Legendary) and mean.Celestial / mean.Common < 160, string.format("%.1f", mean.Celestial))
+		end
 
 		-- next-best skill hint (T199)
 		local nb, nbCost = Config.nextBestSkill({ Start = 1 }, 0)
@@ -149,6 +161,30 @@ return function(Shared)
 		end
 		check("nothing to suggest when everything is maxed", Config.nextBestSkill(allMax, 99) == nil)
 		check("crit cap is below 1", Config.CRIT_CAP > 0 and Config.CRIT_CAP < 1)
+
+		-- more tiers and rarities
+		check("the tier cap is 8", Config.TIER_MAX == 8, Config.TIER_MAX)
+		check("six rarities in order", #Config.RARITY_ORDER == 6 and Config.RARITY_ORDER[5] == "Mythic" and Config.RARITY_ORDER[6] == "Celestial")
+		local ordOk = true
+		for i, r in Config.RARITY_ORDER do
+			if Config.RARITIES[r].order ~= i or (i > 1 and Config.RARITIES[r].mult <= Config.RARITIES[Config.RARITY_ORDER[i - 1]].mult) then
+				ordOk = false
+			end
+		end
+		check("rarity orders count up and multipliers rise", ordOk)
+		local w = Config.rarityWeights(0.3)
+		local emptyZero = true
+		for _, r in Config.RARITY_ORDER do
+			if #Config.petsOfRarity(r) == 0 and w[r] ~= 0 then
+				emptyZero = false
+			end
+			if #Config.petsOfRarity(r) > 0 and w[r] <= 0 then
+				emptyZero = false
+			end
+		end
+		check("a rarity has weight only when a familiar has it", emptyZero)
+		check("tier 8 damage is TIER_MULT^7 of tier 1", near(Config.petDamage("Ember", 8) / Config.petDamage("Ember", 1), Config.TIER_MULT ^ 7, 1e-3))
+		check("recycle at tier 8 is 3^7 of tier 1", Config.recycleValue("Ember", 8) == Config.recycleValue("Ember", 1) * 3 ^ 7)
 
 		-- pity (T200): over many rolls the dry streak without an Epic or better never reaches the pity interval
 		local worst, rolls, pityHits = 0, 0, 0

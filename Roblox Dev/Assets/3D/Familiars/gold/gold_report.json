@@ -21,6 +21,22 @@
   ],
   "distance_to_reference": 44.1
  },
+ "CantorVesper": {
+  "top5_rgb": [
+   216.6,
+   195.5,
+   150.9
+  ],
+  "distance_to_reference": 16.6
+ },
+ "DameOrrery": {
+  "top5_rgb": [
+   202.5,
+   180.7,
+   132.9
+  ],
+  "distance_to_reference": 39.2
+ },
  "Ember": {
   "top5_rgb": [
    250.9,
@@ -92,6 +108,22 @@
    169.1
   ],
   "distance_to_reference": 44.3
+ },
+ "TheLamplighter": {
+  "top5_rgb": [
+   172.1,
+   149.5,
+   104.5
+  ],
+  "distance_to_reference": 88.4
+ },
+ "VeilWalker": {
+  "top5_rgb": [
+   223.9,
+   196.1,
+   143.5
+  ],
+  "distance_to_reference": 26.0
  },
  "Ward": {
   "top5_rgb": [

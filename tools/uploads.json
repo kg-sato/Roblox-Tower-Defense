@@ -1030,5 +1030,101 @@
   "type": "Decal",
   "assetId": "130240582337054",
   "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/CantorVesper_rigged.glb",
+  "type": "Model",
+  "assetId": "87320725806516",
+  "time": "2026-10-29 13:57"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/DameOrrery_rigged.glb",
+  "type": "Model",
+  "assetId": "100541943813006",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/TheLamplighter_rigged.glb",
+  "type": "Model",
+  "assetId": "100337103280707",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/VeilWalker_rigged.glb",
+  "type": "Model",
+  "assetId": "89236664532172",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/CantorVesper_BaseColor.png",
+  "type": "Decal",
+  "assetId": "88233563120101",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/DameOrrery_BaseColor.png",
+  "type": "Decal",
+  "assetId": "104531048923567",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/TheLamplighter_BaseColor.png",
+  "type": "Decal",
+  "assetId": "81472362180131",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/VeilWalker_BaseColor.png",
+  "type": "Decal",
+  "assetId": "126845041722270",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/CantorVesper_cutout.png",
+  "type": "Decal",
+  "assetId": "96304300677262",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/CantorVesper_lore.png",
+  "type": "Decal",
+  "assetId": "87993153013124",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/DameOrrery_cutout.png",
+  "type": "Decal",
+  "assetId": "99586509154989",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/DameOrrery_lore.png",
+  "type": "Decal",
+  "assetId": "135396128159303",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/TheLamplighter_cutout.png",
+  "type": "Decal",
+  "assetId": "114916642237241",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/TheLamplighter_lore.png",
+  "type": "Decal",
+  "assetId": "127551983332701",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/VeilWalker_cutout.png",
+  "type": "Decal",
+  "assetId": "74676763342643",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/VeilWalker_lore.png",
+  "type": "Decal",
+  "assetId": "103918551040206",
+  "time": "2026-10-29 14:03"
  }
 ]

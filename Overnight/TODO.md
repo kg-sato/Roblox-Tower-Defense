@@ -72,7 +72,6 @@ Ids are in priority order: T001 is first. Research and lore come before characte
 - [ ] T187 | Boss attacks as data: each attack with timing, damage and telegraph | verify: studio: evidence T187 (test PASS)
 - [ ] T190 | Economy simulator: coins and gems per wave, roll cost curve, checked over 25 stages | verify: studio: evidence T190
 - [ ] T193 | Ability synergy list: which familiars combo and why (data, not hard-coded) | verify: studio: evidence T193
-- [ ] T194 | Status effects: burn, chill, stun, mark, lantern-bright, each with duration and stack rule | verify: studio: evidence T194 (test PASS)
 - [ ] T197 | Skill tree: 40 nodes, each with a short description and a clear effect; no dead nodes | verify: studio: evidence T197
 - [ ] T002 | Achievement unlock logic on the server, tested | verify: studio: evidence T202 (test PASS)
 - [ ] T003 | Tutorial rewrite: 6 steps, each teaching one mechanic, with a lore line | verify: studio: evidence T203

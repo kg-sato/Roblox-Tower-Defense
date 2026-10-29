@@ -1,3 +1,3 @@
-PARTIAL (design written; implementation and test NOT done, so the task stays open): Enemy armour types and damage types (design only)
-Where: Roblox Dev/Design/Familiar Systems.md. Facts from the lore verbs and factions (Roblox Dev/Lore/Familiars/) and Config.UPGRADES; all numbers are PROPOSAL.
-Unmet: the data table or code and the PASS test the task asks for (nothing implemented in Studio).
+PASS (Config.ARMOR_MULT, DAMAGE_TYPE and the armor field on enemies installed, applied in MatchSim.armourDamage, tested)
+Fire 0.7 vs brass and 1.2 vs flesh, ice 1.3 vs brass, stone 0.7 and light 1.3 vs fog; Sentinel pierces brass and the Wraith everything; bosses have no armour. Tested in Combat.test.luau.
+Limits: the multipliers are the proposal from Design/Familiar Systems.md, not balanced; no UI shows the armour type.

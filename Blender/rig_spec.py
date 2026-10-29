@@ -58,6 +58,7 @@ ARCHETYPE = {
     "Ember": "floater", "MothLantern": "flyer", "BrassHound": "quadruped", "Sentinel": "biped",
     "Frostling": "biped", "Gargoyle": "quadruped", "Ward": "biped", "Archivist": "biped",
     "Mourner": "biped", "MirrorChorister": "biped", "StarDrake": "flyer", "GreyVeilWraith": "floater",
+    "CantorVesper": "biped", "DameOrrery": "biped", "TheLamplighter": "biped", "VeilWalker": "biped",
 }
 
 

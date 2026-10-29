@@ -29,8 +29,8 @@ main chat's family could see. It is not committed on its own; it is a live file.
 ## Shared resources (one holder at a time)
 | Resource | Holder | Since |
 |---|---|---|
-| Roblox Studio (Edit edits, Play, recordings) | FREE (Sonnet released, Edit mode; temp modules deleted) | 2026-10-29 |
-| ComfyUI 127.0.0.1:8188 (GPU, 8 GB) | FREE (server stopped) | 2026-10-29 |
+| Roblox Studio (Edit edits, Play, recordings) | loading-eye: odds panel check for 6 rarities (GameClient), Edit + short Play; about 20 min | 2026-10-29 |
+| ComfyUI 127.0.0.1:8188 (GPU, 8 GB) | FREE (Sonnet stopped the server) | 2026-10-29 |
 | GPU for Hunyuan3D (shares the 8 GB with ComfyUI) | FREE | |
 | Blender (CPU, headless; several runs are fine) | FREE | |
 | File server for Studio_Export (127.0.0.1:8770 or 8798) | FREE; whoever starts it stops it | |
@@ -43,6 +43,7 @@ main chat's family could see. It is not committed on its own; it is a live file.
 | Sonnet (familiar art) | ReplicatedStorage.Characters, Shared.Config, Shared.Familiars, Shared.FamiliarClips, Shared.FamiliarMaterials, ReplicatedStorage.FamiliarArt, ServerScriptService.MatchService, StarterPlayerScripts.CollectionScreen; Blender/* character work |
 | 3d-art (if it returns) | MapBuilder, WardFX, ServerStorage models (Ward meshes, metal_white) |
 | Sonnet, stage set 5 (new, 2026-10-29) | ServerScriptService.BackdropVeil (new), the AboveTheGreyVeil entry in Shared.StageSets, the `veil` state in MusicFX.states |
+| Sonnet, cutscenes (new, 2026-10-29) | StarterPlayerScripts.CutsceneDirector (new), StarterPlayerScripts.StageSetClient, Shared.StageCaptions |
 | shared, append-only | VFX/ASSETS.md, UI Kit/art/upload_1028/ids.txt and decal_ids.txt, Roblox Dev/Session Log.md (add lines, never rewrite) |
 
 ## Queue: loading-eye (main UI chat)

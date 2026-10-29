@@ -130,5 +130,49 @@
   "summon": "Visitors. Better than ships.",
   "attack": "Mind the rocks.",
   "victory": "The light held."
+ },
+ "CantorVesper": {
+  "name": "CantorVesper",
+  "tone": [
+   "calm",
+   "exact",
+   "tireless"
+  ],
+  "summon": "Take your breath. Now, together.",
+  "attack": "Hold the note.",
+  "victory": "The song goes on without us."
+ },
+ "DameOrrery": {
+  "name": "DameOrrery",
+  "tone": [
+   "gruff",
+   "warm",
+   "impatient"
+  ],
+  "summon": "Right. What is broken?",
+  "attack": "Again, faster.",
+  "victory": "Good. Now oil it."
+ },
+ "TheLamplighter": {
+  "name": "TheLamplighter",
+  "tone": [
+   "patient",
+   "quiet",
+   "kind"
+  ],
+  "summon": "Light enough for all of you.",
+  "attack": "Here. Look.",
+  "victory": "Another lamp lit. Another."
+ },
+ "VeilWalker": {
+  "name": "VeilWalker",
+  "tone": [
+   "light",
+   "distant",
+   "amused"
+  ],
+  "summon": "Mind the edge. It is a long way down.",
+  "attack": "There. See it?",
+  "victory": "The fog will remember this."
  }
 }

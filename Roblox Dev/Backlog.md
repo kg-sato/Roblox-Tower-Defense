@@ -125,3 +125,11 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [x] (2026-10-29) 11 enemy and boss concept models (Fog Wisp to the Clockmaker) built, checked against the familiar silhouettes, uploaded, loaded back in Studio
 - [x] (2026-10-29) Headless tests: Rules (37), ServerRules (45), Balance integration run; 12 of 12 suites PASS
 - [ ] Respec button on the skill tree screen: `Action:FireServer("Respec")`, reply event `Respec {refunded, cost}`; fee 50 gems, cooldown 120 s (server done 2026-10-29, T198)
+- [ ] Client: handle `Pace {id, dist, speed, t}` (re-time the enemy), then set `Config.MOVEMENT_EFFECTS = true` so slow, stun, freeze, plant and the thief speed-up show ([[Design/Combat Systems Implemented]])
+- [ ] Client: models for Clockwork Crow and Lantern Thief (and Sentinel plant and telegraph FX), then set `Config.NEW_ENEMIES = true`
+- [ ] UI: odds panel and reveal for six rarities (`FXRecipes.ORDER`, `RevealFX` ORDER need Mythic and Celestial)
+- [ ] Content: Mythic and Celestial familiars (lore, model, rig, stats), tier 6 to 8 looks
+- [ ] Animations: idle, hit, death, new walk cycles for familiars and enemies
+- [ ] More cutscenes: merge morph on tier-up (needs GameClient's model table), boss phase transitions (needs boss phases), sounds for the captions and set morph ([[Design/Cutscenes and Transitions]])
+- [ ] Look at the four human familiars on the board in Play (facing: Yaw 180, scale, animations) and tune their stats ([[Design/Human Familiars]])
+- [ ] Idle clips and better hands and faces for the human familiars; more humans for Epic and Legendary if wanted

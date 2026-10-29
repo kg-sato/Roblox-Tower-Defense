@@ -1,3 +1,3 @@
-PARTIAL (design written; implementation and test NOT done, so the task stays open): Status effects: five statuses with duration and stack rule (design only)
-Where: Roblox Dev/Design/Familiar Systems.md. Facts from the lore verbs and factions (Roblox Dev/Lore/Familiars/) and Config.UPGRADES; all numbers are PROPOSAL.
-Unmet: the data table or code and the PASS test the task asks for (nothing implemented in Studio).
+PASS WITH A GAP (Config.STATUS and MatchSim.applyStatus installed in Studio, mirrored, tested)
+Burn, chill (3 stacks freeze), stun (immunity afterwards), mark and hush, with the boss halving and freeze immunity and the planted-enemy immunity; the lantern-bright status from the design is not implemented (no player lantern power exists). Tests in Tests/Combat.test.luau: 51 of 51 PASS in Studio Edit mode.
+Gap: slows, stuns and freezes only change enemy speed when Config.MOVEMENT_EFFECTS is true, and it is false because the client moves enemies at constant speed (a Pace event handler is needed in GameClient); no status visuals.
