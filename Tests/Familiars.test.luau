@@ -16,8 +16,8 @@ return function(Shared)
 		table.insert(results, (ok and "ok   " or "FAIL ") .. name .. " -> " .. tostring(got) .. (ok and "" or " (want " .. tostring(want) .. ")"))
 	end
 
-	check("16 familiars", #F.list, 16)
-	check("order has 16 ids", #F.order, 16)
+	check("20 familiars", #F.list, 20)
+	check("order has 20 ids", #F.order, 20)
 
 	local rarity, names, ids, roles, lores, empty, badRarity = {}, {}, {}, {}, {}, 0, 0
 	local dupName, dupId, dupRole, dupLore = 0, 0, 0, 0
@@ -52,8 +52,8 @@ return function(Shared)
 	end
 	check("rarity Common 4", rarity.Common, 4)
 	check("rarity Rare 4", rarity.Rare, 4)
-	check("rarity Epic 2", rarity.Epic, 2)
-	check("rarity Legendary 2", rarity.Legendary, 2)
+	check("rarity Epic 4", rarity.Epic, 4)
+	check("rarity Legendary 4", rarity.Legendary, 4)
 	check("rarity Mythic 2", rarity.Mythic, 2)
 	check("rarity Celestial 2", rarity.Celestial, 2)
 	check("every rarity exists in Config.RARITIES", badRarity, 0)
@@ -75,14 +75,14 @@ return function(Shared)
 	end
 
 	-- wiring into Config
-	check("Config.FAMILIARS has 16", (function()
+	check("Config.FAMILIARS has 20", (function()
 		local n = 0
 		for _ in Config.FAMILIARS do
 			n += 1
 		end
 		return n
-	end)(), 16)
-	check("Config.FAMILIAR_ORDER has 16", #Config.FAMILIAR_ORDER, 16)
+	end)(), 20)
+	check("Config.FAMILIAR_ORDER has 20", #Config.FAMILIAR_ORDER, 20)
 	local mapped, mappedBad, unmappedInPets = 0, 0, 0
 	for _, f in F.list do
 		local def = f.charId and Config.PETS[f.charId]
@@ -95,18 +95,18 @@ return function(Shared)
 			unmappedInPets += 1
 		end
 	end
-	check("all 16 familiars map onto a character folder", mapped, 16)
+	check("all 20 familiars map onto a character folder", mapped, 20)
 	check("mapped pets carry name, role, faction, loreId and the same rarity", mappedBad, 0)
 	check("no familiar is missing from Config.PETS", unmappedInPets, 0)
 	check("forChar finds Zap as Moth-Lantern", F.forChar("Zap") and F.forChar("Zap").id, "MothLantern")
 	check("forChar returns nil for retired Sprout", F.forChar("Sprout"), nil)
 	check("retired Sprout is gone from Config.PETS", Config.PETS.Sprout, nil)
-	check("roster is the 16 familiars", #Config.PET_ORDER, 16)
+	check("roster is the 20 familiars", #Config.PET_ORDER, 20)
 	local perRarity = { Common = 0, Rare = 0, Epic = 0, Legendary = 0, Mythic = 0, Celestial = 0 }
 	for _, id in Config.PET_ORDER do
 		perRarity[Config.PETS[id].rarity] += 1
 	end
-	check("roster rarity spread 4/4/2/2/2/2", perRarity.Common .. "/" .. perRarity.Rare .. "/" .. perRarity.Epic .. "/" .. perRarity.Legendary .. "/" .. perRarity.Mythic .. "/" .. perRarity.Celestial, "4/4/2/2/2/2")
+	check("roster rarity spread 4/4/4/4/2/2", perRarity.Common .. "/" .. perRarity.Rare .. "/" .. perRarity.Epic .. "/" .. perRarity.Legendary .. "/" .. perRarity.Mythic .. "/" .. perRarity.Celestial, "4/4/4/4/2/2")
 
 	return (failed == 0 and "PASS" or "FAIL") .. " Familiars: " .. (#results - failed) .. "/" .. #results .. " checks ok\n" .. table.concat(results, "\n")
 end

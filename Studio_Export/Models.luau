@@ -354,7 +354,7 @@ end
 -- 2026-10-28 art pass: Blender-made enemy meshes (ReplicatedStorage.Enemy<Kind>Mesh, VFX/ASSETS.md) replace the
 -- primitive builders when present. Sized to the old model's height, standing on y = 0, facing -Z like the others.
 local addWalk -- defined below (Sentinel walk)
-local MESH_HEIGHT = { Tank = 10.5 } -- reviewer v7c: "a tiny grey speck at board zoom", 1.4x
+local MESH_HEIGHT = { Tank = 10.5, Crow = 2.6, Thief = 4.4 } -- reviewer v7c: "a tiny grey speck at board zoom", 1.4x
 local MESH_YAW = { Tank = 0 } -- measured in Play: with no turn the front already faces -Z
 local function meshEnemy(model, kind)
 	local art = game:GetService("ReplicatedStorage"):FindFirstChild("Enemy" .. kind .. "Mesh")

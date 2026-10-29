@@ -191,3 +191,63 @@ Image ids are what the game uses (`ReplicatedStorage.ArtIds`, `LoadingScreen.ART
 | 95646501629562 | 121057959639956 | etched_eye_lashes: make_eye_lashes.py, etched lash fringe and crease lines around the great eye's rim (the user: "the eyelashes are why the original model was so defined", 2026-10-29) |
 | 88935995065985 | 131230619338082 | etched_eye_lashes_black: make_eye_lashes.py v2, BLACK lashes over a cream lid band (the user: "the screenshots eyelashes are pure black"; measured lid band 74 % dark, reference 62-78 %), replaces 95646501629562 |
 | 117521992225366 / 131055110018506 | 115537900971155 / 72357432024114 | etched_iris_inner / etched_iris_outer: make_etched_iris_rings.py, the etched clock iris split at r 141 so its rings counter-rotate in the 2D great eye (2026-10-29) |
+
+## Human familiar animation clips (uploaded 2026-10-29, Animation, creator 872430111)
+Source: Animation Kit/out/familiar_clips/*.rbxmx built by Shared.FamiliarClips; not yet wired into the game.
+
+- CantorVesper_Idle: rbxassetid://111755183195492
+- CantorVesper_Attack: rbxassetid://92564774580885
+- CantorVesper_Death: rbxassetid://115167173392830
+- CantorVesper_Hit: rbxassetid://120823661265971
+- CantorVesper_Walk: rbxassetid://84105644943359
+- DameOrrery_Attack: rbxassetid://126626877895658
+- DameOrrery_Death: rbxassetid://90108742894285
+- DameOrrery_Hit: rbxassetid://71424311990602
+- DameOrrery_Idle: rbxassetid://129124905942506
+- DameOrrery_Walk: rbxassetid://120536152700476
+- TheLamplighter_Attack: rbxassetid://103840120478519
+- TheLamplighter_Death: rbxassetid://97484836783702
+- TheLamplighter_Hit: rbxassetid://74108757367639
+- TheLamplighter_Idle: rbxassetid://127637182554164
+- TheLamplighter_Walk: rbxassetid://89121859012387
+- VeilWalker_Attack: rbxassetid://112947395281798
+- VeilWalker_Death: rbxassetid://106412719609902
+- VeilWalker_Hit: rbxassetid://108261744215622
+- VeilWalker_Idle: rbxassetid://110409424576530
+- VeilWalker_Walk: rbxassetid://103223214507393
+
+## Epic and Legendary human familiars (uploaded 2026-10-29, creator 872430111)
+Rigged models (Model) and gold-ink textures (Decal ids; image ids are read in Studio):
+- ConstableWren: model rbxassetid://99720337419253, gold decal 132991960018565
+- MadamQuill: model rbxassetid://124637000398787, gold decal 75486492195389
+- CogWarden: model rbxassetid://128047234263813, gold decal 84091719510381
+- FerrymanOfFog: model rbxassetid://126312687773119, gold decal 95991038779586
+
+Clips for the four Epic and Legendary humans (Animation, 2026-10-29):
+- CogWarden_Attack: rbxassetid://70885088625664
+- CogWarden_Death: rbxassetid://122336116732262
+- CogWarden_Hit: rbxassetid://112119258612806
+- CogWarden_Idle: rbxassetid://79102047505162
+- CogWarden_Walk: rbxassetid://133069679617807
+- ConstableWren_Attack: rbxassetid://91717559458415
+- ConstableWren_Death: rbxassetid://124678587901553
+- ConstableWren_Hit: rbxassetid://83522939395326
+- ConstableWren_Idle: rbxassetid://92718111276555
+- ConstableWren_Walk: rbxassetid://80833612328996
+- FerrymanOfFog_Attack: rbxassetid://120185630494797
+- FerrymanOfFog_Death: rbxassetid://108556216544150
+- FerrymanOfFog_Hit: rbxassetid://96020261101074
+- FerrymanOfFog_Idle: rbxassetid://84709484237976
+- FerrymanOfFog_Walk: rbxassetid://91366107093592
+- MadamQuill_Attack: rbxassetid://100837798287130
+- MadamQuill_Death: rbxassetid://85431449650614
+- MadamQuill_Hit: rbxassetid://124207566291276
+- MadamQuill_Idle: rbxassetid://110675701836198
+- MadamQuill_Walk: rbxassetid://89847662610535
+
+Collection art for the four Epic and Legendary humans (Decal ids, 2026-10-29; image ids are in Shared FamiliarArt): ConstableWren cutout 130529500306008, lore 73237313923491; MadamQuill cutout 90455337557183, lore 82342736143900; CogWarden cutout 76464098140186, lore 133110636742859; FerrymanOfFog cutout 113556706665399, lore 110766383718160.
+
+Skill tree engraved icons (white line art, 256 px, UI Kit/art/make_skilltree_icons.py; uploaded 2026-10-29 via Studio upload_image, image ids): Armor rbxassetid://140485132734548, Charge rbxassetid://137915456412547, Charm rbxassetid://91321861751583, Claws rbxassetid://104503848358426, Clock rbxassetid://70371876518220, Discount rbxassetid://132380128059909, Double rbxassetid://79355991077094, Eye rbxassetid://118479517178330, Finder rbxassetid://140672373757552, Guard rbxassetid://83091671363094, Haste rbxassetid://99346353544120, Heavy rbxassetid://79764788010440, Learner rbxassetid://128027987548468, Magnet rbxassetid://114214626329333, Mega rbxassetid://130998936325390, Merger rbxassetid://87654079598346, Pity rbxassetid://139228403939798, Refund rbxassetid://85148876319062, Start rbxassetid://88116451873049
+
+Title page layers (uploaded 2026-10-29 via upload_image, from UI Kit/art/title_bg/layers): sky 135189074641926, rays 96973107269185, figure 118678537152629, mist_far 82813632895739, mist_near 108963568266256, foreground 127018063062309.
+Title foreground v2 (character moved right): 97923729896441 (127018063062309 superseded)

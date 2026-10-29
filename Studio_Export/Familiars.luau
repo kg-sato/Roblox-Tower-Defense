@@ -74,6 +74,22 @@ Familiars.list = {
 		faction = "Unaligned", element = "fog and starlight", home = "Above the Grey Veil", loreId = "lore_veil_walker", color = Color3.fromRGB(190, 230, 255), charId = "VeilWalker",
 		tier2 = "a second veil layer in a paler colour", tier3 = "a hovering ring of three small stars at the shoulder",
 		voice = { tone = { "light", "distant", "amused" }, summon = "Mind the edge. It is a long way down.", attack = "There. See it?", victory = "The fog will remember this." } },
+	{ id = "ConstableWren", name = "Constable Wren", epithet = "who blows the hour the clock forgot", rarity = "Epic", role = "Whistle", roleText = "every fourth shot is a whistle blast that hits nearby enemies for 60% damage",
+		faction = "Lantern Keepers", element = "brass and breath", home = "Lampwick Lane", loreId = "lore_constable_wren", color = Color3.fromRGB(224, 164, 88), charId = "ConstableWren",
+		tier2 = "a second whistle on the chain", tier3 = "a ring of small lit lanterns floating round her shoulders",
+		voice = { tone = { "dutiful", "dry", "unshakeable" }, summon = "Evening, all. Keep moving.", attack = "Move along.", victory = "Lights on. Another night kept." } },
+	{ id = "MadamQuill", name = "Madam Quill", epithet = "the Ink Seer who writes tomorrow's footnotes", rarity = "Epic", role = "Annotate", roleText = "each hit marks the enemy and hushes its special move",
+		faction = "Star Choir", element = "ink and starlight", home = "Above the Grey Veil", loreId = "lore_madam_quill", color = Color3.fromRGB(154, 140, 255), charId = "MadamQuill",
+		tier2 = "a second floating pen that writes on its own", tier3 = "the book opens and pages of light circle her",
+		voice = { tone = { "precise", "amused", "faintly ominous" }, summon = "Ah. A new line in the ledger.", attack = "Noted.", victory = "As written." } },
+	{ id = "CogWarden", name = "The Cog-Warden", epithet = "who holds the Foundry door shut", rarity = "Legendary", role = "Lockstep", roleText = "crits stun the target, and every sixth shot strikes twice",
+		faction = "Clockwork Guild", element = "gears and iron", home = "Clockwork Foundry", loreId = "lore_cog_warden", color = Color3.fromRGB(230, 180, 80), charId = "CogWarden",
+		tier2 = "a second great key on the other hip", tier3 = "a halo of slow turning gears behind the helm",
+		voice = { tone = { "slow", "courteous", "immovable" }, summon = "The door stays shut. Stand behind me.", attack = "Not yet.", victory = "It was worth the wait." } },
+	{ id = "FerrymanOfFog", name = "The Ferryman of Fog", epithet = "who carries what the fog forgets", rarity = "Legendary", role = "Crossing", roleText = "each hit chills and marks the enemy, and he extends the reach of familiars beside him by 15%",
+		faction = "Hollow Court", element = "fog and cold water", home = "Harbour of Brass", loreId = "lore_ferryman_of_fog", color = Color3.fromRGB(143, 211, 208), charId = "FerrymanOfFog",
+		tier2 = "a second lantern, lower, on the pole's tail", tier3 = "a low ring of mist and slow ripples round his boots",
+		voice = { tone = { "quiet", "kind", "tired" }, summon = "Step in. Mind the water.", attack = "Cold, isn't it.", victory = "Everyone gets across." } },
 }
 
 Familiars.byId = {} :: { [string]: Familiar }

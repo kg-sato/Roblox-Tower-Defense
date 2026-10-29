@@ -303,6 +303,57 @@ local conn = RunService.RenderStepped:Connect(function(dt)
 	status.Text = STATUS[i] .. "..."
 end)
 
+-- 2026-10-29 loading clock (the user's Pinterest pins, note Research/UI/Pinterest Batch 1 section 5: a clock "with multiple
+-- moving parts", 4 to 6 concentric rings turning at independent speeds, some counter-rotating, with hands as the
+-- progress). Pacing only, gold-ink palette, no reference art. Built from frames and strokes (no uploads). It sits in the
+-- tunnel's centre (so it glides, turns and dives with the tunnel) and fades out when the finale starts; the hands
+-- are the progress: the minute hand makes three sweeps over the load and the hour hand one, both landing on twelve.
+local clockRoot = new("CanvasGroup", { Name = "LoadingClock", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.3, 0.3), GroupTransparency = 1, ZIndex = 6 }, tunnel)
+local CLOCK_INK = Color3.fromRGB(255, 214, 120)
+local backing = new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1.04, 1.04), BackgroundColor3 = Color3.fromRGB(8, 5, 3), BackgroundTransparency = 0.3, BorderSizePixel = 0 }, clockRoot) -- dark ink plate so the gold rings read over the busy tunnel (first capture: too faint)
+new("UICorner", { CornerRadius = UDim.new(1, 0) }, backing)
+local function clockRing(r, stroke, ticks, tickSize, speed)
+	local ring = new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(r, r), BackgroundTransparency = 1 }, clockRoot)
+	new("UICorner", { CornerRadius = UDim.new(1, 0) }, ring)
+	new("UIStroke", { Color = CLOCK_INK, Thickness = stroke, Transparency = 0.05 }, ring)
+	new("UIStroke", { Color = CLOCK_INK, Thickness = stroke + 5, Transparency = 0.9 }, ring) -- faint ghost: glare (duplicate-for-glare)
+	for k = 0, ticks - 1 do
+		local a = k / ticks * math.pi * 2
+		new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5 + 0.5 * math.cos(a), 0.5 + 0.5 * math.sin(a)), Size = UDim2.fromScale(tickSize[1], tickSize[2]), Rotation = math.deg(a) + 90, BackgroundColor3 = CLOCK_INK, BackgroundTransparency = k % 4 == 0 and 0.05 or 0.35, BorderSizePixel = 0 }, ring)
+	end
+	return { f = ring, v = speed }
+end
+local clockRings = {
+	clockRing(1.0, 2, 60, { 0.008, 0.03 }, 4), clockRing(0.84, 2, 12, { 0.03, 0.03 }, -9), clockRing(0.68, 1, 24, { 0.012, 0.012 }, 16),
+	clockRing(0.52, 2, 8, { 0.07, 0.05 }, -26), clockRing(0.36, 1, 6, { 0.02, 0.05 }, 40),
+}
+for _, R in clockRings do if R.f.Size.X.Scale == 0.84 then R.f.Rotation = 7 end end
+local function clockHand(len, width, tail)
+	local pivot = new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1 }, clockRoot)
+	new("Frame", { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(width, len), BackgroundColor3 = Color3.fromRGB(255, 236, 190), BorderSizePixel = 0 }, pivot)
+	new("Frame", { AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(width, tail), BackgroundColor3 = CLOCK_INK, BorderSizePixel = 0 }, pivot)
+	local w = new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5 + tail), Size = UDim2.fromScale(width * 3, width * 3), BackgroundColor3 = CLOCK_INK, BorderSizePixel = 0 }, pivot) -- counterweight
+	new("UICorner", { CornerRadius = UDim.new(1, 0) }, w)
+	return pivot
+end
+local minuteHand, hourHand, secondHand = clockHand(0.46, 0.012, 0.1), clockHand(0.3, 0.02, 0.07), clockHand(0.5, 0.006, 0.14)
+local hub = new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.05, 0.05), BackgroundColor3 = Color3.fromRGB(255, 236, 190), BorderSizePixel = 0 }, clockRoot)
+new("UICorner", { CornerRadius = UDim.new(1, 0) }, hub)
+tw(clockRoot, 1.6, { GroupTransparency = 0.1 }, Enum.EasingStyle.Sine)
+local clockT0, lastTick, secAngle = os.clock(), 0, 0
+local clockConn = RunService.RenderStepped:Connect(function(dt)
+	for _, R in clockRings do R.f.Rotation += R.v * dt end -- every ring turns all the time, no two alike
+	minuteHand.Rotation = shown * 360 * 3
+	hourHand.Rotation = shown * 360
+	local now = os.clock() - clockT0
+	if now - lastTick >= 1 then -- the second hand jumps a step with a little overshoot, then settles
+		lastTick += 1
+		secAngle += 30
+		tw(secondHand, 0.35, { Rotation = secAngle }, Enum.EasingStyle.Back)
+	end
+end)
+gui.Destroying:Connect(function() clockConn:Disconnect() end)
+
 if not game:IsLoaded() then
 	game.Loaded:Wait()
 end
@@ -347,6 +398,7 @@ task.spawn(function()
 	tunnel.Position = UDim2.fromScale(0.5, 0.5)
 end)
 tunnelSpeed = 0.9
+tw(clockRoot, 0.5, { GroupTransparency = 1 }) -- the loading clock steps aside for the tree and the eyes
 for _, d in titleRow:GetDescendants() do -- the title steps aside so the tree and the eyes own the centre
 	if d:IsA("TextLabel") then tw(d, 0.3, { TextTransparency = 1 }) end
 	if d:IsA("ImageLabel") then tw(d, 0.3, { ImageTransparency = 1 }) end
@@ -566,14 +618,17 @@ local ringConn = RunService.RenderStepped:Connect(function(dt)
 end)
 gui.Destroying:Connect(function() ringConn:Disconnect() end)
 -- the slit (same as the watchers): the eye shows through a soft horizontal band that widens from the middle
-local slitE = new("UIGradient", { Rotation = 90, Transparency = NumberSequence.new(1) }, eyeArt)
+local slitE = new("UIGradient", { Rotation = 90, Enabled = false, Transparency = NumberSequence.new(1) }, eyeArt) -- unused since the lid squash (kept so the later slitE.Enabled line stays valid)
 local slitI = {}
 for _, x in { irisBack, ringOut, ringIn } do table.insert(slitI, new("UIGradient", { Rotation = 90, Transparency = NumberSequence.new(1) }, x)) end
 local openV = Instance.new("NumberValue")
 openV.Changed:Connect(function(v)
 	local lo, hi = math.clamp(0.5 - v, 0.002, 0.49), math.clamp(0.5 + v, 0.51, 0.998)
-	local e = math.min(0.06, math.max(0.002, (hi - lo) / 3))
-	slitE.Transparency = hi - lo < 0.01 and NumberSequence.new(1) or NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(lo, 1), NumberSequenceKeypoint.new(lo + e, 0), NumberSequenceKeypoint.new(hi - e, 0), NumberSequenceKeypoint.new(hi, 1), NumberSequenceKeypoint.new(1, 1) })
+	-- 2026-10-29 (the user: the eye only faded in through a slit, it did not open like a blink): the socket art (lids and
+	-- lashes) squashes vertically about the eye's middle, so the upper lid and lashes really travel; the iris keeps its
+	-- full size and is cut off by the same opening (slitI), so it is revealed, not squashed
+	eyeArt.AnchorPoint, eyeArt.Position = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5)
+	eyeArt.Size = UDim2.fromScale(1, math.max(0.02, 2 * v))
 	local span, base = 424 / 676, 0.5 - 0.5 * 424 / 676 -- the iris box inside the eye
 	local ilo, ihi = math.clamp((lo - base) / span, 0.002, 0.49), math.clamp((hi - base) / span, 0.51, 0.998)
 	local iseq = ihi - ilo < 0.01 and NumberSequence.new(1) or NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(ilo, 1), NumberSequenceKeypoint.new(ilo + 0.02, 0), NumberSequenceKeypoint.new(ihi - 0.02, 0), NumberSequenceKeypoint.new(ihi, 1), NumberSequenceKeypoint.new(1, 1) })
@@ -585,19 +640,24 @@ end)
 -- colour copies that slide together as it steadies. Everything in the finale turns counter-clockwise, one whirlpool.
 local s0 = treeBox.Size.X.Scale
 treeBox.AnchorPoint, treeBox.Position = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.9 - s0 / 2) -- same place, centre pivot
-local COLLAPSE = 0.9
+-- 2026-10-29 (the user: the lid opening and the suck-in must play AT THE SAME TIME as the tree and the small eyes
+-- vanish, not one after another): one overlapping timeline from here, t = 0 at the collapse.
+--   0.0-1.2 tree wrung into the point (slower, so it is still going when the lid and the pull are under way)
+--   0.0-0.7 great eye unfurls out of the same point (morph: same point, same counter-clockwise turn)
+--   0.05-1.55 watchers spiral into the eye
+--   0.2-1.8 lid opens   0.6-2.6 pull / whirlpool   1.8-2.6 dials spin up
+local COLLAPSE = 1.2
 tw(treeBox, COLLAPSE, { Size = UDim2.fromScale(0.02, 0.02), Position = UDim2.fromScale(0.5, EYE_Y), Rotation = -240 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 for _, i in { whole, halo } do tw(i, COLLAPSE, { ImageTransparency = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.In) end
 for _, W in watchers do tw(W.beam, COLLAPSE * 0.8, { BackgroundTransparency = 1 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In) end
-task.wait(COLLAPSE - 0.2)
-task.delay(0.25, function()
+task.delay(COLLAPSE + 0.05, function()
 	frenzy = false
 	nextBurst = math.huge
 	mend()
 	treeBox.Visible = false
 end)
 great.Size, great.Rotation = UDim2.fromScale(EW * 0.08, EW * EA * 0.08), 110
-tw(great, 1.6, { Size = UDim2.fromScale(EW, EW * EA), Rotation = 0 }, Enum.EasingStyle.Quint)
+tw(great, 0.7, { Size = UDim2.fromScale(EW, EW * EA), Rotation = 0 }, Enum.EasingStyle.Quint)
 for _, x in { eyeArt, irisBack, ringOut, ringIn, pupilDisc } do tw(x, 0.45, { ImageTransparency = 0 }) end
 openV.Value = 0.03 -- it arrives closed: a thin glowing slit, spinning out of the point
 treeGlow.Position, treeGlow.Size, treeGlow.BackgroundTransparency = UDim2.fromScale(0.5, EYE_Y), UDim2.fromScale(0.05, 0.05), 0.2
@@ -611,7 +671,7 @@ task.spawn(function() -- glitch bands across the whole eye, fewer and smaller sh
 	while os.clock() - t0g < 1.2 do
 		local age = (os.clock() - t0g) / 1.2
 		for _, bd in bands do
-			if math.random() < 0.85 - age * 0.5 then
+			if math.random() < 0.85 - age * 0.5 and openV.Value > 0.3 then -- full-socket copies would show through the closed lid
 				local h = 0.05 + math.random() * 0.1
 				local y = 0.15 + math.random() * (0.7 - h)
 				bd.ImageRectOffset, bd.ImageRectSize = Vector2.new(0, 1024 * 0.15 + 676 * y), Vector2.new(1024, 676 * h)
@@ -626,7 +686,7 @@ task.spawn(function() -- glitch bands across the whole eye, fewer and smaller sh
 	for _, bd in bands do bd:Destroy() end
 end)
 for _, F in fog do tw(F.img, 1.2, { ImageTransparency = F.base - 0.15 }) end -- the fog thickens
-task.delay(0.15, function() -- the watchers spiral into the great eye
+task.delay(0.05, function() -- the watchers spiral into the great eye
 	local t0w, starts = os.clock(), {}
 	for i, W in watchers do
 		local p = W.holder.Position
@@ -636,7 +696,7 @@ task.delay(0.15, function() -- the watchers spiral into the great eye
 	end
 	local conn
 	conn = RunService.RenderStepped:Connect(function()
-		local q = math.min(1, (os.clock() - t0w) / 1.1)
+		local q = math.min(1, (os.clock() - t0w) / 1.5)
 		local e = q * q
 		for i, W in watchers do
 			local S = starts[i]
@@ -649,25 +709,21 @@ task.delay(0.15, function() -- the watchers spiral into the great eye
 		if q >= 1 then conn:Disconnect() end
 	end)
 end)
-task.wait(1.5)
--- it opens: the slit parts a little, rests, then opens wide (one smooth motion each, no reversal). Once fully open
--- the slit's gradients come off, the dials start turning against each other, and a steady warm light comes up.
-tw(openV, 0.7, { Value = 0.09 }, Enum.EasingStyle.Sine)
-task.wait(0.85)
-tw(openV, 1.7, { Value = 0.5 }, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-task.wait(1.75)
-slitE.Enabled = false
-for _, g in slitI do g.Enabled = false end
-tw(ringSpin, 1.2, { Value = 1 }, Enum.EasingStyle.Sine)
-tw(pupil, 1.0, { ImageTransparency = 0.55 }, Enum.EasingStyle.Sine)
+local PULL = 2.0
+task.delay(0.2, function() -- the lid opens in one smooth motion, while the tree and the watchers are still going
+	tw(openV, 0.75, { Value = 0.5 }, Enum.EasingStyle.Quint) -- a blink: the lid snaps up fast, then eases to rest
+end)
+task.delay(1.8, function() -- fully open: the slit's gradients come off (they must not turn with the dials), the dials spin up
+	slitE.Enabled = false
+	for _, g in slitI do g.Enabled = false end
+	tw(ringSpin, PULL - 1.2, { Value = 35 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+end)
 task.wait(0.6)
--- the pull (the user: "sucks in the player", "more rotational movement so the suck in is more immersive"): the dials
+-- the pull (starts while the lid is half open and the watchers are mid-spiral) (the user: "sucks in the player", "more rotational movement so the suck in is more immersive"): the dials
 -- spin up against each other, the pupil opens into a hole that swallows the inner dial and its light, the eye turns
 -- and draws closer, a sunburst wheels behind it, the clock tunnel and the fog turn into a whirlpool, and streaks of
 -- light spiral into the pupil
-local PULL = 1.8
 tw(great, PULL, { Size = UDim2.fromScale(EW * 1.4, EW * EA * 1.4), Rotation = -35 }, Enum.EasingStyle.Sine, Enum.EasingDirection.In)
-tw(ringSpin, PULL, { Value = 35 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 tw(pupilDisc, PULL, { Size = pupilSize(2.15) }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 tw(pupil, PULL * 0.7, { ImageTransparency = 1 })
 tw(tunnel, PULL, { Rotation = -40 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)

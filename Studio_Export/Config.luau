@@ -4,7 +4,7 @@
 local Config = {}
 
 Config.START_COINS = 30
-Config.START_GEMS = 30
+Config.START_GEMS = 60 -- was 30; the tutorial forces 3 rolls, so this stays 3 x ROLL_COST
 Config.CRYSTAL_HP = 20
 Config.TIER_MAX = 8 -- tiers 6 to 8 are the long game: tier t needs 3^(t-1) tier-1 units (2,187 for tier 8)
 Config.TIER_MULT = 3.5
@@ -16,7 +16,7 @@ Config.BOSS_EVERY = 5
 Config.BOSS_TIME = 35
 Config.OVERRUN_STAGE_LOSS = 2
 Config.OVERRUN_COIN_LOSS = 0.3
-Config.ROLL_COST = 10
+Config.ROLL_COST = 20 -- was 10; 2026-10-29 tuning: with 16 familiars the full bot cleared 25 stages in 6 min, now a mean of 10.6 min over 10 seeds
 Config.PITY_EVERY = 20 -- guaranteed Epic or better within this many rolls
 Config.UPGRADE_MAX = 5
 Config.CRIT_CAP = 0.75 -- crit chance never exceeds this, whatever upgrades and skills add
@@ -226,8 +226,8 @@ Config.ENEMIES = {
 	Crow = { hp = 12, speed = 16, coins = 3, gems = 1, leak = 1, size = 2.2, color = Color3.fromRGB(70, 74, 86), armor = "flesh" },
 	Thief = { hp = 40, speed = 11, coins = 4, gems = 2, leak = 1, size = 2.4, color = Color3.fromRGB(104, 74, 118), armor = "flesh" },
 }
-Config.NEW_ENEMIES = false -- Clockwork Crow and Lantern Thief in the wave lists (needs client models first)
-Config.MOVEMENT_EFFECTS = false -- slows, stuns, plants and speed-ups change enemy speed; the client moves enemies at a constant speed, so keep false until GameClient handles the "Pace" event {id, dist, speed, t}
+Config.NEW_ENEMIES = true -- Clockwork Crow and Lantern Thief in the wave lists (needs client models first)
+Config.MOVEMENT_EFFECTS = true -- slows, stuns, plants and speed-ups change enemy speed; the client moves enemies at a constant speed, so keep false until GameClient handles the "Pace" event {id, dist, speed, t}
 
 -- Familiar roles, damage types, armour and statuses (Design/Familiar Systems.md, Design/Enemy Bible.md). Keys are the Characters folder ids.
 Config.DAMAGE_TYPE = {
@@ -268,6 +268,11 @@ Config.ROLES = {
 	DameOrrery = { rewind = { every = 10 } },
 	TheLamplighter = { global = { damage = 0.10 } },
 	VeilWalker = { global = { crit = 0.12 } },
+	-- Epic and Legendary humans (2026-10-29): Whistle, Annotate, Lockstep, Crossing
+	ConstableWren = { nth = { n = 4, splash = { radius = 6, mult = 0.6 } } },
+	MadamQuill = { onHit = { "mark", "hush" } },
+	CogWarden = { critStun = true, nth = { n = 6, extraHit = true } },
+	FerrymanOfFog = { onHit = { "chill", "mark" }, aura = { range = 0.15 } },
 }
 
 Config.HP_GROWTH = 1.27 -- enemy hp multiplier per stage (was 1.2; raised 2026-10-29: 1.25 gave a perfect bot 6 minutes, 1.3 made it fail or take 18 minutes)
@@ -277,6 +282,44 @@ end
 
 function Config.isBossStage(stage: number): boolean
 	return stage % Config.BOSS_EVERY == 0
+end
+
+-- Boss framework (2026-10-29): one definition per boss, three phases at 100%, 66% and 33% hp. `Config.bossDef(stage)` picks the boss of a stage set
+-- (the five repeat after stage 25). Each phase has `fx` that the sim runs generically (Shared.MatchSim bossTick): regen { every, pct }, deny { every, dur } (the
+-- newest unit cannot fire), freeze { every, dur } (every unit cannot fire), summon { every, kind, count }, slowAura { radius, slow } (units within radius
+-- cool down 1/(1+slow) as fast), speedMult, damageTaken. Design notes: Roblox Dev/Design/Boss Designs.md and Boss Framework.md. Numbers are placeholders.
+-- BOSS_PHASES off gives the old single generic Boss.
+Config.BOSS_PHASES = true
+Config.BOSSES = {
+	{ id = "Unbound", name = "The Unbound", hpMult = 1.0, rewardMult = 1.0, phases = {
+		{ at = 1, banner = "A bank of fog", fx = { deny = { every = 10, dur = 1.5 } } },
+		{ at = 0.66, banner = "It rises", fx = { deny = { every = 6, dur = 1.5 } } },
+		{ at = 0.33, banner = "The cloak falls", fx = { deny = { every = 6, dur = 1.5 }, speedMult = 1.2 } },
+	} },
+	{ id = "Automaton", name = "The Clockmaker's Automaton", hpMult = 1.3, rewardMult = 1.6, phases = {
+		{ at = 1, banner = "The gears wind", fx = { slowAura = { radius = 12, slow = 0.15 }, regen = { every = 8, pct = 0.03 } } },
+		{ at = 0.66, banner = "A bargain is offered", fx = { slowAura = { radius = 12, slow = 0.15 }, freeze = { every = 14, dur = 3 } } },
+		{ at = 0.33, banner = "The gears overheat", fx = { slowAura = { radius = 12, slow = 0.25 }, speedMult = 1.15 } },
+	} },
+	{ id = "Echo", name = "The Star Choir's Echo", hpMult = 1.4, rewardMult = 2.0, phases = {
+		{ at = 1, banner = "One voice", fx = { deny = { every = 9, dur = 2 } } },
+		{ at = 0.66, banner = "The echoes answer", fx = { deny = { every = 9, dur = 2 }, summon = { every = 10, kind = "Swift", count = 2 } } },
+		{ at = 0.33, banner = "A chord", fx = { slowAura = { radius = 10, slow = 0.25 }, summon = { every = 10, kind = "Swift", count = 2 } } },
+	} },
+	{ id = "Regent", name = "The Hollow Court Regent", hpMult = 1.3, rewardMult = 2.5, phases = {
+		{ at = 1, banner = "The bell tolls", fx = { summon = { every = 12, kind = "Grunt", count = 3 } } },
+		{ at = 0.66, banner = "The candles are lit", fx = { damageTaken = 0.85, summon = { every = 12, kind = "Grunt", count = 2 } } },
+		{ at = 0.33, banner = "The crown burns down", fx = { speedMult = 2.0 } },
+	} },
+	{ id = "Clockmaker", name = "The Clockmaker", hpMult = 1.2, rewardMult = 4.0, phases = {
+		{ at = 1, banner = "Behind its own clock", fx = { deny = { every = 12, dur = 2 } } },
+		{ at = 0.66, banner = "Time stops", fx = { freeze = { every = 20, dur = 3 } } },
+		{ at = 0.33, banner = "The hands run backwards", fx = { regen = { every = 6, pct = 0.02 }, speedMult = 1.1 } },
+	} },
+}
+function Config.bossDef(stage: number)
+	local n = #Config.BOSSES
+	return Config.BOSSES[((math.floor(stage / Config.BOSS_EVERY) - 1) % n) + 1]
 end
 
 -- Ordered enemy kinds for a stage.

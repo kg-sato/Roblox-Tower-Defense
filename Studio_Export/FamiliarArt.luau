@@ -19,4 +19,8 @@ return {
 	DameOrrery = { cutout = "rbxassetid://137449843426989", lore = "rbxassetid://91845640375322" },
 	TheLamplighter = { cutout = "rbxassetid://72732600075469", lore = "rbxassetid://103172307593224" },
 	VeilWalker = { cutout = "rbxassetid://101589900928916", lore = "rbxassetid://117306350227537" },
+	ConstableWren = { cutout = "rbxassetid://138272928953216", lore = "rbxassetid://115964896047169" },
+	MadamQuill = { cutout = "rbxassetid://93470526594789", lore = "rbxassetid://84534981554466" },
+	CogWarden = { cutout = "rbxassetid://81423624929073", lore = "rbxassetid://89873454554241" },
+	FerrymanOfFog = { cutout = "rbxassetid://90892548434368", lore = "rbxassetid://121954172237178" },
 }

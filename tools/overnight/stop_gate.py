@@ -146,10 +146,10 @@ if todo and not limit:
     except Exception:
         used = 0
     el, tot = (time.time() - cfg["start"]) / 3600, (cfg["deadline"] - cfg["start"]) / 3600
-    pace = f"{el:.1f}/{tot:.1f} h, commits {used}/3 (past 3 only with --intensive). "
+    pace = f"{el:.1f}/{tot:.1f} h, commits {used} (one per finished task). "
     block(
         pace + f"Loop {state['iter']}/{cfg['max_iterations']}, {len(todo)} left. Next {t['id']}: {t['title']} (attempt {n}). "
-        f"Verify: {t['verify']}. Tick [x] only after it passes; log one evidence line; checkpoint at milestones. Reply in under 30 words, no recap."
+        f"Verify: {t['verify']}. Tick [x] only after it passes; log one evidence line; then `python tools/overnight/checkpoint.py -m \"<two plain sentences>\" --task <id> --desc \"<three words>\" --status <gate-verified|attested|UNVERIFIED> --lane <lane>`. Silent: no chat text; push major finishes with `python tools/notify.py --done`."
     )
 
 # 5. wrap up: report required
@@ -159,5 +159,5 @@ if not fresh:
     why = limit or "no actionable tasks remain"
     block(f"Run ending ({why}). Write Overnight/REPORT.md per POLICY.md Final Report (features, bugs fixed, tests and results, files changed, "
           f"blocked tasks, checkpoint commit hashes, next actions; mark each item gate-verified, attested or UNVERIFIED), run "
-          f"`python tools/overnight/checkpoint.py -m \"<two plain sentences>\"`, then stop.")
+          f"`python tools/overnight/checkpoint.py -m \"<two plain sentences>\" --task REPORT --desc \"final report written\"`, run `python tools/morning_digest.py --push`, then stop.")
 disarm("Run ended: " + (limit or "all tasks done or blocked"))

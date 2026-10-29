@@ -114,6 +114,69 @@ local function attack(arch, t)
 	return p
 end
 
+-- Idle (loop, 2 s): slow breathing. Hit (0.5 s): short flinch back. Death (1.2 s, no loop): sink and slump forward, holds the last pose.
+-- Core chain bones only plus small arm and wing motion, so every archetype works. Back is +Z and +X rotation, forward is -X (see top note).
+local function idle(arch, ph)
+	local s = math.sin(TAU * ph)
+	local p = { Pelvis = { 0, 0, 0, 0, 0.03 * s, 0 }, Spine = { -1.2 * s }, Chest = { 1.5 * s }, Head = { -1 * s, 3 * math.sin(TAU * ph + 1) } }
+	if arch == "biped" or arch == "floater" then
+		p["UpperArm.L"] = { 3 * s }
+		p["UpperArm.R"] = { 3 * s }
+	elseif arch == "flyer" then
+		p.Pelvis = { 0, 0, 0, 0, 0.1 * s, 0 }
+		p["WingInner.L"] = { 0, 0, 10 * s }
+		p["WingInner.R"] = { 0, 0, -10 * s }
+	elseif arch == "quadruped" then
+		p.Tail1 = { 0, 8 * s }
+	end
+	return p
+end
+
+local function hit(arch, t)
+	local e = t < 0.2 and t / 0.2 or math.max(0, 1 - (t - 0.2) / 0.8)
+	e = e * e * (3 - 2 * e)
+	local p = { Pelvis = { 0, 0, 0, 0, 0, 0.2 * e }, Spine = { 18 * e }, Chest = { 14 * e }, Head = { 26 * e } }
+	if arch == "biped" or arch == "floater" then
+		p["UpperArm.L"] = { 25 * e }
+		p["UpperArm.R"] = { 25 * e }
+	elseif arch == "flyer" then
+		p["WingInner.L"] = { 0, 0, -30 * e }
+		p["WingInner.R"] = { 0, 0, 30 * e }
+	end
+	return p
+end
+
+local function death(arch, t)
+	local e = t * t * (3 - 2 * t)
+	local p = { Pelvis = { 0, 0, 0, 0, -1.4 * e, -0.3 * e }, Spine = { -50 * e }, Chest = { -35 * e }, Head = { -40 * e } }
+	if arch == "biped" then
+		p["UpperLeg.L"] = { 50 * e }
+		p["UpperLeg.R"] = { 50 * e }
+		p["LowerLeg.L"] = { -90 * e }
+		p["LowerLeg.R"] = { -90 * e }
+		p["UpperArm.L"] = { 12 * e }
+		p["UpperArm.R"] = { 12 * e }
+	elseif arch == "quadruped" then
+		p["FrontUpperLeg.L"] = { 40 * e }
+		p["FrontUpperLeg.R"] = { 40 * e }
+		p["HindUpperLeg.L"] = { -40 * e }
+		p["HindUpperLeg.R"] = { -40 * e }
+	elseif arch == "flyer" then
+		p["WingInner.L"] = { 0, 0, 50 * e }
+		p["WingInner.R"] = { 0, 0, -50 * e }
+	end
+	return p
+end
+
+-- length (s), steps, loop, priority, recipe(arch, 0..1)
+local CLIPS = {
+	Walk = { 1, 12, true, Enum.AnimationPriority.Movement, walk },
+	Attack = { 1, 30, false, Enum.AnimationPriority.Action, attack },
+	Idle = { 2, 16, true, Enum.AnimationPriority.Idle, idle },
+	Hit = { 0.5, 10, false, Enum.AnimationPriority.Action, hit },
+	Death = { 1.2, 24, false, Enum.AnimationPriority.Action, death },
+}
+
 local function restWorldRotations(mesh)
 	local out = {}
 	for _, b in mesh:GetDescendants() do
@@ -139,20 +202,21 @@ function M.build(model, archetype, clip)
 	local rest = restWorldRotations(mesh)
 	local ks = Instance.new("KeyframeSequence")
 	ks.Name = clip
-	ks.Loop = clip == "Walk"
-	ks.Priority = clip == "Walk" and Enum.AnimationPriority.Movement or Enum.AnimationPriority.Action
+	local def = assert(CLIPS[clip], "FamiliarClips: unknown clip " .. tostring(clip))
+	local length, steps, loop, priority, recipe = def[1], def[2], def[3], def[4], def[5]
+	ks.Loop = loop
+	ks.Priority = priority
 	local boneTree = {}
 	for _, b in mesh:GetDescendants() do
 		if b:IsA("Bone") then
 			boneTree[b] = b.Parent
 		end
 	end
-	local steps = clip == "Walk" and 12 or 30
 	for i = 0, steps do
 		local t = i / steps
-		local spec = clip == "Walk" and walk(archetype, t == 1 and 0 or t) or attack(archetype, t)
+		local spec = recipe(archetype, (loop and t == 1) and 0 or t) -- looping clips end on their first pose
 		local kf = Instance.new("Keyframe")
-		kf.Time = t * 1.0
+		kf.Time = t * length
 		local rootPose = Instance.new("Pose")
 		rootPose.Name = mesh.Name
 		rootPose.Weight = 0
@@ -180,5 +244,5 @@ function M.build(model, archetype, clip)
 	return ks
 end
 
-M.walk, M.attack = walk, attack
+M.walk, M.attack, M.idle, M.hit, M.death = walk, attack, idle, hit, death
 return M

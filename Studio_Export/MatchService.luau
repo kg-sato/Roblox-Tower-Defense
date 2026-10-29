@@ -91,6 +91,10 @@ end
 
 local function startRun(player: Player, tutorial: boolean)
 	local sim = MatchSim.new(Random.new(), function(kind: string, payload: any)
+		if kind == "Pace" then
+			local s = sessions[player]
+			payload.t = s and s.gclock or payload.t -- the client follows the game clock, not the sim clock
+		end
 		if kind == "Spawn" then
 			local s = sessions[player]
 			payload.spawnTime = s and s.gclock or 0

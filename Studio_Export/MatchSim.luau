@@ -12,6 +12,12 @@ export type Enemy = { id: number, kind: string, hp: number, maxHp: number, dist:
 local MatchSim = {}
 MatchSim.__index = MatchSim
 
+-- the current phase's effects of a boss enemy (see Config.BOSSES), nil for other enemies
+local function bossFx(e: any): any
+	local b = e.boss
+	return b and b.def.phases[b.phase].fx or nil
+end
+
 export type Sim = typeof(setmetatable({} :: {
 	t: number,
 	coins: number,
@@ -501,12 +507,20 @@ function MatchSim.castUlt(self: Sim): (boolean, string?)
 end
 
 function MatchSim.damage(self: Sim, e: Enemy, amount: number, chargeUlt: boolean)
+	local bossFxNow = bossFx(e)
+	if bossFxNow and bossFxNow.damageTaken then
+		amount *= bossFxNow.damageTaken
+	end
 	e.hp -= amount
+	if (e :: any).boss and e.hp > 0 then
+		self:checkPhase(e)
+	end
 	if e.hp <= 0 and not e.dead then
 		e.dead = true
 		local def = Config.ENEMIES[e.kind]
-		local coins = math.floor(def.coins * (1 + 0.1 * (self.stage - 1)) * (1 + self:sv("coins")) + 0.5)
-		local gems = math.floor(def.gems * Config.comboMult(self.combo) * (1 + self:sv("gems")) + 0.5)
+		local rewardMult = (e :: any).boss and (e :: any).boss.def.rewardMult or 1
+		local coins = math.floor(def.coins * rewardMult * (1 + 0.1 * (self.stage - 1)) * (1 + self:sv("coins")) + 0.5)
+		local gems = math.floor(def.gems * rewardMult * Config.comboMult(self.combo) * (1 + self:sv("gems")) + 0.5)
 		if (e :: any).carrying then
 			self.coins += 10 -- the stolen light drops as coins
 			self.emit("Drop", { id = e.id, coins = 10 })
@@ -876,6 +890,75 @@ function MatchSim.effective(self: Sim, u: Unit): (number, number, number)
 	return dmg, cd, crit
 end
 
+-- Boss framework (see Config.BOSSES). The boss state lives on the enemy as e.boss = { def, phase, stage, timers }.
+function MatchSim.checkPhase(self: Sim, e: any)
+	local b = e.boss
+	while b.phase < #b.def.phases and e.hp / e.maxHp <= b.def.phases[b.phase + 1].at do
+		b.phase += 1
+		b.timers = {}
+		self.emit("BossPhase", { id = e.id, boss = b.def.id, name = b.def.name, phase = b.phase, phases = #b.def.phases, banner = b.def.phases[b.phase].banner, hpFrac = e.hp / e.maxHp })
+	end
+end
+
+-- Runs the current phase's timed effects; returns the boss's speed multiplier.
+function MatchSim.bossTick(self: Sim, e: any, dt: number): number
+	local b = e.boss
+	if not b or e.dead then
+		return 1
+	end
+	local fx = bossFx(e)
+	local T = b.timers
+	local function due(key: string, every: number): boolean
+		T[key] = (T[key] or 0) + dt
+		if T[key] >= every then
+			T[key] -= every
+			return true
+		end
+		return false
+	end
+	if fx.regen and due("regen", fx.regen.every) then
+		e.hp = math.min(e.maxHp, e.hp + e.maxHp * fx.regen.pct)
+		self.emit("BossFx", { id = e.id, kind = "regen" })
+	end
+	if fx.deny and due("deny", fx.deny.every) then
+		local newest
+		for id in self.grid do
+			if not newest or id > newest then
+				newest = id
+			end
+		end
+		if newest then
+			(self.grid[newest] :: any).disabledUntil = self.t + fx.deny.dur
+			self.emit("BossFx", { id = e.id, kind = "deny", slot = newest, dur = fx.deny.dur })
+		end
+	end
+	if fx.freeze and due("freeze", fx.freeze.every) then
+		for _, u in self.grid do
+			(u :: any).disabledUntil = math.max((u :: any).disabledUntil or 0, self.t + fx.freeze.dur)
+		end
+		self.emit("BossFx", { id = e.id, kind = "freeze", dur = fx.freeze.dur })
+	end
+	if fx.summon and due("summon", fx.summon.every) then
+		for i = 1, fx.summon.count do
+			table.insert(self.queue, { at = self.t + (i - 1) * Config.SPAWN_GAP, kind = fx.summon.kind, stage = b.stage })
+		end
+		self.emit("BossFx", { id = e.id, kind = "summon", enemy = fx.summon.kind, count = fx.summon.count })
+	end
+	return fx.speedMult or 1
+end
+
+-- The slow aura of a live boss: { x, z, r2, factor } or nil. Units inside it cool down more slowly.
+function MatchSim.bossSlow(self: Sim): any
+	for _, e in self.enemies do
+		local fx = not e.dead and bossFx(e)
+		if fx and fx.slowAura then
+			local p = Path.positionAt(e.dist)
+			return { x = p.X, z = p.Z, r2 = fx.slowAura.radius * fx.slowAura.radius, factor = 1 / (1 + fx.slowAura.slow) }
+		end
+	end
+	return nil
+end
+
 function MatchSim.step(self: Sim, dt: number)
 	if self.paused then
 		return
@@ -892,25 +975,29 @@ function MatchSim.step(self: Sim, dt: number)
 	while self.queue[1] and self.queue[1].at <= self.t do
 		local q = table.remove(self.queue, 1) :: { at: number, kind: string, stage: number }
 		local def = Config.ENEMIES[q.kind]
-		local hp = def.hp * Config.hpScale(q.stage)
+		local bossDef = (q.kind == "Boss" and Config.BOSS_PHASES) and Config.bossDef(q.stage) or nil
+		local hp = def.hp * Config.hpScale(q.stage) * (bossDef and bossDef.hpMult or 1)
 		local e: Enemy = { id = self.nextId, kind = q.kind, hp = hp, maxHp = hp, dist = 0, dead = false }
+		if bossDef then
+			(e :: any).boss = { def = bossDef, phase = 1, stage = q.stage, timers = {} }
+		end
 		self.nextId += 1
 		table.insert(self.enemies, e)
 		if q.kind == "Boss" then
 			self.bossClock = Config.BOSS_TIME + self:sv("bossTime")
 		end
-		self.emit("Spawn", { id = e.id, kind = e.kind, t = self.t, maxHp = hp })
+		self.emit("Spawn", { id = e.id, kind = e.kind, t = self.t, maxHp = hp, boss = bossDef and bossDef.id or nil, bossName = bossDef and bossDef.name or nil })
 	end
 
 	for _, e in self.enemies do
 		local pace = self:enemyTick(e, dt)
-		if (e :: any).pace ~= pace then
-			(e :: any).pace = pace
-			if Config.MOVEMENT_EFFECTS then
-				self.emit("Pace", { id = e.id, dist = e.dist, speed = Config.ENEMIES[e.kind].speed * pace, t = self.t })
-			end
+		-- the speed multiplier the client must follow: movement effects (when on) times the boss phase's speedMult; "Pace" tells the client when it changes
+		local mult = (Config.MOVEMENT_EFFECTS and pace or 1) * self:bossTick(e, dt)
+		if ((e :: any).mult or 1) ~= mult then
+			(e :: any).mult = mult
+			self.emit("Pace", { id = e.id, dist = e.dist, speed = Config.ENEMIES[e.kind].speed * mult, t = self.t })
 		end
-		e.dist += Config.ENEMIES[e.kind].speed * (Config.MOVEMENT_EFFECTS and pace or 1) * dt
+		e.dist += Config.ENEMIES[e.kind].speed * mult * dt
 		if e.dist >= Path.length and not e.dead then
 			e.dead = true
 			if not self.tutorial then
@@ -925,8 +1012,16 @@ function MatchSim.step(self: Sim, dt: number)
 		end
 	end
 
+	local slowAura = self:bossSlow()
 	for slot, u in self.grid do
-		u.cd -= dt
+		local slow = 1
+		if slowAura then
+			local dx, dz = u.x - slowAura.x, u.z - slowAura.z
+			if dx * dx + dz * dz <= slowAura.r2 then
+				slow = slowAura.factor
+			end
+		end
+		u.cd -= dt * slow
 		if ((u :: any).disabledUntil or 0) > self.t then
 			u.cd = math.max(u.cd, 0.1) -- a perched crow keeps this familiar from firing
 		elseif u.cd <= 0 then
@@ -994,6 +1089,16 @@ function MatchSim.step(self: Sim, dt: number)
 	end
 end
 
+function MatchSim.bossSnapshot(self: Sim): any
+	for _, e in self.enemies do
+		local b = (e :: any).boss
+		if b and not e.dead then
+			return { id = e.id, name = b.def.name, phase = b.phase, phases = #b.def.phases, hp = e.hp, maxHp = e.maxHp }
+		end
+	end
+	return nil
+end
+
 function MatchSim.snapshot(self: Sim): { [string]: any }
 	local grid = {}
 	for i, u in self.grid do
@@ -1017,6 +1122,7 @@ function MatchSim.snapshot(self: Sim): { [string]: any }
 		combo = self.combo,
 		ult = self.ult,
 		bossClock = self.bossClock,
+		boss = self:bossSnapshot(),
 		tutorial = self.tutorial,
 		paused = self.paused,
 		state = self.state,

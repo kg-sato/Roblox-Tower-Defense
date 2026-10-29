@@ -1126,5 +1126,341 @@
   "type": "Decal",
   "assetId": "103918551040206",
   "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CantorVesper_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "111755183195492",
+  "time": "2026-10-29 15:06"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CantorVesper_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "92564774580885",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CantorVesper_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "115167173392830",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CantorVesper_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "120823661265971",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CantorVesper_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "84105644943359",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/DameOrrery_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "126626877895658",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/DameOrrery_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "90108742894285",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/DameOrrery_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "71424311990602",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/DameOrrery_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "129124905942506",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/DameOrrery_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "120536152700476",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/TheLamplighter_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "103840120478519",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/TheLamplighter_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "97484836783702",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/TheLamplighter_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "74108757367639",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/TheLamplighter_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "127637182554164",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/TheLamplighter_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "89121859012387",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VeilWalker_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "112947395281798",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VeilWalker_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "106412719609902",
+  "time": "2026-10-29 15:08"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VeilWalker_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "108261744215622",
+  "time": "2026-10-29 15:08"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VeilWalker_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "110409424576530",
+  "time": "2026-10-29 15:08"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VeilWalker_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "103223214507393",
+  "time": "2026-10-29 15:08"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/ConstableWren_rigged.glb",
+  "type": "Model",
+  "assetId": "99720337419253",
+  "time": "2026-10-29 16:34"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/ConstableWren_BaseColor.png",
+  "type": "Decal",
+  "assetId": "132991960018565",
+  "time": "2026-10-29 16:34"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/MadamQuill_rigged.glb",
+  "type": "Model",
+  "assetId": "124637000398787",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/MadamQuill_BaseColor.png",
+  "type": "Decal",
+  "assetId": "75486492195389",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/CogWarden_rigged.glb",
+  "type": "Model",
+  "assetId": "128047234263813",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/CogWarden_BaseColor.png",
+  "type": "Decal",
+  "assetId": "84091719510381",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/FerrymanOfFog_rigged.glb",
+  "type": "Model",
+  "assetId": "126312687773119",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/FerrymanOfFog_BaseColor.png",
+  "type": "Decal",
+  "assetId": "95991038779586",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/ConstableWren_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "92718111276555",
+  "time": "2026-10-29 16:36"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/ConstableWren_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "80833612328996",
+  "time": "2026-10-29 16:36"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/ConstableWren_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "91717559458415",
+  "time": "2026-10-29 16:36"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/ConstableWren_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "83522939395326",
+  "time": "2026-10-29 16:36"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/ConstableWren_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "124678587901553",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/MadamQuill_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "110675701836198",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/MadamQuill_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "89847662610535",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/MadamQuill_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "100837798287130",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/MadamQuill_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "124207566291276",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/MadamQuill_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "85431449650614",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CogWarden_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "79102047505162",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CogWarden_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "133069679617807",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CogWarden_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "70885088625664",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CogWarden_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "112119258612806",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CogWarden_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "122336116732262",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/FerrymanOfFog_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "84709484237976",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/FerrymanOfFog_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "91366107093592",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/FerrymanOfFog_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "120185630494797",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/FerrymanOfFog_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "96020261101074",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/FerrymanOfFog_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "108556216544150",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/ConstableWren_cutout.png",
+  "type": "Decal",
+  "assetId": "130529500306008",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/ConstableWren_lore.png",
+  "type": "Decal",
+  "assetId": "73237313923491",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/MadamQuill_cutout.png",
+  "type": "Decal",
+  "assetId": "90455337557183",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/MadamQuill_lore.png",
+  "type": "Decal",
+  "assetId": "82342736143900",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/CogWarden_cutout.png",
+  "type": "Decal",
+  "assetId": "76464098140186",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/CogWarden_lore.png",
+  "type": "Decal",
+  "assetId": "133110636742859",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/FerrymanOfFog_cutout.png",
+  "type": "Decal",
+  "assetId": "113556706665399",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/FerrymanOfFog_lore.png",
+  "type": "Decal",
+  "assetId": "110766383718160",
+  "time": "2026-10-29 18:12"
  }
 ]

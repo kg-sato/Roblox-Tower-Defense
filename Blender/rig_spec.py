@@ -59,6 +59,7 @@ ARCHETYPE = {
     "Frostling": "biped", "Gargoyle": "quadruped", "Ward": "biped", "Archivist": "biped",
     "Mourner": "biped", "MirrorChorister": "biped", "StarDrake": "flyer", "GreyVeilWraith": "floater",
     "CantorVesper": "biped", "DameOrrery": "biped", "TheLamplighter": "biped", "VeilWalker": "biped",
+    "ConstableWren": "biped", "MadamQuill": "biped", "CogWarden": "biped", "FerrymanOfFog": "biped",
 }
 
 

@@ -31,3 +31,6 @@ Compiled 2026-10-29: every open row of [[Bug Log]] plus the gaps found while wor
 | cosmetic | The loading-screen title still grazes the largest clock face's lower rim | Noted in Bug Log #5 (fixed row) |
 
 Not listed: anything the user asked for but has not seen (for example every texture and every enemy model is UNVERIFIED by the user).
+
+## GameClient size (2026-10-29)
+`StarterPlayerScripts.GameClient` is 173,770 of Roblox's 200,000-character limit after `UILib` was split out (it was 199,960). The next candidates to move, in order of size (all in `Studio_Export/GameClient.luau`): the `EventRemote.OnClientEvent` handler (about 13 KB), `killEnemy` (9 KB), `UI.sealButton` and `hideIcon` (14 KB together), the start-button icon setup (6 KB), the `RenderStepped` loop (5 KB). Use `UILib` as the pattern: a ModuleScript taking an env table of the few outside locals, found by listing the block's identifiers against the top-level locals defined before it. Do not add code to `GameClient` beyond ~190,000 characters without moving a block first.

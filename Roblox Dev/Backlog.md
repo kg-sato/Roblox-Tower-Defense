@@ -131,6 +131,6 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [ ] Content: Mythic and Celestial familiars (lore, model, rig, stats), tier 6 to 8 looks
 - [ ] Animations: idle, hit, death, new walk cycles for familiars and enemies
 - [ ] More cutscenes: merge morph on tier-up (needs GameClient's model table), boss phase transitions (needs boss phases), sounds for the captions and set morph ([[Design/Cutscenes and Transitions]])
-- [ ] Look at the four human familiars on the board in Play (facing: Yaw 180, scale, animations) and tune their stats ([[Design/Human Familiars]])
+- [ ] Look at the four human familiars on the board in Play (scale, animations) and tune their stats ([[Design/Human Familiars]]). 2026-10-29: facing fixed (Yaw 180 showed backs; now 0, place unsaved). Play check done: all 4 humans place on the board at heights 4.4 to 4.8 and face +Z toward the camera; still to do: view at game zoom (units are about 25 px tall), animations
 - [ ] Idle clips and better hands and faces for the human familiars; more humans for Epic and Legendary if wanted
 - [x] (2026-10-29, loading-eye chat) Odds panel for six rarities fixed and checked in a Play capture

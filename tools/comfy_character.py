@@ -27,6 +27,10 @@ CHARACTERS = {
                       "kind weathered face under the hood, scarf, worn boots",
     "VeilWalker": "a slender person in a floating long cape made of thin starry veils that hang above the ground, a mirror-like mask pushed up on the head showing a calm face, "
                   "bare feet, bracelets of small stars, graceful pose",
+    "ConstableWren": "a sturdy broad-shouldered woman, a Lantern Keepers constable, in a long dark watch coat with brass buttons, a round brass-trimmed helmet, a brass whistle on a chain at her collar, a short truncheon at her belt, stern kind face, heavy boots",
+    "MadamQuill": "a tall thin woman, an ink seer, in a long deep violet robe with silver script embroidered along the hem, a wide-brimmed hat tilted forward, a very tall pen held like a staff, a heavy book under one arm, ink-stained fingers, amused expression",
+    "CogWarden": "a very large armoured figure, the warden of a foundry door, in black iron half-plate with brass gears at the joints, a visored helm, a long key-shaped staff held in both hands, a heavy chain cloak, imposing and still",
+    "FerrymanOfFog": "a tall cloaked ferryman in a long grey-green hooded coat dripping pale water, holding a tall punt pole in one hand and a hanging lantern in the other, a pale tired kind face under the hood, wet boots",
 }
 
 
@@ -56,6 +60,6 @@ for k in range(args.variants):
         text = text.replace("front view", "rear view seen from directly behind, the back of the head and the back of the clothes")
     raw = cg.run_one(text, seed, args.size, 4)
     raw = cg.flatten_background(raw)
-    (ROOT / "Roblox Dev" / "Assets" / "Characters" / "Concept" / f"{args.name}_{args.view}_s{seed}.png" if args.view == "back" else f"{args.name}_s{seed}.png").write_bytes(raw)
+    (ROOT / "Roblox Dev" / "Assets" / "Characters" / "Concept" / (f"{args.name}_{args.view}_s{seed}.png" if args.view == "back" else f"{args.name}_s{seed}.png")).write_bytes(raw)
     key_out(raw).save(ROOT / "Hunyuan3D" / "input_new" / (f"{args.name}_back_s{seed}.png" if args.view == "back" else f"{args.name}_s{seed}.png"))
     print("saved", args.name, seed, "background ok:", cg.background_ok(raw))

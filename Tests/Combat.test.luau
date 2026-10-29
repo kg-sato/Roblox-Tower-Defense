@@ -285,7 +285,8 @@ return function(Shared)
 		check("a Pace event is emitted when the flag is on", has("Pace"))
 		Config.MOVEMENT_EFFECTS = false
 
-		-- new enemies are off by default and keep the wave size
+		-- new enemies keep the wave size; the flag is on in the game (2026-10-29), so the "off" check sets it off first
+		Config.NEW_ENEMIES = false
 		local plainOk = true
 		for s = 1, 25 do
 			for _, k in Config.stageSpawns(s) do
@@ -294,7 +295,7 @@ return function(Shared)
 				end
 			end
 		end
-		check("Crow and Thief stay out of the waves by default", plainOk)
+		check("Crow and Thief stay out of the waves when the flag is off", plainOk)
 		Config.NEW_ENEMIES = true
 		local sawCrow, sawThief, sizeOk = false, false, true
 		for s = 1, 25 do

@@ -29,6 +29,22 @@
   ],
   "distance_to_reference": 16.6
  },
+ "CogWarden": {
+  "top5_rgb": [
+   186.8,
+   170.6,
+   131.1
+  ],
+  "distance_to_reference": 51.6
+ },
+ "ConstableWren": {
+  "top5_rgb": [
+   184.4,
+   162.0,
+   119.7
+  ],
+  "distance_to_reference": 65.3
+ },
  "DameOrrery": {
   "top5_rgb": [
    202.5,
@@ -44,6 +60,14 @@
    152.2
   ],
   "distance_to_reference": 47.3
+ },
+ "FerrymanOfFog": {
+  "top5_rgb": [
+   191.6,
+   173.0,
+   130.2
+  ],
+  "distance_to_reference": 48.8
  },
  "Frostling": {
   "top5_rgb": [
@@ -68,6 +92,14 @@
    163.7
   ],
   "distance_to_reference": 8.5
+ },
+ "MadamQuill": {
+  "top5_rgb": [
+   177.2,
+   154.8,
+   116.4
+  ],
+  "distance_to_reference": 74.9
  },
  "MirrorChorister": {
   "top5_rgb": [

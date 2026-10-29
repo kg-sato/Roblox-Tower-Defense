@@ -70,3 +70,11 @@ Tested in `Tests/Rules.test.luau` (37 of 37 pass): the mean DPS climbs with rari
 1. Stage 25 falls in about 5 minutes for a perfect bot: raise the hp scale, the enemy count or the boss hp, or tighten the economy ([[Difficulty Curve]], [[Progression Rules]]); the user decides the target session length (the design doc says a match is 8 to 12 minutes).
 2. Epic and Legendary base stats double-count rarity; normalise their damage over cooldown so the multiplier carries the rarity (PROPOSAL), then re-run.
 3. Re-run the harness after any change. The harness now also prints the clear time per stage (added 2026-10-29).
+
+## Tuning pass (2026-10-29, main coordinator): target a perfect (full) bot clears 25 stages in about 10 minutes
+Method: a lean copy of `Tests/Balance.test.luau` (full bot only, Config overrides, 10 seeds, 20 simulated minutes per run, headless in Studio Edit mode).
+- `HP_GROWTH` is a cliff, not a dial: 1.28 still clears in about 380 s, 1.30 to 1.34 makes the bot fail or take 1000+ s on most seeds. Left at 1.27.
+- Roll cost is the smooth lever. Over 10 seeds at HP growth 1.27: roll 20 mean 637 s, roll 18 mean 455 s, roll 22 mean 619 s with one failure. Per-seed spread is wide (about 380 to 1000 s).
+- Chosen: `ROLL_COST` 10 to 20 and `START_GEMS` 30 to 60 (the tutorial forces 3 rolls, so start gems must stay 3 x roll cost). Result: 10 of 10 seeds clear, mean 605 s (10.1 min), min 379 s, max 948 s.
+- Not covered: the upgrade bot, a human player, the 16 familiars' stats themselves (still placeholders), later stages past 25. Per-summon rising roll cost (design doc v1) is not implemented.
+- All 14 suites pass (MatchSim.test.luau failed once until START_GEMS was raised). Place not saved; export mirror `Studio_Export/Config.luau` updated.

@@ -12,6 +12,8 @@
 local TweenService = game:GetService("TweenService")
 
 return function(env)
+	local okT, errT = pcall(function() require(script.Parent:WaitForChild("TitleScene", 3))(env) end) -- title background (2026-10-29)
+	if not okT then warn("TitleScene: " .. tostring(errT)) end
 	local sm, btn = env.startScreen, env.startBtn
 	local A = require(game:GetService("ReplicatedStorage"):WaitForChild("ArtIds"))
 	local reduced = env.reduced or function() return false end
