@@ -254,3 +254,7 @@
 - 19:19 CHECKPOINT 4c30cda on overnight/2026-10-27: Stage completeness check passes for all 25 stages. Generated the missing front cards for the four new humans so lore, cards and voice lines are complete for 20 familiars.
 - 19:20 T232 DONE (gate-verified): Stage completeness check passes for all 25 stages
 - 19:20 T422 DONE (gate-verified): Lore, cards, voice lines complete for all 20 familiars
+- 19:30 T124 DONE (attested): 512 px texture sets for enemies, bosses and stage props
+- 19:30 T027 DONE (attested): UI research boards for HUD, collection, results plus HUD wireframe
+- 19:30 T424 DONE (attested): Refresh Systems.md, Backlog and Design Doc for bosses, 20 familiars, set 5
+- 19:30 CHECKPOINT 3d1f029 on overnight/2026-10-27: Refresh the systems, backlog and design notes, add the HUD, collection and results research boards, and bake 512 px texture sets for enemies and bosses. Evidence files hold the verification output.

@@ -1,3 +1,8 @@
 PASS
 Note: Roblox Dev/Research/Game Design and Market/Arcane art direction and lighting.md
 Sources: 5 linked with dates; 3 read (Wikipedia partial, AWN 2025-01-21, 80.lv 2023-09-19). Lighting and palette not covered by read sources; flagged unverified in note.
+
+--- sim lane (TODO.md T005, studio-sim, 2026-10-29) ---
+gameSpeed accepts 1, 2, 3 (SettingsDefaults rule); MatchService gclock already = dt*speed, stepsFor generic. GameSpeed.test: 3x reaches same stage/coins/gems/crystal hp/enemies/sim time as 1x and 2x over 1200 steps, takes 1/3 real time, 4 and 2.5 rejected. UNVERIFIED: client UI (SettingsPanel choice list and GameClient lines forcing gameSpeed to 1 or 2) still offers only 1x/2x, not mine.
+
+RunAll: ActionArgs PASS; Balance PASS (baseline); Boss 31/31; Combat 58/58; FamiliarMaterials 69/69; Familiars 32/32; GameSpeed PASS; LoreFragments PASS; MatchSim PASS; NewRoles 27/27; NumberFormat PASS; Rules 69 of 69; SaveMigration 27 of 27; ServerRules 58/58; SettingsDefaults PASS; SoundCap PASS; StageSets PASS. SUMMARY 17 of 17 suites PASS (2026-10-29, Studio Edit mode)

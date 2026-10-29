@@ -6,9 +6,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
 
 
 ## Lane: sim (sim-and-balance)
-- [ ] T413 | Delete stale duplicate MatchSim and stray _GameSpeedTest folder | verify: studio: only one MatchSim in ReplicatedStorage.Shared, RunAll 16 of 16 PASS
+- [x] T413 | Delete stale duplicate MatchSim and stray _GameSpeedTest folder | verify: studio: only one MatchSim in ReplicatedStorage.Shared, RunAll 16 of 16 PASS
   lane: docs-tooling | needs: Studio | depends: none | size: S | owner-files: ReplicatedStorage.Shared (delete only the stale 694-line MatchSim), ReplicatedStorage._GameSpeedTest
-- [ ] T606 | Fix SoundFX cap so a lower priority never stops a higher | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SoundCap.test.luau (new, 8 voices at priority 3 then priority 2))
+- [x] T606 | Fix SoundFX cap so a lower priority never stops a higher | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SoundCap.test.luau (new, 8 voices at priority 3 then priority 2))
   lane: fx-audio | needs: Studio | depends: none | size: S | owner-files: SoundFX, Tests/SoundCap.test.luau
 - [x] T232 | Stage completeness check passes for all 25 stages | verify: python tools/check_stages_complete.py
   lane: docs-tooling | needs: none | depends: none | size: S | owner-files: Studio_Export/StageCaptions.luau, tools/gen_stage_captions.py
@@ -16,9 +16,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: docs-tooling | needs: none | depends: none | size: S | owner-files: Roblox Dev/Lore/*, tools/voice_lines.py
 - [ ] T153 | Play-verify stage sets 4 and 5: stages 16 and 21, edge rings, console clean | verify: studio: evidence with captures at stages 16 and 21, Bug Log #10 closed
   lane: world | needs: Studio | depends: none | size: M | owner-files: Backdrop*.luau, Shared.StageSets entries 4 and 5, BackdropFoundry, BackdropVeil
-- [ ] T411 | Save bestStage and stage progress in profile with migration | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SaveMigration.test.luau (new cases))
+- [x] T411 | Save bestStage and stage progress in profile with migration | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SaveMigration.test.luau (new cases))
   lane: sim | needs: Studio | depends: none | size: S | owner-files: Shared.Config, ServerScriptService.MatchService (profile), Tests/SaveMigration.test.luau
-- [ ] T005 | Add 3x game speed, same results per sim second | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/GameSpeed.test.luau)
+- [x] T005 | Add 3x game speed, same results per sim second | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/GameSpeed.test.luau)
   lane: sim | needs: Studio | depends: none | size: S | owner-files: Shared.SettingsDefaults, MatchService gclock, Tests/GameSpeed.test.luau
 - [ ] T004 | Difficulty modes Normal and Hard, server-decided, labelled in data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Rules.test.luau (new cases) and Balance still clears)
   lane: sim | needs: Studio | depends: T411 | size: M | owner-files: Shared.Config, Shared.MatchSim, MatchService, Tests/Rules.test.luau
@@ -28,7 +28,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: chars | needs: Studio | depends: none | size: M | owner-files: Models.luau (playClip use), Shared.FamiliarClips
 - [ ] T404 | Idle, Hit, Death clips for the 12 original familiars | verify: studio: tracks load with correct lengths, Tests/Familiars.test.luau PASS
   lane: chars | needs: Studio | depends: none | size: M | owner-files: Shared.FamiliarClips, Characters/<id>/Animations
-- [ ] T142 | Rig and animate six enemy models: walk, hit, death; place in a stage | verify: manual: tools/verify_enemy_model.py, studio: walk loop plays in Play
+- [x] T142 | Rig and animate six enemy models: walk, hit, death; place in a stage | verify: manual: tools/verify_enemy_model.py, studio: walk loop plays in Play
   lane: chars | needs: Blender | depends: none | size: L | owner-files: Blender/* enemy scripts, Blender/out/, Roblox Dev/Assets/3D/Enemies, Models.luau (enemy clips)
 - [x] T124 | 512 px texture sets for enemies, bosses and stage props | verify: manual: tools/texture_maps.py report, tools/asset_budget.py PASS
   lane: chars | needs: Blender | depends: none | size: M | owner-files: tools/texture_maps.py, Roblox Dev/Assets/3D/Textures
@@ -36,7 +36,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: client-core | needs: Studio | depends: QUEUE release of GameClient | size: L | owner-files: StarterPlayerScripts.GameClient, new modules next to UILib (OnClientEvent handler, killEnemy, sealButton/hideIcon, RenderStepped loop), Studio_Export/GameClient.luau
 - [ ] T149 | Client boss phase bar, banner per phase, deny and freeze feedback | verify: studio: BossPhase and BossFx events drive bar ticks and banner in a Play run to stage 5 boss; console clean
   lane: client-core | needs: Studio | depends: T198 | size: M | owner-files: StarterPlayerScripts.BossBar (new), GameClient (one hook)
-- [ ] T185 | Roster slot unlock rules (when a new slot opens) in data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Rules.test.luau)
+- [x] T185 | Roster slot unlock rules (when a new slot opens) in data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Rules.test.luau)
   lane: sim | needs: Studio | depends: none | size: S | owner-files: Shared.Config, Tests/Rules.test.luau
 - [ ] T186 | Collection schema: duplicates and shards, wired to the profile | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SaveMigration.test.luau)
   lane: sim | needs: Studio | depends: T411 | size: M | owner-files: MatchService, Shared.Config, Tests/SaveMigration.test.luau
@@ -56,7 +56,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: sim | needs: Studio | depends: none | size: M | owner-files: Shared.StageSets (data fields only), Shared.MatchSim, Tests/Env.test.luau
 - [ ] T016 | Endless mode after stage 25, tested to wave 100 | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Endless.test.luau (new))
   lane: sim | needs: Studio | depends: T015 | size: M | owner-files: Shared.MatchSim, Shared.Config, Tests/Endless.test.luau
-- [ ] T019 | Sell and recycle refund percent per tier | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Rules.test.luau)
+- [x] T019 | Sell and recycle refund percent per tier | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Rules.test.luau)
   lane: sim | needs: Studio | depends: none | size: S | owner-files: Shared.Config, Shared.MatchSim, Tests/Rules.test.luau
 - [ ] T025 | Weekly leaderboard server validation and anti-cheat checks | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Leaderboard.test.luau (new, pure validation; live OrderedDataStore UNVERIFIED in Studio))
   lane: sim | needs: Studio | depends: T411 | size: M | owner-files: Shared.LeaderboardRules (new), MatchService, Tests/Leaderboard.test.luau
@@ -128,7 +128,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
 ## Lane: chars (characters-and-models)
 - [ ] T409 | Wire 512 px maps into SurfaceAppearance, check in Play | verify: studio: maps load, capture of 3 familiars
   lane: chars | needs: Studio | depends: T124 | size: M | owner-files: ReplicatedStorage.Characters, FamiliarMaterials
-- [ ] T407 | Clean blotchy first-pass textures on the 12 original familiars | verify: manual: tools/verify_textured_models.py PASS plus contact sheet
+- [x] T407 | Clean blotchy first-pass textures on the 12 original familiars | verify: manual: tools/verify_textured_models.py PASS plus contact sheet
   lane: chars | needs: Blender | depends: none | size: M | owner-files: Blender/tex_in, Blender/out, tools/prep_texture_inputs.py
 - [ ] T405 | Upload original familiars' clips as Animation assets and wire ids | verify: manual: tools/uploads.json lists ids, studio: tracks load from ids
   lane: chars | needs: Studio | depends: T404 | size: M | owner-files: tools/upload_asset.py, tools/uploads.json, VFX/ASSETS.md (append), Characters/<id>/Animations
@@ -160,11 +160,11 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: FXRecipes, ImpactFX, Tests/FXScale.test.luau
 - [ ] T144 | One lantern-light language: spawn sparkle, level column, clear ash, low-lantern vignette, decals | verify: studio: captures per effect, performance on Low
   lane: fx-audio | needs: Studio | depends: none | size: L | owner-files: FeedbackFX, FlipbookFX registry, VFX/flipbooks
-- [ ] T155 | Familiar cues: placement, merge tiers 1 to 8, reveal per rarity | verify: manual: tools/check_sound_lengths.py PASS, studio: cues logged in a Play run
+- [x] T155 | Familiar cues: placement, merge tiers 1 to 8, reveal per rarity | verify: manual: tools/check_sound_lengths.py PASS, studio: cues logged in a Play run
   lane: fx-audio | needs: Studio | depends: T606 | size: M | owner-files: SoundCatalog, SoundFX call sites via SoundCues (new), VFX/sfx
-- [ ] T603 | Enemy footsteps and hits, boss intro per boss, trainer footsteps | verify: manual: tools/check_sound_lengths.py PASS, studio: cue log
+- [x] T603 | Enemy footsteps and hits, boss intro per boss, trainer footsteps | verify: manual: tools/check_sound_lengths.py PASS, studio: cue log
   lane: fx-audio | needs: Studio | depends: T606 | size: M | owner-files: SoundCatalog, VFX/sfx
-- [ ] T604 | UI sound set: click, hover, error, buy, quest, achievement, level-up | verify: manual: tools/check_sound_lengths.py PASS
+- [x] T604 | UI sound set: click, hover, error, buy, quest, achievement, level-up | verify: manual: tools/check_sound_lengths.py PASS
   lane: fx-audio | needs: Studio | depends: T606 | size: M | owner-files: SoundCatalog, VFX/sfx
 - [ ] T605 | Sound mix sliders (master, music, effects, UI) and ducking | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SettingsDefaults.test.luau (new keys), studio: duck on reveal)
   lane: fx-audio | needs: Studio | depends: T604 | size: M | owner-files: SoundFX, Shared.SettingsDefaults (claim from client-ui)

@@ -12,3 +12,5 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-29 19:18 Overnight armed until 04:18: 84 tasks in 7 lanes, one commit per task, ledger and morning digest on.
 - 2026-10-29 19:28 Skill tree round 2 done: new engraved icons, tarot cards, bold node states, Respec and real-open verified in Play. Unverified: touch, video of motion (recorder grabbed wrong window).
 - 2026-10-29 19:29 blender-worker: T407 familiar re-bake; last: 19:27 T124,T142 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle, holding nothing; last: 19:14 finale overlap, blink li
+- 2026-10-29 19:30 T424, T027, T124 done: docs refreshed, UI research boards, 512 px enemy textures. Look-and-feel unverified.
+- 2026-10-29 19:33 Title round 2 installed: fog deity, rooftop city, bridge, lamp; Edit captures show motion; menu text changes unverified

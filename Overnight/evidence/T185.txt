@@ -1,0 +1,4 @@
+PASS
+Config.ROSTER_SLOT_UNLOCKS (rows level/slots) and Config.rosterSlots(level), clamped 1..MAX_UNITS; default one row = 12 slots from level 1 so behaviour is unchanged. Rules tests 5 cases. NOT wired into MatchSim placement limit (would change behaviour once rows are edited); UNVERIFIED in play.
+
+RunAll: ActionArgs PASS; Balance PASS (baseline); Boss 31/31; Combat 58/58; FamiliarMaterials 69/69; Familiars 32/32; GameSpeed PASS; LoreFragments PASS; MatchSim PASS; NewRoles 27/27; NumberFormat PASS; Rules 69 of 69; SaveMigration 27 of 27; ServerRules 58/58; SettingsDefaults PASS; SoundCap PASS; StageSets PASS. SUMMARY 17 of 17 suites PASS (2026-10-29, Studio Edit mode)

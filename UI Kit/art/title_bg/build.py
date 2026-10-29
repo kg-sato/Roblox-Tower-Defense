@@ -9,14 +9,14 @@ def ramp(img, mid, hi): return ImageOps.colorize(ImageOps.autocontrast(img.conve
 def grad(w, h, fn): # vertical L gradient from fn(y/h)->0..255
     g = Image.linear_gradient("L").resize((w, h)); return g.point(lambda v: int(fn(v / 255)))
 # 1 sky: dark, vignetted, one luminous source behind the head
-sky = Image.open("raw/sky_s22.png").convert("L").resize((W + 120, H + 68), Image.LANCZOS).point(lambda v: int(v * 0.24))
-sky = ramp(sky, "#2c261b", "#bda878").convert("RGB")
-vig = Image.radial_gradient("L").resize((W + 120, H + 68)).point(lambda v: min(255, int(v * 1.5)))  # 0 centre .. 255 edge
-sky = Image.composite(Image.new("RGB", sky.size, K), sky, vig.point(lambda v: int(v * 0.8)))
+sky = Image.open("raw/sky_s22.png").convert("L").resize((W + 120, H + 68), Image.LANCZOS).point(lambda v: int(v * 0.07))
+sky = ramp(sky, "#14110c", "#bda878").convert("RGB")
+vig = Image.radial_gradient("L").resize((W + 120, H + 68)).point(lambda v: min(255, int(v * 2.2)))  # 0 centre .. 255 edge
+sky = Image.composite(Image.new("RGB", sky.size, K), sky, vig.point(lambda v: int(v * 0.95)))
 src = Image.new("L", sky.size, 0); sx, sy = HEAD[0] + 60, HEAD[1] + 34
-ImageDraw.Draw(src).ellipse([sx - 170, sy - 170, sx + 170, sy + 170], fill=255)
-src = src.filter(ImageFilter.GaussianBlur(110))
-sky = Image.composite(Image.new("RGB", sky.size, CR), sky, src.point(lambda v: int(v * 0.7)))
+ImageDraw.Draw(src).ellipse([sx - 120, sy - 120, sx + 120, sy + 120], fill=255)
+src = src.filter(ImageFilter.GaussianBlur(90))
+sky = Image.composite(Image.new("RGB", sky.size, CR), sky, src.point(lambda v: min(255, int(v * 1.5))))
 sky.save("layers/sky.png")
 # 2 god rays (rotate in UI around the head)
 S = 1400; ray = Image.new("L", (S, S), 0); d = ImageDraw.Draw(ray); random.seed(9)
@@ -27,24 +27,28 @@ ray = ImageChops.multiply(ray.filter(ImageFilter.GaussianBlur(10)), ImageOps.inv
 r = Image.new("RGBA", (S, S), G2); r.putalpha(ray.point(lambda v: int(v * 0.75))); r.save("layers/rays.png")
 # 3 figure: faceless (face painted to a void), rotated so the reaching arm lowers toward the traveller, rim lit, translucent
 f = Image.open("raw/fig3_s70.png").convert("L")
-void = Image.new("L", f.size, 0); ImageDraw.Draw(void).ellipse([649, 94, 721, 186], fill=255); void = void.filter(ImageFilter.GaussianBlur(7)); void = void.point(lambda v: min(255, v * 2))
+void = Image.new("L", f.size, 0); ImageDraw.Draw(void).ellipse([634, 104, 708, 192], fill=255); void = void.filter(ImageFilter.GaussianBlur(7)); void = void.point(lambda v: min(255, v * 2))
 f = ImageChops.multiply(f, ImageOps.invert(void.point(lambda v: int(v * 0.97))))
+voidm = void
 HS = (685, 140); HAND = (410, 360)  # head centre in the source
 TH, SC = 17, 1.6
 clr = Image.new('L', f.size, 255); ImageDraw.Draw(clr).rectangle([0, 0, 520, 300], fill=0); ImageDraw.Draw(clr).rectangle([1180, 0, 1344, 330], fill=0); ImageDraw.Draw(clr).rectangle([0, 600, 150, 768], fill=0)
 m = ImageChops.multiply(f.point(lambda v: 255 if v > 22 else 0), clr.filter(ImageFilter.GaussianBlur(40)))
-m = m.filter(ImageFilter.MaxFilter(7)).filter(ImageFilter.MinFilter(7)).filter(ImageFilter.GaussianBlur(1.5))
-m = ImageChops.multiply(m.filter(ImageFilter.GaussianBlur(3)), grad(*f.size, lambda t: 255 * (1 - 0.35 * t) if t < .75 else 255 * (1 - 0.35 * t) * (1 - (t - .75) * 2.2)))  # lower body thins out
-body = ramp(f.point(lambda v: min(255, int(v * 1.1))), "#a48f62", CR).convert("RGBA")
-rim = ImageChops.subtract(m, m.filter(ImageFilter.MinFilter(13)).filter(ImageFilter.GaussianBlur(4))).point(lambda v: int(v * 0.35))
+m = m.filter(ImageFilter.MaxFilter(25)).filter(ImageFilter.MinFilter(25)).filter(ImageFilter.GaussianBlur(1.5))
+m = ImageChops.multiply(m.filter(ImageFilter.GaussianBlur(3)), grad(*f.size, lambda t: 255 if t < .55 else 255 * max(0.0, 1 - (t - .55) * 2.4) ** 1.3))  # lower body thins out
+body = ramp(f.point(lambda v: min(255, int(300 * (v / 255) ** 1.6))), "#241e15", CR).convert("RGBA")
+rim = ImageChops.subtract(m, m.filter(ImageFilter.MinFilter(13)).filter(ImageFilter.GaussianBlur(4))).point(lambda v: int(v * 0.9))
 rimc = Image.new("RGBA", f.size, CR); rimc.putalpha(rim)
-body.putalpha(m.point(lambda v: int(v * 0.97))); body.alpha_composite(rimc)
-halo = m.filter(ImageFilter.MaxFilter(61)).filter(ImageFilter.GaussianBlur(70)).point(lambda v: int(v * 0.5))
+body.putalpha(ImageChops.lighter(m, voidm)); body.paste(Image.new("RGBA", f.size, K), (0, 0), voidm.point(lambda v: 255 if v > 140 else v)); body.alpha_composite(rimc)
+halo = m.filter(ImageFilter.MaxFilter(61)).filter(ImageFilter.GaussianBlur(70)).point(lambda v: int(v * 0.3))
 fog = Image.new("RGBA", f.size, CR); fog.putalpha(halo); fog.alpha_composite(body)
 fog = fog.resize((int(f.size[0] * SC), int(f.size[1] * SC)), Image.LANCZOS)
 pivot = (HS[0] * SC, HS[1] * SC)
 fog = fog.rotate(TH, resample=Image.BICUBIC, center=pivot, translate=(0, 0))
 fig = Image.new("RGBA", (W, H), (0, 0, 0, 0)); fig.paste(fog, (int(HEAD[0] - pivot[0]), int(HEAD[1] - pivot[1])), fog)
+clean = Image.new("L", (W, H), 255); cd = ImageDraw.Draw(clean)
+cd.rectangle([1835, 0, W, H], fill=0); cd.rectangle([1735, 520, W, H], fill=0)
+fig.putalpha(ImageChops.multiply(fig.split()[3], clean.filter(ImageFilter.GaussianBlur(8))))
 fig.save("layers/figure.png")
 th = math.radians(TH); hx, hy = (HAND[0] - HS[0]) * SC, (HAND[1] - HS[1]) * SC
 print("left hand at", (HEAD[0] + hx * math.cos(th) + hy * math.sin(th)) / W, (HEAD[1] - hx * math.sin(th) + hy * math.cos(th)) / H)
@@ -56,11 +60,11 @@ def band(seed, h, op):
         for dx in (-w, 0, w): dd.ellipse([x - rx + dx, y - ry, x + rx + dx, y + ry], fill=random.randint(40, 120))
     base = base.filter(ImageFilter.GaussianBlur(45)); base = ImageChops.multiply(base, grad(w, h, lambda t: 255 * math.sin(math.pi * t)))
     im = Image.new("RGBA", (w, h), CR); im.putalpha(base.point(lambda v: min(255, int(v * op)))); return im
-band(1, 420, 1.0).save("layers/mist_far.png"); band(2, 420, 1.5).save("layers/mist_near.png")
+band(1, 420, 0.4).save("layers/mist_far.png"); band(2, 420, 0.7).save("layers/mist_near.png")
 # 5 ground: foggy rooftops far below, fading into the sky mist
 gr = Image.open("raw/ground_s82.png").convert("L").resize((W, int(W * 768 / 1344)), Image.LANCZOS)
-gr = gr.crop((0, gr.size[1] - 640, W, gr.size[1])).point(lambda v: int(v * 0.38))
-grc = ramp(gr, "#3a3122", "#9c8860").convert("RGBA")
+gr = gr.crop((0, gr.size[1] - 640, W, gr.size[1])).point(lambda v: int(v * 0.12))
+grc = ramp(gr, "#1a1610", "#7a6a48").convert("RGBA")
 grc.putalpha(grad(W, 640, lambda t: 230 * min(1, t * 2.6) ** 1.5))
 ground = Image.new("RGBA", (W, H), (0, 0, 0, 0)); ground.paste(grc, (0, H - 640), grc)
 ground.paste(Image.new("RGBA", (W, 160), K), (0, H - 160), grad(W, 160, lambda t: 255 * t))  # dark at the very bottom
@@ -76,10 +80,11 @@ for x in range(60, W, 140): d.line([(x, y0(x)), (x, y0(x) - 56)], fill=D, width=
 d.line([(0, y0(0) - 56), (W, y0(W) - 56)], fill=D, width=4)
 cx = 830; cy = y0(cx) - 3
 d.polygon([(cx - 7, cy), (cx + 7, cy), (cx + 5, cy - 22), (cx + 1, cy - 28), (cx - 1, cy - 28), (cx - 5, cy - 22)], fill=K)
-d.ellipse([cx - 4, cy - 38, cx + 4, cy - 30], fill=K); d.line([(cx + 4, cy - 26), (cx + 13, cy - 38)], fill=K, width=3)
+d.ellipse([cx - 4, cy - 38, cx + 4, cy - 30], fill=K)
+d.line([(cx - 8, cy), (cx - 6, cy - 22), (cx - 5, cy - 30)], fill=CR, width=2); d.line([(cx + 8, cy), (cx + 6, cy - 22), (cx + 4, cy - 30)], fill=G2, width=2); d.line([(cx + 4, cy - 26), (cx + 13, cy - 38)], fill=K, width=3)
 d.line([(cx - 6, cy - 22), (cx - 4, cy - 2)], fill=G2, width=1); d.line([(cx - 4, cy - 38), (cx - 2, cy - 31)], fill=G2, width=1)  # rim light
 lamp = Image.new("RGBA", (W, H), (0, 0, 0, 0)); ld = ImageDraw.Draw(lamp); lx, ly = cx + 14, cy - 40
-ld.ellipse([lx - 26, ly - 26, lx + 26, ly + 26], fill=(217, 184, 120, 160)); lamp = lamp.filter(ImageFilter.GaussianBlur(14))
+ld.ellipse([lx - 46, ly - 46, lx + 46, ly + 46], fill=(239, 214, 150, 200)); lamp = lamp.filter(ImageFilter.GaussianBlur(20))
 fg.alpha_composite(lamp); ImageDraw.Draw(fg).ellipse([lx - 3, ly - 3, lx + 3, ly + 3], fill=CR)
 fg.save("layers/foreground.png")
 # composite preview

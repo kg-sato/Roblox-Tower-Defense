@@ -11,7 +11,7 @@ local TweenService = game:GetService("TweenService")
 local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
-local INK = Color3.fromRGB(12, 11, 10)
+local INK, INK2 = Color3.fromRGB(12, 11, 10), Color3.fromRGB(26, 23, 20)
 local GOLD, LIGHT, CREAM = Color3.fromRGB(184, 151, 90), Color3.fromRGB(217, 184, 120), Color3.fromRGB(239, 230, 207)
 local DIM, FAINT = Color3.fromRGB(104, 88, 58), Color3.fromRGB(70, 60, 42)
 local ICONS = {
@@ -66,40 +66,45 @@ return function(env)
 	for _, g in treeGui:GetChildren() do if g:IsA("UIGradient") then g.Enabled = false end end
 	treeGui.BackgroundColor3, treeGui.BackgroundTransparency = INK, 0
 	local root = new("Frame", { Name = "TreeV3", BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 13, ClipsDescendants = true }, treeGui)
-	new("Frame", { Name = "Scrim", BackgroundColor3 = INK, BackgroundTransparency = 0.4, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 13 }, root)
+	-- an opaque gold-ink backdrop: hides the grove's night sky, beams and blobs (the game world) while the tree is open
+	new("Frame", { Name = "Backdrop", BackgroundColor3 = Color3.fromRGB(14, 12, 10), BackgroundTransparency = 0, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 13 }, root)
 	local S = new("Frame", { Name = "Stage", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1, 1), ZIndex = 14 }, root)
 	new("UIAspectRatioConstraint", { AspectRatio = 16 / 9, AspectType = Enum.AspectType.FitWithinMaxSize }, S)
 
-	-- 1) layout: hex angles with a seeded wobble, so nothing sits on a grid (positions in height units from the hub)
-	local rng = Random.new(11)
-	local function hexRing(n) return math.max(math.abs(n.q), math.abs(n.r), math.abs(-n.q - n.r)) end
-	local P, ringOf, ids = {}, {}, {}
-	local armK, armA = {}, {} -- per path colour: length factor and a curl (angle drift with distance)
-	local function layout(seed)
-		local g = Random.new(seed)
-		P, ringOf, ids, armK, armA = {}, {}, {}, {}, {}
-		for _, n in Config.TREE do
-			if n.id ~= "Start" and not armK[n.color] then armK[n.color], armA[n.color] = g:NextNumber(0.82, 1.18), g:NextNumber(-0.32, 0.32) end
-		end
-		local minD = math.huge
-		for _, n in Config.TREE do
-			local rg = hexRing(n)
-			local hx, hy = math.sqrt(3) * (n.q + n.r / 2), 1.5 * n.r
-			local a = math.atan2(hy, hx) + math.rad(g:NextNumber(-16, 16))
-			local straight = (n.q == 0 or n.r == 0 or n.q == -n.r)
-			local r = rg == 0 and 0 or (rg == 1 and g:NextNumber(0.17, 0.25) or (straight and g:NextNumber(0.33, 0.43) or g:NextNumber(0.3, 0.4)))
-			if n.id ~= "Start" then r *= armK[n.color]; a += armA[n.color] * (rg - 1) end
-			P[n.id], ringOf[n.id] = Vector2.new(math.cos(a) * r * 1.62, math.sin(a) * r), rg
-			table.insert(ids, n.id)
-		end
-		for i = 1, #ids do
-			for j = i + 1, #ids do minD = math.min(minD, (P[ids[i]] - P[ids[j]]).Magnitude) end
-			if math.abs(P[ids[i]].Y) > 0.37 or math.abs(P[ids[i]].X) > 0.72 then minD = 0 end
-		end
-		return minD
+	local BS = new("Frame", { Name = "BackStage", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1, 1), ZIndex = 13 }, root)
+	new("UIAspectRatioConstraint", { AspectRatio = 16 / 9, AspectType = Enum.AspectType.FitWithinMaxSize }, BS)
+	new("ImageLabel", { Name = "WarmGlow", BackgroundTransparency = 1, Image = A.glow, ImageColor3 = Color3.fromRGB(70, 52, 26), ImageTransparency = 0.35, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1.6 * AR, 1.6), ZIndex = 13 }, BS)
+	for k = 0, 47 do -- faint engraved rays from the hub
+		local a = k / 48 * math.pi * 2
+		new("Frame", { BackgroundColor3 = GOLD, BackgroundTransparency = k % 4 == 0 and 0.88 or 0.94, BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.95 * AR, k % 4 == 0 and 0.0016 or 0.0009), Rotation = math.deg(a), ZIndex = 13 }, BS)
 	end
-	for seed = 11, 400 do if layout(seed) >= 0.115 then break end end
-	for k = 1, 3 do rng:NextNumber() end
+	new("ImageLabel", { Name = "TreeSepia", BackgroundTransparency = 1, Image = A.tree, ImageColor3 = Color3.fromRGB(176, 134, 64), ImageTransparency = 0.62, ScaleType = Enum.ScaleType.Fit, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.52), Size = sq(0.9), ZIndex = 13 }, BS)
+	do
+		local function edge(pos, size, rot) new("UIGradient", { Rotation = rot, Transparency = NumberSequence.new(0.1, 1) }, new("Frame", { BackgroundColor3 = Color3.new(0, 0, 0), BorderSizePixel = 0, Position = pos, Size = size, ZIndex = 13 }, root)) end
+		edge(UDim2.fromScale(0, 0), UDim2.fromScale(0.14, 1), 0)
+		edge(UDim2.fromScale(0.86, 0), UDim2.fromScale(0.14, 1), 180)
+		edge(UDim2.fromScale(0, 0), UDim2.fromScale(1, 0.14), 90)
+		edge(UDim2.fromScale(0, 0.86), UDim2.fromScale(1, 0.14), 270)
+	end
+
+	-- 1) layout: hand-placed (height units from the hub). Clusters sit near their stems; nothing is on a ring.
+	local rng = Random.new(11)
+	local P, ringOf = {}, {}
+	local POS = {
+		Start = { 0, 0 }, Claws = { 0.21, 0.015 }, Magnet = { 0.14, -0.17 }, Armor = { -0.12, -0.19 }, Charge = { -0.22, 0.03 }, Charm = { -0.15, 0.17 }, Finder = { 0.10, 0.19 },
+		Heavy = { 0.57, 0.02 }, Eye = { 0.40, -0.12 }, Haste = { 0.36, 0.14 }, Merger = { 0.31, -0.27 }, Learner = { 0.03, -0.31 }, Clock = { -0.28, -0.30 },
+		Mega = { -0.50, -0.02 }, Refund = { -0.37, -0.15 }, Pity = { -0.39, 0.15 }, Discount = { -0.27, 0.29 }, Guard = { 0.30, 0.31 }, Double = { -0.02, 0.32 },
+	}
+	local MAJOR = { Claws = 1, Magnet = 1, Armor = 1, Charge = 1, Charm = 1, Finder = 1, Eye = 1, Double = 1, Haste = 1 }
+	local PARENT = { Claws = "Start", Magnet = "Start", Armor = "Start", Charge = "Start", Charm = "Start", Finder = "Start", Heavy = "Claws", Eye = "Claws", Haste = "Claws",
+		Merger = "Magnet", Learner = "Magnet", Clock = "Armor", Mega = "Charge", Refund = "Charge", Pity = "Charm", Discount = "Charm", Double = "Finder", Guard = "Finder" }
+	local HAIR = { { "Eye", "Magnet" }, { "Haste", "Finder" }, { "Learner", "Armor" }, { "Refund", "Armor" }, { "Pity", "Charge" }, { "Double", "Charm" } }
+	local CARDPOS = { Vector2.new(0.80, 0), Vector2.new(0.50, -0.355), Vector2.new(-0.50, -0.355), Vector2.new(-0.80, 0), Vector2.new(-0.50, 0.33), Vector2.new(0.50, 0.33) }
+	local CARD_H = 0.15
+	for _, n in Config.TREE do
+		local v = POS[n.id]
+		P[n.id], ringOf[n.id] = Vector2.new(v[1], v[2]), n.id == "Start" and 0 or 1
+	end
 
 	-- 2) drawing: segments and S-curves
 	local function seg(a, b, th, color, tr, z, parent)
@@ -149,30 +154,14 @@ return function(env)
 		table.insert(edges, e)
 		return e
 	end
-	local hubEdges = {}
-	local primary = {}
 	for _, n in Config.TREE do
 		if n.id ~= "Start" then
-			local parent
-			for _, nb in Config.TREE_NEIGHBORS[n.id] do
-				if ringOf[nb] == ringOf[n.id] - 1 then parent = parent or nb end
-			end
-			parent = parent or "Start"
-			primary[n.id .. ">" .. parent], primary[parent .. ">" .. n.id] = true, true
-			local inner = ringOf[n.id] == 1
-			edgeOf[n.id] = makeEdge(parent, n.id, "main", (rng:NextInteger(0, 1) * 2 - 1) * rng:NextNumber(0.13, 0.24), inner and 12 or 11, inner and 0.0056 or 0.0042, inner and 0.0036 or 0.0028)
+			local parent = PARENT[n.id]
+			local inner = parent == "Start"
+			edgeOf[n.id] = makeEdge(parent, n.id, "main", (rng:NextInteger(0, 1) * 2 - 1) * rng:NextNumber(0.16, 0.26), inner and 12 or 11, inner and 0.0085 or 0.0062, inner and 0.0055 or 0.0042)
 		end
 	end
-	local seen = {}
-	for _, n in Config.TREE do
-		for _, nb in Config.TREE_NEIGHBORS[n.id] do
-			local k = n.id < nb and n.id .. ">" .. nb or nb .. ">" .. n.id
-			if not seen[k] and not primary[n.id .. ">" .. nb] and n.id ~= "Start" and nb ~= "Start" then
-				seen[k] = true
-				makeEdge(n.id, nb, "hair", (rng:NextInteger(0, 1) * 2 - 1) * 0.2, 7, 0.0011, 0.0011)
-			end
-		end
-	end
+	for _, h in HAIR do makeEdge(h[1], h[2], "hair", (rng:NextInteger(0, 1) * 2 - 1) * 0.22, 8, 0.0022, 0.0022) end
 
 	-- 3) hub: glow, zodiac rings, concentric lines
 	local hubG = new("ImageLabel", { BackgroundTransparency = 1, Image = A.glow, ImageColor3 = LIGHT, ImageTransparency = 0.45, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = sq(0.42), ZIndex = 14 }, S)
@@ -238,25 +227,18 @@ return function(env)
 		local ar = ARCANA[gi] or ARCANA[1]
 		local far
 		for _, n in Config.TREE do if n.color == col and (not far or P[n.id].Magnitude > P[far].Magnitude) then far = n.id end end
-		local p = P[far] + dir * 0.15
-		for _ = 1, 12 do -- keep clear of every lantern
-			for _, n in Config.TREE do
-				local dv = p - P[n.id]
-				if dv.Magnitude < 0.125 and dv.Magnitude > 0 then p += dv.Unit * 0.035 end
-			end
-			p = Vector2.new(math.clamp(p.X, -0.8, 0.8), math.clamp(p.Y, -0.38, 0.33))
-		end
-		local ch = 0.115 -- a small tarot card: double border, numeral, a sigil, the name
-		local rd = new("Frame", { BackgroundColor3 = INK, BackgroundTransparency = 0.05, AnchorPoint = Vector2.new(0.5, 0.5), Position = at(p), Size = UDim2.fromScale(ch * 0.64 * AR, ch), ZIndex = 16 }, S)
+		local p = CARDPOS[gi] or CARDPOS[1] -- an outer arc, clear of every lantern and the popup
+		local ch = CARD_H -- a tarot card: double border, numeral, a sigil, the name
+		local rd = new("Frame", { BackgroundColor3 = INK2, BackgroundTransparency = 0.05, AnchorPoint = Vector2.new(0.5, 0.5), Position = at(p), Size = UDim2.fromScale(ch * 0.64 * AR, ch), ZIndex = 16 }, S)
 		new("UICorner", { CornerRadius = UDim.new(0.06, 0) }, rd)
-		new("UIStroke", { Color = LIGHT, Thickness = 1.4 }, rd)
+		new("UIStroke", { Color = LIGHT, Thickness = 2.2 }, rd)
 		local inner = new("Frame", { BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.86, 0.9), ZIndex = 16 }, rd)
 		new("UICorner", { CornerRadius = UDim.new(0.05, 0) }, inner)
 		new("UIStroke", { Color = GOLD, Thickness = 1, Transparency = 0.5 }, inner)
-		new("TextLabel", { BackgroundTransparency = 1, Text = ar[1], TextColor3 = CREAM, TextScaled = true, Size = UDim2.fromScale(0.7, 0.2), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.07), ZIndex = 17 }, rd)
-		local sg = new("ImageLabel", { BackgroundTransparency = 1, Image = ICONS[far] or "", ImageColor3 = LIGHT, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.62, 0.4 * 0.64 / 0.64), ZIndex = 17 }, rd)
+		new("TextLabel", { BackgroundTransparency = 1, Text = ar[1], TextColor3 = CREAM, TextScaled = true, Size = UDim2.fromScale(0.7, 0.17), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.06), ZIndex = 17 }, rd)
+		local sg = new("ImageLabel", { BackgroundTransparency = 1, Image = ICONS[far] or "", ImageColor3 = LIGHT, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.7, 0.4), ZIndex = 17 }, rd)
 		new("UIAspectRatioConstraint", { AspectRatio = 1 }, sg)
-		new("TextLabel", { BackgroundTransparency = 1, Text = string.upper(ar[2]), TextColor3 = LIGHT, TextScaled = true, Size = UDim2.fromScale(0.8, 0.12), AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 0.94), ZIndex = 17 }, rd)
+		new("TextLabel", { BackgroundTransparency = 1, Text = string.upper(ar[2]), TextColor3 = LIGHT, TextScaled = true, Size = UDim2.fromScale(0.86, 0.11), AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 0.95), ZIndex = 17 }, rd)
 		P["H" .. gi] = p
 		ringOf["H" .. gi] = 3
 		local e = makeEdge(far, "H" .. gi, "hair", 0.12, 6, 0.0016, 0.0016)
@@ -267,11 +249,11 @@ return function(env)
 	-- 6) nodes
 	local N, state, lastLvl = {}, {}, {}
 	local snap, hovered, selected
-	local HN, HO = 0.082, 0.094 -- node heights (about 67 and 78 px at 1080)
+	local HMAJ, HMIN = 0.08, 0.056 -- node heights: about 86 and 60 px at 1080
 	for _, n in Config.TREE do
 		local id = n.id
 		local isHub = id == "Start"
-		local h = isHub and 0.125 or HN
+		local h = isHub and 0.125 or (MAJOR[id] and HMAJ or HMIN)
 		local cont = new("Frame", { Name = id, BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = at(P[id]), Size = sq(h), ZIndex = 18 }, S)
 		local halo = new("ImageLabel", { BackgroundTransparency = 1, Image = A.glow, ImageColor3 = LIGHT, ImageTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(2.4, 2.4), ZIndex = 17 }, cont)
 		local orbit = new("Frame", { BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1.55, 1.55), ZIndex = 18 }, cont)
@@ -288,7 +270,7 @@ return function(env)
 		local outer = new("Frame", { BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1.22, 1.22), ZIndex = 19, Visible = false }, cont)
 		new("UICorner", { CornerRadius = UDim.new(1, 0) }, outer)
 		new("UIStroke", { Color = CREAM, Thickness = 1, Transparency = 0.55 }, outer)
-		local glyph = new("ImageLabel", { BackgroundTransparency = 1, Image = ICONS[id] or "", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.66, 0.66), ZIndex = 20 }, cont)
+		local glyph = new("ImageLabel", { BackgroundTransparency = 1, Image = ICONS[id] or "", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.78, 0.78), ZIndex = 20 }, cont)
 		local rank = new("TextLabel", { BackgroundColor3 = INK, BackgroundTransparency = 0.15, Text = "", TextColor3 = CREAM, TextScaled = true, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 1.0), Size = UDim2.fromScale(0.5, 0.26), ZIndex = 21, Visible = false }, cont)
 		new("UICorner", { CornerRadius = UDim.new(0.5, 0) }, rank)
 		new("UIStroke", { Color = GOLD, Thickness = 1 }, rank)
@@ -300,7 +282,7 @@ return function(env)
 	end
 
 	-- 7) the popup: an ornate gold-ink frame, a title, a thin rule, a description, cost and status
-	local PW, PH = 0.2, 0.25 -- of the stage width and height
+	local PW, PH = 0.17, 0.3 -- of the stage width and height
 	local pop = new("Frame", { Name = "Popup", BackgroundColor3 = INK, BackgroundTransparency = 0.04, Visible = false, Size = UDim2.fromScale(PW, PH), ZIndex = 50 }, S)
 	new("UIStroke", { Color = LIGHT, Thickness = 1.6 }, pop)
 	local pin = new("Frame", { BackgroundTransparency = 1, Position = UDim2.fromScale(0.03, 0.03 * PW * 16 / 9 / PH), Size = UDim2.fromScale(0.94, 1 - 0.06 * PW * 16 / 9 / PH), ZIndex = 50 }, pop)
@@ -316,21 +298,37 @@ return function(env)
 	local pNext = lab({ BackgroundTransparency = 1, TextColor3 = GOLD, TextScaled = true, Position = UDim2.fromScale(0.08, 0.62), Size = UDim2.fromScale(0.84, 0.07), ZIndex = 51, Text = "" })
 	local pCost = lab({ BackgroundTransparency = 1, TextColor3 = LIGHT, TextScaled = true, RichText = true, Position = UDim2.fromScale(0.08, 0.72), Size = UDim2.fromScale(0.84, 0.1), ZIndex = 51, Text = "" })
 	local pStatus = lab({ BackgroundTransparency = 1, TextColor3 = DIM, TextScaled = true, Position = UDim2.fromScale(0.08, 0.84), Size = UDim2.fromScale(0.84, 0.08), ZIndex = 51, Text = "" })
-	for f, m in { [pPath] = 16, [pTitle] = 26, [pDesc] = 20, [pNext] = 15, [pCost] = 22, [pStatus] = 16 } do new("UITextSizeConstraint", { MaxTextSize = m }, f) end
+	for f, m in { [pPath] = 19, [pTitle] = 32, [pDesc] = 25, [pNext] = 19, [pCost] = 28, [pStatus] = 20 } do new("UITextSizeConstraint", { MaxTextSize = m }, f) end
 	local popScale = new("UIScale", { Scale = 1 }, pop) -- (the popup alone pops in with a spring; the layout itself is Scale-sized)
+
+	-- a gold-framed tarot plate: ink face, bold gold border, inner hairline frame, four corner diamonds
+	local function plate(b, z)
+		b.BackgroundColor3, b.BackgroundTransparency = INK2, 0
+		for _, c in b:GetChildren() do if c:IsA("UIStroke") or c:IsA("UIGradient") or c:IsA("UICorner") then c:Destroy() end end
+		new("UICorner", { CornerRadius = UDim.new(0.1, 0) }, b)
+		local st = new("UIStroke", { Color = LIGHT, Thickness = 2.5 }, b)
+		local inn = new("Frame", { Name = "PlateInner", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.new(1, -10, 1, -10), ZIndex = z }, b)
+		new("UICorner", { CornerRadius = UDim.new(0.1, 0) }, inn)
+		new("UIStroke", { Color = GOLD, Thickness = 1, Transparency = 0.35 }, inn)
+		for _, c in { { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } } do
+			new("Frame", { BackgroundColor3 = LIGHT, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(c[1], c[2]), Size = UDim2.fromOffset(9, 9), Rotation = 45, ZIndex = z + 1 }, b)
+		end
+		return st
+	end
 
 	-- 8) corner pieces: skill points, respec, next-best hint, close
 	local bar = new("Frame", { Name = "Bar", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 0.985), Size = UDim2.fromScale(0.94, 0.07), ZIndex = 30 }, S)
 	new("Frame", { BackgroundColor3 = LIGHT, BackgroundTransparency = 0.45, BorderSizePixel = 0, Position = UDim2.fromScale(0, 0), Size = UDim2.fromScale(1, 0.02), ZIndex = 30 }, bar)
-	local respec = new("TextButton", { BackgroundColor3 = INK, BackgroundTransparency = 0, AutoButtonColor = false, Text = "RESPEC", TextColor3 = LIGHT, TextScaled = true, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromScale(0, 0.55), Size = UDim2.fromScale(0.13, 0.7), ZIndex = 31 }, bar)
-	new("UICorner", { CornerRadius = UDim.new(0.2, 0) }, respec)
-	new("UITextSizeConstraint", { MaxTextSize = 22 }, respec)
-	local rStroke = new("UIStroke", { Color = GOLD, Thickness = 1.5 }, respec)
+	local respec = new("TextButton", { AutoButtonColor = false, Text = "RESPEC", TextColor3 = LIGHT, TextScaled = true, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromScale(0.005, 0.55), Size = UDim2.fromScale(0.15, 0.82), ZIndex = 31 }, bar)
+	respec.Font = Enum.Font.Bodoni
+	respec:SetAttribute("KeepFont", true)
+	new("UITextSizeConstraint", { MaxTextSize = 28 }, respec)
+	local rStroke = plate(respec, 31)
 	local hintIcon = new("ImageLabel", { BackgroundTransparency = 1, Image = ICONS.Start, ImageColor3 = LIGHT, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.fromScale(0.39, 0.55), Size = UDim2.fromScale(0.03, 0.62), ZIndex = 31 }, bar)
 	local hint = new("TextLabel", { BackgroundTransparency = 1, Text = "", TextColor3 = LIGHT, TextScaled = true, TextXAlignment = Enum.TextXAlignment.Left, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromScale(0.4, 0.55), Size = UDim2.fromScale(0.28, 0.6), ZIndex = 31 }, bar)
-	new("UITextSizeConstraint", { MaxTextSize = 22 }, hint)
+	new("UITextSizeConstraint", { MaxTextSize = 27 }, hint)
 	local spText = new("TextLabel", { BackgroundTransparency = 1, Text = "0", TextColor3 = CREAM, TextScaled = true, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.fromScale(0.9, 0.55), Size = UDim2.fromScale(0.05, 0.8), ZIndex = 31 }, bar)
-	new("UITextSizeConstraint", { MaxTextSize = 40 }, spText)
+	new("UITextSizeConstraint", { MaxTextSize = 54 }, spText)
 	spText:SetAttribute("KeepFont", true)
 	spText.Font = Enum.Font.Bodoni
 	new("ImageLabel", { BackgroundTransparency = 1, Image = ICONS.Start, ImageColor3 = LIGHT, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromScale(0.905, 0.55), Size = UDim2.fromScale(0.03, 0.7), ZIndex = 31 }, bar)
@@ -352,13 +350,12 @@ return function(env)
 	if close then task.delay(1.5, function() -- after AbstractScreens has styled it
 		for _, d in close:GetDescendants() do if d:IsA("GuiObject") or d:IsA("UIStroke") or d:IsA("UIGradient") then pcall(function() d.Visible = false end) pcall(function() d.Enabled = false end) end end
 		close.Text, close.TextTransparency = "", 1
-		close.AnchorPoint, close.Position, close.Size = Vector2.new(1, 0), UDim2.fromScale(0.975, 0.035), UDim2.fromScale(0.026, 0.046)
-		close.BackgroundColor3, close.BackgroundTransparency, close.ZIndex = INK, 0.15, 70
-		new("UICorner", { CornerRadius = UDim.new(1, 0) }, close)
-		local f = new("Frame", { BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 70 }, close)
-		new("UIStroke", { Color = GOLD, Thickness = 1.5 }, f)
+		close.AnchorPoint, close.Position, close.Size = Vector2.new(1, 0), UDim2.fromScale(0.975, 0.03), UDim2.fromScale(0.042, 0.075)
+		close.ZIndex = 70
+		plate(close, 70)
+		local f = new("Frame", { BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.62, 0.62), ZIndex = 72 }, close)
 		for _, r in { 45, -45 } do
-			new("Frame", { BackgroundColor3 = CREAM, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.5, 0.06), Rotation = r, ZIndex = 71 }, f)
+			new("Frame", { BackgroundColor3 = CREAM, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1.0, 0.13), Rotation = r, ZIndex = 72 }, f)
 		end
 		close.MouseEnter:Connect(function() tw(f, 0.2, { Rotation = 90 }) end)
 		close.MouseLeave:Connect(function() tw(f, 0.2, { Rotation = 0 }) end)
@@ -406,18 +403,36 @@ return function(env)
 			else
 				local cost = Config.skillCost(node, lvl)
 				pNext.Text = lvl > 0 and string.format("Rank %d / %d  ·  next %s", lvl, node.max, eff(node, node.per * (lvl + 1))) or string.format("Rank 0 / %d", node.max)
-				pCost.Text = string.format('%d <font size="16">skill point%s</font>', cost, cost == 1 and "" or "s")
+				pCost.Text = string.format("%d skill point%s", cost, cost == 1 and "" or "s")
 				pStatus.Text = snap.sp >= cost and (UIS.TouchEnabled and not UIS.MouseEnabled and "Tap again to kindle" or "Click to kindle") or "Not enough light"
 			end
 		end
 		pStatus.TextColor3 = pStatus.Text:find("kindle") and CREAM or DIM
-		-- beside the node, on the side away from the hub, kept on the stage
+		-- beside the node: try the sides, keep the one that covers the fewest neighbours, cards and the stage edge
 		local p = P[id]
-		local right = p.X >= 0
-		local x = 0.5 + p.X * AR + (right and 0.045 or -0.045 - PW)
-		x = math.clamp(x, 0.02, 0.98 - PW)
-		local y = math.clamp(0.5 + p.Y - PH / 2, 0.03, 0.97 - PH)
-		pop.Position = UDim2.fromScale(x, y)
+		local nh = (N[id].big or N[id].h) / 2 + 0.012
+		local pw, ph = PW / AR, PH -- popup size in height units
+		local best, bx, by = math.huge
+		for _, c in { { 1, 0 }, { -1, 0 }, { 1, -1 }, { -1, -1 }, { 1, 1 }, { -1, 1 }, { 0, -1 }, { 0, 1 } } do
+			local cx = p.X + c[1] * (nh + pw / 2 * (c[1] ~= 0 and 1 or 0)) + (c[1] == 0 and 0 or 0)
+			local cy = p.Y + c[2] * (nh + ph / 2 * (c[2] ~= 0 and 1 or 0)) * (c[1] == 0 and 1 or 0.55)
+			cx = math.clamp(cx, -0.89 + pw / 2 + 0.01, 0.89 - pw / 2 - 0.01)
+			cy = math.clamp(cy, -0.5 + ph / 2 + 0.01, 0.5 - ph / 2 - 0.01)
+			local function ov(x, y, w, h) -- overlap area of (x,y,w,h) centred rects with the popup
+				local ox = math.max(0, (pw + w) / 2 - math.abs(cx - x))
+				local oy = math.max(0, (ph + h) / 2 - math.abs(cy - y))
+				return ox * oy
+			end
+			local score = 0
+			for oid, od in N do
+				if oid ~= id then score += ov(P[oid].X, P[oid].Y, od.h * 1.3, od.h * 1.3) * 40 end
+			end
+			score += ov(p.X, p.Y, nh * 2, nh * 2) * 60 -- never over the hovered node itself
+			for _, cp in CARDPOS do score += ov(cp.X, cp.Y, CARD_H * 0.64, CARD_H) * 25 end
+			score += (math.abs(cx - p.X) + math.abs(cy - p.Y)) * 0.02
+			if score < best then best, bx, by = score, cx, cy end
+		end
+		pop.Position = UDim2.fromScale(0.5 + (bx - pw / 2) * AR, 0.5 + by - ph / 2)
 		if not pop.Visible then
 			pop.Visible = true
 			popScale.Scale = 0.92
@@ -464,7 +479,7 @@ return function(env)
 				if st then st.Enabled = true end
 			else
 				f.BackgroundColor3 = e.avail and LIGHT or (e.kind == "hair" and DIM or GOLD)
-				f.BackgroundTransparency = e.avail and 0.1 or (e.kind == "hair" and 0.6 or 0.5)
+				f.BackgroundTransparency = e.avail and 0.05 or (e.kind == "hair" and 0.45 or 0.3)
 				local st = f:FindFirstChildOfClass("UIStroke")
 				if st then st.Enabled = false end
 			end
@@ -473,7 +488,7 @@ return function(env)
 	local function applyNode(d, st, lvl, s, instant)
 		local node = d.node
 		local owned = st == "owned" or st == "maxed"
-		local big = owned and HO or d.h
+		local big = owned and d.h * 1.1 or d.h
 		d.big, d.st = big, st
 		if instant then d.cont.Size = sq(big) else tw(d.cont, 0.45, { Size = sq(big) }, Enum.EasingStyle.Back) end
 		d.outer.Visible = st == "maxed"
@@ -481,29 +496,29 @@ return function(env)
 		d.moon.BackgroundTransparency = owned and 0 or 1
 		d.rank.Text = (lvl > 0 and st ~= "start") and (lvl .. "/" .. node.max) or ""
 		d.rank.Visible = d.rank.Text ~= ""
-		d.stroke.Thickness = 2
-		if st == "locked" then -- clearly there, clearly dark: a dim gold ring on ink
-			d.stroke.Color, d.stroke.Transparency = Color3.fromRGB(150, 124, 80), 0.1
-			d.iStroke.Color, d.iStroke.Transparency = DIM, 0.6
-			d.ring.BackgroundColor3, d.ring.BackgroundTransparency = INK, 0.05
-			d.glyph.ImageColor3, d.glyph.ImageTransparency = Color3.fromRGB(150, 124, 80), 0.2
+		d.glyph.Size = UDim2.fromScale(0.78, 0.78)
+		if st == "locked" then -- dark, desaturated, no glow
+			d.stroke.Color, d.stroke.Transparency, d.stroke.Thickness = Color3.fromRGB(78, 68, 52), 0, 2
+			d.iStroke.Transparency = 1
+			d.ring.BackgroundColor3, d.ring.BackgroundTransparency = Color3.fromRGB(16, 15, 13), 0
+			d.glyph.ImageColor3, d.glyph.ImageTransparency = Color3.fromRGB(86, 76, 60), 0.15
 			d.halo.ImageTransparency = 1
-		elseif st == "available" then -- ready to take: bright gold ring that pulses
-			d.stroke.Color, d.stroke.Transparency, d.stroke.Thickness = LIGHT, 0, 3
-			d.iStroke.Color, d.iStroke.Transparency = GOLD, 0.3
-			d.ring.BackgroundColor3, d.ring.BackgroundTransparency = INK, 0
+		elseif st == "available" then -- ready to take: a gold ring that pulses
+			d.stroke.Color, d.stroke.Transparency, d.stroke.Thickness = LIGHT, 0, 4
+			d.iStroke.Color, d.iStroke.Transparency = GOLD, 0.4
+			d.ring.BackgroundColor3, d.ring.BackgroundTransparency = INK2, 0
 			d.glyph.ImageColor3, d.glyph.ImageTransparency = LIGHT, 0
 		elseif st == "start" then
-			d.stroke.Color, d.stroke.Transparency, d.stroke.Thickness = LIGHT, 0, 2.5
+			d.stroke.Color, d.stroke.Transparency, d.stroke.Thickness = LIGHT, 0, 3
 			d.ring.BackgroundColor3, d.ring.BackgroundTransparency = INK, 0
 			d.glyph.ImageColor3, d.glyph.ImageTransparency = CREAM, 0
 			d.halo.ImageTransparency = 0.5
-		else -- owned: filled gold, dark engraving, a halo
-			d.stroke.Color, d.stroke.Transparency, d.stroke.Thickness = CREAM, 0, 2.5
-			d.iStroke.Color, d.iStroke.Transparency = INK, 0.4
-			d.ring.BackgroundColor3, d.ring.BackgroundTransparency = st == "maxed" and CREAM or LIGHT, 0
+		else -- owned: a solid cream disc with a dark icon
+			d.stroke.Color, d.stroke.Transparency, d.stroke.Thickness = LIGHT, 0, 3
+			d.iStroke.Color, d.iStroke.Transparency = INK, 0.5
+			d.ring.BackgroundColor3, d.ring.BackgroundTransparency = CREAM, 0
 			d.glyph.ImageColor3, d.glyph.ImageTransparency = INK, 0
-			d.halo.ImageTransparency = st == "maxed" and 0.4 or 0.55
+			d.halo.ImageTransparency = st == "maxed" and 0.45 or 0.65
 		end
 	end
 	local function burstAt(id)
@@ -521,7 +536,7 @@ return function(env)
 			task.delay(0.72, function() sp:Destroy() end)
 		end
 		d.ring.BackgroundColor3 = Color3.new(1, 1, 1)
-		tw(d.ring, 0.7, { BackgroundColor3 = LIGHT })
+		tw(d.ring, 0.7, { BackgroundColor3 = CREAM })
 	end
 
 	local first = true
@@ -568,7 +583,7 @@ return function(env)
 		end
 		spText.Text = tostring(s.sp)
 		respec:SetAttribute("off", not spent)
-		respec.TextTransparency, rStroke.Transparency = spent and 0 or 0.5, spent and 0 or 0.5
+		respec.TextTransparency, rStroke.Transparency = spent and 0 or 0.6, spent and 0 or 0.5
 		hintIcon.Visible = nbest ~= nil
 		hint.Text = nbest and ("Next: " .. Config.TREE_BY_ID[nbest].name) or ""
 		first = false
@@ -654,7 +669,7 @@ return function(env)
 				d.nextR.Size = UDim2.fromScale(1.3 + k * 0.18, 1.3 + k * 0.18)
 				d.nStroke.Transparency = 0.15 + k * 0.5
 			end
-			if d.st == "available" then local k = 0.5 + 0.5 * math.sin(now * 2.4 + d.ph); d.halo.ImageTransparency = 0.5 + 0.35 * (1 - k); d.stroke.Transparency = 0.25 * (1 - k) end
+			if d.st == "available" then local k = 0.5 + 0.5 * math.sin(now * 2.4 + d.ph); d.halo.ImageTransparency = 0.7 + 0.25 * (1 - k); d.stroke.Transparency = 0.55 * (1 - k); d.stroke.Thickness = 3 + 2 * k end
 			if d.halo.ImageTransparency < 0.95 and d.id ~= "Start" then d.halo.Size = UDim2.fromScale(2.4 + math.sin(now * 2 + d.ph) * 0.12, 2.4 + math.sin(now * 2 + d.ph) * 0.12) end
 		end
 		for _, r in runners do
@@ -684,9 +699,8 @@ return function(env)
 		pcall(function()
 			for _, b in treeGui.Parent:GetChildren() do
 				if b:IsA("TextButton") and b.Text == "FAMILIARS" then
-					for _, c in b:GetChildren() do if c:IsA("UIStroke") or c:IsA("UIGradient") then c:Destroy() end end
-					b.BackgroundColor3, b.BackgroundTransparency, b.TextColor3 = INK, 0, LIGHT
-					new("UIStroke", { Color = GOLD, Thickness = 1.5 }, b)
+					b.TextColor3 = LIGHT
+					plate(b, b.ZIndex)
 				end
 			end
 		end)

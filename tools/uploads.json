@@ -1462,5 +1462,53 @@
   "type": "Decal",
   "assetId": "110766383718160",
   "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "VFX/sfx/out/ui_buy.wav",
+  "type": "Audio",
+  "assetId": "138935227500698",
+  "time": "2026-10-29 19:33"
+ },
+ {
+  "file": "VFX/sfx/out/ui_click_soft.wav",
+  "type": "Audio",
+  "assetId": "111673041051226",
+  "time": "2026-10-29 19:33"
+ },
+ {
+  "file": "VFX/sfx/out/ui_error.wav",
+  "type": "Audio",
+  "assetId": "109055487674361",
+  "time": "2026-10-29 19:34"
+ },
+ {
+  "file": "VFX/sfx/out/ui_levelup.wav",
+  "type": "Audio",
+  "assetId": "89524906675033",
+  "time": "2026-10-29 19:34"
+ },
+ {
+  "file": "VFX/sfx/out/familiar_place.wav",
+  "type": "Audio",
+  "assetId": "135206057906557",
+  "time": "2026-10-29 19:34"
+ },
+ {
+  "file": "VFX/sfx/out/reveal_legendary.wav",
+  "type": "Audio",
+  "assetId": "100672209997679",
+  "time": "2026-10-29 19:34"
+ },
+ {
+  "file": "VFX/sfx/out/reveal_celestial.wav",
+  "type": "Audio",
+  "assetId": "114164363714017",
+  "time": "2026-10-29 19:34"
+ },
+ {
+  "file": "VFX/sfx/out/boss_intro_clockmaker.wav",
+  "type": "Audio",
+  "assetId": "129659992794232",
+  "time": "2026-10-29 19:34"
  }
 ]

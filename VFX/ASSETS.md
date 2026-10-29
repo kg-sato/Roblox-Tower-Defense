@@ -253,3 +253,5 @@ Title page layers (uploaded 2026-10-29 via upload_image, from UI Kit/art/title_b
 Title foreground v2 (character moved right): 97923729896441 (127018063062309 superseded)
 
 Title page round 2 layers (2026-10-29): sky 82308350034807, rays 104036777344439, figure 128197158529429, ground 89551418679476, foreground 85966992159723, mist_far 82252188238475, mist_near 108210761536387 (round 1 ids superseded).
+
+Overnight cue set audio (2026-10-29, WAV synthesised by VFX/sfx/make_cues.py, uploaded as Audio; 8 of the 30 new cues, rest not uploaded yet; see VFX/sfx/MANIFEST.md): ui_click_soft rbxassetid://111673041051226, ui_error rbxassetid://109055487674361, ui_buy rbxassetid://138935227500698, ui_levelup rbxassetid://89524906675033, familiar_place rbxassetid://135206057906557, reveal_legendary rbxassetid://100672209997679, reveal_celestial rbxassetid://114164363714017, boss_intro_clockmaker rbxassetid://129659992794232. Moderation state not checked; ear quality UNVERIFIED.

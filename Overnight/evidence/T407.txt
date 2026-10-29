@@ -1,0 +1,28 @@
+PASS
+T407: re-baked the 12 original familiars with the three-view projection (Blender/bake_familiar_textures.py, inputs Blender/tex_in, clean models Familiars/clean) plus a new 5x5 median clean-up step (removes speckle under about 12 px; lines 3 px wide or more survive; CLEAN_TEXTURE=0 skips). Outputs overwritten in Assets/3D/Familiars/textured; the 12 rigged GLB/FBX (rig_template.py) and the 512 px maps (tools/texture_maps.py) were regenerated from them.
+speckle share (pixels > 24 levels from their 5x5 median) before -> after, from *_tex_stats.json: Ward .0109->.0040, Archivist .0264->.0086, Mourner .0095->.0022, MirrorChorister .0286->.0111, Sentinel .0214->.0065, Frostling .0452->.0165, BrassHound .0147->.0057, Gargoyle .0170->.0047, MothLantern .0311->.0125, StarDrake .0341->.0121, Ember .0173->.0050, GreyVeilWraith .0227->.0077 (about 65% lower; limit now 0.02).
+--- python tools/verify_textured_models.py (exit 0; speckle column and 0.02 limit for the 12 originals added)
+model              uv  colTex rghTex       size painted% colours  rough min-max   tris speckle
+Archivist          True True   True    1024x1024     75.9     232      1-207      6000  0.0086  ok
+BrassHound         True True   True    1024x1024     81.4     178      1-218      6000  0.0057  ok
+CantorVesper       True True   True    1024x1024     71.0     406      1-220      8999  0.0285  ok
+CogWarden          True True   True    1024x1024     63.2     304      1-221      9000  0.0360  ok
+ConstableWren      True True   True    1024x1024     68.2     291      1-222      9000  0.0154  ok
+DameOrrery         True True   True    1024x1024     68.2     357      1-221      7002  0.0265  ok
+Ember              True True   True    1024x1024     78.4     208      1-218      6000  0.0050  ok
+FerrymanOfFog      True True   True    1024x1024     69.3     243      1-219      9000  0.0224  ok
+Frostling          True True   True    1024x1024     72.7     209      1-220      6000  0.0165  ok
+Gargoyle           True True   True    1024x1024     78.9     132      1-219      6000  0.0047  ok
+GreyVeilWraith     True True   True    1024x1024     71.1     108      1-218      6000  0.0077  ok
+MadamQuill         True True   True    1024x1024     63.5     282      1-217      9000  0.0263  ok
+MirrorChorister    True True   True    1024x1024     70.4     233      1-223      6000  0.0111  ok
+MothLantern        True True   True    1024x1024     79.0     198      1-202      6000  0.0125  ok
+Mourner            True True   True    1024x1024     68.8      80      5-218      6000  0.0022  ok
+Sentinel           True True   True    1024x1024     70.6     163      1-215      6000  0.0065  ok
+StarDrake          True True   True    1024x1024     70.2     268      1-219      6000  0.0121  ok
+TheLamplighter     True True   True    1024x1024     65.9     303      1-221      8999  0.0228  ok
+VeilWalker         True True   True    1024x1024     72.2     179      1-213      8999  0.0212  ok
+Ward               True True   True    1024x1024     81.3     180      1-223      6000  0.0040  ok
+models: 20 problems: 0
+contact sheets: Overnight/captures/T407_before_sheet.png, T407_after_sheet.png (3/4 views), T407_colour_crops_before_after.png (colour-map crops)
+UNVERIFIED: look and feel (no human judged). Speckle metric uses the same 5x5 median the fix applies, so it shows speckle removed, not that the textures look right. Remaining known flaws: projection streaks on grazing surfaces, black gaps between UV islands, blur/halo at view seams. The 8 newer humans (CantorVesper, CogWarden etc.) were not re-baked (not in scope; speckle 0.015 to 0.036 for information).

@@ -1,0 +1,4 @@
+PASS
+MatchSim.meta now carries bestStage and lastStage; loadMeta clamps them 1..1000 (best never below last), run stage not changed; bestStage updated on every stage clear; MatchService TEMPLATE has bestStage/lastStage and loadProfile clamps them. SaveMigration 27 of 27 (13 new cases: old save defaults to 1, clamps huge/negative/NaN/string/table, setback keeps best, round trip). MatchService profile path itself UNVERIFIED (needs Play with ProfileStore).
+
+RunAll: ActionArgs PASS; Balance PASS (baseline); Boss 31/31; Combat 58/58; FamiliarMaterials 69/69; Familiars 32/32; GameSpeed PASS; LoreFragments PASS; MatchSim PASS; NewRoles 27/27; NumberFormat PASS; Rules 69 of 69; SaveMigration 27 of 27; ServerRules 58/58; SettingsDefaults PASS; SoundCap PASS; StageSets PASS. SUMMARY 17 of 17 suites PASS (2026-10-29, Studio Edit mode)
