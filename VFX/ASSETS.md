@@ -169,3 +169,8 @@ Image ids are what the game uses (`ReplicatedStorage.ArtIds`, `LoadingScreen.ART
 | 99544291548389 | 139847034960914 | road_stars: make_menu_art.py, progression horizon 3 |
 | 93038594791730 | 78210865840707 | road_veil: make_menu_art.py, progression horizon 2 |
 | 102117649984377 | Brass Sentinel v5 (in use; slate steel + brass repaint of the concept) | Hunyuan3D + `Blender/sentinel_hy.py` | |
+| 85579492882374 | Brass Sentinel v6 (flat colours, metal 0.6: rendered sky-blue in Studio) | Hunyuan3D + `Blender/sentinel_hy.py` | superseded |
+| 105590661234199 / 115745072343324 | Brass Sentinel v7 / v7b (metal 0.1, roughness 0.65; v7b warm dark repaint) | `Blender/sentinel_hy.py` | superseded |
+| 103893658539937 | Brass Sentinel v7c (in use as `ReplicatedStorage.EnemyTankMesh`; small specks removed, deep brass) | `Blender/sentinel_hy.py`, paint `Blender/out_art/sentinel_paint.png` | |
+| 124300641110722 | Brass Sentinel v8 (in use as `ReplicatedStorage.EnemyTankMesh`; user: "Yes, brass": brass plates, dark iron, gold trim; metal 0.35) | `Blender/sentinel_hy.py` | reviewer 5/3/4/4/5 |
+| 73478931319348 / 116076795526880 | Brass Sentinel v9 / v9b hard-surface rebuild (v9 in use as `ReplicatedStorage.EnemyTankMesh`; parts joined by material, so limbs can't move yet; v9b: one dial + vent, deeper brass, bigger head, not inserted) | `Blender/sentinel_hs.py` | not reviewed |

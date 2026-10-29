@@ -152,6 +152,44 @@ function M.pop(gui, amount, t)
 	end)
 end
 
+-- rolling counter smear (neildegracce's "900 frames" digits): while a TextLabel's number is counting, two fading
+-- copies show the previous values just above it, so the digits read as rolling upward with a vertical blur. The
+-- copies hide 0.12 s after the last change. reduced: a function returning true turns it off.
+function M.rollSmear(lbl, reduced)
+	local ghosts, hist, last = {}, {}, 0
+	for k = 1, 2 do
+		local g = lbl:Clone()
+		for _, d in g:GetChildren() do
+			if not (d:IsA("UIStroke") or d:IsA("UIGradient") or d:IsA("UITextSizeConstraint")) then d:Destroy() end
+		end
+		g.Name, g.Visible, g.ZIndex = lbl.Name .. "_roll", false, math.max(1, lbl.ZIndex - 1)
+		g.TextTransparency = 0.45 + k * 0.2
+		for _, s in g:GetChildren() do if s:IsA("UIStroke") then s.Transparency = 0.6 + k * 0.15 end end
+		g.Parent = lbl.Parent
+		ghosts[k] = g
+	end
+	lbl:GetPropertyChangedSignal("Text"):Connect(function()
+		table.insert(hist, 1, lbl.Text)
+		if #hist > 3 then table.remove(hist) end
+		if (reduced and reduced()) or M.reduced then return end
+		last = os.clock()
+		local h = lbl.AbsoluteSize.Y
+		for k, g in ghosts do
+			local t = hist[k + 1]
+			g.Visible = t ~= nil and lbl.Visible
+			if t then
+				g.Text = t
+				g.Position = lbl.Position + UDim2.fromOffset(0, -h * 0.28 * k)
+				g.Size, g.AnchorPoint, g.TextXAlignment = lbl.Size, lbl.AnchorPoint, lbl.TextXAlignment
+			end
+		end
+		local mine = last
+		task.delay(0.12, function()
+			if last == mine then for _, g in ghosts do g.Visible = false end end
+		end)
+	end)
+end
+
 -- self-check (run with require(Motion).selfTest()): step responses behave as their dials say
 function M.selfTest()
 	local function run(f, z, r, dt, secs)

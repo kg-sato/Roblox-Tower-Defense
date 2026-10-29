@@ -42,7 +42,8 @@ for i = 1, #pts - 1 do
 	local a, b = pts[i], pts[i + 1]
 	local mid = (a + b) / 2
 	local cf = CFrame.lookAt(Vector3.new(mid.X, 0.6, mid.Z), Vector3.new(b.X, 0.6, b.Z))
-	part("Lane" .. i, Vector3.new(8, 0.4, (b - a).Magnitude + 8), cf, Color3.fromRGB(200, 192, 178), Enum.Material.Cobblestone)
+	local lane = part("Lane" .. i, Vector3.new(8, 0.4, (b - a).Magnitude + 8), cf, Color3.fromRGB(150, 142, 132), Enum.Material.Cobblestone)
+	lane.MaterialVariant = "LampwickCobble" -- 2026-10-28 art pass: AI-made wet cobblestone (MaterialService); darker so it no longer blows out
 	-- low dark kerb under the lane edges frames the path
 	part("Kerb" .. i, Vector3.new(9.6, 0.3, (b - a).Magnitude + 9.6), cf * CFrame.new(0, -0.1, 0), Color3.fromRGB(28, 28, 34), Enum.Material.Slate)
 end
@@ -75,6 +76,79 @@ do
 	glow.Range = 20
 	glow.Brightness = 1.4
 	glow.Parent = core
+	-- 2026-10-28: each area has its own protected item (Game Design Doc "Theme arc"). workspace attribute WardStyle
+	-- picks it: "Lampwick" (default, the steampunk start) = the brass steampunk lantern; "Cosmic" = the hero crystal
+	-- with orbit rings (WardFX animates it). Missing art falls back to the primitive lantern above.
+	local style = workspace:GetAttribute("WardStyle") or "Lampwick"
+	core.Parent:SetAttribute("WardStyle", style)
+	local function hidePrimitives()
+		for _, n in { "WardPlinth", "WardBase", "WardPost", "WardRing", "WardRoof", "WardFinial" } do
+			for _, p in core.Parent:GetChildren() do
+				if p.Name == n and p:IsA("BasePart") then p.Transparency, p.CanCollide = 1, false end
+			end
+		end
+	end
+	-- clone a stored model, stand it on the plinth spot at the given height (by bounding box, not pivot: v1 floated)
+	local function placeArt(src, height, drop)
+		local m = src:Clone()
+		for _, d in m:GetDescendants() do
+			if d:IsA("PackageLink") then d:Destroy() end
+			if d:IsA("BasePart") then d.Anchored, d.CanCollide, d.CastShadow = true, false, true end
+		end
+		for _, n in drop or {} do
+			local sub = m:FindFirstChild(n)
+			if sub then sub:Destroy() end
+		end
+		local _, s0 = m:GetBoundingBox()
+		if type(height) == "function" then height = height(m, s0) end -- sized after the dropped parts are gone
+		m:ScaleTo(m:GetScale() * height / s0.Y)
+		local cfb, sb = m:GetBoundingBox()
+		m:PivotTo(m:GetPivot() + Vector3.new(c.X - cfb.Position.X, (c.Y + sb.Y / 2) - cfb.Position.Y, c.Z - cfb.Position.Z))
+		m.Name = "WardLantern"
+		m.Parent = core.Parent
+		hidePrimitives()
+		return m, m:FindFirstChild("Crystal") or m:FindFirstChild("Crystal_Node") -- the importer renames it
+	end
+	local SS = game:GetService("ServerStorage")
+	local lamp = style == "Lampwick" and SS:FindFirstChild("WardLampwickMesh")
+	local art = style == "Cosmic" and SS:FindFirstChild("WardCosmicMesh")
+	if lamp then
+		local m, cry = placeArt(lamp, 14)
+		-- reviewer v6: "add the stepped stone plinth": keep the old slate plinth and stand the lantern on it
+		local plinth = core.Parent:FindFirstChild("WardPlinth")
+		if plinth then
+			plinth.Transparency, plinth.CanCollide = 0, true
+			m:PivotTo(m:GetPivot() + Vector3.new(0, plinth.Size.Y, 0))
+		end
+		for _, d in (m:FindFirstChild("Glass") and m.Glass:GetDescendants() or {}) do
+			if d:IsA("MeshPart") then d.Transparency, d.Reflectance = 0.7, 0.15 end
+		end
+		for _, d in (cry and cry:GetDescendants() or {}) do -- Hunyuan model: the crystal is a separate sphere: make it glow
+			if d:IsA("MeshPart") then
+				local sa = d:FindFirstChildOfClass("SurfaceAppearance")
+				if sa then sa:Destroy() end
+				d.Material, d.Color, d.Transparency = Enum.Material.Neon, Color3.fromRGB(150, 235, 255), 0.1
+			end
+		end
+		local ccf, csize = (cry or m):GetBoundingBox()
+		core.Size = Vector3.one * math.min(csize.X, csize.Z) * 0.3
+		core.Position = ccf.Position
+		glow.Range, glow.Brightness = 30, 2.2
+	elseif art then
+		-- the cosmic variant (asset 74543193086211): no cage or roof (reviewer: "the crystal must be the hero"); the
+		-- whole model is sized so the crystal stands ~11 studs; the neon ball becomes a small heart in the facets
+		local m, cry = placeArt(art, function(mm, size)
+			local _, cs = (mm:FindFirstChild("Crystal") or mm):GetBoundingBox()
+			return size.Y * 11 / cs.Y
+		end, { "Frame", "Roof" })
+		for _, d in (cry or m):GetDescendants() do
+			if d:IsA("MeshPart") then d.Transparency = 0.05 end -- nearly opaque: 0.18 washed the facets out
+		end
+		local ccf, csize = (cry or m):GetBoundingBox()
+		core.Size = Vector3.one * math.min(csize.X, csize.Z) * 0.22
+		core.Position = ccf.Position - Vector3.new(0, csize.Y * 0.1, 0)
+		glow.Range, glow.Brightness = 40, 3
+	end
 end
 
 -- Fog Gate (where enemies come from): a stone arch with a swirling violet veil and mist spilling out.

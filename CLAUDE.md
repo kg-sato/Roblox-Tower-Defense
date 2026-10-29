@@ -34,6 +34,7 @@ Output `.glb` files go to `Roblox Dev/Assets/3D/`, cleaned and reduced under 20,
 License: Tencent's license does not apply in the EU, UK or South Korea.
 
 ## Rules
+- Uploads to the user's Roblox account (meshes, textures, images, audio, animations) and Studio AI generation (`generate_mesh`, `generate_texture`, `generate_material`, `insert_asset` of vetted free assets) are pre-approved since 2026-10-28; log every asset id. Publishing the game still needs the user. Older "needs the user's OK" notes about uploads below are superseded.
 - Server decides currency, rewards, purchases, inventory and cooldowns. Never trust the client.
 - Use ProfileStore for player data.
 - Keep meshes under 20,000 triangles.

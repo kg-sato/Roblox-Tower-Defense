@@ -18,6 +18,7 @@ An endless tower defense run (Bloons endless style) with a light gacha on top. T
 - Roster expansion and a roster revamp to fit the mystic theme (the current seven are elemental pets) are major goals.
 - A 1x / 2x speed setting for gameplay, plus skippable cutscenes.
 - Playtest with friends after the overnight work.
+- **Theme arc (2026-10-28):** the world starts steampunk with quiet magic and grows more magical with progress; the endgame is cosmic (Lord of the Mysteries as the model). The game is split into themed sections along the way, and future sections may be less serious. Full note: [[Game Design Doc#Theme arc: steampunk magic to cosmic (Decided, 2026-10-28)]].
 
 ## 3. Proposed
 - **Characters (S3 Hybrid):** account-saved collection, lobby rolls with earned tickets, duplicates level a familiar, a 3 to 4 slot loadout, and the in-run summon draws from the loadout. Build it in two stages: the collection and loadout first, the loadout-only summon second. New players start with 3 Commons.

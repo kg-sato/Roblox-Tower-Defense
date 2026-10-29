@@ -351,8 +351,146 @@ enemyBuilders.Boss = function(m)
 	m(CYL, Vector3.new(0.3, 8.6, 8.6), Vector3.new(0, 0.15, 0), glow, NEON, CFrame.Angles(0, 0, math.pi / 2), 0.6)
 end
 
+-- 2026-10-28 art pass: Blender-made enemy meshes (ReplicatedStorage.Enemy<Kind>Mesh, VFX/ASSETS.md) replace the
+-- primitive builders when present. Sized to the old model's height, standing on y = 0, facing -Z like the others.
+local addWalk -- defined below (Sentinel walk)
+local MESH_HEIGHT = { Tank = 10.5 } -- reviewer v7c: "a tiny grey speck at board zoom", 1.4x
+local MESH_YAW = { Tank = 0 } -- measured in Play: with no turn the front already faces -Z
+local function meshEnemy(model, kind)
+	local art = game:GetService("ReplicatedStorage"):FindFirstChild("Enemy" .. kind .. "Mesh")
+	if not (art and MESH_HEIGHT[kind]) then return false end
+	local m = art:Clone()
+	for _, d in m:GetDescendants() do
+		if d:IsA("PackageLink") then d:Destroy() end
+		if d:IsA("BasePart") then
+			d.Anchored, d.CanCollide, d.CanQuery, d.CanTouch, d.CastShadow = true, false, false, false, true
+			if d.Parent and d.Parent.Name == "Eye" then -- glowing eye: Neon ignores SurfaceAppearance, so drop it
+				local sa = d:FindFirstChildOfClass("SurfaceAppearance")
+				if sa then sa:Destroy() end
+				d.Material, d.Color = NEON, Color3.fromRGB(255, 70, 40)
+				local l = Instance.new("PointLight")
+				l.Color, l.Range, l.Brightness = Color3.fromRGB(255, 80, 50), 5, 1.3 -- v7c: brighter; still small: 9 studs washed the whole body red (reviewer v2)
+				l.Parent = d
+			end
+		end
+	end
+	local _, s0 = m:GetBoundingBox()
+	m:ScaleTo(m:GetScale() * MESH_HEIGHT[kind] / s0.Y)
+	m:PivotTo(CFrame.Angles(0, MESH_YAW[kind] or 0, 0))
+	local cf, s1 = m:GetBoundingBox()
+	m:PivotTo(m:GetPivot() + Vector3.new(-cf.Position.X, s1.Y / 2 - cf.Position.Y, -cf.Position.Z))
+	for _, d in m:GetDescendants() do
+		if d:IsA("BasePart") then d.Parent = model end -- flat, like the primitive builders, so the movers can pivot it
+	end
+	if kind == "Tank" then -- steam from the back chimney (reviewer: no secondary motion). No outline or fill light per
+		-- enemy: Roblox draws at most 31 Highlights and lights cost phones; the brightened texture does the job.
+		local cf2, s2 = model:GetBoundingBox()
+		local puff = Instance.new("Part")
+		puff.Name, puff.Transparency, puff.Size, puff.Anchored, puff.CanCollide, puff.CanQuery, puff.CanTouch = "SteamPoint", 1, Vector3.one * 0.2, true, false, false, false
+		puff.CFrame = CFrame.new(cf2.Position + Vector3.new(s2.X * 0.12, s2.Y / 2 - 0.2, s2.Z * 0.3))
+		puff.Parent = model
+		local pe = Instance.new("ParticleEmitter")
+		pe.Texture = "rbxasset://textures/particles/smoke_main.dds"
+		pe.Color = ColorSequence.new(Color3.fromRGB(200, 195, 190))
+		pe.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.6), NumberSequenceKeypoint.new(1, 1) })
+		pe.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.6), NumberSequenceKeypoint.new(1, 2.4) })
+		pe.Lifetime, pe.Rate, pe.Speed = NumberRange.new(1.2, 1.8), 6, NumberRange.new(2, 3)
+		pe.EmissionDirection, pe.SpreadAngle, pe.LightInfluence = Enum.NormalId.Top, Vector2.new(12, 12), 0.6
+		pe.Parent = puff
+	end
+	if model:FindFirstChild("LegL_Upper") then -- after the steam point, so it rides the body bob too
+		addWalk(model)
+	end
+	return true
+end
+
+-- Sentinel walk (v10, the user: "split + walk"). The mesh arrives as limb parts (Blender/sentinel_hs.py). Every frame
+-- each part is placed from the model pivot; the movers PivotTo the model absolutely, so nothing accumulates. The gait
+-- advances with the distance walked, so it stops when the enemy stops: heavy stomp (the body drops at each footfall),
+-- a roll onto the planted leg, arms swinging against the legs, a dust puff under the landing boot.
+local RunService = game:GetService("RunService")
+local walkers = {}
+local STRIDE = 7 -- studs per full cycle (two steps) at the 10.5-stud Sentinel
+local TAU = math.pi * 2
+local walkConn
+local function stepWalkers(dt)
+	for model, w in walkers do
+		if not model.Parent then continue end
+		local pivot = model:GetPivot()
+		local d = Vector3.new(pivot.X - w.last.X, 0, pivot.Z - w.last.Z).Magnitude
+		w.last = pivot.Position
+		if d > 3 then d = 0 end -- spawn or teleport, not a step
+		local before = math.cos(w.phase)
+		w.phase += d / STRIDE * TAU
+		w.amp += ((d > 0.002 and 1 or 0) - w.amp) * math.min(1, dt * 5)
+		local a, ph = w.amp, w.phase
+		if a > 0.3 and math.sign(math.cos(ph)) ~= math.sign(before) then -- a boot lands
+			local dust = w.dust[math.cos(ph) < 0 and "L" or "R"]
+			if dust then dust:Emit(7) end
+		end
+		local body = pivot * CFrame.new(0, -0.35 * a * math.abs(math.sin(ph)) ^ 3, 0) * CFrame.Angles(0, 0, 0.05 * a * math.sin(ph))
+		for p, r in w.rest do
+			local limb = w.limb[p]
+			if not limb then
+				p.CFrame = body * r
+				continue
+			end
+			local sideph = ph + limb.offset
+			local swing = (limb.arm and -0.35 or 0.45) * a * math.sin(sideph)
+			local cf = body * CFrame.new(limb.top) * CFrame.Angles(swing, 0, 0) * CFrame.new(-limb.top)
+			if limb.mid then
+				local bend = limb.arm and (0.2 + 0.2 * a * math.max(0, -math.sin(sideph))) or (-0.7 * a * math.max(0, math.cos(sideph)))
+				cf = cf * CFrame.new(limb.mid) * CFrame.Angles(bend, 0, 0) * CFrame.new(-limb.mid)
+			end
+			p.CFrame = cf * r
+		end
+	end
+end
+
+function addWalk(model)
+	local piv = model:GetPivot()
+	local w = { last = piv.Position, phase = 0, amp = 0, rest = {}, limb = {}, dust = {} }
+	for _, p in model:GetChildren() do
+		if p:IsA("BasePart") then w.rest[p] = piv:ToObjectSpace(p.CFrame) end
+	end
+	local function topOf(name) -- joint = top centre of the part, in pivot space (the meshes import axis-aligned)
+		local p = model:FindFirstChild(name)
+		return p and piv:PointToObjectSpace(p.Position + Vector3.new(0, p.Size.Y / 2, 0))
+	end
+	for _, side in { "L", "R" } do
+		local offset = side == "L" and 0 or math.pi
+		for _, kind in { "Leg", "Arm" } do
+			local up, low = model:FindFirstChild(kind .. side .. "_Upper"), model:FindFirstChild(kind .. side .. "_Lower")
+			if not (up and low) then continue end
+			local top, mid = topOf(up.Name), topOf(low.Name)
+			w.limb[up] = { top = top, offset = offset, arm = kind == "Arm" }
+			w.limb[low] = { top = top, mid = mid, offset = offset, arm = kind == "Arm" }
+			if kind == "Leg" then
+				local at = Instance.new("Attachment")
+				at.Position = Vector3.new(0, -low.Size.Y / 2, 0)
+				at.Parent = low
+				local pe = Instance.new("ParticleEmitter")
+				pe.Texture = "rbxasset://textures/particles/smoke_main.dds"
+				pe.Color = ColorSequence.new(Color3.fromRGB(150, 135, 115))
+				pe.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.45), NumberSequenceKeypoint.new(1, 1) })
+				pe.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.8), NumberSequenceKeypoint.new(1, 2.6) })
+				pe.Lifetime, pe.Rate, pe.Speed = NumberRange.new(0.5, 0.8), 0, NumberRange.new(3, 5)
+				pe.SpreadAngle, pe.EmissionDirection, pe.Drag = Vector2.new(80, 80), Enum.NormalId.Top, 6
+				pe.Parent = at
+				w.dust[side] = pe
+			end
+		end
+	end
+	walkers[model] = w
+	model.Destroying:Connect(function() walkers[model] = nil end)
+	walkConn = walkConn or RunService.RenderStepped:Connect(stepWalkers)
+end
+
 function Models.buildEnemy(kind)
 	local model = newModel(kind)
+	if meshEnemy(model, kind) then
+		return model
+	end
 	-- 1.3x: the dusk street is darker, so enemies need more screen size to read (visual only)
 	enemyBuilders[kind](builder(model, 1.3))
 	return model

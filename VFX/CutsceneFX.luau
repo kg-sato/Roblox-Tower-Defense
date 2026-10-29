@@ -427,10 +427,11 @@ function K.impact(stage, pos, color, size)
 	K.shockwave(stage, pos, white, 9 * size, 0.45)
 	local col = part({ Shape = Enum.PartType.Cylinder, Color = color, Transparency = 0.3, Size = Vector3.new(1, 1.6 * size, 1.6 * size), CFrame = CFrame.new(pos + Vector3.new(0, 0.5, 0)) * CFrame.Angles(0, 0, math.pi / 2) }, stage)
 	tw(col, 0.5, { Size = Vector3.new(16 * size, 0.2, 0.2), Transparency = 1 }, Enum.EasingStyle.Quint)
-	local glow = part({ Shape = Enum.PartType.Ball, Color = color, Transparency = 0.35, Size = Vector3.one * 2.5 * size, Position = pos + Vector3.new(0, 1, 0) }, stage)
-	tw(glow, 1.1, { Size = Vector3.one * 6 * size, Transparency = 1 }, Enum.EasingStyle.Sine)
-	for _ = 1, LIGHT and 2 or 4 do
-		local d = part({ Material = Enum.Material.Slate, Color = Color3.fromRGB(70, 62, 56), Size = Vector3.new(0.4, 0.3, 0.4) * size, CFrame = CFrame.new(pos + Vector3.new(0, 0.5, 0)) * CFrame.Angles(math.random() * 6, math.random() * 6, 0) }, stage)
+	local glow = part({ Shape = Enum.PartType.Ball, Color = color, Transparency = 0.62, Size = Vector3.one * 1.8 * size, Position = pos + Vector3.new(0, 1, 0) }, stage) -- fainter: v1 read as a solid blob
+	tw(glow, 0.7, { Size = Vector3.one * 4.5 * size, Transparency = 1 }, Enum.EasingStyle.Sine)
+	K.glint(stage, pos + Vector3.new(0, 1.2, 0), color, 7 * size, 0.35)
+	for _ = 1, LIGHT and 3 or 6 do -- glowing shards (2026-10-28: were grey slate cubes, "effects lacking")
+		local d = part({ Shape = Enum.PartType.Wedge, Material = Enum.Material.Neon, Color = color:Lerp(Color3.new(1, 1, 1), math.random() * 0.5), Size = Vector3.new(0.12, 0.7, 0.3) * size, CFrame = CFrame.new(pos + Vector3.new(0, 0.5, 0)) * CFrame.Angles(math.random() * 6, math.random() * 6, 0) }, stage)
 		local dir = Vector3.new(math.random() - 0.5, math.random() * 0.9 + 0.5, math.random() - 0.5).Unit
 		tw(d, 0.3, { Position = pos + dir * 4 * size }, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 		task.delay(0.3, function()
@@ -438,14 +439,123 @@ function K.impact(stage, pos, color, size)
 		end)
 		Debris:AddItem(d, 0.75)
 	end
-	local dust = part({ Shape = Enum.PartType.Ball, Material = Enum.Material.SmoothPlastic, Color = Color3.fromRGB(150, 135, 120), Transparency = 0.5, Size = Vector3.one * 1.5 * size, Position = pos + Vector3.new(0, 0.6, 0) }, stage)
-	tw(dust, 0.8, { Size = Vector3.one * 5.5 * size, Transparency = 1 }, Enum.EasingStyle.Quart)
+	for k = 1, LIGHT and 5 or 10 do -- motes skim outward along the ground (was a grey dust ball)
+		local a = k / (LIGHT and 5 or 10) * math.pi * 2 + math.random() * 0.4
+		local mote = part({ Shape = Enum.PartType.Ball, Color = color:Lerp(Color3.new(1, 1, 1), 0.6), Size = Vector3.one * 0.18 * size, Position = pos + Vector3.new(0, 0.3, 0) }, stage)
+		tw(mote, 0.6, { Position = pos + Vector3.new(math.cos(a) * 4.5, 0.5 + math.random(), math.sin(a) * 4.5) * size + Vector3.new(0, 0, 0), Size = Vector3.one * 0.05, Transparency = 1 }, Enum.EasingStyle.Quart)
+		Debris:AddItem(mote, 0.65)
+	end
 	task.delay(0.4, function()
 		K.shockwave(stage, pos, color, 5 * size, 0.35)
 		local b = part({ Shape = Enum.PartType.Ball, Color = white, Transparency = 0.1, Size = Vector3.one * size, Position = pos + Vector3.new(0, 0.8, 0) }, stage)
 		tw(b, 0.3, { Size = Vector3.one * 3.5 * size, Transparency = 1 })
 		Debris:AddItem(b, 0.35)
 	end)
+end
+
+-- ===== 2026-10-28 upgrades from the user's reference set 2 (Roblox Dev/Research/UI/Loading, Intro and UI References 2.md)
+
+-- A star glint: two crossed thin lines and a bright point on a BillboardGui (always faces the camera). It snaps open
+-- and shrinks away. corektvfx's star burst.
+function K.glint(stage, pos, color, studs, t)
+	local a = anchorAt(stage, pos)
+	local bb = Instance.new("BillboardGui")
+	bb.Size, bb.AlwaysOnTop, bb.LightInfluence = UDim2.fromScale(studs, studs), false, 0
+	bb.Parent = a
+	local root = Instance.new("Frame")
+	root.BackgroundTransparency, root.AnchorPoint, root.Position, root.Size = 1, Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5), UDim2.fromScale(0.15, 0.15)
+	root.Parent = bb
+	for _, r in { 0, 90, 45, -45 } do
+		local l = Instance.new("Frame")
+		l.BorderSizePixel, l.AnchorPoint, l.Position, l.Rotation = 0, Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5), r
+		l.Size = UDim2.new(r % 90 == 0 and 1 or 0.55, 0, 0.035, 0)
+		l.BackgroundColor3 = r % 90 == 0 and Color3.new(1, 1, 1) or color
+		l.Parent = root
+		local g = Instance.new("UIGradient")
+		g.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.5, 0), NumberSequenceKeypoint.new(1, 1) })
+		g.Parent = l
+	end
+	local dot = Instance.new("Frame")
+	dot.BorderSizePixel, dot.AnchorPoint, dot.Position, dot.Size, dot.BackgroundColor3 = 0, Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5), UDim2.fromScale(0.12, 0.12), Color3.new(1, 1, 1)
+	Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
+	dot.Parent = root
+	tw(root, t * 0.3, { Size = UDim2.fromScale(1, 1), Rotation = 20 }, Enum.EasingStyle.Quint)
+	task.delay(t * 0.3, function()
+		tw(root, t * 0.7, { Size = UDim2.fromScale(0, 0), Rotation = 60 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+	end)
+	Debris:AddItem(a, t + 0.1)
+end
+
+-- A diagonal light slam: a layered beam drops from the sky at a slant onto pos, with a glint where it lands and a
+-- short streak of light along the ground (corektvfx's falling star).
+function K.slam(stage, pos, color, size)
+	size = size or 1
+	local dir = Vector3.new(math.random() - 0.5, 0, math.random() - 0.5)
+	dir = dir.Magnitude > 0.05 and dir.Unit or Vector3.xAxis
+	local top = anchorAt(stage, pos - dir * 16 * size + Vector3.new(0, 30 * size, 0))
+	local bot = anchorAt(stage, pos)
+	local b = K.beam(top, bot, color, 1.6 * size)
+	b.grow(0.07, 1.2)
+	task.delay(0.12, function() b.fade(0.35) end)
+	K.glint(stage, pos + Vector3.new(0, 0.6, 0), color, 9 * size, 0.45)
+	local streak = part({ Material = Enum.Material.Neon, Color = color:Lerp(Color3.new(1, 1, 1), 0.4), Transparency = 0.2, Size = Vector3.new(0.25, 0.08, 0.2) * size, CFrame = CFrame.lookAt(pos + Vector3.new(0, 0.1, 0), pos + dir + Vector3.new(0, 0.1, 0)) }, stage)
+	tw(streak, 0.25, { Size = Vector3.new(0.25, 0.08, 9) * size, CFrame = CFrame.lookAt(pos + dir * 4.5 * size + Vector3.new(0, 0.1, 0), pos + dir * 10 + Vector3.new(0, 0.1, 0)) }, Enum.EasingStyle.Quint)
+	task.delay(0.25, function() tw(streak, 0.35, { Transparency = 1, Size = Vector3.new(0.05, 0.05, 9) * size }) end)
+	Debris:AddItem(streak, 0.7)
+end
+
+-- The crystal core (fxroxx's hero object): a white-hot centre, two ghost shells (glow by duplication), three tilted
+-- rings of points that turn, and six crystal shards circling. Returns c with c.model, c.at(pos), c.scale(s), c.destroy().
+function K.core(stage, pos, color)
+	local m = Instance.new("Model")
+	m.Name = "Core"
+	m.Parent = stage
+	local centre = part({ Shape = Enum.PartType.Ball, Color = Color3.new(1, 1, 1), Size = Vector3.one * 0.5 }, m)
+	m.PrimaryPart = centre -- so the model's pivot follows the centre (echo copies read it)
+	local shells = {
+		part({ Shape = Enum.PartType.Ball, Color = color:Lerp(Color3.new(1, 1, 1), 0.3), Transparency = 0.55, Size = Vector3.one * 0.85 }, m),
+		part({ Shape = Enum.PartType.Ball, Color = color, Transparency = 0.82, Size = Vector3.one * 1.5 }, m),
+	}
+	local rings, shards = {}, {}
+	for r, tilt in { CFrame.Angles(math.rad(70), 0, 0), CFrame.Angles(math.rad(70), math.rad(60), 0), CFrame.Angles(math.rad(70), math.rad(-60), 0) } do
+		local pts = {}
+		for i = 1, LIGHT and 10 or 16 do
+			pts[i] = part({ Shape = Enum.PartType.Ball, Color = r == 1 and Color3.new(1, 1, 1) or color:Lerp(Color3.new(1, 1, 1), 0.5), Size = Vector3.one * 0.09 }, m)
+		end
+		rings[r] = { tilt = tilt, pts = pts, speed = (r % 2 == 0 and -1 or 1) * (1.2 + r * 0.4) }
+	end
+	for i = 1, LIGHT and 3 or 6 do
+		shards[i] = part({ Shape = Enum.PartType.Wedge, Color = color:Lerp(Color3.fromRGB(200, 240, 255), 0.5), Transparency = 0.15, Size = Vector3.new(0.08, 0.45, 0.16) }, m)
+	end
+	local c = { model = m, pos = pos, s = 1 }
+	local t0 = os.clock()
+	local conn
+	conn = hold(RunService.RenderStepped:Connect(function()
+		if not m.Parent then conn:Disconnect() return end
+		local t, s, p = os.clock() - t0, c.s, c.pos
+		centre.CFrame = CFrame.new(p)
+		centre.Size = Vector3.one * 0.5 * s
+		shells[1].CFrame, shells[1].Size = CFrame.new(p), Vector3.one * 0.85 * s * (1 + math.sin(t * 9) * 0.05)
+		shells[2].CFrame, shells[2].Size = CFrame.new(p), Vector3.one * 1.5 * s * (1 + math.sin(t * 6) * 0.08)
+		for _, ring in rings do
+			local n = #ring.pts
+			for i, pt in ring.pts do
+				local a = i / n * math.pi * 2 + t * ring.speed
+				pt.CFrame = CFrame.new(p) * ring.tilt * CFrame.new(math.cos(a) * 1.1 * s, math.sin(a) * 1.1 * s, 0)
+				pt.Size = Vector3.one * 0.09 * math.max(1, s * 0.6)
+			end
+		end
+		for i, sh in shards do
+			local a = i / #shards * math.pi * 2 - t * 1.7
+			local out = Vector3.new(math.cos(a), math.sin(t * 2 + i) * 0.3, math.sin(a))
+			sh.CFrame = CFrame.lookAt(p + out * 1.5 * s, p + out * 3 * s) * CFrame.Angles(math.pi / 2, 0, 0)
+			sh.Size = Vector3.new(0.08, 0.45, 0.16) * s
+		end
+	end))
+	function c.at(p) c.pos = p end
+	function c.scale(s) c.s = s end
+	function c.destroy() conn:Disconnect() m:Destroy() end
+	return c
 end
 
 -- ===== signatures =====
@@ -948,14 +1058,19 @@ CutsceneFX.signatures.FirstPerson = function(ctx)
 
 	-- 2) charge in first person
 	local orbPos = eye + fwd * 6.5 - up * 1.6 -- low in frame so the lane stays readable (v1 covered ~40% of the screen)
-	local orb = part({ Shape = Enum.PartType.Ball, Color = Color3.new(1, 1, 1), Size = Vector3.one * 0.3, Position = orbPos }, stage)
-	local glow = part({ Shape = Enum.PartType.Ball, Color = ctx.color, Transparency = 0.45, Size = Vector3.one * 0.6, Position = orbPos }, stage)
+	-- the orb is the crystal core (2026-10-28; was a plain white ball): it grows from a spark while it charges
+	local core = K.core(stage, orbPos, ctx.color)
+	local orb = anchorAt(stage, orbPos) -- the trail beam and the light follow this anchor
 	local light = Instance.new("PointLight")
 	light.Color, light.Range, light.Brightness = ctx.color, 18, 2
 	light.Parent = orb
 	local chargeT = 0.95 * S
-	tw(orb, chargeT, { Size = Vector3.one * 1.6 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-	tw(glow, chargeT, { Size = Vector3.one * 2.2 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+	local growStart = os.clock()
+	local growConn = hold(RunService.RenderStepped:Connect(function()
+		local k = math.clamp((os.clock() - growStart) / chargeT, 0, 1)
+		core.scale(0.25 + 1.15 * k * k)
+	end))
+	task.delay(chargeT, function() growConn:Disconnect() end)
 	tw(light, chargeT, { Brightness = 9, Range = 26 })
 	K.gather(stage, orbPos, ctx.color, short and 10 or 22, 9, chargeT)
 	for i, ally in ctx.allies or {} do -- the other familiars feed the orb: beams from the sides of the frame
@@ -990,7 +1105,8 @@ CutsceneFX.signatures.FirstPerson = function(ctx)
 	else
 		K.flash(ov, ctx, Color3.new(1, 1, 1), 0.6, 0.18)
 	end
-	glow:Destroy()
+	local stopEcho = function() end
+	pcall(function() stopEcho = require(RS.Shared.Motion).echoModel(core.model, { count = 3, gap = 2 }) end) -- multiples on the ride
 	local travelT = short and 0.35 or 0.5
 	local startPos = orbPos
 	local endPos = center + up * 2
@@ -1002,6 +1118,7 @@ CutsceneFX.signatures.FirstPerson = function(ctx)
 		local e = k * k -- accelerate into the hit
 		local op = startPos:Lerp(endPos, e)
 		orb.Position = op
+		core.at(op)
 		local dir = (endPos - startPos)
 		dir = dir.Magnitude > 0.1 and dir.Unit or fwd
 		cam.to(CFrame.lookAt(op - dir * 7 + up * 2.2, op + dir * 3), 0)
@@ -1014,6 +1131,8 @@ CutsceneFX.signatures.FirstPerson = function(ctx)
 	task.wait(travelT)
 	ride:Disconnect()
 	tb.fade(0.3)
+	stopEcho()
+	core.destroy()
 	orb:Destroy()
 
 	-- 4) impact: brake to a side vantage on the cluster
@@ -1027,6 +1146,9 @@ CutsceneFX.signatures.FirstPerson = function(ctx)
 	for i, t in ctx.targets do
 		if i > (short and 5 or 9) then break end
 		task.delay((i - 1) * 0.05, function() K.impact(stage, t, ctx.color, short and 0.9 or 1.1) end)
+		if i <= (short and 2 or 4) then -- light slams onto the first few targets, staggered like falling stars
+			task.delay(0.12 + (i - 1) * 0.11, function() K.slam(stage, t, ctx.color, short and 0.8 or 1) end)
+		end
 	end
 	K.shockwave(stage, center, ctx.color, 22, 0.5) -- coloured, not white: v1 washed the frame white
 	if not short then

@@ -2,6 +2,18 @@
 
 Working title: **Guardian Grid** (placeholder). Concept chosen 2026-10-24 by the user: a merge tower defense, replacing the three pitches in [[Concept Pitches]]. Related: [[Merge Tower Defense Playbook]], [[Systems]], [[Master Plan]], [[Dev Process Playbook]]
 
+## Theme arc: steampunk magic to cosmic (Decided, 2026-10-28)
+The user's words: "What I want is for the endgame to be kind of cosmic. So think about stories like Lord of the Mysteries where the main character starts in a world with magic but it's more steampunk and slowly becomes more magical. This also allows us to have different themed sections and even less serious ones in the future."
+- **Start:** a gaslit, steampunk world where magic exists but is quiet (Lampwick Lane, brass, lamps, fog: what is built now).
+- **Middle:** the further the player progresses, the more openly magical the world becomes.
+- **Endgame:** cosmic: white light on black, stars, galaxies, rune circles, light pillars, black holes, eyes (the user's Pinterest set, `Research/UI/References 3 (Pinterest)/`).
+- **Sections:** the game is split into themed sections along this arc, so new sections can have their own theme, including less serious ones.
+- **Skill tree (Decided, 2026-10-28):** the cinematic is centred on the tree. Once inside the UI it becomes "a little more magical than just a tree", similar to the Cookie Clicker heavenly tree: many branches. The background is more vibrant and carries our theme.
+- **Level path (Decided, 2026-10-28):** "a path where there are themes for different parts and it's connected to world themes, area themes etc. It should basically be an infinite path where you can't see the end, where as you level up and continue levelling, your setting is always evolving."
+- **Loading screen (Decided, 2026-10-28):** the clock tunnel is the main effect; at the end, the tree forming and the eye vortex, alongside glitching. The story: travelling through time in the eye tunnel; the tree is the player's future; the eyes are gods watching them; then they are swallowed into a vortex and the game loads.
+- **Protected item per area (Decided, 2026-10-28):** "I want different crystals / protected items in different areas." Each themed section has its own thing to defend. Lampwick Lane (steampunk start): a brass steampunk lantern. A cosmic section: the hero crystal with orbit rings (built 2026-10-28, kept as the cosmic variant).
+- **Proposed (Claude, not yet confirmed):** the visual style follows the player's progress. Early screens stay steampunk violet and gold; skill tree, level path, ultimates and late-game sections take more of the cosmic look as the player climbs. The skill tree's glowing tree of light and the Star Drake's starfall fit the cosmic end.
+
 ## Design v2 (2026-10-24, after first playtest) - supersedes "Core loop", "Match rules" and "Gacha / crates" below
 User feedback: start too slow, camera too far, coins left with menus beside them, merge only with neighbours, movable turrets, ability upgrades, highlighted tutorial, a faster gacha/rolling loop, no way to lose but real stakes, research payments.
 - **Loop:** endless stages, not a 10-wave match. Kills drop **coins** (upgrades) and **gems** (rolls). Tap ROLL (10 gems) for a random pet straight onto the grid. Rolls are free-currency, so no odds-disclosure duty, but the odds panel is built anyway.
