@@ -5,8 +5,8 @@
 -- Art: UI Kit/art/title_bg (gold-ink palette). Called from StartMenuArt with its env; Scale-only sizes.
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
-local ID = { sky = "rbxassetid://135189074641926", rays = "rbxassetid://96973107269185", figure = "rbxassetid://118678537152629",
-	mistFar = "rbxassetid://82813632895739", mistNear = "rbxassetid://108963568266256", fg = "rbxassetid://97923729896441",
+local ID = { sky = "rbxassetid://82308350034807", rays = "rbxassetid://104036777344439", figure = "rbxassetid://128197158529429", ground = "rbxassetid://89551418679476",
+	mistFar = "rbxassetid://82252188238475", mistNear = "rbxassetid://108210761536387", fg = "rbxassetid://85966992159723",
 	glow = "rbxassetid://122630907915085" }
 local GOLD, CREAM, INK = Color3.fromRGB(217, 184, 120), Color3.fromRGB(239, 230, 207), Color3.fromRGB(11, 10, 9)
 
@@ -29,18 +29,21 @@ return function(env)
 		return new("ImageLabel", props, root)
 	end
 	local sky = img("Sky", ID.sky, 10, { Size = UDim2.fromScale(1.06, 1.06), ScaleType = Enum.ScaleType.Crop })
-	local rays = img("Rays", ID.rays, 11, { Position = UDim2.fromScale(0.55, 0.05), Size = UDim2.fromScale(1.6, 1.6), ImageTransparency = 0.35 })
+	local rays = img("Rays", ID.rays, 11, { Position = UDim2.fromScale(0.64, 0.265), Size = UDim2.fromScale(1.8, 1.8), ImageTransparency = 0.35 })
 	new("UIAspectRatioConstraint", { AspectRatio = 1, DominantAxis = Enum.DominantAxis.Width }, rays)
-	local fig = img("Figure", ID.figure, 12, { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 1), Size = UDim2.fromScale(1.02, 1.02) })
-	local glow = img("HeadGlow", ID.glow, 12, { Position = UDim2.fromScale(0.585, 0.3), Size = UDim2.fromScale(0.2, 0.2), ImageColor3 = GOLD, ImageTransparency = 0.7 })
+	local ground = img("Ground", ID.ground, 12, { Size = UDim2.fromScale(1.04, 1.04), Position = UDim2.fromScale(0.5, 0.52) })
+	local fig = img("Figure", ID.figure, 13, { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 1), Size = UDim2.fromScale(1.02, 1.02) })
+	local glow = img("HeadGlow", ID.glow, 13, { Position = UDim2.fromScale(0.64, 0.265), Size = UDim2.fromScale(0.16, 0.16), ImageColor3 = CREAM, ImageTransparency = 0.6 })
 	new("UIAspectRatioConstraint", { AspectRatio = 1 }, glow)
 	local mists = {}
-	for k, d in { { "mistFar", 0.5, 0.03, 13, 0.55 }, { "mistNear", 0.72, 0.06, 15, 0.3 } } do
+	for k, d in { { "mistFar", 0.55, 0.03, 14, 0.72 }, { "mistNear", 0.76, 0.06, 15, 0.6 } } do
 		for n = 0, 1 do
 			mists[#mists + 1] = { img("Mist" .. k .. n, ID[d[1]], d[4], { AnchorPoint = Vector2.new(0, 0.5), Size = UDim2.fromScale(1, 0.4), Position = UDim2.fromScale(n, d[2]), ImageTransparency = d[5] }), n, d[2], d[3] }
 		end
 	end
 	local fg = img("Foreground", ID.fg, 16, { Size = UDim2.fromScale(1.02, 1.02) })
+	local lamp = img("LampGlow", ID.glow, 17, { Position = UDim2.fromScale(0.439, 0.77), Size = UDim2.fromScale(0.05, 0.05), ImageColor3 = GOLD, ImageTransparency = 0.45 })
+	new("UIAspectRatioConstraint", { AspectRatio = 1 }, lamp)
 	local dust = {}
 	local rng = Random.new(7)
 	for i = 1, 28 do
@@ -50,8 +53,8 @@ return function(env)
 		dust[i] = { d, rng:NextNumber(), rng:NextNumber(0.2, 1), rng:NextNumber(0.004, 0.012), rng:NextNumber(0, 6.28) }
 	end
 	-- the left third stays calm for the title and buttons
-	local shade = new("Frame", { Name = "LeftShade", BackgroundColor3 = INK, BorderSizePixel = 0, Size = UDim2.fromScale(0.42, 1), ZIndex = 18 }, root)
-	new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.2), NumberSequenceKeypoint.new(1, 1) }) }, shade)
+	local shade = new("Frame", { Name = "LeftShade", BackgroundColor3 = INK, BorderSizePixel = 0, Size = UDim2.fromScale(0.5, 1), ZIndex = 18 }, root)
+	new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.05), NumberSequenceKeypoint.new(0.6, 0.45), NumberSequenceKeypoint.new(1, 1) }) }, shade)
 	local cover = new("Frame", { Name = "Wipe", BackgroundColor3 = INK, BorderSizePixel = 0, AnchorPoint = Vector2.new(1, 0), Position = UDim2.fromScale(1, 0), Size = UDim2.fromScale(1, 1), ZIndex = 19 }, root)
 	if not reduced() then
 		TweenService:Create(cover, TweenInfo.new(2.2, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Size = UDim2.fromScale(0, 1) }):Play()
@@ -72,7 +75,9 @@ return function(env)
 		rays.ImageTransparency = 0.4 + 0.1 * math.sin(t * 0.4)
 		local b = 1.02 + 0.016 * math.sin(t * 0.8)
 		fig.Size = UDim2.fromScale(b, b)
-		glow.ImageTransparency = 0.72 + 0.12 * math.sin(t * 0.8 + 0.6)
+		lamp.ImageTransparency = 0.5 + 0.15 * math.sin(t * 2.1)
+		ground.Position = UDim2.fromScale(0.5 + 0.003 * math.sin(t * 0.2), 0.52)
+		glow.ImageTransparency = 0.6 + 0.12 * math.sin(t * 0.8 + 0.6)
 		for _, m in mists do m[1].Position = UDim2.fromScale((-t * m[4]) % 1 - 1 + m[2], m[3]) end
 		fg.Position = UDim2.fromScale(0.5 + 0.004 * math.sin(t * 0.3), 0.5)
 		for _, d in dust do

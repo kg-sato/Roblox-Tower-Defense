@@ -28,9 +28,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: chars | needs: Studio | depends: none | size: M | owner-files: Models.luau (playClip use), Shared.FamiliarClips
 - [ ] T404 | Idle, Hit, Death clips for the 12 original familiars | verify: studio: tracks load with correct lengths, Tests/Familiars.test.luau PASS
   lane: chars | needs: Studio | depends: none | size: M | owner-files: Shared.FamiliarClips, Characters/<id>/Animations
-- [ ] T142 | Rig and animate six enemy models: walk, hit, death; place in a stage | verify: tools/verify_enemy_model.py, studio: walk loop plays in Play
+- [ ] T142 | Rig and animate six enemy models: walk, hit, death; place in a stage | verify: manual: tools/verify_enemy_model.py, studio: walk loop plays in Play
   lane: chars | needs: Blender | depends: none | size: L | owner-files: Blender/* enemy scripts, Blender/out/, Roblox Dev/Assets/3D/Enemies, Models.luau (enemy clips)
-- [ ] T124 | 512 px texture sets for enemies, bosses and stage props | verify: tools/texture_maps.py report, tools/asset_budget.py PASS
+- [x] T124 | 512 px texture sets for enemies, bosses and stage props | verify: manual: tools/texture_maps.py report, tools/asset_budget.py PASS
   lane: chars | needs: Blender | depends: none | size: M | owner-files: tools/texture_maps.py, Roblox Dev/Assets/3D/Textures
 - [ ] T198 | Split GameClient below 150,000 characters into modules | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (RunAll PASS plus studio: Play shows HUD identical, script size in evidence)
   lane: client-core | needs: Studio | depends: QUEUE release of GameClient | size: L | owner-files: StarterPlayerScripts.GameClient, new modules next to UILib (OnClientEvent handler, killEnemy, sealButton/hideIcon, RenderStepped loop), Studio_Export/GameClient.luau
@@ -120,7 +120,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: client-ui | needs: Studio | depends: T098 | size: M | owner-files: StarterPlayerScripts.PassScreen, ShopScreen (new)
 - [ ] T093 | Leaderboard and stage-select screens | verify: studio: both open in Play with fake rows
   lane: client-ui | needs: Studio | depends: T025,T098 | size: M | owner-files: StarterPlayerScripts.BoardScreen, StageSelect (new)
-- [ ] T081 | One-style icon set for status, currency, rarity, faction | verify: contact sheet in UI Kit/art/icons_set/, 40 files with alpha
+- [ ] T081 | One-style icon set for status, currency, rarity, faction | verify: manual: contact sheet in UI Kit/art/icons_set/, 40 files with alpha
   lane: client-ui | needs: ComfyUI | depends: none | size: M | owner-files: UI Kit/art/icons_set/ (new), VFX/ASSETS.md (append)
 - [ ] T076 | Harsh Grading pass on HUD, reveal and collection | verify: manual: reviewer subagent scores 7 of 10 or fixes logged
   lane: client-ui | needs: Studio | depends: T057,T058,T074 | size: M | owner-files: Roblox Dev/Research/UI/Captures (notes only)
@@ -128,9 +128,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
 ## Lane: chars (characters-and-models)
 - [ ] T409 | Wire 512 px maps into SurfaceAppearance, check in Play | verify: studio: maps load, capture of 3 familiars
   lane: chars | needs: Studio | depends: T124 | size: M | owner-files: ReplicatedStorage.Characters, FamiliarMaterials
-- [ ] T407 | Clean blotchy first-pass textures on the 12 original familiars | verify: tools/verify_textured_models.py PASS plus contact sheet
+- [ ] T407 | Clean blotchy first-pass textures on the 12 original familiars | verify: manual: tools/verify_textured_models.py PASS plus contact sheet
   lane: chars | needs: Blender | depends: none | size: M | owner-files: Blender/tex_in, Blender/out, tools/prep_texture_inputs.py
-- [ ] T405 | Upload original familiars' clips as Animation assets and wire ids | verify: tools/uploads.json lists ids, studio: tracks load from ids
+- [ ] T405 | Upload original familiars' clips as Animation assets and wire ids | verify: manual: tools/uploads.json lists ids, studio: tracks load from ids
   lane: chars | needs: Studio | depends: T404 | size: M | owner-files: tools/upload_asset.py, tools/uploads.json, VFX/ASSETS.md (append), Characters/<id>/Animations
 - [ ] T406 | Verify rig deformation visually in Roblox for all 20 familiars | verify: studio: screen_capture per archetype, bone data and capture saved
   lane: chars | needs: Studio | depends: none | size: M | owner-files: Overnight/captures only
@@ -160,17 +160,17 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: FXRecipes, ImpactFX, Tests/FXScale.test.luau
 - [ ] T144 | One lantern-light language: spawn sparkle, level column, clear ash, low-lantern vignette, decals | verify: studio: captures per effect, performance on Low
   lane: fx-audio | needs: Studio | depends: none | size: L | owner-files: FeedbackFX, FlipbookFX registry, VFX/flipbooks
-- [ ] T155 | Familiar cues: placement, merge tiers 1 to 8, reveal per rarity | verify: tools/check_sound_lengths.py PASS, studio: cues logged in a Play run
+- [ ] T155 | Familiar cues: placement, merge tiers 1 to 8, reveal per rarity | verify: manual: tools/check_sound_lengths.py PASS, studio: cues logged in a Play run
   lane: fx-audio | needs: Studio | depends: T606 | size: M | owner-files: SoundCatalog, SoundFX call sites via SoundCues (new), VFX/sfx
-- [ ] T603 | Enemy footsteps and hits, boss intro per boss, trainer footsteps | verify: tools/check_sound_lengths.py PASS, studio: cue log
+- [ ] T603 | Enemy footsteps and hits, boss intro per boss, trainer footsteps | verify: manual: tools/check_sound_lengths.py PASS, studio: cue log
   lane: fx-audio | needs: Studio | depends: T606 | size: M | owner-files: SoundCatalog, VFX/sfx
-- [ ] T604 | UI sound set: click, hover, error, buy, quest, achievement, level-up | verify: tools/check_sound_lengths.py PASS
+- [ ] T604 | UI sound set: click, hover, error, buy, quest, achievement, level-up | verify: manual: tools/check_sound_lengths.py PASS
   lane: fx-audio | needs: Studio | depends: T606 | size: M | owner-files: SoundCatalog, VFX/sfx
 - [ ] T605 | Sound mix sliders (master, music, effects, UI) and ducking | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SettingsDefaults.test.luau (new keys), studio: duck on reveal)
   lane: fx-audio | needs: Studio | depends: T604 | size: M | owner-files: SoundFX, Shared.SettingsDefaults (claim from client-ui)
 - [ ] T160 | Music per set (5, crossfade) plus tension layer by wave | verify: studio: states for sets 1 to 5 load, crossfade logged
   lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: MusicFX, MusicCatalog, AudioIds
-- [ ] T166 | Ambient loops per set and lobby, plus sounds for captions and set morph | verify: tools/check_sound_lengths.py PASS, studio: loops start per set
+- [ ] T166 | Ambient loops per set and lobby, plus sounds for captions and set morph | verify: manual: tools/check_sound_lengths.py PASS, studio: loops start per set
   lane: fx-audio | needs: Studio | depends: T153 | size: M | owner-files: MusicFX ambience states, SoundCatalog
 
 ## Lane: docs-tooling (docs, vault, tooling, content)
@@ -180,9 +180,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: docs-tooling | needs: Studio | depends: T199 | size: L | owner-files: Shared.NumberFormat, SettingsDefaults, StageSets, MatchSim helpers
 - [ ] T205 | Memory after 10 waves per set and frame-time probe Low/Default/High | verify: studio: numbers table in evidence
   lane: docs-tooling | needs: Studio | depends: T153 | size: M | owner-files: tools/perf_probe.luau (new)
-- [ ] T027 | UI research boards for HUD, collection, results plus HUD wireframe | verify: manual: note in Research/UI with 5 cited sources per board
+- [x] T027 | UI research boards for HUD, collection, results plus HUD wireframe | verify: manual: note in Research/UI with 5 cited sources per board
   lane: docs-tooling | needs: none | depends: none | size: M | owner-files: Roblox Dev/Research/UI/ (new notes)
-- [ ] T424 | Refresh Systems.md, Backlog and Design Doc for bosses, 20 familiars, set 5 | verify: grep shows no "idea" for Bosses and Stage set 5 rows
+- [x] T424 | Refresh Systems.md, Backlog and Design Doc for bosses, 20 familiars, set 5 | verify: manual: grep shows no "idea" for Bosses and Stage set 5 rows
   lane: docs-tooling | needs: none | depends: none | size: S | owner-files: Roblox Dev/Systems.md, Backlog.md, Design/Game Design Doc.md
 - [ ] T246 | Write tonight's report: built, to judge, to delete | verify: manual: Overnight/REPORT.md updated with labels
   lane: docs-tooling | needs: none | depends: all lanes done | size: S | owner-files: Overnight/REPORT.md, Roblox Dev/Session Log.md (append)

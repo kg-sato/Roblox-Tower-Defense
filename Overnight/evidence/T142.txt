@@ -1,0 +1,18 @@
+PASS
+T142: six enemy models rigged (rig_spec archetypes via Blender/rig_enemy.py; clips Walk, Hit, Death as data in Blender/enemy_clips.py, same convention as Studio_Export/FamiliarClips.luau).
+models: FogWisp floater, BrassSentinel biped, ClockworkCrow flyer, LanternThief biped, HollowParishioner biped, ClockmakerAutomaton quadruped. Source: 512 px UV-baked Enemies/maps/_bake/<Name>_uv.glb (T124). Output Enemies/rigged/<Name>_rigged.glb, <Name>_clips.json, <Name>_rig_stats.json. Not uploaded.
+--- python tools/verify_enemy_model.py --rigged (exit 0)
+BrassSentinel (biped, 14 bones): triangles 368 <= 3000 ok; one skin, 14 joints (10..150) ok; JOINTS_0 and WEIGHTS_0 present, no JOINTS_1 (max 4 influences) ok; weights sum to 1 (min 1.0000, max 1.0000) ok; joint indices inside the skin ok; pose tests Walk/Hit/Death move vertices, finite ok; clips Walk, Hit, Death with keys ok
+   pose tests: Walk moved 720 verts max 0.31 H, Hit moved 702 verts max 0.20 H, Death moved 720 verts max 0.98 H
+ClockmakerAutomaton (quadruped, 16 bones): triangles 568 <= 3000 ok; one skin, 16 joints (10..150) ok; JOINTS_0 and WEIGHTS_0 present, no JOINTS_1 (max 4 influences) ok; weights sum to 1 (min 1.0000, max 1.0000) ok; joint indices inside the skin ok; pose tests Walk/Hit/Death move vertices, finite ok; clips Walk, Hit, Death with keys ok
+   pose tests: Walk moved 1048 verts max 0.29 H, Hit moved 1056 verts max 0.19 H, Death moved 1062 verts max 0.97 H
+ClockworkCrow (flyer, 12 bones): triangles 416 <= 3000 ok; one skin, 12 joints (10..150) ok; JOINTS_0 and WEIGHTS_0 present, no JOINTS_1 (max 4 influences) ok; weights sum to 1 (min 1.0000, max 1.0000) ok; joint indices inside the skin ok; pose tests Walk/Hit/Death move vertices, finite ok; clips Walk, Hit, Death with keys ok
+   pose tests: Walk moved 699 verts max 0.56 H, Hit moved 732 verts max 0.38 H, Death moved 786 verts max 1.56 H
+FogWisp (floater, 10 bones): triangles 1405 <= 3000 ok; one skin, 10 joints (10..150) ok; JOINTS_0 and WEIGHTS_0 present, no JOINTS_1 (max 4 influences) ok; weights sum to 1 (min 1.0000, max 1.0000) ok; joint indices inside the skin ok; pose tests Walk/Hit/Death move vertices, finite ok; clips Walk, Hit, Death with keys ok
+   pose tests: Walk moved 3623 verts max 0.24 H, Hit moved 3671 verts max 0.49 H, Death moved 3683 verts max 1.91 H
+HollowParishioner (biped, 14 bones): triangles 332 <= 3000 ok; one skin, 14 joints (10..150) ok; JOINTS_0 and WEIGHTS_0 present, no JOINTS_1 (max 4 influences) ok; weights sum to 1 (min 1.0000, max 1.0000) ok; joint indices inside the skin ok; pose tests Walk/Hit/Death move vertices, finite ok; clips Walk, Hit, Death with keys ok
+   pose tests: Walk moved 597 verts max 0.25 H, Hit moved 606 verts max 0.25 H, Death moved 612 verts max 1.02 H
+LanternThief (biped, 14 bones): triangles 264 <= 3000 ok; one skin, 14 joints (10..150) ok; JOINTS_0 and WEIGHTS_0 present, no JOINTS_1 (max 4 influences) ok; weights sum to 1 (min 1.0000, max 1.0000) ok; joint indices inside the skin ok; pose tests Walk/Hit/Death move vertices, finite ok; clips Walk, Hit, Death with keys ok
+   pose tests: Walk moved 516 verts max 0.32 H, Hit moved 528 verts max 0.22 H, Death moved 528 verts max 0.94 H
+rigged enemies 6: problems 0
+UNVERIFIED: how the motion looks (no human judged; no render of the posed meshes), Studio KeyframeSequence build from the JSON (Studio side, not done), automatic weights not hand-painted (LanternThief UpperArm.R owns 0 vertices: its right arm is not modelled as an arm; template tail bones of ClockmakerAutomaton own about 20 and 0 vertices; FogWisp trail bones moved to follow its +Y tail), death pose moves FogWisp and Crow up to about 1.9 and 1.6 model heights at the extremities (tune in Studio).

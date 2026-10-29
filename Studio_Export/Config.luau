@@ -140,6 +140,18 @@ end
 -- Pets go anywhere on the street inside the fence, off the path, without footprints overlapping.
 -- Shared by server (validation) and client (preview), so both always agree.
 Config.MAX_UNITS = 12
+-- Roster slots (T185): how many pets may stand at once, by trainer level. Each row opens `slots` from `level` on; the last row
+-- whose level is reached wins. Today every slot is open from level 1, so nothing changes; raise a row's level to gate it.
+Config.ROSTER_SLOT_UNLOCKS = { { level = 1, slots = 12 } }
+function Config.rosterSlots(level: number): number
+	local n = 0
+	for _, row in Config.ROSTER_SLOT_UNLOCKS do
+		if level >= row.level then
+			n = math.max(n, row.slots)
+		end
+	end
+	return math.clamp(n, 1, Config.MAX_UNITS)
+end
 Config.PLACE_BOUNDS = { minX = -50, maxX = 46, minZ = -26, maxZ = 28 }
 Config.PATH_HALF_WIDTH = 4.8 -- lane half width (4) plus kerb
 Config.TOUCH_GAP = 2.5 -- extra distance that still counts as touching for merges
@@ -396,9 +408,16 @@ function Config.rarityPercents(luck: number): { [string]: number }
 	return out
 end
 
+-- Refund share of a recycled pet by its tier (T019). 1 = the full value, as before; lower a tier's entry to pay less.
+Config.REFUND_PCT = { 1, 1, 1, 1, 1, 1, 1, 1 }
+function Config.refundPct(tier: number): number
+	local p = Config.REFUND_PCT[tier]
+	return if type(p) == "number" and p == p then math.clamp(p, 0, 1) else 1
+end
+
 function Config.recycleValue(pet: string, tier: number): number
 	local def = Config.PETS[pet]
-	return math.floor(5 * Config.RARITIES[def.rarity].order * 3 ^ (tier - 1))
+	return math.floor(5 * Config.RARITIES[def.rarity].order * 3 ^ (tier - 1) * Config.refundPct(tier))
 end
 
 function Config.comboMult(combo: number): number

@@ -8,7 +8,8 @@
 --   SoundFX.play("ultimate_impact")               -- or by hand: name, { volume, pitch, length, delay }
 --   SoundFX.setVolumes({ master = 1, sfx = 0.8 }) -- from the Settings screen (Music is a separate group, not used here)
 --   SoundFX.audit()                               -- in-engine check: every file loads and its TimeLength matches the catalog
--- Rules: one SoundGroup for all effect sounds; at most 8 sounds at once (6 on touch), UI sounds are dropped first; `length`
+-- Rules: one SoundGroup for all effect sounds; at most 8 sounds at once (6 on touch), UI sounds are dropped first, and a new sound
+-- of lower priority than every playing one is dropped instead of stopping a higher one; `length`
 -- trims a long sound (the 4 s anticipation riser is cut at the reveal's own anticipation length with a 0.25 s fade);
 -- every sound destroys itself when it ends; nothing loops.
 
@@ -85,6 +86,13 @@ function SoundFX.play(name, o)
 			if not worst or a.pri < worst.pri then
 				worst, wi = a, i
 			end
+		end
+		if worst and worst.pri > e.pri then
+			-- a lower priority never stops a higher one: the new sound is the one dropped
+			if SoundFX.log then
+				table.insert(SoundFX.log, { name = name, t = os.clock(), ok = false, why = "dropped (lower priority)" })
+			end
+			return nil
 		end
 		if worst then
 			worst.sound:Stop()

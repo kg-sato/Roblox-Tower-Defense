@@ -1,1 +1,1 @@
-{"name": "MirrorChorister", "size": 1024, "uv_layers": ["UVMap"], "triangles": 6000}
+{"name": "MirrorChorister", "size": 1024, "uv_layers": ["UVMap"], "triangles": 6000, "speckle_before": 0.0286, "speckle_after": 0.0111}

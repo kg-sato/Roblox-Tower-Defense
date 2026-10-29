@@ -59,6 +59,35 @@ return function(Shared)
 		e:loadMeta({ level = Config.LEVEL_MAX + 10, xp = 1, sp = 0, gems = 0 })
 		check("a level above the cap loads clamped", e.level <= Config.LEVEL_MAX, e.level)
 
+		-- stage progress (T411): bestStage and lastStage are new fields; old saves lack them
+		local f = newSim(8)
+		f:loadMeta({ version = 1, level = 2, xp = 0, sp = 0, gems = 0 })
+		check("an old save without bestStage loads with best stage 1", f.bestStage == 1, f.bestStage)
+		check("a load never moves the run's own stage", f.stage == 1)
+		local g = newSim(9)
+		g:loadMeta({ bestStage = 12, lastStage = 9 })
+		check("a saved best stage loads", g.bestStage == 12, g.bestStage)
+		local h = newSim(10)
+		h:loadMeta({ bestStage = 4, lastStage = 9 })
+		check("the best stage is never below the last stage", h.bestStage == 9, h.bestStage)
+		for label, bad in { ["huge"] = 1e12, ["negative"] = -5, ["NaN"] = 0 / 0, ["string"] = "9", ["table"] = {} } do
+			local x = newSim(11)
+			x:loadMeta({ bestStage = bad, lastStage = bad })
+			check("a " .. label .. " best stage is clamped into 1 to 1000", x.bestStage >= 1 and x.bestStage <= 1000, x.bestStage)
+		end
+		local y = newSim(12)
+		y.stage = 7
+		local ym = y:meta()
+		check("meta() carries best and last stage", ym.bestStage == 7 and ym.lastStage == 7, ym.bestStage .. "/" .. ym.lastStage)
+		y.stage = 3 -- an overrun sets the stage back; the best stays
+		y.bestStage = 7
+		local ym2 = y:meta()
+		check("after a setback the best stage stays and the last stage drops", ym2.bestStage == 7 and ym2.lastStage == 3, ym2.bestStage .. "/" .. ym2.lastStage)
+		local z = newSim(13)
+		z:loadMeta(ym2)
+		check("best and last stage survive a round trip", z.bestStage == 7)
+		check("meta() of a fresh sim reports stage 1", newSim(15):meta().bestStage == 1)
+
 		-- settings: an old profile without settings, or with only some, gets full defaults and keeps its valid values
 		local def = Settings.copyDefaults()
 		local s0 = Settings.sanitize(nil)

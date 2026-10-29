@@ -251,3 +251,6 @@
 - 19:18 CHECKPOINT c8c1696 on overnight/2026-10-27: Add Epic and Legendary humans, boss framework, Crow and Thief client models, UILib split, comms and notify tools. Promote the overnight board and relax the guardrails for per-task commits.
 
 ## Run 2026-10-29 19:18 on overnight/2026-10-27 (9.0 h, 150 loops)
+- 19:19 CHECKPOINT 4c30cda on overnight/2026-10-27: Stage completeness check passes for all 25 stages. Generated the missing front cards for the four new humans so lore, cards and voice lines are complete for 20 familiars.
+- 19:20 T232 DONE (gate-verified): Stage completeness check passes for all 25 stages
+- 19:20 T422 DONE (gate-verified): Lore, cards, voice lines complete for all 20 familiars

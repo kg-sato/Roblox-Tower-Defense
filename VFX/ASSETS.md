@@ -251,3 +251,5 @@ Skill tree engraved icons (white line art, 256 px, UI Kit/art/make_skilltree_ico
 
 Title page layers (uploaded 2026-10-29 via upload_image, from UI Kit/art/title_bg/layers): sky 135189074641926, rays 96973107269185, figure 118678537152629, mist_far 82813632895739, mist_near 108963568266256, foreground 127018063062309.
 Title foreground v2 (character moved right): 97923729896441 (127018063062309 superseded)
+
+Title page round 2 layers (2026-10-29): sky 82308350034807, rays 104036777344439, figure 128197158529429, ground 89551418679476, foreground 85966992159723, mist_far 82252188238475, mist_near 108210761536387 (round 1 ids superseded).

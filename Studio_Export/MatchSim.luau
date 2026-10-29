@@ -28,6 +28,7 @@ export type Sim = typeof(setmetatable({} :: {
 	nextId: number,
 	crystalHp: number,
 	stage: number,
+	bestStage: number, -- highest stage reached, saved in the profile
 	state: string, -- "ready" (waiting for Start Wave or Auto) | "active"
 	autoWave: boolean,
 	breakClock: number,
@@ -70,6 +71,7 @@ function MatchSim.new(rng: Random, emit: (string, any) -> (), tutorial: boolean)
 		nextId = 1,
 		crystalHp = Config.CRYSTAL_HP,
 		stage = 1,
+		bestStage = 1,
 		state = "ready",
 		autoWave = false,
 		breakClock = 1.5,
@@ -106,7 +108,7 @@ end
 
 -- Progress that carries between visits (what the server saves with ProfileStore).
 function MatchSim.meta(self: Sim): { [string]: any }
-	return { level = self.level, xp = self.xp, sp = self.sp, gems = self.gems, tree = table.clone(self.tree) }
+	return { level = self.level, xp = self.xp, sp = self.sp, gems = self.gems, tree = table.clone(self.tree), bestStage = math.max(self.bestStage, self.stage), lastStage = self.stage }
 end
 
 -- Load saved progress, clamping every value so a corrupt or edited save can't give an impossible state.
@@ -135,6 +137,8 @@ function MatchSim.loadMeta(self: Sim, d: any)
 		end
 	end
 	self.tree = tree
+	-- stage progress (T411): the best stage can never be below the last one; the run itself still starts at stage 1
+	self.bestStage = math.max(num(d.bestStage, 1, 1000, 1), num(d.lastStage, 1, 1000, 1))
 end
 
 function MatchSim.maxHp(self: Sim): number
@@ -618,6 +622,7 @@ function MatchSim.clearStage(self: Sim)
 	self.emit("Clear", { stage = self.stage, perfect = perfect, bonus = bonus, combo = self.combo })
 	self:addXp(8 + 2 * self.stage)
 	self.stage += 1
+	self.bestStage = math.max(self.bestStage, self.stage)
 	self.state = "ready"
 	self.breakClock = Config.STAGE_BREAK
 	self.bossClock = nil

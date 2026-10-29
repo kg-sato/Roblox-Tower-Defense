@@ -1,8 +1,25 @@
 PASS
-T124 profile audit (PlayerData_v1, TEMPLATE version 1, Reconcile, sanitize, BindToClose).
-Findings and fixes:
- F1 only settings were sanitized on load; level, xp, sp, gems, tutorialDone and tree were trusted. Now clamped and typed on load; tree keeps only known skill ids (Start forced to 1, levels 0..99).
- F2 no version stamp on load: d.version = TEMPLATE.version now, with a comment marking where a migration goes before a bump.
-Checked and kept: Reconcile runs before the sanitize step; BindToClose is handled by the vendored ProfileStore (Vendor/ProfileStore.luau lines 2199 and 2208), so MatchService needs no extra hook; session locking via StartSessionAsync and the OnSessionEnd kick stay.
-Tests: MatchSim.test.luau PASS. SettingsDefaults.test.luau PASS (all checks, including the uiSize and damageNumbers ones). An earlier FAIL came from Edit-mode module caching, not the code; a fresh module clone cleared it.
-Play: profile loaded after restart with version 1, level 1, xp 0, sp 0, gems 0, tree Start 1, tutorialDone false. Test settings restored to musicVolume 0.7 afterwards.
+T124: 512 px sets for 12 enemy/boss models x 5 stage sets (Lampwick, Harbour, Cathedral, Foundry, GreyVeil). Pipeline: Blender/bake_enemy_maps.py (smart UV + bake colour and AO, CPU, all materials into one image) then tools/texture_maps.py (enemy section, venv python).
+per model: <Name>_<Set>_Color_512 / _Roughness_512 / _Emissive_512, <Name>_Normal_512, <Name>_sets_sheet.png; Enemies/maps/enemy_maps_report.json; baked inputs and <Name>_uv.glb in Enemies/maps/_bake
+512 px PNG count in Enemies/maps: 192 (expect 12*16=192)
+--- python tools/texture_maps.py (enemy section)
+enemy sets: 12 models x 5 stage sets, 512 px: Color, Roughness, Emissive per set plus Normal
+BrassSentinel 0.967 {'Lampwick': 0.0, 'Harbour': 0.0, 'Cathedral': 0.0, 'Foundry': 0.1424, 'GreyVeil': 0.0}
+Clockmaker 0.953 {'Lampwick': 0.0, 'Harbour': 0.0, 'Cathedral': 0.0, 'Foundry': 0.022, 'GreyVeil': 0.0}
+ClockmakerAutomaton 0.869 {'Lampwick': 0.0, 'Harbour': 0.0, 'Cathedral': 0.0, 'Foundry': 0.0631, 'GreyVeil': 0.0}
+ClockworkCrow 0.791 {'Lampwick': 0.0, 'Harbour': 0.0, 'Cathedral': 0.0, 'Foundry': 0.083, 'GreyVeil': 0.0}
+FogWisp 0.501 {'Lampwick': 0.0, 'Harbour': 0.0, 'Cathedral': 0.0, 'Foundry': 0.0069, 'GreyVeil': 0.0}
+HollowCourtRegent 0.945 {'Lampwick': 0.0, 'Harbour': 0.0, 'Cathedral': 0.0, 'Foundry': 0.0591, 'GreyVeil': 0.0}
+HollowParishioner 0.952 {'Lampwick': 0.0204, 'Harbour': 0.0204, 'Cathedral': 0.0204, 'Foundry': 0.0628, 'GreyVeil': 0.0204}
+LanternThief 0.827 {'Lampwick': 0.0, 'Harbour': 0.0, 'Cathedral': 0.0, 'Foundry': 0.1366, 'GreyVeil': 0.0}
+StarChoirEcho 0.864 {'Lampwick': 0.0, 'Harbour': 0.0, 'Cathedral': 0.0, 'Foundry': 0.0992, 'GreyVeil': 0.0}
+Unbound 0.839 {'Lampwick': 0.0, 'Harbour': 0.0, 'Cathedral': 0.0, 'Foundry': 0.0439, 'GreyVeil': 0.0}
+UnboundP2 0.839 {'Lampwick': 0.0, 'Harbour': 0.0, 'Cathedral': 0.0, 'Foundry': 0.0156, 'GreyVeil': 0.0}
+UnboundP3 0.863 {'Lampwick': 0.0206, 'Harbour': 0.0206, 'Cathedral': 0.0206, 'Foundry': 0.023, 'GreyVeil': 0.0206}
+--- python tools/asset_budget.py
+178 meshes; most triangles: Boulder_concept_v1.glb 18000, CogWarden.glb 18000, ConstableWren.glb 18000, Ember_concept_v1.glb 18000, Archivist.glb 18000
+largest texture 1024 px
+106 audio files (96 with a readable length); longest: ultimate_impact.wav 5.4s, ultimate_impact.wav 5.4s, merge_8.wav 5.2s
+all within budget
+exit 0
+UNVERIFIED: look and feel (no human judged); stage props: no prop models exist, none made; FogWisp alpha fade not baked; weathering is procedural, not hand-painted; smart-project UVs are blocky; maps not wired into Roblox.

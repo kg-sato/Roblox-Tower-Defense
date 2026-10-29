@@ -1,0 +1,578 @@
+{
+ "BrassSentinel": {
+  "painted_fraction": 0.967,
+  "Lampwick": {
+   "mean_rgb": [
+    0.193,
+    0.144,
+    0.073
+   ],
+   "roughness_mean": 0.618,
+   "emissive_fraction": 0.0
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.145,
+    0.148,
+    0.087
+   ],
+   "roughness_mean": 0.293,
+   "emissive_fraction": 0.0
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.324,
+    0.262,
+    0.153
+   ],
+   "roughness_mean": 0.475,
+   "emissive_fraction": 0.0
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.221,
+    0.121,
+    0.04
+   ],
+   "roughness_mean": 0.721,
+   "emissive_fraction": 0.1424
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.179,
+    0.149,
+    0.092
+   ],
+   "roughness_mean": 0.449,
+   "emissive_fraction": 0.0
+  }
+ },
+ "Clockmaker": {
+  "painted_fraction": 0.953,
+  "Lampwick": {
+   "mean_rgb": [
+    0.325,
+    0.254,
+    0.158
+   ],
+   "roughness_mean": 0.578,
+   "emissive_fraction": 0.0
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.226,
+    0.28,
+    0.22
+   ],
+   "roughness_mean": 0.344,
+   "emissive_fraction": 0.0
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.445,
+    0.363,
+    0.227
+   ],
+   "roughness_mean": 0.461,
+   "emissive_fraction": 0.0
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.224,
+    0.151,
+    0.078
+   ],
+   "roughness_mean": 0.745,
+   "emissive_fraction": 0.022
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.289,
+    0.254,
+    0.195
+   ],
+   "roughness_mean": 0.449,
+   "emissive_fraction": 0.0
+  }
+ },
+ "ClockmakerAutomaton": {
+  "painted_fraction": 0.869,
+  "Lampwick": {
+   "mean_rgb": [
+    0.255,
+    0.198,
+    0.119
+   ],
+   "roughness_mean": 0.593,
+   "emissive_fraction": 0.0
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.194,
+    0.268,
+    0.207
+   ],
+   "roughness_mean": 0.353,
+   "emissive_fraction": 0.0
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.388,
+    0.317,
+    0.195
+   ],
+   "roughness_mean": 0.472,
+   "emissive_fraction": 0.0
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.207,
+    0.128,
+    0.058
+   ],
+   "roughness_mean": 0.737,
+   "emissive_fraction": 0.0631
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.233,
+    0.202,
+    0.148
+   ],
+   "roughness_mean": 0.449,
+   "emissive_fraction": 0.0
+  }
+ },
+ "ClockworkCrow": {
+  "painted_fraction": 0.791,
+  "Lampwick": {
+   "mean_rgb": [
+    0.19,
+    0.181,
+    0.177
+   ],
+   "roughness_mean": 0.619,
+   "emissive_fraction": 0.0
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.143,
+    0.186,
+    0.189
+   ],
+   "roughness_mean": 0.294,
+   "emissive_fraction": 0.0
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.343,
+    0.31,
+    0.246
+   ],
+   "roughness_mean": 0.473,
+   "emissive_fraction": 0.0
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.191,
+    0.127,
+    0.085
+   ],
+   "roughness_mean": 0.733,
+   "emissive_fraction": 0.083
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.179,
+    0.189,
+    0.216
+   ],
+   "roughness_mean": 0.449,
+   "emissive_fraction": 0.0
+  }
+ },
+ "FogWisp": {
+  "painted_fraction": 0.501,
+  "Lampwick": {
+   "mean_rgb": [
+    0.565,
+    0.638,
+    0.704
+   ],
+   "roughness_mean": 0.636,
+   "emissive_fraction": 0.0
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.457,
+    0.586,
+    0.661
+   ],
+   "roughness_mean": 0.269,
+   "emissive_fraction": 0.0
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.635,
+    0.668,
+    0.663
+   ],
+   "roughness_mean": 0.484,
+   "emissive_fraction": 0.0
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.37,
+    0.367,
+    0.352
+   ],
+   "roughness_mean": 0.748,
+   "emissive_fraction": 0.0069
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.489,
+    0.604,
+    0.777
+   ],
+   "roughness_mean": 0.45,
+   "emissive_fraction": 0.0
+  }
+ },
+ "HollowCourtRegent": {
+  "painted_fraction": 0.945,
+  "Lampwick": {
+   "mean_rgb": [
+    0.348,
+    0.274,
+    0.185
+   ],
+   "roughness_mean": 0.606,
+   "emissive_fraction": 0.0
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.24,
+    0.346,
+    0.273
+   ],
+   "roughness_mean": 0.399,
+   "emissive_fraction": 0.0
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.465,
+    0.381,
+    0.251
+   ],
+   "roughness_mean": 0.466,
+   "emissive_fraction": 0.0
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.257,
+    0.166,
+    0.087
+   ],
+   "roughness_mean": 0.738,
+   "emissive_fraction": 0.0591
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.31,
+    0.271,
+    0.22
+   ],
+   "roughness_mean": 0.449,
+   "emissive_fraction": 0.0
+  }
+ },
+ "HollowParishioner": {
+  "painted_fraction": 0.952,
+  "Lampwick": {
+   "mean_rgb": [
+    0.37,
+    0.329,
+    0.427
+   ],
+   "roughness_mean": 0.625,
+   "emissive_fraction": 0.0204
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.282,
+    0.292,
+    0.39
+   ],
+   "roughness_mean": 0.28,
+   "emissive_fraction": 0.0204
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.493,
+    0.435,
+    0.482
+   ],
+   "roughness_mean": 0.475,
+   "emissive_fraction": 0.0204
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.24,
+    0.176,
+    0.186
+   ],
+   "roughness_mean": 0.741,
+   "emissive_fraction": 0.0628
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.346,
+    0.339,
+    0.515
+   ],
+   "roughness_mean": 0.449,
+   "emissive_fraction": 0.0204
+  }
+ },
+ "LanternThief": {
+  "painted_fraction": 0.827,
+  "Lampwick": {
+   "mean_rgb": [
+    0.198,
+    0.15,
+    0.119
+   ],
+   "roughness_mean": 0.606,
+   "emissive_fraction": 0.0
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.147,
+    0.166,
+    0.142
+   ],
+   "roughness_mean": 0.305,
+   "emissive_fraction": 0.0
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.341,
+    0.276,
+    0.195
+   ],
+   "roughness_mean": 0.47,
+   "emissive_fraction": 0.0
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.243,
+    0.132,
+    0.062
+   ],
+   "roughness_mean": 0.722,
+   "emissive_fraction": 0.1366
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.183,
+    0.156,
+    0.151
+   ],
+   "roughness_mean": 0.449,
+   "emissive_fraction": 0.0
+  }
+ },
+ "StarChoirEcho": {
+  "painted_fraction": 0.864,
+  "Lampwick": {
+   "mean_rgb": [
+    0.508,
+    0.477,
+    0.486
+   ],
+   "roughness_mean": 0.632,
+   "emissive_fraction": 0.0
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.353,
+    0.43,
+    0.459
+   ],
+   "roughness_mean": 0.308,
+   "emissive_fraction": 0.0
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.621,
+    0.57,
+    0.529
+   ],
+   "roughness_mean": 0.475,
+   "emissive_fraction": 0.0
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.349,
+    0.263,
+    0.212
+   ],
+   "roughness_mean": 0.733,
+   "emissive_fraction": 0.0992
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.472,
+    0.487,
+    0.578
+   ],
+   "roughness_mean": 0.449,
+   "emissive_fraction": 0.0
+  }
+ },
+ "Unbound": {
+  "painted_fraction": 0.839,
+  "Lampwick": {
+   "mean_rgb": [
+    0.425,
+    0.47,
+    0.535
+   ],
+   "roughness_mean": 0.63,
+   "emissive_fraction": 0.0
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.333,
+    0.417,
+    0.487
+   ],
+   "roughness_mean": 0.268,
+   "emissive_fraction": 0.0
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.519,
+    0.537,
+    0.547
+   ],
+   "roughness_mean": 0.475,
+   "emissive_fraction": 0.0
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.289,
+    0.261,
+    0.245
+   ],
+   "roughness_mean": 0.741,
+   "emissive_fraction": 0.0439
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.384,
+    0.468,
+    0.624
+   ],
+   "roughness_mean": 0.449,
+   "emissive_fraction": 0.0
+  }
+ },
+ "UnboundP2": {
+  "painted_fraction": 0.839,
+  "Lampwick": {
+   "mean_rgb": [
+    0.5,
+    0.576,
+    0.645
+   ],
+   "roughness_mean": 0.585,
+   "emissive_fraction": 0.0
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.406,
+    0.532,
+    0.609
+   ],
+   "roughness_mean": 0.27,
+   "emissive_fraction": 0.0
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.611,
+    0.621,
+    0.568
+   ],
+   "roughness_mean": 0.446,
+   "emissive_fraction": 0.0
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.338,
+    0.338,
+    0.328
+   ],
+   "roughness_mean": 0.746,
+   "emissive_fraction": 0.0156
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.44,
+    0.555,
+    0.725
+   ],
+   "roughness_mean": 0.449,
+   "emissive_fraction": 0.0
+  }
+ },
+ "UnboundP3": {
+  "painted_fraction": 0.863,
+  "Lampwick": {
+   "mean_rgb": [
+    0.503,
+    0.567,
+    0.608
+   ],
+   "roughness_mean": 0.574,
+   "emissive_fraction": 0.0206
+  },
+  "Harbour": {
+   "mean_rgb": [
+    0.406,
+    0.525,
+    0.579
+   ],
+   "roughness_mean": 0.273,
+   "emissive_fraction": 0.0206
+  },
+  "Cathedral": {
+   "mean_rgb": [
+    0.605,
+    0.598,
+    0.516
+   ],
+   "roughness_mean": 0.44,
+   "emissive_fraction": 0.0206
+  },
+  "Foundry": {
+   "mean_rgb": [
+    0.333,
+    0.333,
+    0.314
+   ],
+   "roughness_mean": 0.749,
+   "emissive_fraction": 0.023
+  },
+  "GreyVeil": {
+   "mean_rgb": [
+    0.438,
+    0.541,
+    0.674
+   ],
+   "roughness_mean": 0.449,
+   "emissive_fraction": 0.0206
+  }
+ }
+}

@@ -182,7 +182,31 @@ def bake(img, src_socket):
 bake(img_color, color_out)
 bake(img_rough, rough_rgb.outputs["Color"])
 
-# "painted" finish: save, then soften slightly and add a faint brush grain in the colour map (PIL is not in Blender, so do it with pixels)
+# clean-up (T407): a 5 by 5 median on the baked colour removes the speckle that the three-view projection leaves where a view's colour changes or a design-sheet texel is stray
+# (specks under about 12 px across; painted lines 3 px wide or more survive). Set CLEAN_TEXTURE=0 to skip. The speckle share (pixels more than 24 levels from their 5 by 5 median) goes into the stats file.
+import numpy as np
+
+
+def med5(q):
+    pad = np.pad(q, ((2, 2), (2, 2), (0, 0)), mode="edge")
+    return np.median(np.stack([pad[y:y + size, x:x + size] for y in range(5) for x in range(5)]), axis=0).astype(np.uint8)
+
+
+def speckle(q):
+    painted = q.astype(int).sum(2) > 30
+    return float(((np.abs(q.astype(int) - med5(q)).max(2) > 24) & painted).sum() / max(1, painted.sum()))
+
+
+px = np.array(img_color.pixels[:], dtype=np.float32).reshape(size, size, 4)
+q = (px[..., :3] * 255 + 0.5).astype(np.uint8)
+speckle_before = speckle(q)
+if os.environ.get("CLEAN_TEXTURE", "1") != "0":
+    q = med5(q)
+    px[..., :3] = q.astype(np.float32) / 255
+    img_color.pixels = px.ravel().tolist()
+speckle_after = speckle(q)
+
+# save the maps
 col_path = os.path.join(out_dir, name + "_BaseColor.png")
 rough_path = os.path.join(out_dir, name + "_Roughness.png")
 img_color.filepath_raw = col_path
@@ -237,5 +261,5 @@ for label, angle in (("front", 0), ("three_quarter", 40), ("back", 180)):
     bpy.ops.render.render(write_still=True)
 
 with open(os.path.join(out_dir, name + "_tex_stats.json"), "w") as f:
-    json.dump({"name": name, "size": size, "uv_layers": [u.name for u in mesh.data.uv_layers], "triangles": len(mesh.data.polygons)}, f)
+    json.dump({"name": name, "size": size, "uv_layers": [u.name for u in mesh.data.uv_layers], "triangles": len(mesh.data.polygons), "speckle_before": round(speckle_before, 4), "speckle_after": round(speckle_after, 4)}, f)
 print("DONE", name)

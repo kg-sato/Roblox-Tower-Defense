@@ -211,6 +211,50 @@ return function(Shared)
 		end
 		check("pity: no dry streak of Epic or better reaches " .. Config.PITY_EVERY .. " rolls", worst < Config.PITY_EVERY, "worst streak " .. worst .. " over " .. rolls .. " rolls")
 		check("pity: the roll loop really ran", rolls >= 1500, rolls)
+		-- roster slot unlocks (T185)
+		check("rosterSlots at level 1 is the full unit cap today", Config.rosterSlots(1) == Config.MAX_UNITS, Config.rosterSlots(1))
+		local saved = Config.ROSTER_SLOT_UNLOCKS
+		Config.ROSTER_SLOT_UNLOCKS = { { level = 1, slots = 6 }, { level = 5, slots = 8 }, { level = 10, slots = 99 } }
+		check("a row below its level is not open yet", Config.rosterSlots(4) == 6, Config.rosterSlots(4))
+		check("the row at its level opens", Config.rosterSlots(5) == 8, Config.rosterSlots(5))
+		check("slots never exceed MAX_UNITS", Config.rosterSlots(25) == Config.MAX_UNITS, Config.rosterSlots(25))
+		check("slots are never below 1", (function()
+			Config.ROSTER_SLOT_UNLOCKS = { { level = 99, slots = 4 } }
+			return Config.rosterSlots(1)
+		end)() == 1)
+		Config.ROSTER_SLOT_UNLOCKS = saved
+
+		-- recycle refund per tier (T019)
+		local pctOk = true
+		for t = 1, Config.TIER_MAX do
+			if Config.refundPct(t) ~= 1 then
+				pctOk = false
+			end
+		end
+		check("default refund is 100 percent at every tier (economy unchanged)", pctOk)
+		local base = Config.recycleValue("Ember", 3)
+		check("default recycle value is the old formula", base == math.floor(5 * Config.RARITIES[Config.PETS.Ember.rarity].order * 3 ^ 2), base)
+		local savedPct = table.clone(Config.REFUND_PCT)
+		Config.REFUND_PCT[3] = 0.5
+		check("a 50 percent tier pays half", Config.recycleValue("Ember", 3) == math.floor(base * 0.5), Config.recycleValue("Ember", 3))
+		check("other tiers are untouched", Config.recycleValue("Ember", 2) == math.floor(5 * Config.RARITIES[Config.PETS.Ember.rarity].order * 3), Config.recycleValue("Ember", 2))
+		Config.REFUND_PCT[3] = 7
+		check("a refund above 100 percent is clamped to 100", Config.refundPct(3) == 1)
+		Config.REFUND_PCT[3] = -1
+		check("a negative refund is clamped to 0", Config.refundPct(3) == 0 and Config.recycleValue("Ember", 3) == 0)
+		Config.REFUND_PCT[3] = 0 / 0
+		check("a NaN refund falls back to 100 percent", Config.refundPct(3) == 1)
+		check("a tier without an entry refunds 100 percent", Config.refundPct(99) == 1)
+		Config.REFUND_PCT = savedPct
+		check("recycle() adds the refunded coins", (function()
+			local sim = MatchSim.new(Random.new(3), function() end, false)
+			sim.grid[1] = { pet = "Ember", tier = 3 }
+			local c0 = sim.coins
+			Config.REFUND_PCT[3] = 0.5
+			sim:recycle(1)
+			Config.REFUND_PCT[3] = 1
+			return sim.coins - c0 == math.floor(base * 0.5)
+		end)())
 	end)
 	if not ok then
 		failed += 1

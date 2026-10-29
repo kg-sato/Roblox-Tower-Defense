@@ -63,3 +63,106 @@ for fam, names in FAMILIES.items():
 (OUT / "maps_report.json").write_text(json.dumps(report, indent=1))
 for n, r in report.items():
     print(n, r)
+
+
+# ---- enemies and bosses (T124): 512 px sets with weathering per stage set -------------------------------------------------------------------
+# Inputs from Blender/bake_enemy_maps.py: Roblox Dev/Assets/3D/Enemies/maps/_bake/<Name>_bake_color.png (palette colour on a smart-projected UV) and _bake_ao.png.
+# Outputs in Enemies/maps/: <Name>_<Set>_Color_512, <Name>_<Set>_Roughness_512, <Name>_<Set>_Emissive_512, <Name>_Normal_512, <Name>_sets_sheet.png, enemy_maps_report.json.
+# Weathering is procedural (noise, ambient occlusion, hue tests), one rule per set from Design/Stage Set Plans (T151): re-skin, never a new palette. Stage props: no prop models exist yet, so none are made.
+EN = ROOT / "Roblox Dev" / "Assets" / "3D" / "Enemies" / "maps"
+BAKE = EN / "_bake"
+SETS = ["Lampwick", "Harbour", "Cathedral", "Foundry", "GreyVeil"]
+
+
+def noise(seed, blur, shape=(S, S)):
+    r = np.random.default_rng(seed)
+    n = Image.fromarray((r.random(shape) * 255).astype("uint8")).filter(ImageFilter.GaussianBlur(blur))
+    a = np.asarray(n).astype(float)
+    return (a - a.min()) / max(1e-6, a.max() - a.min())
+
+
+def weather(a, ao, setname, seed):
+    """a: colour 0..1 (H,W,3); ao: 0..1 (1 = open). Returns colour, roughness, emissive-add (all 0..1)."""
+    mx, mn = a.max(2), a.min(2)
+    painted = (mx > 0.03)[..., None]
+    crev = np.clip((0.85 - ao) / 0.6, 0, 1)[..., None]       # crevices
+    edge = np.clip((ao - 0.92) / 0.08, 0, 1)[..., None]      # open, exposed faces
+    n1, n2 = noise(seed, 3)[..., None], noise(seed + 1, 1.2)[..., None]
+    streak = noise(seed + 2, 0.0)  # replaced below by vertical streaks
+    sx = np.asarray(Image.fromarray((np.random.default_rng(seed + 2).random((1, S)) * 255).astype("uint8")).resize((S, S)).filter(ImageFilter.GaussianBlur(2))).astype(float) / 255
+    sx = ((sx - sx.min()) / max(1e-6, sx.max() - sx.min()))[..., None]
+    rough = np.full((S, S), 0.55)
+    glow = np.zeros((S, S))
+    warm = ((a[..., 0] > a[..., 2] + 0.04) & (mx > 0.25))[..., None]  # brass and gold read warm
+    if setname == "Lampwick":
+        out = a * (1 - 0.25 * crev) + 0.05 * crev * n1  # dust and dirt in cracks
+        rough = rough + 0.15 * crev[..., 0]
+    elif setname == "Harbour":
+        out = a * np.array([0.82, 0.93, 0.95]) * (1 - 0.3 * crev)  # wet and dark
+        verd = np.clip((sx * 1.4 + n1 * 0.6 - 0.75) * 4, 0, 1) * warm * painted  # verdigris streaks run down brass
+        out = out * (1 - 0.7 * verd) + np.array([0.27, 0.58, 0.48]) * 0.7 * verd
+        rough = 0.32 - 0.1 * n2[..., 0] + 0.25 * verd[..., 0]
+    elif setname == "Cathedral":
+        out = a * 0.9 + 0.1 * np.array([0.9, 0.88, 0.8])  # pale
+        gold = np.clip((edge[..., 0] - 0.3) * 1.4, 0, 1)[..., None] * (n1 > 0.35) * painted  # gilded edging on exposed faces
+        out = out * (1 - 0.55 * gold) + np.array([0.82, 0.64, 0.24]) * 0.55 * gold
+        wax = (np.clip((n1 - 0.72) * 6, 0, 1) * crev.clip(0.3, 1)) * painted  # wax drips
+        out = out * (1 - 0.6 * wax) + np.array([0.93, 0.9, 0.78]) * 0.6 * wax
+        rough = 0.5 - 0.15 * gold[..., 0]
+    elif setname == "Foundry":
+        out = a * np.array([0.74, 0.66, 0.58]) * (1 - 0.5 * crev)  # ash-brown, soot in crevices
+        out = out * (1 - 0.2 * n2) + 0.0
+        seam = np.clip((crev[..., 0] - 0.75) * 4, 0, 1) * (n1[..., 0] > 0.55) * painted[..., 0]  # ember glow in the seams
+        out = out * (1 - 0.8 * seam[..., None]) + np.array([1.0, 0.45, 0.1]) * 0.8 * seam[..., None]
+        glow = seam
+        rough = 0.75 - 0.2 * seam
+    else:  # GreyVeil: cold, starlit
+        out = a * np.array([0.82, 0.9, 1.05]) + 0.06 * edge * np.array([0.6, 0.75, 1.0])
+        flecks = (np.random.default_rng(seed + 3).random((S, S)) > 0.9985).astype(float)
+        flecks = np.asarray(Image.fromarray((flecks * 255).astype("uint8")).filter(ImageFilter.GaussianBlur(0.8))).astype(float) / 255
+        flecks = np.clip(flecks * 5, 0, 1)[..., None] * painted
+        out = out * (1 - flecks) + np.array([0.85, 0.92, 1.0]) * flecks
+        rough = 0.45 - 0.15 * flecks[..., 0]
+        glow = flecks[..., 0] * 0.6
+    out = np.where(painted, np.clip(out, 0, 1), a)
+    return out, np.clip(rough, 0, 1), np.clip(glow, 0, 1)
+
+
+ereport = {}
+bakes = sorted(BAKE.glob("*_bake_color.png")) if BAKE.exists() else []
+for ci, cp in enumerate(bakes):
+    n = cp.name[:-len("_bake_color.png")]
+    a = np.asarray(Image.open(cp).convert("RGB")).astype(float) / 255
+    ao = np.asarray(Image.open(BAKE / f"{n}_bake_ao.png").convert("L")).astype(float) / 255
+    mx = a.max(2)
+    sat = (mx - a.min(2)) / np.maximum(mx, 1e-6)
+    base_glow = smooth(mx, 0.80, 0.95) * smooth(sat, 0.30, 0.50) * (mx > 0.03)
+    lum = (0.299 * a[..., 0] + 0.587 * a[..., 1] + 0.114 * a[..., 2])
+    low = np.asarray(Image.fromarray((lum * 255).astype("uint8")).filter(ImageFilter.GaussianBlur(6))).astype(float) / 255
+    h = (lum - low) + 0.6 * (ao - 0.8)  # painted edges plus a hint of ambient-occlusion relief
+    dx, dy = np.gradient(h, axis=1) * 2.0 * S / 64, np.gradient(h, axis=0) * 2.0 * S / 64
+    ln = np.sqrt(dx * dx + dy * dy + 1)
+    Image.fromarray((np.stack([(-dx / ln + 1) / 2, (dy / ln + 1) / 2, (1 / ln + 1) / 2], 2) * 255).astype("uint8")).save(EN / f"{n}_Normal_512.png")
+    tiles, rep = [], {"painted_fraction": round(float((mx > 0.03).mean()), 3)}
+    for si, s in enumerate(SETS):
+        col, rough, glow = weather(a, ao, s, 1000 * ci + 10 * si)
+        em = np.clip(np.maximum(base_glow, glow), 0, 1)
+        em = Image.fromarray((em * 255).astype("uint8")).filter(ImageFilter.GaussianBlur(1))
+        Image.fromarray((col * 255).astype("uint8")).save(EN / f"{n}_{s}_Color_512.png")
+        Image.fromarray((rough * 255).astype("uint8")).save(EN / f"{n}_{s}_Roughness_512.png")
+        em.save(EN / f"{n}_{s}_Emissive_512.png")
+        tiles.append(Image.fromarray((col * 255).astype("uint8")))
+        rep[s] = {"mean_rgb": [round(float(v), 3) for v in col[mx > 0.03].mean(0)] if (mx > 0.03).any() else None, "roughness_mean": round(float(rough.mean()), 3),
+                  "emissive_fraction": round(float((np.asarray(em) > 128).mean()), 4)}
+    sheet = Image.new("RGB", (len(SETS) * 256, 256 + 22), (24, 24, 30))
+    d = ImageDraw.Draw(sheet)
+    for i, (t, s) in enumerate(zip(tiles, SETS)):
+        sheet.paste(t.resize((256, 256), Image.LANCZOS), (i * 256, 22))
+        d.text((i * 256 + 6, 4), f"{n} {s}", fill=(230, 230, 230))
+    sheet.save(EN / f"{n}_sets_sheet.png")
+    ereport[n] = rep
+if ereport:
+    (EN / "enemy_maps_report.json").write_text(json.dumps(ereport, indent=1))
+    print(f"enemy sets: {len(ereport)} models x {len(SETS)} stage sets, 512 px: Color, Roughness, Emissive per set plus Normal")
+    for n, r in ereport.items():
+        print(n, r["painted_fraction"], {s: r[s]["emissive_fraction"] for s in SETS})

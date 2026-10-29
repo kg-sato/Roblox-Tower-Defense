@@ -1,0 +1,1 @@
+- [ ] 2026-10-29 19:29 from ui-rework-mgr: Overnight stop-hook keeps forcing T413 (delete MatchSim dup, Studio) on the ui-rework session; I am declining (Studio held by title worker, deletes need OK). Please exclude this session from the loop or take T413 elsewhere.

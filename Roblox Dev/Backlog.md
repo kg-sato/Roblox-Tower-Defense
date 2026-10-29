@@ -115,18 +115,24 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 ## From the familiar art session (2026-10-29)
 - [x] (2026-10-29) Gold-ink recolour of the 12 familiars, applied after the user said yes ([[Design/Gold Ink Recolour]])
 - [ ] Export the Walk and Attack clips as Animation assets and upload them (a published game cannot play Studio-only clips) ([[Design/Upload Plan]])
-- [ ] Build stage set 5 (Above the Grey Veil) in `StageSets`: lighting data is ready ([[Design/Stage Set 5 Plan]]); `python tools/check_stages_complete.py` fails until it exists
-- [ ] Implement familiar roles (Hasten, Ward, Reveal, Hush, Echo, Starfall, Drain) and the statuses ([[Design/Familiar Systems]])
-- [ ] Balance the nine new familiars and the economy (the full bot clears 25 stages in about 5 minutes) ([[Design/Balance Baseline 2026-10-29]])
-- [ ] Boss framework: per-boss definitions, phases, phase bar ([[Design/Boss Designs]])
+- [x] (2026-10-29) Build stage set 5 (Above the Grey Veil) in `StageSets`: installed with `BackdropVeil` and `veil` music state; stage completeness check passes for all 25 stages ([[Design/Stage Set 5 Plan]])
+- [x] (2026-10-29) Implement familiar roles and statuses (`Tests/NewRoles.test.luau`, 27 checks; [[Design/Familiar Systems]])
+- [x] (2026-10-29) Balance the economy: ROLL_COST 20, START_GEMS 60, full bot clears 25 stages in a mean 574 s over 12 seeds ([[Design/Balance Baseline 2026-10-29]])
+- [x] (2026-10-29) Boss framework, server side: `Config.BOSSES` (5 bosses x 3 phases), `BossPhase` and `BossFx` events, 31 checks ([[Design/Boss Framework]])
+- [ ] Boss client: phase bar with three ticks, banner at each phase change, flicker on denied units, freeze overlay ([[Design/Boss Framework]], [[Design/Boss Designs]])
+- [ ] Boss per-boss specials (beyond the shared phase effects) ([[Design/Boss Designs]])
+- [ ] Client Hit and Death clip hooks for the human familiars (clips are uploaded and wired, the client does not call them yet) ([[Design/Human Familiars]])
+- [x] (2026-10-29) 20 familiars: four Epic and Legendary humans (Constable Wren, Madam Quill, Cog-Warden, Ferryman of Fog) with lore, cards, models, rigs, clips; collection art for all 20 cells installed
+- [x] (2026-10-29) GameClient split: UI helpers moved to `StarterPlayerScripts.UILib` (199,960 to 173,770 of 200,000 characters); click-test the panels still open
+- [x] (2026-10-29) Comms and notify tools (`tools/comms.py`, `tools/notify.py`)
 - [ ] Decide: rarity tier cap, the 2x Coins pass, fusion tier ([[Design/Progression Rules]], [[Design/Content Plans]])
 - [ ] Fix the sound cap rule that can stop a higher-priority sound ([[Design/Sound Priority]])
 - [x] (2026-10-29) 12 familiars: data, lore, cards, models, textures, rigs, Walk and Attack clips, collection screen
 - [x] (2026-10-29) 11 enemy and boss concept models (Fog Wisp to the Clockmaker) built, checked against the familiar silhouettes, uploaded, loaded back in Studio
 - [x] (2026-10-29) Headless tests: Rules (37), ServerRules (45), Balance integration run; 12 of 12 suites PASS
 - [ ] Respec button on the skill tree screen: `Action:FireServer("Respec")`, reply event `Respec {refunded, cost}`; fee 50 gems, cooldown 120 s (server done 2026-10-29, T198)
-- [ ] Client: handle `Pace {id, dist, speed, t}` (re-time the enemy), then set `Config.MOVEMENT_EFFECTS = true` so slow, stun, freeze, plant and the thief speed-up show ([[Design/Combat Systems Implemented]])
-- [ ] Client: models for Clockwork Crow and Lantern Thief (and Sentinel plant and telegraph FX), then set `Config.NEW_ENEMIES = true`
+- [x] (2026-10-29) Client: `Pace` handler (`PaceClient` + `EnemyPace`), `Config.MOVEMENT_EFFECTS = true` ([[Design/Combat Systems Implemented]])
+- [x] (2026-10-29) Client models for Clockwork Crow and Lantern Thief, `Config.NEW_ENEMIES = true`; still open: Sentinel plant and telegraph FX
 - [ ] UI: odds panel and reveal for six rarities (`FXRecipes.ORDER`, `RevealFX` ORDER need Mythic and Celestial)
 - [ ] Content: Mythic and Celestial familiars (lore, model, rig, stats), tier 6 to 8 looks
 - [ ] Animations: idle, hit, death, new walk cycles for familiars and enemies

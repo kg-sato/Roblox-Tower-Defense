@@ -1,7 +1,10 @@
 """Check an enemy model (T114 onward): python tools/verify_enemy_model.py <Name> [budget]. Reads Roblox Dev/Assets/3D/Enemies/<Name>/<Name>.glb (JSON chunk), <Name>_stats.json and the stills.
 Checks: the GLB parses with one mesh and at least one material and an image; triangles at most the budget (default 3000; the project rule is under 20000 for any mesh); the front-view silhouette
 (backdrop keyed out, scaled to 48 px, bounding-box fitted) differs from all 12 familiar front cutouts (IoU at most 0.5; the worst over all three views is printed for information) so an enemy never reads as a familiar; the model's own three views differ from each other.
-Exit 1 on failure. Run with the Hunyuan3D venv."""
+Exit 1 on failure. Run with the Hunyuan3D venv.
+Rigged mode (T142): python tools/verify_enemy_model.py --rigged [Name ...] checks Enemies/rigged/<Name>_rigged.glb read straight from the GLB (triangles at most 3000, one skin with 10 to 150 joints,
+JOINTS_0 and WEIGHTS_0 present and no JOINTS_1 (so at most 4 influences), every vertex's weights sum to 1 within 0.002, no weight on a joint index outside the skin) plus the pose tests recorded in
+<Name>_rig_stats.json (Walk, Hit, Death each move vertices, finite) and the three clips in <Name>_clips.json. Names default to every *_rigged.glb found."""
 import json, pathlib, struct, sys
 import numpy as np
 from PIL import Image
@@ -9,6 +12,58 @@ from PIL import Image
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import familiar_cards as fc
 
+
+
+def rigged(names):
+    R = fc.ROOT / "Roblox Dev" / "Assets" / "3D" / "Enemies" / "rigged"
+    names = names or sorted(p.name[:-len("_rigged.glb")] for p in R.glob("*_rigged.glb"))
+    bad = 0
+    for n in names:
+        data = (R / f"{n}_rigged.glb").read_bytes()
+        clen = struct.unpack("<I", data[12:16])[0]
+        j = json.loads(data[20:20 + clen])
+        bo = 20 + clen + 8
+        prim = j["meshes"][0]["primitives"][0]
+        at = prim["attributes"]
+
+        def acc(i):
+            a = j["accessors"][i]
+            bv = j["bufferViews"][a["bufferView"]]
+            ncomp = {"SCALAR": 1, "VEC2": 2, "VEC3": 3, "VEC4": 4}[a["type"]]
+            dt = {5121: "u1", 5123: "<u2", 5125: "<u4", 5126: "<f4"}[a["componentType"]]
+            off = bo + bv.get("byteOffset", 0) + a.get("byteOffset", 0)
+            item = np.dtype(dt).itemsize * ncomp
+            stride = bv.get("byteStride", item)
+            raw = np.frombuffer(data, dtype=np.uint8, count=stride * (a["count"] - 1) + item, offset=off)
+            out = np.lib.stride_tricks.as_strided(raw, shape=(a["count"], item), strides=(stride, 1)).copy().view(dt).reshape(a["count"], ncomp)
+            if a.get("normalized"):
+                out = out.astype(float) / np.iinfo(np.dtype(dt)).max
+            return out
+        tris = sum(j["accessors"][pr["indices"]]["count"] // 3 for pr in j["meshes"][0]["primitives"])
+        skins = j.get("skins", [])
+        nj = len(skins[0]["joints"]) if skins else 0
+        jt, wt = acc(at["JOINTS_0"]) if "JOINTS_0" in at else None, acc(at["WEIGHTS_0"]) if "WEIGHTS_0" in at else None
+        st = json.loads((R / f"{n}_rig_stats.json").read_text())
+        cl = json.loads((R / f"{n}_clips.json").read_text())["clips"]
+        wsum = wt.astype(float).sum(1) if wt is not None else np.zeros(1)
+        checks = {
+            f"triangles {tris} <= 3000": tris <= 3000,
+            f"one skin, {nj} joints (10..150)": len(skins) == 1 and 10 <= nj <= 150,
+            "JOINTS_0 and WEIGHTS_0 present, no JOINTS_1 (max 4 influences)": jt is not None and wt is not None and "JOINTS_1" not in at,
+            f"weights sum to 1 (min {wsum.min():.4f}, max {wsum.max():.4f})": bool(np.abs(wsum - 1).max() < 0.002),
+            "joint indices inside the skin": jt is not None and bool(((wt > 0) <= (jt < nj)).all()),
+            "pose tests Walk/Hit/Death move vertices, finite": all(st["pose_tests"][c]["vertices_moved"] > 0 and st["pose_tests"][c]["finite"] for c in ("Walk", "Hit", "Death")),
+            "clips Walk, Hit, Death with keys": all(len(cl.get(c, {}).get("keys", [])) >= 10 for c in ("Walk", "Hit", "Death")),
+        }
+        print(f"{n} ({st['archetype']}, {len(st['bones'])} bones): " + "; ".join(f"{k} {'ok' if v else 'FAIL'}" for k, v in checks.items()))
+        print("   pose tests: " + ", ".join(f"{c} moved {t['vertices_moved']} verts max {t['max_move_height_fraction']:.2f} H" for c, t in st["pose_tests"].items()))
+        bad += sum(not v for v in checks.values())
+    print(f"rigged enemies {len(names)}: problems {bad}")
+    sys.exit(1 if bad or not names else 0)
+
+
+if sys.argv[1] == "--rigged":
+    rigged(sys.argv[2:])
 name = sys.argv[1]
 budget = int(sys.argv[2]) if len(sys.argv) > 2 else 3000
 D = fc.ROOT / "Roblox Dev" / "Assets" / "3D" / "Enemies" / name

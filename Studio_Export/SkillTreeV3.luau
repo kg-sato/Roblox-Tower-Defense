@@ -66,6 +66,7 @@ return function(env)
 	for _, g in treeGui:GetChildren() do if g:IsA("UIGradient") then g.Enabled = false end end
 	treeGui.BackgroundColor3, treeGui.BackgroundTransparency = INK, 0
 	local root = new("Frame", { Name = "TreeV3", BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 13, ClipsDescendants = true }, treeGui)
+	new("Frame", { Name = "Scrim", BackgroundColor3 = INK, BackgroundTransparency = 0.4, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 13 }, root)
 	local S = new("Frame", { Name = "Stage", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1, 1), ZIndex = 14 }, root)
 	new("UIAspectRatioConstraint", { AspectRatio = 16 / 9, AspectType = Enum.AspectType.FitWithinMaxSize }, S)
 
@@ -237,8 +238,14 @@ return function(env)
 		local ar = ARCANA[gi] or ARCANA[1]
 		local far
 		for _, n in Config.TREE do if n.color == col and (not far or P[n.id].Magnitude > P[far].Magnitude) then far = n.id end end
-		local p = P[far] + dir * 0.13
-		p = Vector2.new(math.clamp(p.X, -0.78, 0.78), math.clamp(p.Y, -0.39, 0.39))
+		local p = P[far] + dir * 0.15
+		for _ = 1, 12 do -- keep clear of every lantern
+			for _, n in Config.TREE do
+				local dv = p - P[n.id]
+				if dv.Magnitude < 0.125 and dv.Magnitude > 0 then p += dv.Unit * 0.035 end
+			end
+			p = Vector2.new(math.clamp(p.X, -0.8, 0.8), math.clamp(p.Y, -0.38, 0.33))
+		end
 		local ch = 0.115 -- a small tarot card: double border, numeral, a sigil, the name
 		local rd = new("Frame", { BackgroundColor3 = INK, BackgroundTransparency = 0.05, AnchorPoint = Vector2.new(0.5, 0.5), Position = at(p), Size = UDim2.fromScale(ch * 0.64 * AR, ch), ZIndex = 16 }, S)
 		new("UICorner", { CornerRadius = UDim.new(0.06, 0) }, rd)
@@ -267,7 +274,9 @@ return function(env)
 		local h = isHub and 0.125 or HN
 		local cont = new("Frame", { Name = id, BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = at(P[id]), Size = sq(h), ZIndex = 18 }, S)
 		local halo = new("ImageLabel", { BackgroundTransparency = 1, Image = A.glow, ImageColor3 = LIGHT, ImageTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(2.4, 2.4), ZIndex = 17 }, cont)
-		local orbit = new("ImageLabel", { BackgroundTransparency = 1, Image = A.ring, ImageColor3 = LIGHT, ImageTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1.55, 1.55), ZIndex = 18 }, cont)
+		local orbit = new("Frame", { BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1.55, 1.55), ZIndex = 18 }, cont)
+		new("UICorner", { CornerRadius = UDim.new(0.5, 0) }, orbit)
+		local oStroke = new("UIStroke", { Color = LIGHT, Thickness = 1, Transparency = 1 }, orbit)
 		local moon = new("Frame", { BackgroundColor3 = CREAM, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, -0.05), Size = UDim2.fromScale(0.09, 0.09), BackgroundTransparency = 1, ZIndex = 19 }, orbit)
 		new("UICorner", { CornerRadius = UDim.new(1, 0) }, moon)
 		local ring = new("Frame", { BackgroundColor3 = INK, BackgroundTransparency = 0.12, BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 19 }, cont)
@@ -280,12 +289,14 @@ return function(env)
 		new("UICorner", { CornerRadius = UDim.new(1, 0) }, outer)
 		new("UIStroke", { Color = CREAM, Thickness = 1, Transparency = 0.55 }, outer)
 		local glyph = new("ImageLabel", { BackgroundTransparency = 1, Image = ICONS[id] or "", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.66, 0.66), ZIndex = 20 }, cont)
-		local rank = new("TextLabel", { BackgroundTransparency = 1, Text = "", TextColor3 = LIGHT, TextScaled = true, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 1.02), Size = UDim2.fromScale(0.7, 0.3), ZIndex = 20 }, cont)
+		local rank = new("TextLabel", { BackgroundColor3 = INK, BackgroundTransparency = 0.15, Text = "", TextColor3 = CREAM, TextScaled = true, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 1.0), Size = UDim2.fromScale(0.5, 0.26), ZIndex = 21, Visible = false }, cont)
+		new("UICorner", { CornerRadius = UDim.new(0.5, 0) }, rank)
+		new("UIStroke", { Color = GOLD, Thickness = 1 }, rank)
 		local nextR = new("Frame", { BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1.35, 1.35), ZIndex = 19, Visible = false }, cont)
 		new("UICorner", { CornerRadius = UDim.new(1, 0) }, nextR)
 		local nStroke = new("UIStroke", { Color = CREAM, Thickness = 1.5, Transparency = 0.2 }, nextR)
 		local btn = new("TextButton", { BackgroundTransparency = 1, Text = "", AutoButtonColor = false, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1.15, 1.15), ZIndex = 22 }, cont)
-		N[id] = { id = id, node = n, cont = cont, halo = halo, orbit = orbit, moon = moon, ring = ring, stroke = stroke, iStroke = iStroke, outer = outer, glyph = glyph, rank = rank, nextR = nextR, nStroke = nStroke, btn = btn, h = h, ph = rng:NextNumber(0, 6.28) }
+		N[id] = { oStroke = oStroke, id = id, node = n, cont = cont, halo = halo, orbit = orbit, moon = moon, ring = ring, stroke = stroke, iStroke = iStroke, outer = outer, glyph = glyph, rank = rank, nextR = nextR, nStroke = nStroke, btn = btn, h = h, ph = rng:NextNumber(0, 6.28) }
 	end
 
 	-- 7) the popup: an ornate gold-ink frame, a title, a thin rule, a description, cost and status
@@ -320,6 +331,8 @@ return function(env)
 	new("UITextSizeConstraint", { MaxTextSize = 22 }, hint)
 	local spText = new("TextLabel", { BackgroundTransparency = 1, Text = "0", TextColor3 = CREAM, TextScaled = true, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.fromScale(0.9, 0.55), Size = UDim2.fromScale(0.05, 0.8), ZIndex = 31 }, bar)
 	new("UITextSizeConstraint", { MaxTextSize = 40 }, spText)
+	spText:SetAttribute("KeepFont", true)
+	spText.Font = Enum.Font.Bodoni
 	new("ImageLabel", { BackgroundTransparency = 1, Image = ICONS.Start, ImageColor3 = LIGHT, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromScale(0.905, 0.55), Size = UDim2.fromScale(0.03, 0.7), ZIndex = 31 }, bar)
 	new("TextLabel", { BackgroundTransparency = 1, Text = "POINTS", TextColor3 = GOLD, TextScaled = true, TextXAlignment = Enum.TextXAlignment.Left, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromScale(0.94, 0.58), Size = UDim2.fromScale(0.06, 0.35), ZIndex = 31 }, bar)
 	local armed = false
@@ -464,9 +477,10 @@ return function(env)
 		d.big, d.st = big, st
 		if instant then d.cont.Size = sq(big) else tw(d.cont, 0.45, { Size = sq(big) }, Enum.EasingStyle.Back) end
 		d.outer.Visible = st == "maxed"
-		d.orbit.ImageTransparency = owned and 0.35 or 1
+		d.oStroke.Transparency = owned and 0.45 or 1
 		d.moon.BackgroundTransparency = owned and 0 or 1
 		d.rank.Text = (lvl > 0 and st ~= "start") and (lvl .. "/" .. node.max) or ""
+		d.rank.Visible = d.rank.Text ~= ""
 		d.stroke.Thickness = 2
 		if st == "locked" then -- clearly there, clearly dark: a dim gold ring on ink
 			d.stroke.Color, d.stroke.Transparency = Color3.fromRGB(150, 124, 80), 0.1

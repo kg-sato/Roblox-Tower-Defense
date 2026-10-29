@@ -1,3 +1,20 @@
 PASS
-Note: Roblox Dev/Research/Game Design and Market/Monetisation players accept vs hate.md
-Sources: 3 Wikipedia pages and the Roblox paid-random-items doc read, fetched 2026-10-28. No survey data on Roblox players; "accepted" is inferred from backlash and regulation history, stated in note.
+Note: Roblox Dev/Research/UI/HUD Collection Results Boards.md (3 boards x 5 sources, ASCII HUD wireframe); linked in Research/Index.md. Sources are WebSearch summaries, pages not fetched in full.
+HUD:
+https://arxiv.org/pdf/2110.08753
+https://openaccess.cms-conferences.org/publications/book/978-1-964867-13-7/article/978-1-964867-13-7_13
+https://www.abratabia.com/game-ui-design/responsive-game-ui.php
+https://bugnet.io/blog/qa-testing-for-touch-controls-on-mobile
+https://create.roblox.com/docs/reference/engine/classes/GuiService.md
+Collection:
+https://uwspace.uwaterloo.ca/items/24cdb052-87cb-48a6-ae80-b96220f0ee2d/full
+https://hearthstone.wiki.gg/wiki/Collection_manager
+https://primagames.com/tips/is-there-a-marvel-snap-collection-and-statistics-tracker-answered
+https://www.ginx.tv/en/card-variant-album-release
+https://marvelsnapzone.com/marvel-snap-tracker-companion-feature-update/
+Results:
+https://bugnet.io/blog/how-to-design-a-results-or-victory-screen
+https://dev.overwolf.com/ow-native/guides/product-guidelines/app-screen-behavior/post-game-behavior
+https://community.gemsofwar.com/t/please-reorder-the-victory-cards-more-sensibly/73345
+https://paladinstudios.com/2012/05/07/momonga-monday-the-new-retina-interface
+https://uxplanet.org/on-our-way-to-win-a-gamification-ui-ux-case-study-776ae75b8273

@@ -1,0 +1,7 @@
+PASS
+grep -E "^\| (Bosses|Stage set 5)" "Roblox Dev/Systems.md" | grep -c -i "idea"  -> 0 (rows at lines 18, 73, 74 say "testing")
+Systems.md:18: | Bosses (telegraphed abilities) | testing (2026-10-29: server framework built and headless-tested ... client phase bar and phase banner still open)
+Systems.md:73: | Bosses (per-stage designs, phases) | testing (2026-10-29: Config.BOSSES five bosses x three phases ... per-boss specials and client phase bar not built)
+Systems.md:74: | Stage set 5 (Above the Grey Veil) | testing (installed 2026-10-29: backdrop script BackdropVeil ...)
+Design/Game Design Doc.md:35: - **Roster:** 20 familiars replace the seven pets ...
+Backlog.md: ticked stage set 5, roles, economy, boss server, Pace handler, Crow/Thief models, 20 familiars, UILib split, comms/notify; open: boss client phase bar, per-boss specials, Hit/Death client hooks.

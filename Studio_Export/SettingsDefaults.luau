@@ -18,7 +18,7 @@ local RULES: { [string]: Rule } = {
 	particles = { kind = "enum", values = { "low", "default", "high" } },
 	backdrop = { kind = "enum", values = { "moving", "still" } },
 	numberFormat = { kind = "enum", values = { "short", "grouped", "scientific" } },
-	gameSpeed = { kind = "choice", values = { 1, 2 } },
+	gameSpeed = { kind = "choice", values = { 1, 2, 3 } },
 	cinematics = { kind = "enum", values = { "full", "short", "off" } },
 }
 

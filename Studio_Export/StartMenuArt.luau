@@ -80,7 +80,7 @@ return function(env)
 		for k = 1, 2 do
 			echoes[k] = new("ImageLabel", { BackgroundTransparency = 1, Image = A.title, Position = UDim2.fromOffset(-20, 20 - k * 14), Size = UDim2.fromOffset(TW, TH), ImageTransparency = 0.55 + k * 0.15, ZIndex = 13 }, col)
 		end
-		local tag = new("TextLabel", { Name = "Tagline", BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 140), Size = UDim2.fromOffset(470, 26), Text = "Summon familiars. Merge three that touch. Hold the lamplit lane.", TextSize = 20, TextColor3 = MUTED, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 14 }, col)
+		local tag = new("TextLabel", { Name = "Tagline", BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 140), Size = UDim2.fromOffset(470, 26), Text = "Summon familiars. Merge three that touch. Hold the lamplit lane.", TextSize = 22, TextColor3 = IVORY, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 14 }, col)
 		tag.FontFace = Font.new("rbxasset://fonts/families/AccanthisADFStd.json", Enum.FontWeight.Bold, Enum.FontStyle.Italic)
 		-- flourish rule: a line that fades out to the right, a small diamond where it starts
 		local rule = new("Frame", { BackgroundColor3 = GOLD, BorderSizePixel = 0, Position = UDim2.fromOffset(12, 190), Size = UDim2.fromOffset(328, 1), ZIndex = 14 }, col)
@@ -126,8 +126,8 @@ return function(env)
 		head:SetAttribute("KeepFont", true)
 		head.FontFace = Font.new("rbxasset://fonts/families/Fondamento.json")
 		for i, line in newsLines do
-			if i > 3 then break end
-			new("TextLabel", { BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 354 + (i - 1) * 26), Size = UDim2.fromOffset(560, 24), Text = "·  " .. line, TextSize = 18, TextColor3 = MUTED, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 14 }, col)
+			if i > 1 then break end
+			new("TextLabel", { BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 354 + (i - 1) * 26), Size = UDim2.fromOffset(560, 30), Text = "·  " .. line, TextSize = 24, TextColor3 = IVORY, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 14 }, col)
 		end
 
 		-- arrival: the echoes catch up with the title, the rest fades in from the left

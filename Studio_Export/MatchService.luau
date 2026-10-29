@@ -16,7 +16,7 @@ local ProfileStore = require(ServerScriptService:WaitForChild("ProfileStore")) :
 
 -- What is saved between visits (see MatchSim.meta / loadMeta). Only account-level progress: the pets on the board
 -- and the current stage belong to a single run and are not saved.
-local TEMPLATE = { version = 1, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, tutorialDone = false, settings = SettingsDefaults.copyDefaults(), seen = {} }
+local TEMPLATE = { version = 1, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, bestStage = 1, lastStage = 1, tutorialDone = false, settings = SettingsDefaults.copyDefaults(), seen = {} }
 local store = ProfileStore.New("PlayerData_v1", TEMPLATE)
 local profiles: { [Player]: any } = {}
 
@@ -74,7 +74,7 @@ type Session = {
 	accum: number,
 	lastAction: number,
 	snapTimer: number,
-	speed: number, -- game speed 1 or 2 (setting)
+	speed: number, -- game speed 1, 2 or 3 (setting)
 	gclock: number, -- game clock: real seconds times speed; enemy spawn times use it so clients can place enemies at any speed
 }
 
@@ -170,6 +170,9 @@ local function loadProfile(player: Player)
 	d.xp = count(d.xp, 0, 1e12)
 	d.sp = count(d.sp, 0, 9999)
 	d.gems = count(d.gems, 0, 1e12)
+	d.bestStage = math.max(1, count(d.bestStage, 1, 1000))
+	d.lastStage = math.max(1, count(d.lastStage, 1, 1000))
+	d.bestStage = math.max(d.bestStage, d.lastStage)
 	d.tutorialDone = d.tutorialDone == true
 	local tree = {}
 	if type(d.tree) == "table" then

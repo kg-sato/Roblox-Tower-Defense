@@ -1,1 +1,1 @@
-{"name": "Gargoyle", "size": 1024, "uv_layers": ["UVMap"], "triangles": 6000}
+{"name": "Gargoyle", "size": 1024, "uv_layers": ["UVMap"], "triangles": 6000, "speckle_before": 0.017, "speckle_after": 0.0047}
