@@ -13,17 +13,18 @@ Solo, one-month Roblox game. Place file: `Claude.rbxl`. Studio is connected thro
 - `Animation Kit/`: third-party R6/R15 humanoid animation pipeline by fwjelaa (credit required). Read `Animation Kit/START-HERE.md` and `Roblox Dev/Research/3D and Art/Animation Kit Review.md` before using it. Not a VFX tool; not for our procedural pets. Installed in `Claude.rbxl` on 2026-10-24 as `ServerStorage.AnimKit` (no HttpService helpers); test emote `R6_Cheer` is in `ServerStorage.Animations`, test dummy in `ServerStorage.TestRigs`. Do not set up Blender, add an API key, upload or publish animations without the user's OK.
 
 ## Every session
+0. Read `QUEUE.md` (repo root). Whenever more than one chat is working on this project, its rules are mandatory for every part of the project: claim a shared resource (Studio, ComfyUI, GPU, Blender, file server, git) or another chat's area before touching it, release it when done, only the Studio holder starts or stops Play, and keep your queue section current (the user, 2026-10-29).
 1. Read `Roblox Dev/Home.md`, then `Roblox Dev/Backlog.md` and any notes it links that matter for today's task.
 2. When work is done, update the vault: tick items in `Backlog.md`, add or close bugs in `Bug Log.md`, update statuses in `Systems.md`, and add one line to `Roblox Dev/Session Log.md`.
 
 ## Vault notes (in `Roblox Dev/`)
-- `Game Design Doc.md`: pitch, core loop, progression, scope
+- `Design/Game Design Doc.md`: pitch, core loop, progression, scope (`Design/` also holds Feature Pipeline, How to Add a Character, User Inputs, 3D Assets)
 - `Session Log.md`: one line per work session; `Research/Index.md`: research notes by area; `Planning/`: early plans
 - `Systems.md`: every system and its status
 - `Bug Log.md`: open and fixed bugs
 - `Backlog.md`: what's next
 - `Analytics/`: weekly analytics notes (template in `Templates/Weekly Analytics.md`)
-- `3D Assets.md`: 3D pipeline and asset list; model files in `Assets/3D/`
+- `Design/3D Assets.md`: 3D pipeline and asset list; model files in `Assets/3D/`
 
 Use Obsidian `[[wikilinks]]` when linking notes.
 
@@ -34,6 +35,7 @@ Output `.glb` files go to `Roblox Dev/Assets/3D/`, cleaned and reduced under 20,
 License: Tencent's license does not apply in the EU, UK or South Korea.
 
 ## Rules
+- Uploads to the user's Roblox account (meshes, textures, images, audio, animations) and Studio AI generation (`generate_mesh`, `generate_texture`, `generate_material`, `insert_asset` of vetted free assets) are pre-approved since 2026-10-28; log every asset id. Publishing the game still needs the user. Older "needs the user's OK" notes about uploads below are superseded.
 - Server decides currency, rewards, purchases, inventory and cooldowns. Never trust the client.
 - Use ProfileStore for player data.
 - Keep meshes under 20,000 triangles.

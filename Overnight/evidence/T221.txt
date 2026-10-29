@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Progression Rules.md, section "Trade rules")
+No trading in v1 (design doc says so); reasons: duplication exploits, scams in a 9 to 16 audience, server-owned inventory. Future option: one-way, rate-limited gifting of Common duplicates between friends.
+Limits: a note; no code.

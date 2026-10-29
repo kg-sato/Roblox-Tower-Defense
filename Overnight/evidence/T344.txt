@@ -1,0 +1,3 @@
+PASS (a "Refresh 2026-10-29" section inserted before "One-line pitch" in Roblox Dev/Design/Game Design Doc.md)
+Summarises the five stage sets and bosses, the 12-familiar roster by rarity, the enemy families, the computed numbers, the proposals awaiting the user, what in the older text is out of date (three worlds, seven pets, tier looks), and links to the new notes including the character and stage indexes (which closes the link gap noted in T243 and T244).
+Limits: the older sections were not rewritten, only flagged; the roster rarities were read from the lore notes.

@@ -1,0 +1,3 @@
+PASS WITH A FINDING (documented: Roblox Dev/Design/Difficulty Curve.md)
+Replayed Config.stageSpawns, hpScale, ENEMIES and PATH for stages 1 to 25 in Python and wrote the table (enemy mix, hp scale, total hp, a tier-1-Ember yardstick). Finding: one 234-stud path serves all 25 stages, so path length is constant and only hp and count (capped at 28 from stage 18) shape difficulty; stage 25 is about 840x stage 1 in total hp. Crossing times: Grunt 29.2 s, Swift 18.0 s, Tank 46.8 s, Boss 58.5 s against a 35 s boss timer.
+Limits: computed from formulas, not played; the yardstick ignores range, misses and upgrades.

@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Design/Credits and Licences.md (10-row licence table from the project's own logs, draft on-screen credit text, licence list screen, upkeep rules, 5 open questions).
+Machine check: python Overnight/evidence/T073_check.py (exit 0). Output: table rows=10; decisions flagged=5; PROBLEMS: none. It verifies the source files exist and are cited, the five music author names appear in both the page and Audio/CREDITS.md, the fwjelaa (FWJ STUDIOS) credit is present, and Unity Labs, AnnoMotion, particlefx, Yuruzuu and CodeManu appear in both the page and VFX/ASSETS.md.
+Gaps (flagged on the page, not guessed): ProfileStore licence not in its header; Hunyuan3D (Tencent) terms and your location; which particlefx effects use CC BY sprites; Yuruzuu credit; whether to name Claude and Roblox's AI disclosure rules (not read). Not legal advice; not built.

@@ -1,0 +1,17 @@
+Archivist        Rare      lines 3 lore_bottom  795 name_font 40 plate_contrast  5.99 lore_contrast 13.71 ok
+BrassHound       Common    lines 3 lore_bottom  795 name_font 40 plate_contrast  9.18 lore_contrast 13.71 ok
+CantorVesper     Mythic    lines 2 lore_bottom  764 name_font 40 plate_contrast  9.83 lore_contrast 13.71 ok
+DameOrrery       Mythic    lines 3 lore_bottom  795 name_font 40 plate_contrast  8.61 lore_contrast 13.71 ok
+Ember            Common    lines 3 lore_bottom  795 name_font 40 plate_contrast  4.63 lore_contrast 13.71 ok
+Frostling        Rare      lines 3 lore_bottom  795 name_font 40 plate_contrast 11.20 lore_contrast 13.71 ok
+Gargoyle         Rare      lines 3 lore_bottom  795 name_font 40 plate_contrast  8.52 lore_contrast 13.71 ok
+GreyVeilWraith   Legendary lines 3 lore_bottom  795 name_font 40 plate_contrast 15.47 lore_contrast 13.71 ok
+MirrorChorister  Epic      lines 3 lore_bottom  795 name_font 40 plate_contrast  5.19 lore_contrast 13.71 ok
+MothLantern      Common    lines 3 lore_bottom  795 name_font 40 plate_contrast  7.95 lore_contrast 13.71 ok
+Mourner          Epic      lines 3 lore_bottom  795 name_font 40 plate_contrast 15.79 lore_contrast 13.71 ok
+Sentinel         Common    lines 3 lore_bottom  795 name_font 40 plate_contrast  6.20 lore_contrast 13.71 ok
+StarDrake        Legendary lines 3 lore_bottom  795 name_font 40 plate_contrast 12.67 lore_contrast 13.71 ok
+TheLamplighter   Celestial lines 2 lore_bottom  764 name_font 40 plate_contrast 12.92 lore_contrast 13.71 ok
+VeilWalker       Celestial lines 3 lore_bottom  795 name_font 40 plate_contrast 13.61 lore_contrast 13.71 ok
+Ward             Rare      lines 3 lore_bottom  795 name_font 40 plate_contrast  6.56 lore_contrast 13.71 ok
+cards: 16 problems: 0

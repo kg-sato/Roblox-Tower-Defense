@@ -1,0 +1,4 @@
+familiar=Mourner
+fill ratio (64 px crop) = 0.29
+IoU vs basic shapes: circle=0.37, square=0.29, triangle=0.49, plain tall column=0.75
+view overlap front/side=0.72 front/back=0.93 side/back=0.73

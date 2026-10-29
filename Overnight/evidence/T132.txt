@@ -1,0 +1,6 @@
+PASS (11 enemy and boss meshes uploaded to the user's Roblox account and loaded from Roblox in Studio Edit mode)
+Uploaded with tools/upload_asset.py (Open Cloud, user 872430111, pre-approved 2026-10-28), logged in tools/uploads.json (names Enemy_<Name>):
+FogWisp 128040982375596; BrassSentinel 95028100682755; ClockworkCrow 85256591738111; LanternThief 107872593870870; Unbound 77114404609027; UnboundP2 132477005165063; UnboundP3 108536993980488; ClockmakerAutomaton 105773609287319; StarChoirEcho 83373040785070; HollowCourtRegent 112741419053232; Clockmaker 117038627587754.
+Check (Studio Edit mode, claim in QUEUE.md, InsertService:LoadAsset on each id, then Destroy): all 11 loaded without error; each has a MeshPart with a texture or SurfaceAppearance; sizes match the Blender stats (for example Clockmaker 9.9 x 10.45 x 3.25, Crow 5.53 x 2.68 x 4.35). FogWisp imports as 3 MeshParts (cloak plus the dark recess and eye points, which keep separate materials), the others as 1.
+Not checked: how they look in Play (lit, textured, scaled in a stage); only LoadAsset in Edit mode, no Play. Not saved into Claude.rbxl (loaded copies were deleted). The Studio claim was released.
+Limits: concept-grade blocky models; the Fog Wisp alpha texture needs AlphaMode set when it is used; the ids are not wired into the game yet.

@@ -1,0 +1,1 @@
+{"name": "Sentinel", "frames": 121, "fps": 30, "bones": ["Root", "Torso", "Head"], "max_vertex_motion_by_frame": {"1": 0.0, "15": 0.0967, "30": 0.0, "48": 0.4141, "60": 0.0, "72": 0.3168, "84": 0.3438, "96": 0.0327, "108": 0.0439, "121": 0.0}, "max_motion": 0.4141, "loop_closure_error": 0.0, "height": 4.0}

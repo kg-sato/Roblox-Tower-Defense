@@ -1,0 +1,1 @@
+{"name": "Frostling", "frames": 121, "fps": 30, "bones": ["Root", "Torso", "Head"], "max_vertex_motion_by_frame": {"1": 0.0, "15": 0.0966, "30": 0.0, "48": 0.5623, "60": 0.3102, "72": 0.1955, "84": 0.2498, "96": 0.0326, "108": 0.0438, "121": 0.0}, "max_motion": 0.5623, "loop_closure_error": 0.0, "height": 4.0}

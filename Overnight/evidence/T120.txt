@@ -1,0 +1,5 @@
+PASS (Star Choir's Echo boss model built and checked; blocky concept-grade; not imported into Roblox; look UNVERIFIED by the user)
+Built: Blender/make_star_echo.py (on Blender/enemy_lib.py). Output Roblox Dev/Assets/3D/Enemies/StarChoirEcho/ (.glb, .fbx, _Palette.png, _stats.json, three stills). Model: a tall hovering singer (no legs) in a silver-blue robe with an open dark mouth, two blue-glass eyes, arms raised in song, and a spiked gold star halo behind its head, flanked by two smaller echo copies at different heights with blue and red halos; 564 triangles.
+Checks (tools/verify_enemy_model.py StarChoirEcho, Overnight/evidence/T120_verify.txt, "problems 0"): GLB parses; 564 triangles against the 3,000 budget; front silhouette against the 12 familiar fronts: highest 0.30 (Ember; limit 0.5), worst over all views 0.39; views differ (smallest 1-IoU 0.51). Passed on the first build.
+Visual check: viewed the front still: one tall singer with a star halo and two smaller echoes.
+Limits: very low detail, flat colours, solid halos, no rig or hover/echo animation, nothing tested in Roblox, the "first sign of the sky" is only the star halos, boss behaviour is T145.

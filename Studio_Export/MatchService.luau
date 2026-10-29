@@ -8,6 +8,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Config = require(Shared:WaitForChild("Config"))
+local ActionArgs = require(Shared:WaitForChild("ActionArgs"))
 local MatchSim = require(Shared:WaitForChild("MatchSim"))
 local SettingsDefaults = require(Shared:WaitForChild("SettingsDefaults"))
 
@@ -15,12 +16,44 @@ local ProfileStore = require(ServerScriptService:WaitForChild("ProfileStore")) :
 
 -- What is saved between visits (see MatchSim.meta / loadMeta). Only account-level progress: the pets on the board
 -- and the current stage belong to a single run and are not saved.
-local TEMPLATE = { version = 1, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, tutorialDone = false, settings = SettingsDefaults.copyDefaults() }
+local TEMPLATE = { version = 1, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, tutorialDone = false, settings = SettingsDefaults.copyDefaults(), seen = {} }
 local store = ProfileStore.New("PlayerData_v1", TEMPLATE)
 local profiles: { [Player]: any } = {}
 
+-- Collection (T103): the familiars a player has pulled. The server decides; the client only reads the player attribute SeenPets (comma list).
+local seenCache: { [Player]: { [string]: boolean } } = {}
+local function publishSeen(player: Player)
+	local ids = {}
+	for id in seenCache[player] or {} do
+		table.insert(ids, id)
+	end
+	table.sort(ids)
+	player:SetAttribute("SeenPets", table.concat(ids, ","))
+end
+local function markSeen(player: Player, pet: any)
+	if type(pet) ~= "string" or not Config.PETS[pet] then
+		return
+	end
+	local seen = seenCache[player]
+	if not seen then
+		seen = {}
+		seenCache[player] = seen
+	end
+	if seen[pet] then
+		return
+	end
+	seen[pet] = true
+	local profile = profiles[player]
+	if profile and type(profile.Data.seen) == "table" then
+		profile.Data.seen[pet] = true
+	end
+	publishSeen(player)
+end
+
 local TICK = 0.1
 local MIN_ACTION_GAP = 0.05
+local ACTION_KINDS = { Roll = true, Drop = true, Move = true, Recycle = true, Upgrade = true, Ult = true, StartWave = true, AutoWave = true, Skill = true, Respec = true, EndTutorial = true }
+local lastStart: { [Player]: number } = {}
 
 local remotes = Instance.new("Folder")
 remotes.Name = "Remotes"
@@ -61,6 +94,9 @@ local function startRun(player: Player, tutorial: boolean)
 		if kind == "Spawn" then
 			local s = sessions[player]
 			payload.spawnTime = s and s.gclock or 0
+		end
+		if kind == "Roll" then
+			markSeen(player, payload.pet)
 		end
 		-- a Legendary pull is the one shared moment: other players in the server get a short banner (T20)
 		if kind == "Roll" and payload.rarity == "Legendary" and not payload.bonus then
@@ -118,6 +154,45 @@ local function loadProfile(player: Player)
 	profile:AddUserId(player.UserId) -- GDPR: lets the data be found and deleted for this user
 	profile:Reconcile() -- fill in any fields added to TEMPLATE after this player's first save
 	profile.Data.settings = SettingsDefaults.sanitize(profile.Data.settings) -- a damaged or edited save cannot hold bad values
+	-- security audit (T124): every other saved field is clamped too, and the version is stamped after any migration
+	local d = profile.Data
+	local function count(v: any, fallback: number, max: number): number
+		if type(v) ~= "number" or v ~= v or v < 0 then
+			return fallback
+		end
+		return math.min(math.floor(v), max)
+	end
+	d.level = math.max(1, count(d.level, 1, 999))
+	d.xp = count(d.xp, 0, 1e12)
+	d.sp = count(d.sp, 0, 9999)
+	d.gems = count(d.gems, 0, 1e12)
+	d.tutorialDone = d.tutorialDone == true
+	local tree = {}
+	if type(d.tree) == "table" then
+		for id, lvl in d.tree do
+			if type(id) == "string" and Config.TREE_BY_ID[id] ~= nil and id ~= "Start" then
+				tree[id] = count(lvl, 0, 99)
+			end
+		end
+	end
+	tree.Start = 1
+	d.tree = tree
+	-- collection (T103): keep only real familiar ids, then merge with what was pulled before the profile finished loading
+	local seen = {}
+	if type(d.seen) == "table" then
+		for id, v in d.seen do
+			if type(id) == "string" and Config.PETS[id] ~= nil and v == true then
+				seen[id] = true
+			end
+		end
+	end
+	for id in seenCache[player] or {} do
+		seen[id] = true
+	end
+	d.seen = seen
+	seenCache[player] = table.clone(seen)
+	publishSeen(player)
+	d.version = TEMPLATE.version -- no migration is needed yet; add one here before bumping TEMPLATE.version
 	profile.OnSessionEnd:Connect(function()
 		profiles[player] = nil
 		player:Kick("Your data was loaded in another server. Please rejoin.")
@@ -133,13 +208,9 @@ for _, player in Players:GetPlayers() do
 end
 
 -- Unit ids are positive integers handed out by the sim (the client calls them slots).
-local function isSlot(n: any): boolean
-	return type(n) == "number" and n % 1 == 0 and n >= 1 and n <= 1e7
-end
-
-local function isCoord(n: any): boolean
-	return type(n) == "number" and n == n and math.abs(n) < 1000
-end
+-- the pure rules live in Shared.ActionArgs, with headless tests (T125)
+local isSlot = ActionArgs.isSlot
+local isCoord = ActionArgs.isCoord
 
 toServer.OnServerEvent:Connect(function(player: Player, kind: any, a: any, b: any)
 	if type(kind) ~= "string" then
@@ -147,6 +218,11 @@ toServer.OnServerEvent:Connect(function(player: Player, kind: any, a: any, b: an
 	end
 	local session = sessions[player]
 	if kind == "Start" then
+			-- security audit (T123): one Start per second, so spam cannot pile up waiting threads
+			if os.clock() - (lastStart[player] or 0) < 1 then
+				return
+			end
+			lastStart[player] = os.clock()
 		if not session then
 			task.spawn(function()
 				local t0 = os.clock()
@@ -184,7 +260,11 @@ toServer.OnServerEvent:Connect(function(player: Player, kind: any, a: any, b: an
 			return
 		end
 		-- one key (a = key, b = value) or a batch (a = { key = value }, at most 16 keys); each value is validated on its own
-		local changes = if type(a) == "table" then a else { [a] = b }
+		-- security audit (T123): a missing key used to throw inside the table constructor
+			local changes = ActionArgs.settingChanges(a, b) -- shape rules in Shared.ActionArgs (T125)
+			if not changes then
+				return
+			end
 		local count, changed = 0, false
 		local speedBefore = profile.Data.settings.gameSpeed
 		for key, value in changes do
@@ -209,7 +289,8 @@ toServer.OnServerEvent:Connect(function(player: Player, kind: any, a: any, b: an
 		return
 	end
 	local now = os.clock()
-	if not session or now - session.lastAction < MIN_ACTION_GAP then
+	-- security audit (T123): unknown kinds no longer use up the gap, so spam cannot block a real action
+		if not ACTION_KINDS[kind] or not session or now - session.lastAction < MIN_ACTION_GAP then
 		return
 	end
 	session.lastAction = now
@@ -243,6 +324,8 @@ toServer.OnServerEvent:Connect(function(player: Player, kind: any, a: any, b: an
 		ok, reason = sim:setAuto(a)
 	elseif kind == "Skill" then
 		ok, reason = sim:skill(a)
+	elseif kind == "Respec" then
+		ok, reason = sim:respec()
 	elseif kind == "EndTutorial" then
 		sim:endTutorial()
 		ok = true
@@ -315,6 +398,7 @@ Players.PlayerRemoving:Connect(function(player)
 		profile:EndSession()
 	end
 	sessions[player] = nil
+	seenCache[player] = nil
 	lastSkip[player] = nil
 	lastSetting[player] = nil
 end)

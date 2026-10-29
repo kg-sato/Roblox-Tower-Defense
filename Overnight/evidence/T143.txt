@@ -1,0 +1,4 @@
+PASS (boss design written, not implemented): Boss 1 design: The Unbound at stage 5
+Where: Roblox Dev/Design/Boss Designs.md, the section for this boss: three phases, telegraphs, counters, clue, reward scale (all numbers PROPOSAL).
+Checked: follows the grief arc and clue table in Roblox Dev/Lore/The Clockmaker.md and the stage set lore; the generic Boss in Config.ENEMIES (700 hp, speed 4) is the baseline for the multipliers.
+Limits: a design document; the game has one generic Boss and none of these mechanics exist in code; the user decisions are listed at the end of the note.

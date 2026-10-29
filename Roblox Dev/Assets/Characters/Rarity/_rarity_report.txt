@@ -1,0 +1,13 @@
+Archivist        IoU vs base R 0.82 E 0.65 L 0.41 | floating shards 0/0/2/6 | width x 1.02/2.27/3.93 | subset True ok
+BrassHound       IoU vs base R 0.89 E 0.74 L 0.54 | floating shards 0/0/2/6 | width x 1.03/2.29/3.99 | subset True ok
+Ember            IoU vs base R 0.82 E 0.67 L 0.42 | floating shards 0/0/2/6 | width x 1.00/2.10/3.40 | subset True ok
+Frostling        IoU vs base R 0.77 E 0.61 L 0.36 | floating shards 0/0/2/6 | width x 1.00/2.12/3.44 | subset True ok
+Gargoyle         IoU vs base R 0.84 E 0.73 L 0.50 | floating shards 0/0/2/6 | width x 1.00/1.82/2.53 | subset True ok
+GreyVeilWraith   IoU vs base R 0.73 E 0.53 L 0.30 | floating shards 0/0/2/6 | width x 1.11/2.61/4.84 | subset True ok
+MirrorChorister  IoU vs base R 0.78 E 0.64 L 0.40 | floating shards 0/0/2/6 | width x 1.00/1.78/2.40 | subset True ok
+MothLantern      IoU vs base R 0.88 E 0.74 L 0.47 | floating shards 0/0/2/6 | width x 1.00/1.84/2.62 | subset True ok
+Mourner          IoU vs base R 0.77 E 0.58 L 0.35 | floating shards 0/0/2/6 | width x 1.09/2.58/4.77 | subset True ok
+Sentinel         IoU vs base R 0.84 E 0.68 L 0.41 | floating shards 0/0/2/6 | width x 1.00/2.09/3.37 | subset True ok
+StarDrake        IoU vs base R 0.73 E 0.57 L 0.32 | floating shards 0/0/2/6 | width x 1.00/1.95/2.94 | subset True ok
+Ward             IoU vs base R 0.86 E 0.72 L 0.50 | floating shards 0/0/2/6 | width x 1.00/2.17/3.63 | subset True ok
+familiars: 12 problems: 0

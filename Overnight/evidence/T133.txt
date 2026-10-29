@@ -1,0 +1,4 @@
+PASS WITH QUESTIONS (enemy bible written: Roblox Dev/Design/Enemy Bible.md)
+Content: a table of six families (Hollow Parishioner, Fog Wisp, Brass Sentinel, Clockwork Crow, Lantern Thief, The Unbound as boss) with layer, role, silhouette, colour and model link, plus a lore line and counter for each. Facts checked against Config.ENEMIES (four kinds today) and the research roster table. Numbers marked PROPOSAL are design targets, not implemented.
+Conflict found and recorded: the research note describes the Unbound as a mage with a crown of arms; the lore and chapter 1 describe a faceless figure of fog. I followed the lore and asked the user which should stand.
+Limits: a design document; no code; the Hollow Parishioner still has no model.

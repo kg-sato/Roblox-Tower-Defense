@@ -1,0 +1,3 @@
+PASS (vault updated 2026-10-29)
+Systems.md: the Test harness row moved from idea to testing (12 suites PASS) and six rows appended (familiar roster, models and clips, collection screen, enemy and boss models, bosses design, stage set 5). Backlog.md: eight new open items and three done items. Bug Log.md: two new open rows (#10 stages 21 to 25 reuse set 1, major; #11 sound cap priority flaw, minor). Session Log.md: one line appended. Known Issues.md and the planning notes were written earlier today.
+Limits: the older rows of Systems.md (for example Bosses idea, Settings idea) were left as they were except where noted; statuses are my reading, not the user's.

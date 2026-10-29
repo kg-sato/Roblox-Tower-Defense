@@ -1,0 +1,1 @@
+{"name": "Ember", "frames": 30, "fps": 30, "centroid_y_rest": -0.0012, "centroid_y_windup": 0.4142, "centroid_y_release": -0.8569, "bones": ["Root"], "max_vertex_motion_by_frame": {"1": 0.0, "4": 0.3623, "8": 0.9025, "10": 1.0896, "11": 1.8382, "13": 1.6813, "17": 0.3731, "20": 0.2735, "24": 0.0, "30": 0.0}, "max_motion": 1.8382, "loop_closure_error": 0.0, "height": 4.0}

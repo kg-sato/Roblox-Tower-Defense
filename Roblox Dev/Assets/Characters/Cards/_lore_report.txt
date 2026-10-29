@@ -1,0 +1,17 @@
+Archivist        words 141 lines 13 text_bottom  703 plate_contrast  5.99 text_contrast 13.71 ok
+BrassHound       words 149 lines 14 text_bottom  730 plate_contrast  9.18 text_contrast 13.71 ok
+CantorVesper     words 122 lines 10 text_bottom  622 plate_contrast  9.83 text_contrast 13.71 ok
+DameOrrery       words 126 lines 12 text_bottom  676 plate_contrast  8.61 text_contrast 13.71 ok
+Ember            words 150 lines 14 text_bottom  730 plate_contrast  4.63 text_contrast 13.71 ok
+Frostling        words 145 lines 13 text_bottom  703 plate_contrast 11.20 text_contrast 13.71 ok
+Gargoyle         words 141 lines 13 text_bottom  703 plate_contrast  8.52 text_contrast 13.71 ok
+GreyVeilWraith   words 144 lines 13 text_bottom  703 plate_contrast 15.47 text_contrast 13.71 ok
+MirrorChorister  words 147 lines 13 text_bottom  703 plate_contrast  5.19 text_contrast 13.71 ok
+MothLantern      words 144 lines 13 text_bottom  703 plate_contrast  7.95 text_contrast 13.71 ok
+Mourner          words 137 lines 12 text_bottom  676 plate_contrast 15.79 text_contrast 13.71 ok
+Sentinel         words 140 lines 13 text_bottom  703 plate_contrast  6.20 text_contrast 13.71 ok
+StarDrake        words 146 lines 13 text_bottom  703 plate_contrast 12.67 text_contrast 13.71 ok
+TheLamplighter   words 130 lines 12 text_bottom  676 plate_contrast 12.92 text_contrast 13.71 ok
+VeilWalker       words 127 lines 11 text_bottom  649 plate_contrast 13.61 text_contrast 13.71 ok
+Ward             words 147 lines 13 text_bottom  703 plate_contrast  6.56 text_contrast 13.71 ok
+cards: 16 problems: 0

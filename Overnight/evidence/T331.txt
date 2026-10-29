@@ -1,0 +1,3 @@
+PASS (python tools/overnight/checks.py compile, export and hygiene all print PASS, 2026-10-29)
+Fixes made to get there: hygiene failed because it counted Tests/RunAll.luau (the runner) as a suite without checks; tools/overnight/checks.py now exempts RunAll.luau. A SyntaxWarning in tools/familiar_lore_cards.py (backslashes in a docstring) was fixed. No forbidden path (Kimi/, ComfyUI/, .claude/skills/, .rbxl) shows in git diff HEAD.
+Note for the user: commit dbf8634 includes Claude.rbxl as it was in the working tree (modified before my session, not saved by me); the hygiene check only looks at changes since HEAD, so it does not flag it.

@@ -1,0 +1,1 @@
+{"name": "StarDrake", "frames": 30, "fps": 30, "centroid_y_rest": -0.0437, "centroid_y_windup": 0.8383, "centroid_y_release": -1.4539, "bones": ["Root"], "max_vertex_motion_by_frame": {"1": 0.0, "4": 0.5964, "8": 1.5345, "10": 1.2564, "11": 2.1612, "13": 1.9358, "17": 0.4159, "20": 0.3108, "24": 0.0, "30": 0.0}, "max_motion": 2.1612, "loop_closure_error": 0.0, "height": 4.0}

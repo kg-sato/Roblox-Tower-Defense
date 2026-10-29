@@ -1,0 +1,3 @@
+PASS WITH A CAVEAT (a Python check, not a Luau test)
+tools/check_familiars_complete.py checks, for each of the 12 lore notes: a bio over 400 characters, a card and a cutout PNG, a non-empty entry in Roblox Dev/Lore/voice_lines.json and the word silhouette in the note. Run now: 12 familiars, 0 gaps, exit 0.
+Limits: it checks that things exist, not that they are good; "silhouette entry" is judged by the word appearing in the lore note; not run inside Studio.

@@ -1,0 +1,3 @@
+PASS
+Page: Roblox Dev/Lore/Character Bible Rules.md (six rules each with test and linked basis, extra hard rules, character sheet template, review checklist).
+Check: includes all six items from the task (silhouette first, one hue, lore line, gesture, flaw, voice) and the no sprout/fox ban; each rule links to a research note; wording, limits and thresholds are proposals. Not yet applied to any character; look and fit are UNVERIFIED.

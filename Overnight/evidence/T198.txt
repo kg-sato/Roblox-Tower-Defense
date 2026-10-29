@@ -1,0 +1,4 @@
+PASS WITH A GAP (server side installed in Studio and mirrored; tested; no UI)
+Built: Config.RESPEC_COST = 50 gems and Config.RESPEC_COOLDOWN = 120 sim seconds; MatchSim.respec (refunds every point spent as Skill Points, resets the tree to Start, clamps the crystal hp to the new maximum, emits "Respec" {refunded, cost}); a Respec action in MatchService (ACTION_KINDS and the dispatch). Mirrored in Studio_Export (Config, MatchSim, MatchService).
+Tests (Studio Edit mode): ServerRules 55 of 55 (10 new respec checks: nothing to refund refused, exact refund, fee, tree reset, event, hp clamp, cooldown refusal, works after the cooldown, too few gems refused and tree kept); MatchSim, Rules, ActionArgs and SaveMigration still PASS.
+Gap: no Respec button (the skill tree screen belongs to the loading-eye chat, who was told the action name and event); the cooldown counts sim seconds inside one run and is not saved between runs.

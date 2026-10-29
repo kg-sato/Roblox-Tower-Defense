@@ -1,0 +1,7 @@
+glb: 1 mesh, 3 materials, 1 images ok
+triangles 1405 (budget 3000, project limit 20000) ok
+highest front silhouette IoU against any familiar front: 0.45 (front vs Ward; limit 0.5) ok; worst over all views 0.45 (front vs Ward, information only)
+views differ from each other (smallest 1-IoU 0.78) ok
+size: [1.28, 3.951, 1.576]
+length_over_height: 2.506
+enemy model FogWisp: problems 0

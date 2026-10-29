@@ -466,5 +466,665 @@
   "type": "Model",
   "assetId": "138630723685732",
   "time": "2026-10-28 19:00"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r4/eye_iris.png",
+  "type": "Decal",
+  "assetId": "88951244412072",
+  "time": "2026-10-28 19:04"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r4/eye_socket.png",
+  "type": "Decal",
+  "assetId": "96351845847287",
+  "time": "2026-10-28 19:04"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r4/coin.png",
+  "type": "Decal",
+  "assetId": "76620136303235",
+  "time": "2026-10-28 19:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r4/gem.png",
+  "type": "Decal",
+  "assetId": "80877214144827",
+  "time": "2026-10-28 19:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r4/road_lane.png",
+  "type": "Decal",
+  "assetId": "115706748369785",
+  "time": "2026-10-28 19:12"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r4/road_veil.png",
+  "type": "Decal",
+  "assetId": "78210865840707",
+  "time": "2026-10-28 19:12"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r4/road_stars.png",
+  "type": "Decal",
+  "assetId": "139847034960914",
+  "time": "2026-10-28 19:12"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r4/tree_clean.png",
+  "type": "Decal",
+  "assetId": "94912352319828",
+  "time": "2026-10-28 19:31"
+ },
+ {
+  "file": "Blender/out_art/sentinel_hy.glb",
+  "type": "Model",
+  "assetId": "102117649984377",
+  "time": "2026-10-28 19:37"
+ },
+ {
+  "file": "Blender/out_art/sentinel_hy.glb",
+  "type": "Model",
+  "assetId": "85579492882374",
+  "time": "2026-10-28 19:40"
+ },
+ {
+  "file": "Blender/out_art/sentinel_v7.glb",
+  "type": "Model",
+  "assetId": "105590661234199",
+  "time": "2026-10-28 19:44"
+ },
+ {
+  "file": "Blender/out_art/sentinel_v7.glb",
+  "type": "Model",
+  "assetId": "115745072343324",
+  "time": "2026-10-28 19:45"
+ },
+ {
+  "file": "Blender/out_art/sentinel_v7.glb",
+  "type": "Model",
+  "assetId": "103893658539937",
+  "time": "2026-10-28 19:46"
+ },
+ {
+  "file": "Blender/out_art/sentinel_v8.glb",
+  "type": "Model",
+  "assetId": "124300641110722",
+  "time": "2026-10-28 19:52"
+ },
+ {
+  "file": "Blender/out_art/sentinel_v9.glb",
+  "type": "Model",
+  "assetId": "73478931319348",
+  "time": "2026-10-28 20:08"
+ },
+ {
+  "file": "Blender/out_art/sentinel_v9.glb",
+  "type": "Model",
+  "assetId": "116076795526880",
+  "time": "2026-10-28 20:10"
+ },
+ {
+  "file": "Blender/out_art/sentinel_v10.glb",
+  "type": "Model",
+  "assetId": "78294245385172",
+  "time": "2026-10-28 20:26"
+ },
+ {
+  "file": "Blender/out_art/sentinel_v11.glb",
+  "type": "Model",
+  "assetId": "98742361543875",
+  "time": "2026-10-28 20:30"
+ },
+ {
+  "file": "Blender/out_art/sentinel_v11.glb",
+  "type": "Model",
+  "assetId": "100036524167793",
+  "time": "2026-10-28 20:32"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r5/tree_glitch.png",
+  "type": "Decal",
+  "assetId": "94971387475577",
+  "time": "2026-10-28 21:07"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r5/eyelid_upper.png",
+  "type": "Decal",
+  "assetId": "129071171191920",
+  "time": "2026-10-28 21:25"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r5/eyelid_lower.png",
+  "type": "Decal",
+  "assetId": "111005150319499",
+  "time": "2026-10-28 21:25"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r5/eyelid_upper.png",
+  "type": "Decal",
+  "assetId": "124961483788709",
+  "time": "2026-10-28 21:28"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r5/eyelid_lower.png",
+  "type": "Decal",
+  "assetId": "112157058826647",
+  "time": "2026-10-28 21:29"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r6/brass_eye.png",
+  "type": "Decal",
+  "assetId": "139867308010154",
+  "time": "2026-10-28 21:44"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r6/brass_rim.png",
+  "type": "Decal",
+  "assetId": "83927624271063",
+  "time": "2026-10-28 21:44"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r6/brass_lid_up.png",
+  "type": "Decal",
+  "assetId": "119128236012573",
+  "time": "2026-10-28 21:44"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r6/brass_lid_down.png",
+  "type": "Decal",
+  "assetId": "85540292646891",
+  "time": "2026-10-28 21:44"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r6/brass_rim.png",
+  "type": "Decal",
+  "assetId": "86968654690830",
+  "time": "2026-10-28 21:50"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r6/bloom_rays.png",
+  "type": "Decal",
+  "assetId": "110707533897263",
+  "time": "2026-10-28 21:50"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r7/lids_0.png",
+  "type": "Decal",
+  "assetId": "86186853388556",
+  "time": "2026-10-28 21:54"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r7/lids_1.png",
+  "type": "Decal",
+  "assetId": "128141392993924",
+  "time": "2026-10-28 21:54"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r7/lids_2.png",
+  "type": "Decal",
+  "assetId": "110387929458894",
+  "time": "2026-10-28 21:54"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Ember.glb",
+  "type": "Model",
+  "assetId": "136282546009058",
+  "time": "2026-10-29 06:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/MothLantern.glb",
+  "type": "Model",
+  "assetId": "106702237676803",
+  "time": "2026-10-29 06:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/BrassHound.glb",
+  "type": "Model",
+  "assetId": "107681100958369",
+  "time": "2026-10-29 06:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Sentinel.glb",
+  "type": "Model",
+  "assetId": "126744188043602",
+  "time": "2026-10-29 06:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Frostling.glb",
+  "type": "Model",
+  "assetId": "110445808538728",
+  "time": "2026-10-29 06:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Gargoyle.glb",
+  "type": "Model",
+  "assetId": "129809830834583",
+  "time": "2026-10-29 06:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Ward.glb",
+  "type": "Model",
+  "assetId": "97817781664100",
+  "time": "2026-10-29 06:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Archivist.glb",
+  "type": "Model",
+  "assetId": "95811615878114",
+  "time": "2026-10-29 06:39"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Mourner.glb",
+  "type": "Model",
+  "assetId": "86178666978786",
+  "time": "2026-10-29 06:39"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/MirrorChorister.glb",
+  "type": "Model",
+  "assetId": "118154808652383",
+  "time": "2026-10-29 06:39"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/StarDrake.glb",
+  "type": "Model",
+  "assetId": "101965399666864",
+  "time": "2026-10-29 06:39"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/GreyVeilWraith.glb",
+  "type": "Model",
+  "assetId": "112474997904243",
+  "time": "2026-10-29 06:40"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r8/iris_inner.png",
+  "type": "Decal",
+  "assetId": "91524651716605",
+  "time": "2026-10-29 06:58"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r8/iris_outer.png",
+  "type": "Decal",
+  "assetId": "119253317135181",
+  "time": "2026-10-29 06:58"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r8/pupil_disc.png",
+  "type": "Decal",
+  "assetId": "131496445156561",
+  "time": "2026-10-29 06:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Ember_rigged.glb",
+  "type": "Model",
+  "assetId": "85376765624655",
+  "time": "2026-10-29 07:02"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Gargoyle_rigged.glb",
+  "type": "Model",
+  "assetId": "125271154356664",
+  "time": "2026-10-29 07:02"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Frostling_rigged.glb",
+  "type": "Model",
+  "assetId": "117971301582045",
+  "time": "2026-10-29 07:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/StarDrake_rigged.glb",
+  "type": "Model",
+  "assetId": "98402544238537",
+  "time": "2026-10-29 07:07"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Sentinel_rigged.glb",
+  "type": "Model",
+  "assetId": "71386221720784",
+  "time": "2026-10-29 07:08"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Ward_rigged.glb",
+  "type": "Model",
+  "assetId": "130314925093755",
+  "time": "2026-10-29 07:08"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/brass_eye.png",
+  "type": "Decal",
+  "assetId": "78389502825820",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/iris_inner.png",
+  "type": "Decal",
+  "assetId": "117645687511252",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/iris_outer.png",
+  "type": "Decal",
+  "assetId": "72764772565444",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/lids_0.png",
+  "type": "Decal",
+  "assetId": "73528688250232",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/lids_1.png",
+  "type": "Decal",
+  "assetId": "94511724571607",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/lids_2.png",
+  "type": "Decal",
+  "assetId": "121317208864344",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/MothLantern_rigged.glb",
+  "type": "Model",
+  "assetId": "113430321163375",
+  "time": "2026-10-29 07:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/BrassHound_rigged.glb",
+  "type": "Model",
+  "assetId": "123751284885975",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Archivist_rigged.glb",
+  "type": "Model",
+  "assetId": "112184846704013",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Mourner_rigged.glb",
+  "type": "Model",
+  "assetId": "112028680163148",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r10/eye_lashes.png",
+  "type": "Decal",
+  "assetId": "121057959639956",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/MirrorChorister_rigged.glb",
+  "type": "Model",
+  "assetId": "134426666795009",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/GreyVeilWraith_rigged.glb",
+  "type": "Model",
+  "assetId": "75356704130854",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r10/eye_lashes.png",
+  "type": "Decal",
+  "assetId": "131230619338082",
+  "time": "2026-10-29 07:33"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r11/etched_iris_inner.png",
+  "type": "Decal",
+  "assetId": "115537900971155",
+  "time": "2026-10-29 07:41"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r11/etched_iris_outer.png",
+  "type": "Decal",
+  "assetId": "72357432024114",
+  "time": "2026-10-29 07:41"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/FogWisp/FogWisp.glb",
+  "type": "Model",
+  "assetId": "128040982375596",
+  "time": "2026-10-29 11:21"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/BrassSentinel/BrassSentinel.glb",
+  "type": "Model",
+  "assetId": "95028100682755",
+  "time": "2026-10-29 11:21"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/ClockworkCrow/ClockworkCrow.glb",
+  "type": "Model",
+  "assetId": "85256591738111",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/LanternThief/LanternThief.glb",
+  "type": "Model",
+  "assetId": "107872593870870",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/Unbound/Unbound.glb",
+  "type": "Model",
+  "assetId": "77114404609027",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/UnboundP2/UnboundP2.glb",
+  "type": "Model",
+  "assetId": "132477005165063",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/UnboundP3/UnboundP3.glb",
+  "type": "Model",
+  "assetId": "108536993980488",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/ClockmakerAutomaton/ClockmakerAutomaton.glb",
+  "type": "Model",
+  "assetId": "105773609287319",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/StarChoirEcho/StarChoirEcho.glb",
+  "type": "Model",
+  "assetId": "83373040785070",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/HollowCourtRegent/HollowCourtRegent.glb",
+  "type": "Model",
+  "assetId": "112741419053232",
+  "time": "2026-10-29 11:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/Clockmaker/Clockmaker.glb",
+  "type": "Model",
+  "assetId": "117038627587754",
+  "time": "2026-10-29 11:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/HollowParishioner/HollowParishioner.glb",
+  "type": "Model",
+  "assetId": "94567177585107",
+  "time": "2026-10-29 11:39"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/Archivist_BaseColor.png",
+  "type": "Decal",
+  "assetId": "121329864059928",
+  "time": "2026-10-29 11:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/BrassHound_BaseColor.png",
+  "type": "Decal",
+  "assetId": "138198391308071",
+  "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/Ember_BaseColor.png",
+  "type": "Decal",
+  "assetId": "115946418684385",
+  "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/Frostling_BaseColor.png",
+  "type": "Decal",
+  "assetId": "97979918602753",
+  "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/Gargoyle_BaseColor.png",
+  "type": "Decal",
+  "assetId": "131719185397624",
+  "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/GreyVeilWraith_BaseColor.png",
+  "type": "Decal",
+  "assetId": "81845267358772",
+  "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/MirrorChorister_BaseColor.png",
+  "type": "Decal",
+  "assetId": "138490009696681",
+  "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/MothLantern_BaseColor.png",
+  "type": "Decal",
+  "assetId": "71720131845912",
+  "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/Mourner_BaseColor.png",
+  "type": "Decal",
+  "assetId": "78745132081973",
+  "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/Sentinel_BaseColor.png",
+  "type": "Decal",
+  "assetId": "91121196376632",
+  "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/StarDrake_BaseColor.png",
+  "type": "Decal",
+  "assetId": "125195486658583",
+  "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/Ward_BaseColor.png",
+  "type": "Decal",
+  "assetId": "130240582337054",
+  "time": "2026-10-29 11:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/CantorVesper_rigged.glb",
+  "type": "Model",
+  "assetId": "87320725806516",
+  "time": "2026-10-29 13:57"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/DameOrrery_rigged.glb",
+  "type": "Model",
+  "assetId": "100541943813006",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/TheLamplighter_rigged.glb",
+  "type": "Model",
+  "assetId": "100337103280707",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/VeilWalker_rigged.glb",
+  "type": "Model",
+  "assetId": "89236664532172",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/CantorVesper_BaseColor.png",
+  "type": "Decal",
+  "assetId": "88233563120101",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/DameOrrery_BaseColor.png",
+  "type": "Decal",
+  "assetId": "104531048923567",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/TheLamplighter_BaseColor.png",
+  "type": "Decal",
+  "assetId": "81472362180131",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/VeilWalker_BaseColor.png",
+  "type": "Decal",
+  "assetId": "126845041722270",
+  "time": "2026-10-29 13:58"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/CantorVesper_cutout.png",
+  "type": "Decal",
+  "assetId": "96304300677262",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/CantorVesper_lore.png",
+  "type": "Decal",
+  "assetId": "87993153013124",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/DameOrrery_cutout.png",
+  "type": "Decal",
+  "assetId": "99586509154989",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/DameOrrery_lore.png",
+  "type": "Decal",
+  "assetId": "135396128159303",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/TheLamplighter_cutout.png",
+  "type": "Decal",
+  "assetId": "114916642237241",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/TheLamplighter_lore.png",
+  "type": "Decal",
+  "assetId": "127551983332701",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/VeilWalker_cutout.png",
+  "type": "Decal",
+  "assetId": "74676763342643",
+  "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/VeilWalker_lore.png",
+  "type": "Decal",
+  "assetId": "103918551040206",
+  "time": "2026-10-29 14:03"
  }
 ]

@@ -1,0 +1,3 @@
+PASS
+Note: Roblox Dev/Research/UI/Cult of the Lamb tone and cult-building UI.md
+Deviation (read before trusting this PASS): the cult-building UI itself is not described by any source read; tone and systems are sourced (Wikipedia fetched 2026-10-28; Game World Observer 2022-08-12), the rest are snippets. UI recommendations are mine. The user should judge.

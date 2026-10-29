@@ -1,0 +1,3 @@
+PASS WITH A CAVEAT (normal maps made for all 12 familiars; they are inferred from colour, not sculpted; UNVERIFIED in Roblox)
+Built: tools/texture_maps.py writes <Name>_Normal_512.png for each familiar (tangent-space, OpenGL convention, strength 2.0, from the high-pass of the colour luminance). Strength per model is in maps_report.json (Ward weakest 1.08, Frostling strongest 1.92). Design note Roblox Dev/Design/Texture Maps.md.
+Unmet part of the task: "where they add silhouette detail": a normal map cannot change the silhouette, and this one is inferred from painted edges, so it adds shading relief only. I did not judge where it helps the silhouette. Not viewed on a model, not wired into SurfaceAppearance, not uploaded.

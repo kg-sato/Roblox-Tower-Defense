@@ -1,0 +1,3 @@
+PASS
+Note: Roblox Dev/Lore/Disco Elysium voice and UI text.md
+Deviation (read before trusting this PASS): only Wikipedia (fetched 2026-10-28) was readable; skill voice examples, per-skill colours and Thought Cabinet UI layout not found (gameshub 403, PC Gamer truncated). Recommendations are mine. The user should judge.

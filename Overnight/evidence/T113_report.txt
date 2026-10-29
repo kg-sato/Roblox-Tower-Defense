@@ -1,0 +1,7 @@
+WICK   vs FLAME  coat dE  39.4, deuteranopia dE  21.3, frame dE  29.9, silhouette IoU 1.000 ok
+WICK   vs LAMP   coat dE  39.5, deuteranopia dE  31.9, frame dE   0.0, silhouette IoU 1.000 ok
+WICK   vs BEACON coat dE  63.4, deuteranopia dE  64.3, frame dE  59.7, silhouette IoU 1.000 ok
+FLAME  vs LAMP   coat dE  72.4, deuteranopia dE  45.9, frame dE  29.9, silhouette IoU 1.000 ok
+FLAME  vs BEACON coat dE  79.4, deuteranopia dE  80.9, frame dE  61.7, silhouette IoU 1.000 ok
+LAMP   vs BEACON coat dE  50.3, deuteranopia dE  35.4, frame dE  59.7, silhouette IoU 1.000 ok
+trainer variants: 4 problems: 0

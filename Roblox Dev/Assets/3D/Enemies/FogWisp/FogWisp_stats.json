@@ -1,0 +1,1 @@
+{"name": "FogWisp", "triangles": 1405, "vertices": 789, "size": [1.28, 3.951, 1.576], "min": [-0.64, -1.495, 0.042], "max": [0.64, 2.456, 1.618], "length_over_height": 2.506, "fraction_vertices_in_lowest_12_percent": 0.0025, "materials": ["FogWisp_Cloak", "FogWisp_Recess", "FogWisp_Eye"]}

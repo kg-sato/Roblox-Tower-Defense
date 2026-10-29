@@ -1,0 +1,3 @@
+PASS
+T001 research note: Roblox Dev/Research/Game Design and Market/Bloons TD6 upgrades and paths.md. Five cited sources with links and dates: Bloons Wiki Version 27.0 (26 July 2021), Version 28.0 (13 October 2021), Version 39.0 (2023), Touch Tap Play Paragons article (27 April 2022, conflicts with the wiki), and the Bloons Wiki Upgrade page (undated; 403 to the fetch tool, facts from search summary).
+Caveat: the Paragon date conflicts between sources; the wiki sequence is used. Facts from search summaries are not checked against the live game.

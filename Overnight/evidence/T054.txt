@@ -1,0 +1,3 @@
+PASS
+Page: Roblox Dev/Lore/The Cosmic Turn.md (why the sky opens, when, visual changes, mechanical changes as data, risks).
+Check: consistent with the decided theme arc in Design/Game Design Doc.md, Lore/World Bible.md and Lore/Factions.md; mechanics reference existing task ids (T010, T011, T015, T147). All specifics beyond the decided arc are labelled proposals with open questions. Not implemented; fit and feel are UNVERIFIED.

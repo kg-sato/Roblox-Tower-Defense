@@ -6,7 +6,7 @@ local Config = {}
 Config.START_COINS = 30
 Config.START_GEMS = 30
 Config.CRYSTAL_HP = 20
-Config.TIER_MAX = 5
+Config.TIER_MAX = 8 -- tiers 6 to 8 are the long game: tier t needs 3^(t-1) tier-1 units (2,187 for tier 8)
 Config.TIER_MULT = 3.5
 Config.ULT_NEED = 10
 Config.ULT_DAMAGE = 60
@@ -19,6 +19,9 @@ Config.OVERRUN_COIN_LOSS = 0.3
 Config.ROLL_COST = 10
 Config.PITY_EVERY = 20 -- guaranteed Epic or better within this many rolls
 Config.UPGRADE_MAX = 5
+Config.CRIT_CAP = 0.75 -- crit chance never exceeds this, whatever upgrades and skills add
+Config.RESPEC_COST = 50 -- gems for resetting the skill tree
+Config.RESPEC_COOLDOWN = 120 -- sim seconds between respecs in one run
 
 Config.PATH = {
 	Vector3.new(-44, 1, -20),
@@ -43,8 +46,10 @@ Config.RARITIES = {
 	Rare = { order = 2, color = Color3.fromRGB(80, 170, 255), odds = 28, mult = 2.2 },
 	Epic = { order = 3, color = Color3.fromRGB(180, 100, 255), odds = 10, mult = 5 },
 	Legendary = { order = 4, color = Color3.fromRGB(255, 200, 60), odds = 2, mult = 12 },
+	Mythic = { order = 5, color = Color3.fromRGB(255, 90, 170), odds = 0.4, mult = 30 }, -- no familiar yet: weight is 0 until one has this rarity
+	Celestial = { order = 6, color = Color3.fromRGB(150, 245, 255), odds = 0.08, mult = 80 }, -- no familiar yet
 }
-Config.RARITY_ORDER = { "Common", "Rare", "Epic", "Legendary" }
+Config.RARITY_ORDER = { "Common", "Rare", "Epic", "Legendary", "Mythic", "Celestial" }
 
 -- damage is for tier 1 before rarity multiplier
 Config.PETS = {
@@ -103,6 +108,31 @@ do
 			Config.PETS = pets
 			Config.PET_ORDER = order
 		end
+	end
+end
+
+-- ===== Familiar data (T101) =====
+-- The 12-familiar cast (Shared.Familiars, generated from Roblox Dev/Lore). Every familiar has a character folder (T102), and its Config.PETS
+-- entry gets the cast's name, role, faction and loreId. Rarity, damage, range and cooldown stay the folder's attributes.
+-- FindFirstChild, never WaitForChild: the headless tests clone only Config, Path and MatchSim into a temporary folder, and a wait would hang them.
+do
+	local shared = game:GetService("ReplicatedStorage"):FindFirstChild("Shared")
+	local mod = script.Parent:FindFirstChild("Familiars") or (shared and shared:FindFirstChild("Familiars"))
+	if mod and mod:IsA("ModuleScript") then
+		local Familiars = require(mod)
+		Config.FAMILIARS = Familiars.byId
+		Config.FAMILIAR_ORDER = Familiars.order
+		for id, def in Config.PETS do
+			local f = Familiars.forChar(id)
+			if f then
+				local d = def :: any
+				d.name, d.role, d.faction, d.loreId, d.familiar = f.name, f.role, f.faction, f.loreId, f.id
+			end
+		end
+	else
+		warn("Config: Shared.Familiars not found; familiar data skipped")
+		Config.FAMILIARS = {}
+		Config.FAMILIAR_ORDER = {}
 	end
 end
 
@@ -188,14 +218,61 @@ function Config.upgradeCost(level: number): number
 end
 
 Config.ENEMIES = {
-	Grunt = { hp = 30, speed = 8, coins = 2, gems = 1, leak = 1, size = 2.4, color = Color3.fromRGB(110, 100, 150) },
-	Swift = { hp = 18, speed = 13, coins = 2, gems = 1, leak = 1, size = 2, color = Color3.fromRGB(160, 205, 235) },
-	Tank = { hp = 120, speed = 5, coins = 6, gems = 3, leak = 2, size = 3.6, color = Color3.fromRGB(176, 136, 72) },
-	Boss = { hp = 700, speed = 4, coins = 60, gems = 25, leak = 5, size = 6.5, color = Color3.fromRGB(140, 230, 110) },
+	Grunt = { hp = 30, speed = 8, coins = 2, gems = 1, leak = 1, size = 2.4, color = Color3.fromRGB(110, 100, 150), armor = "flesh" },
+	Swift = { hp = 18, speed = 13, coins = 2, gems = 1, leak = 1, size = 2, color = Color3.fromRGB(160, 205, 235), armor = "fog" },
+	Tank = { hp = 120, speed = 5, coins = 6, gems = 3, leak = 2, size = 3.6, color = Color3.fromRGB(176, 136, 72), armor = "brass" },
+	Boss = { hp = 700, speed = 4, coins = 60, gems = 25, leak = 5, size = 6.5, color = Color3.fromRGB(140, 230, 110), armor = "none" },
+	-- new kinds (Design/Enemy Bible.md); they appear in waves only when Config.NEW_ENEMIES is true (the client has no model for them yet)
+	Crow = { hp = 12, speed = 16, coins = 3, gems = 1, leak = 1, size = 2.2, color = Color3.fromRGB(70, 74, 86), armor = "flesh" },
+	Thief = { hp = 40, speed = 11, coins = 4, gems = 2, leak = 1, size = 2.4, color = Color3.fromRGB(104, 74, 118), armor = "flesh" },
+}
+Config.NEW_ENEMIES = false -- Clockwork Crow and Lantern Thief in the wave lists (needs client models first)
+Config.MOVEMENT_EFFECTS = false -- slows, stuns, plants and speed-ups change enemy speed; the client moves enemies at a constant speed, so keep false until GameClient handles the "Pace" event {id, dist, speed, t}
+
+-- Familiar roles, damage types, armour and statuses (Design/Familiar Systems.md, Design/Enemy Bible.md). Keys are the Characters folder ids.
+Config.DAMAGE_TYPE = {
+	Ember = "fire", Zap = "light", BrassHound = "spring", Sentinel = "brass", Frostling = "ice", Boulder = "stone",
+	Ward = "light", Archivist = "brass", Mourner = "shadow", VoltFox = "cosmic", StarDrake = "cosmic", GreyVeilWraith = "shadow",
+	CantorVesper = "cosmic", DameOrrery = "brass", TheLamplighter = "light", VeilWalker = "cosmic",
+}
+-- multiplier by armour type and damage type; anything not listed is 1
+Config.ARMOR_MULT = {
+	brass = { fire = 0.7, ice = 1.3 },
+	fog = { stone = 0.7, light = 1.3 },
+	flesh = { fire = 1.2 },
+	stone = { spring = 0.7, cosmic = 1.3 },
+}
+Config.STATUS = {
+	burn = { dur = 3, dps = 0.2 }, -- damage per second as a share of the hit that lit it
+	chill = { dur = 2, max = 3, slow = 0.15, freeze = 0.5 }, -- 3 stacks freeze for 0.5 s (movement: needs MOVEMENT_EFFECTS)
+	stun = { dur = 1, immune = 5 }, -- 5 s immunity afterwards
+	mark = { dur = 4, bonus = 0.25 }, -- +25% damage from every source
+	hush = { dur = 2 }, -- cancels the enemy's special move
+}
+-- roles: onHit statuses, every-Nth-shot bonuses, auras on touching units, armour piercing, echo and drain
+Config.ROLES = {
+	Ember = { onHit = { "burn" } },
+	Zap = { onHit = { "mark" } },
+	BrassHound = { nth = { n = 5, extraHit = true } },
+	Sentinel = { pierce = { "brass" } },
+	Frostling = { onHit = { "chill" } },
+	Boulder = { critStun = true },
+	Ward = { aura = { range = 0.2 } },
+	Archivist = { aura = { haste = 0.15 } },
+	Mourner = { onHit = { "hush" } },
+	VoltFox = { echo = 0.35 },
+	StarDrake = { nth = { n = 8, splash = { radius = 8, mult = 0.5 } } },
+	GreyVeilWraith = { pierce = "all", drain = { every = 10, heal = 1 } },
+	-- Mythic and Celestial humans: Hymn (touching familiars +20% damage), Rewind (every 10th shot resets touching cooldowns), Kindle (every familiar +10% damage), Veil (every familiar +12% crit chance)
+	CantorVesper = { aura = { damage = 0.20 } },
+	DameOrrery = { rewind = { every = 10 } },
+	TheLamplighter = { global = { damage = 0.10 } },
+	VeilWalker = { global = { crit = 0.12 } },
 }
 
+Config.HP_GROWTH = 1.27 -- enemy hp multiplier per stage (was 1.2; raised 2026-10-29: 1.25 gave a perfect bot 6 minutes, 1.3 made it fail or take 18 minutes)
 function Config.hpScale(stage: number): number
-	return 1.2 ^ (stage - 1)
+	return Config.HP_GROWTH ^ (stage - 1)
 end
 
 function Config.isBossStage(stage: number): boolean
@@ -213,6 +290,13 @@ function Config.stageSpawns(stage: number): { string }
 		end
 		if stage >= 6 and i % 5 == 0 then
 			kind = "Tank"
+		end
+		if Config.NEW_ENEMIES and kind == "Grunt" then
+			if stage >= 7 and i % 7 == 0 then
+				kind = "Crow"
+			elseif stage >= 9 and i % 4 == 0 then
+				kind = "Thief"
+			end
 		end
 		table.insert(list, kind)
 	end
@@ -238,13 +322,22 @@ function Config.luck(level: number): number
 end
 
 -- Odds as weights. Luck makes better rarities likelier. One function feeds the roll AND the odds panel.
+-- A rarity with no familiar has weight 0, so adding a rarity to the table is harmless until a familiar uses it.
 function Config.rarityWeights(luck: number): { [string]: number }
-	return {
+	local out = {
 		Common = Config.RARITIES.Common.odds,
 		Rare = Config.RARITIES.Rare.odds * (1 + luck),
 		Epic = Config.RARITIES.Epic.odds * (1 + 2 * luck),
 		Legendary = Config.RARITIES.Legendary.odds * (1 + 3 * luck),
+		Mythic = Config.RARITIES.Mythic.odds * (1 + 4 * luck),
+		Celestial = Config.RARITIES.Celestial.odds * (1 + 5 * luck),
 	}
+	for rarity in out do
+		if #Config.petsOfRarity(rarity) == 0 then
+			out[rarity] = 0
+		end
+	end
+	return out
 end
 
 function Config.rarityPercents(luck: number): { [string]: number }
@@ -326,6 +419,33 @@ function Config.skillCost(node: any, level: number): number
 	return node.base * math.ceil((level + 1) / 2)
 end
 
+-- The cheapest node the player can buy right now (reachable, not maxed, affordable), for the skill tree's next-best hint (T199).
+-- Ties go to the node listed first in Config.TREE (the inner ring). Returns nil when nothing can be bought.
+function Config.nextBestSkill(levels: { [string]: number }, sp: number): (string?, number?)
+	local best: string?, bestCost: number? = nil, nil
+	for _, node in Config.TREE do
+		if node.id ~= "Start" then
+			local level = levels[node.id] or 0
+			if level < node.max then
+				local reachable = false
+				for _, n in Config.TREE_NEIGHBORS[node.id] do
+					if (levels[n] or 0) > 0 then
+						reachable = true
+						break
+					end
+				end
+				if reachable then
+					local cost = Config.skillCost(node, level)
+					if cost <= sp and (bestCost == nil or cost < bestCost) then
+						best, bestCost = node.id, cost
+					end
+				end
+			end
+		end
+	end
+	return best, bestCost
+end
+
 -- Total effect of one kind, given a { [nodeId]: level } table.
 function Config.skillValue(levels: { [string]: number }, kind: string): number
 	local total = 0
@@ -343,7 +463,7 @@ Config.PRODUCTS = {}
 
 -- Load-time sanity check: every rarity needs at least one character or its rolls step down (MatchSim.pickPet).
 for _, r in Config.RARITY_ORDER do
-	if #Config.petsOfRarity(r) == 0 then
+	if #Config.petsOfRarity(r) == 0 and Config.RARITIES[r].order <= 4 then -- Mythic and Celestial are empty on purpose (weight 0 until a familiar uses them)
 		warn("Config: no characters for rarity " .. r)
 	end
 end

@@ -1,0 +1,3 @@
+PASS
+Page: Roblox Dev/Lore/Tone Guide.md (voice, 8 rules, caption style matching the existing bracketed captions, narration and item examples, UI text rules, banned phrases, checks).
+Check: caption format taken from the existing recipes note (`[ STARS GATHER ]`); examples are original; rules cite the research notes; wording is a proposal. Voice fit is UNVERIFIED until the user reads sample screens.

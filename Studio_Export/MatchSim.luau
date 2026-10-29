@@ -98,6 +98,39 @@ function MatchSim.sv(self: Sim, kind: string): number
 	return Config.skillValue(self.tree, kind)
 end
 
+-- Progress that carries between visits (what the server saves with ProfileStore).
+function MatchSim.meta(self: Sim): { [string]: any }
+	return { level = self.level, xp = self.xp, sp = self.sp, gems = self.gems, tree = table.clone(self.tree) }
+end
+
+-- Load saved progress, clamping every value so a corrupt or edited save can't give an impossible state.
+-- Gems never drop below the starting amount, so a returning player can always roll.
+function MatchSim.loadMeta(self: Sim, d: any)
+	if type(d) ~= "table" then
+		return
+	end
+	local function num(v: any, lo: number, hi: number, fallback: number): number
+		if type(v) ~= "number" or v ~= v then
+			return fallback
+		end
+		return math.clamp(math.floor(v), lo, hi)
+	end
+	self.level = num(d.level, 1, Config.LEVEL_MAX, 1)
+	self.xp = num(d.xp, 0, 1e9, 0)
+	self.sp = num(d.sp, 0, 1e6, 0)
+	self.gems = math.max(self.gems, num(d.gems, 0, 1e9, 0))
+	local tree = { Start = 1 }
+	if type(d.tree) == "table" then
+		for id, lvl in d.tree do
+			local node = type(id) == "string" and Config.TREE_BY_ID[id]
+			if node and id ~= "Start" and type(lvl) == "number" and lvl == lvl then
+				tree[id] = math.clamp(math.floor(lvl), 0, node.max)
+			end
+		end
+	end
+	self.tree = tree
+end
+
 function MatchSim.maxHp(self: Sim): number
 	return Config.CRYSTAL_HP + self:sv("crystal")
 end
@@ -148,6 +181,36 @@ function MatchSim.skill(self: Sim, id: any): (boolean, string?)
 	self.sp -= cost
 	self.tree[id] = level + 1
 	self.emit("SkillBought", { id = id, level = level + 1 })
+	return true, nil
+end
+
+-- Reset the skill tree: every point spent comes back as Skill Points, for a gem fee and a cooldown (T198).
+-- The cooldown counts sim seconds within one run (it is not saved between runs); nothing is refunded for nodes that no longer exist.
+function MatchSim.respec(self: Sim): (boolean, string?)
+	local spent = 0
+	for id, level in self.tree do
+		local node = Config.TREE_BY_ID[id]
+		if node and id ~= "Start" then
+			for l = 0, level - 1 do
+				spent += Config.skillCost(node, l)
+			end
+		end
+	end
+	if spent == 0 then
+		return false, "Nothing to refund"
+	end
+	if self.t - ((self :: any).lastRespec or -1e9) < Config.RESPEC_COOLDOWN then
+		return false, "Respec is cooling down"
+	end
+	if self.gems < Config.RESPEC_COST then
+		return false, "Not enough gems"
+	end
+	self.gems -= Config.RESPEC_COST
+	self.sp += spent
+	self.tree = { Start = 1 }
+	;(self :: any).lastRespec = self.t
+	self.crystalHp = math.min(self.crystalHp, self:maxHp()) -- Crystal Armor may have been refunded
+	self.emit("Respec", { refunded = spent, cost = Config.RESPEC_COST })
 	return true, nil
 end
 
@@ -236,6 +299,18 @@ function MatchSim.pickRarity(self: Sim): string
 	return "Common"
 end
 
+-- A random pet of this rarity; an empty rarity (its Characters folders removed) steps down to the next lower one.
+function MatchSim.pickPet(self: Sim, rarity: string): (string?, string)
+	local at = table.find(Config.RARITY_ORDER, rarity) or 1
+	for i = at, 1, -1 do
+		local list = Config.petsOfRarity(Config.RARITY_ORDER[i])
+		if #list > 0 then
+			return list[self.rng:NextInteger(1, #list)], Config.RARITY_ORDER[i]
+		end
+	end
+	return nil, rarity
+end
+
 function MatchSim.roll(self: Sim): (boolean, string?)
 	if self:unitCount() >= Config.MAX_UNITS then
 		return false, "Too many pets (max " .. Config.MAX_UNITS .. ")"
@@ -255,8 +330,10 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 		end
 	else
 		rarity = self:pickRarity()
-		local list = Config.petsOfRarity(rarity)
-		pet = list[self.rng:NextInteger(1, #list)]
+		pet, rarity = self:pickPet(rarity)
+		if not pet then
+			return false, "No characters configured"
+		end
 		x, z = self:findSpot(pet)
 	end
 	if not x or not z then
@@ -275,10 +352,11 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 	-- Double Hatch: a free bonus pet
 	local chance = self:sv("doubleHatch")
 	if chance > 0 and not self.tutorial and self.rng:NextNumber() < chance and self:unitCount() < Config.MAX_UNITS then
-		local bonusRarity = self:pickRarity()
-		local list = Config.petsOfRarity(bonusRarity)
-		local bonusPet = list[self.rng:NextInteger(1, #list)]
-		local bx, bz = self:findSpot(bonusPet)
+		local bonusPet, bonusRarity = self:pickPet(self:pickRarity())
+		local bx, bz
+		if bonusPet then
+			bx, bz = self:findSpot(bonusPet)
+		end
 		if bx and bz then
 			local bid = self:addUnit(bonusPet, bx, bz)
 			self.emit("Roll", { slot = bid, pet = bonusPet, rarity = bonusRarity, bonus = true, x = bx, z = bz })
@@ -393,8 +471,26 @@ function MatchSim.castUlt(self: Sim): (boolean, string?)
 		return false, "Not charged"
 	end
 	self.ult = math.min(self:ultNeed() - 1, self:sv("ultRefund"))
-	self.emit("Ult", {})
-	local dmg = Config.ULT_DAMAGE * Config.hpScale(self.stage) * (1 + self:sv("ultDamage"))
+	-- a featured familiar on the board performs its signature instead (highest tier, then rarity)
+	local caster, best = nil, -1
+	for id, u in self.grid do
+		local def = Config.PETS[u.pet]
+		if def and def.signature then
+			local score = u.tier * 10 + Config.RARITIES[def.rarity].order
+			if score > best then
+				caster, best = id, score
+			end
+		end
+	end
+	local power = 1
+	if caster then
+		local def = Config.PETS[self.grid[caster].pet]
+		power = def.signaturePower
+		self.emit("Ult", { signature = def.signature, slot = caster, pet = self.grid[caster].pet })
+	else
+		self.emit("Ult", {})
+	end
+	local dmg = Config.ULT_DAMAGE * Config.hpScale(self.stage) * (1 + self:sv("ultDamage")) * power
 	for _, e in self.enemies do
 		if not e.dead then
 			self:damage(e, dmg, false)
@@ -411,6 +507,14 @@ function MatchSim.damage(self: Sim, e: Enemy, amount: number, chargeUlt: boolean
 		local def = Config.ENEMIES[e.kind]
 		local coins = math.floor(def.coins * (1 + 0.1 * (self.stage - 1)) * (1 + self:sv("coins")) + 0.5)
 		local gems = math.floor(def.gems * Config.comboMult(self.combo) * (1 + self:sv("gems")) + 0.5)
+		if (e :: any).carrying then
+			self.coins += 10 -- the stolen light drops as coins
+			self.emit("Drop", { id = e.id, coins = 10 })
+		end
+		local perched = (e :: any).perched
+		if perched and self.grid[perched] then
+			(self.grid[perched] :: any).disabledUntil = 0 -- the perched familiar is free again
+		end
 		local sp = 0
 		if e.kind == "Boss" then
 			sp = 1
@@ -536,11 +640,239 @@ function MatchSim.endTutorial(self: Sim)
 	end
 end
 
+-- ===== Statuses, roles and enemy behaviour (Design/Familiar Systems.md, Design/Enemy Bible.md) =====
+-- Server-only and data-driven (Config.STATUS, Config.ROLES, Config.ARMOR_MULT). Movement effects (slow, stun, freeze, plant, thief speed-up) only change
+-- enemy speed when Config.MOVEMENT_EFFECTS is true, because the client moves enemies at constant speed; they emit "Pace" {id, dist, speed, t} then.
+
+local function hasStatus(e: any, kind: string, t: number): boolean
+	local st = e.status and e.status[kind]
+	return st ~= nil and st.untilT > t
+end
+
+function MatchSim.applyStatus(self: Sim, e: any, kind: string, power: number?)
+	local def = Config.STATUS[kind]
+	if not def or e.dead then
+		return
+	end
+	e.status = e.status or {}
+	if (kind == "chill" or kind == "stun") and e.plant then
+		return -- planted enemies shrug off slows and stuns
+	end
+	if kind == "stun" and (e.stunImmune or 0) > self.t then
+		return
+	end
+	local dur = def.dur * (e.kind == "Boss" and 0.5 or 1)
+	local st = e.status[kind]
+	if not st then
+		st = { stacks = 0, untilT = 0 }
+		e.status[kind] = st
+	end
+	st.untilT = self.t + dur
+	if kind == "chill" then
+		st.stacks = math.min(def.max, st.stacks + 1)
+		if st.stacks >= def.max and e.kind ~= "Boss" then
+			e.status.freeze = { stacks = 1, untilT = self.t + def.freeze }
+			st.stacks = 0
+		end
+	elseif kind == "burn" then
+		st.dps = math.max(st.dps or 0, (power or 0) * def.dps)
+		st.stacks = 1
+	else
+		st.stacks = 1
+	end
+	if kind == "stun" then
+		e.stunImmune = self.t + dur + def.immune
+	end
+	if kind == "hush" then
+		e.telegraph, e.plant, e.plantTimer = nil, nil, 4
+	end
+	self.emit("Status", { id = e.id, kind = kind, dur = dur, stacks = st.stacks })
+end
+
+function MatchSim.neighbours(self: Sim, u: any): { any }
+	local list = {}
+	for _, o in self.grid do
+		if o ~= u and Config.touching(u, o) then
+			table.insert(list, o)
+		end
+	end
+	return list
+end
+
+-- aura multipliers from touching familiars: range (Ward) and attack speed (Archivist)
+function MatchSim.auras(self: Sim, u: any): (number, number, number)
+	local range, haste, damage = 0, 0, 0
+	for _, o in self:neighbours(u) do
+		local role = Config.ROLES[o.pet]
+		if role and role.aura then
+			range += role.aura.range or 0
+			haste += role.aura.haste or 0
+			damage += role.aura.damage or 0
+		end
+	end
+	return range, haste, damage
+end
+
+-- bonuses every familiar gets from Celestial familiars on the board (Kindle: damage, Veil: crit chance)
+function MatchSim.globals(self: Sim): (number, number)
+	local damage, crit = 0, 0
+	for _, o in self.grid do
+		local role = Config.ROLES[o.pet]
+		if role and role.global then
+			damage += role.global.damage or 0
+			crit += role.global.crit or 0
+		end
+	end
+	return damage, crit
+end
+
+-- damage after armour and marks; Sentinel pierces brass, the Wraith pierces everything
+function MatchSim.armourDamage(self: Sim, u: any, e: any, dmg: number): number
+	local role = Config.ROLES[u.pet]
+	local armor = Config.ENEMIES[e.kind].armor
+	local pierce = role and role.pierce
+	if armor and armor ~= "none" and not (pierce == "all" or (type(pierce) == "table" and table.find(pierce, armor))) then
+		local mult = Config.ARMOR_MULT[armor]
+		dmg *= (mult and mult[Config.DAMAGE_TYPE[u.pet] or ""]) or 1
+	end
+	if hasStatus(e, "mark", self.t) then
+		dmg *= 1 + Config.STATUS.mark.bonus
+	end
+	return dmg
+end
+
+-- what a shot does beyond its own damage: statuses, every-Nth bonuses, echo, drain
+function MatchSim.roleHit(self: Sim, slot: number, u: any, e: any, dmg: number, isCrit: boolean)
+	local role = Config.ROLES[u.pet]
+	if role then
+		if role.onHit and not e.dead then
+			for _, kind in role.onHit do
+				self:applyStatus(e, kind, dmg)
+			end
+		end
+		if role.critStun and isCrit and not e.dead then
+			self:applyStatus(e, "stun")
+		end
+		u.shots = (u.shots or 0) + 1
+		if role.nth and u.shots % role.nth.n == 0 then
+			if role.nth.extraHit and not e.dead then
+				self:damage(e, dmg, false)
+				self.emit("Echo", { slot = slot, id = e.id, dmg = dmg, kind = "extra" })
+			end
+			local sp = role.nth.splash
+			if sp then
+				local centre = Path.positionAt(e.dist)
+				for _, o in self.enemies do
+					if o ~= e and not o.dead then
+						local p = Path.positionAt(o.dist)
+						if (p - centre).Magnitude <= sp.radius then
+							self:damage(o, dmg * sp.mult, false)
+						end
+					end
+				end
+				self.emit("Echo", { slot = slot, id = e.id, dmg = dmg * sp.mult, kind = "splash" })
+			end
+		end
+		if role.rewind and u.shots % role.rewind.every == 0 then
+			for _, o in self:neighbours(u) do
+				o.cd = 0
+			end
+			self.emit("Echo", { slot = slot, id = e.id, dmg = 0, kind = "rewind" })
+		end
+		if role.drain then
+			u.hits = (u.hits or 0) + 1
+			if u.hits % role.drain.every == 0 then
+				self.crystalHp = math.min(self:maxHp(), self.crystalHp + role.drain.heal)
+				self.emit("Drain", { slot = slot, heal = role.drain.heal })
+			end
+		end
+	end
+	for _, o in self:neighbours(u) do
+		local r2 = Config.ROLES[o.pet]
+		if r2 and r2.echo and not e.dead then
+			self:damage(e, dmg * r2.echo, false)
+			self.emit("Echo", { slot = slot, id = e.id, dmg = dmg * r2.echo, kind = "echo" })
+		end
+	end
+end
+
+-- per-enemy ticks: burn damage, the Brass Sentinel's plant, the Lantern Thief's steal, the Clockwork Crow's perch; returns the speed multiplier
+function MatchSim.enemyTick(self: Sim, e: any, dt: number): number
+	local mult = 1
+	if e.status then
+		local burn = e.status.burn
+		if burn and burn.untilT > self.t and burn.dps then
+			self:damage(e, burn.dps * dt, false)
+			if e.dead then
+				return 0
+			end
+		end
+		if hasStatus(e, "stun", self.t) or hasStatus(e, "freeze", self.t) then
+			mult = 0
+		elseif hasStatus(e, "chill", self.t) then
+			mult = 1 - Config.STATUS.chill.slow * e.status.chill.stacks
+		end
+	end
+	if e.kind == "Tank" then
+		e.plantTimer = (e.plantTimer or 4) - dt
+		if e.telegraph then
+			e.telegraph -= dt
+			if e.telegraph <= 0 then
+				e.telegraph, e.plant = nil, 0.6
+				self.emit("Plant", { id = e.id, dur = 0.6 })
+			end
+		elseif e.plant then
+			e.plant -= dt
+			if e.plant <= 0 then
+				e.plant, e.plantTimer = nil, 4
+			end
+		elseif e.plantTimer <= 0 then
+			e.telegraph = 1
+			self.emit("Telegraph", { id = e.id, kind = "plant", delay = 1 })
+		end
+		if e.plant then
+			mult = 0
+		end
+	elseif e.kind == "Thief" then
+		if not e.carrying and e.dist >= 0.3 * Path.length then
+			e.carrying = true
+			self.emit("Steal", { id = e.id })
+		end
+		if e.carrying then
+			mult *= 1.3
+		end
+	elseif e.kind == "Crow" then
+		if e.perched == nil and e.dist >= 0.5 * Path.length then
+			local here = Path.positionAt(e.dist)
+			local bestSlot, bestD
+			for slot, u in self.grid do
+				local d = (Vector3.new(u.x, 0, u.z) - here).Magnitude
+				if d <= 30 and (not bestD or d < bestD) then
+					bestSlot, bestD = slot, d
+				end
+			end
+			e.perched = bestSlot or false
+			e.perchEnd = self.t + 6
+			if bestSlot then
+				(self.grid[bestSlot] :: any).disabledUntil = e.perchEnd
+				self.emit("Perch", { id = e.id, slot = bestSlot, dur = 6 })
+			end
+		end
+		if e.perched ~= nil and e.perchEnd and self.t < e.perchEnd then
+			mult = 0
+		end
+	end
+	return mult
+end
+
 function MatchSim.effective(self: Sim, u: Unit): (number, number, number)
 	local up = self.upgrades[u.pet]
 	local dmg = Config.petDamage(u.pet, u.tier) * (1 + Config.UPGRADES.Power.per * up.Power) * (1 + self:sv("damage"))
-	local cd = Config.PETS[u.pet].cooldown / ((1 + Config.UPGRADES.Haste.per * up.Haste) * (1 + self:sv("haste")))
-	local crit = Config.UPGRADES.Crit.per * up.Crit + self:sv("crit")
+	local _, auraHaste, auraDamage = self:auras(u)
+	local globalDamage, globalCrit = self:globals()
+	dmg *= 1 + auraDamage + globalDamage
+	local cd = Config.PETS[u.pet].cooldown / ((1 + Config.UPGRADES.Haste.per * up.Haste) * (1 + self:sv("haste")) * (1 + auraHaste))
+	local crit = math.min(Config.CRIT_CAP, Config.UPGRADES.Crit.per * up.Crit + self:sv("crit") + globalCrit)
 	return dmg, cd, crit
 end
 
@@ -571,11 +903,18 @@ function MatchSim.step(self: Sim, dt: number)
 	end
 
 	for _, e in self.enemies do
-		e.dist += Config.ENEMIES[e.kind].speed * dt
+		local pace = self:enemyTick(e, dt)
+		if (e :: any).pace ~= pace then
+			(e :: any).pace = pace
+			if Config.MOVEMENT_EFFECTS then
+				self.emit("Pace", { id = e.id, dist = e.dist, speed = Config.ENEMIES[e.kind].speed * pace, t = self.t })
+			end
+		end
+		e.dist += Config.ENEMIES[e.kind].speed * (Config.MOVEMENT_EFFECTS and pace or 1) * dt
 		if e.dist >= Path.length and not e.dead then
 			e.dead = true
 			if not self.tutorial then
-				self.crystalHp -= Config.ENEMIES[e.kind].leak
+				self.crystalHp -= Config.ENEMIES[e.kind].leak + ((e :: any).carrying and 1 or 0)
 			end
 			self.leakCount += 1
 			if self.leakCount > self:sv("streakGuard") then
@@ -588,15 +927,19 @@ function MatchSim.step(self: Sim, dt: number)
 
 	for slot, u in self.grid do
 		u.cd -= dt
-		if u.cd <= 0 then
+		if ((u :: any).disabledUntil or 0) > self.t then
+			u.cd = math.max(u.cd, 0.1) -- a perched crow keeps this familiar from firing
+		elseif u.cd <= 0 then
 			local def = Config.PETS[u.pet]
 			local origin = Vector3.new(u.x, 0, u.z)
+			local rangeAura = self:auras(u)
+			local range = def.range * (1 + rangeAura)
 			local best: Enemy? = nil
 			for _, e in self.enemies do
 				if not e.dead and (not best or e.dist > best.dist) then
 					local p = Path.positionAt(e.dist)
 					local dx, dz = p.X - origin.X, p.Z - origin.Z
-					if dx * dx + dz * dz <= def.range * def.range then
+					if dx * dx + dz * dz <= range * range then
 						best = e
 					end
 				end
@@ -610,9 +953,11 @@ function MatchSim.step(self: Sim, dt: number)
 				if best.kind == "Boss" then
 					dmg *= 1 + self:sv("bossDamage")
 				end
+				dmg = self:armourDamage(u, best, dmg)
 				u.cd = cd
 				self.emit("Shot", { slot = slot, id = best.id, dmg = dmg, crit = isCrit })
 				self:damage(best, dmg, true)
+				self:roleHit(slot, u, best, dmg, isCrit)
 			else
 				u.cd = 0.1
 			end

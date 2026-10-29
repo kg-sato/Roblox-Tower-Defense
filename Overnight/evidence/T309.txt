@@ -1,0 +1,3 @@
+PARTIAL (the list is written, the Studio test is NOT, so the task stays open): Roblox Dev/Design/Sound Priority.md
+Lists the 48 sounds by priority from the catalog (17 at priority 1, 18 at 2, 13 at 3) and the cap rule of SoundFX (8 voices, 6 on touch). Finding: when all playing sounds are priority 3 and a priority 2 sound arrives, the code stops a priority 3 sound; the note gives the fix (drop the newcomer when it is not higher than the lowest playing).
+Unmet: a test of the cap and priority behaviour in Studio; the fix was not applied (SoundFX belongs to the audio and UI sessions).

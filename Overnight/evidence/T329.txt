@@ -1,0 +1,3 @@
+PASS (Roblox Dev/Design/Remote Audit 2026-10-29.md; tests run in Studio Edit mode: 11 of 11 suites PASS through a temporary runner, Balance run separately)
+Audited the single client-to-server remote (Action) by reading MatchService, ActionArgs, MatchSim and SettingsDefaults: a table of every kind with its argument checks and rate limit. No new remote was added today. Findings: nothing trusted from the client for currency, rewards or cooldowns; NaN and out-of-range coordinates refused; one minor issue (Start can queue about 15 waiting threads per player).
+Limits: a static read plus the existing tests, not an exploit attempt in Play; no purchase flow exists to audit; the 20 actions per second bound is generous.

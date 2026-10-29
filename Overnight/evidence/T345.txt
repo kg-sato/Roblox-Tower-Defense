@@ -1,0 +1,3 @@
+PASS WITH A GAP (Roblox Dev/Design/Character Bible Index.md)
+A table of all 12 familiars (faction, element, rarity, role verb, home set, links to the lore note and the design notes, art and model paths), from the lore notes. Task says "linked from the design doc": the link from the Game Design Doc is NOT added (it belongs to T242, the doc refresh); and "one page per familiar" already exists as the lore notes in Roblox Dev/Lore/Familiars/ which the index links.
+Checked: the family facts match the lore notes (read via grep); the files named exist except none missing found.

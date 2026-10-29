@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Lore/Story/Chapter 3 - Silent Cathedral.md (70 rows keyed by trigger, stages 11 to 15 plus reactive lines).
+Machine check: Python word count over the text column of the C3-xx rows gave 70 rows, 811 words (matched to chapter 1's 800-word target; the task itself gave no length).
+Check: act 3 clues planted (lit child's lantern, the Choir's note); foreshadow star links to The Cosmic Turn; grief handled by implication per the tone guide. Not built into the game; quality is a proposal and UNVERIFIED by a human.

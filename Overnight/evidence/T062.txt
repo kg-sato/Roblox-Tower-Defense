@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Lore/Story/Chapter 1 - Lampwick Lane.md (75 rows keyed by trigger, covering tutorial to stage 5 plus reactive lines).
+Machine check: a Python word count over the text column of the C1-xx table rows gave 75 rows, 802 words (target 800). Run on the file as saved.
+Check: tone rules from Lore/Tone Guide.md followed (short lines, captions in the bracketed style, no banned words); act 1 clues planted for The Clockmaker. Not built into the game; the writing quality is a proposal and UNVERIFIED by a human.

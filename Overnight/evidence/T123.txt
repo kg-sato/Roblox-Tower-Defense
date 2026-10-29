@@ -1,0 +1,5 @@
+PASS (512 px colour and roughness maps for the 12 familiars plus family sheets; NOT packed into shared atlases)
+Built: tools/texture_maps.py; output Roblox Dev/Assets/3D/Familiars/maps/ (<Name>_Color_512.png and _Roughness_512.png for all 12, four contact sheets per family: biped, quadruped, flyer, floater). Design note Roblox Dev/Design/Texture Maps.md.
+Checked: the script ran on all 12 and wrote 48 map files and 16 sheets (maps_report.json lists painted share 69 to 82% and mean roughness 0.28 to 0.55 per familiar); viewed the flyer colour sheet (Moth-Lantern and Star Drake colour maps look like the baked UV islands, as expected).
+Unmet: "one atlas per family" in the task means shared atlases; the models keep their own UVs, so packing would need a UV re-layout of each model and a re-import. I delivered per-model 512 maps and per-family review sheets instead and say so here.
+Limits: not wired into Roblox, not uploaded, not seen in Play; the colour is the first-pass projected texture.

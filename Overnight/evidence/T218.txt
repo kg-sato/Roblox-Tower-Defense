@@ -1,0 +1,3 @@
+PASS WITH A QUESTION (documented: Roblox Dev/Design/Content Plans.md, section "Fusion")
+Finding: the task says tier 8, but TIER_MAX is 5 in Config and the design doc. Recommended fusion at tier 5 (two different tier-5 familiars of one faction become a Legend variant; one per run; not fusable again). The user must decide the tier number and whether fusion is wanted (about 20 new designs).
+Limits: design only.

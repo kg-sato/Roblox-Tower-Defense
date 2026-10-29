@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Lore/NPC - Tamsin the Supplier.md (persona, shop text rules, 30 texts: greetings, categories, coin-sink flavour, 11 cosmetic items, purchase flow).
+Machine check: python Overnight/evidence/T070_check.py (run this session, exit 0). Output: texts=30; PROBLEMS: none. It checks 30 texts, 16-word limit (20 for item texts), no digits (prices live in the UI), and no pressure, sale or Robux words.
+Grounding: Systems.md lists "Shop / purchases" as an idea only, so no item list or prices are invented as final; item names and the cosmetics are proposals for a later design task. Tamsin reuses the keeper from chapters 1 and 2. UNVERIFIED by a human; not built.

@@ -1,0 +1,14 @@
+model            anim   chan  secs joints  breath signature  closure
+Archivist        Idle      9  4.03      3   0.096     1.461  0.00000  ok
+BrassHound       Idle      3  4.03      1   0.120     0.337  0.00000  ok
+Ember            Idle      3  4.03      1   0.120     0.770  0.00000  ok
+Frostling        Idle      9  4.03      3   0.097     0.562  0.00000  ok
+Gargoyle         Idle      9  4.03      3   0.098     1.441  0.00000  ok
+GreyVeilWraith   Idle      9  4.03      3   0.096     0.729  0.00000  ok
+MirrorChorister  Idle      9  4.03      3   0.096     0.359  0.00000  ok
+MothLantern      Idle      9  4.03      3   0.097     0.479  0.00000  ok
+Mourner          Idle      9  4.03      3   0.096     0.964  0.00000  ok
+Sentinel         Idle      9  4.03      3   0.097     0.414  0.00000  ok
+StarDrake        Idle      3  4.03      1   0.121     0.452  0.00000  ok
+Ward             Idle      9  4.03      3   0.096     0.579  0.00000  ok
+models: 12 problems: 0

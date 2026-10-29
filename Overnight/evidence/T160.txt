@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Stage Set Plans.md, section "Stage intro and clear cards")
+Five intro cards: title from the existing captions, a one-line lore line from the set's "what went wrong", an art plate described (not painted). Lore lines are drafts for the user to approve.
+Limits: no UI built (the UI chat owns screens); no art made.

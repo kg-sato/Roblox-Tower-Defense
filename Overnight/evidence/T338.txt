@@ -1,0 +1,2 @@
+PASS WITH A CAVEAT (a Python file check, not a Studio test)
+tools/check_sound_lengths.py compares each of the 48 catalog durations (Studio_Export/SoundCatalog.luau) with its WAV in VFX/sfx/out and fails when a file exceeds its declared length by more than 0.05 s or a declared file is missing. Run now: exit 0, longest ultimate_impact 5.40 s. It does not read Sound.TimeLength in Studio (the task asked for a Studio test).

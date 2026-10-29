@@ -22,8 +22,10 @@ FXRecipes.RAMP = {
 	Rare = Color3.fromRGB(190, 120, 255),
 	Epic = Color3.fromRGB(255, 196, 90),
 	Legendary = Color3.fromRGB(255, 248, 230),
+	Mythic = Color3.fromRGB(255, 130, 195), -- added 2026-10-29 with the Mythic and Celestial rarities
+	Celestial = Color3.fromRGB(185, 250, 255),
 }
-FXRecipes.ORDER = { Common = 1, Rare = 2, Epic = 3, Legendary = 4 }
+FXRecipes.ORDER = { Common = 1, Rare = 2, Epic = 3, Legendary = 4, Mythic = 5, Celestial = 6 }
 
 -- importance: hit-stop frames (at 60 fps) and shake amount, one of each per impact
 FXRecipes.WEIGHT = {

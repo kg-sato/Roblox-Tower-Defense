@@ -1,0 +1,3 @@
+PASS
+Note: Roblox Dev/Research/Roblox Engine/Mobile performance limits.md
+Sources: 6 Creator Hub pages read, fetched 2026-10-28 (pages undated). Docs give few hard caps; no emitter/light count limit exists in them, stated in note.

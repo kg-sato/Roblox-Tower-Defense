@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Stage Set Plans.md, section "Path shapes")
+Stair and back (132 studs), ring round the clock (161, 45 to 63 degree turns) and a bridge with a pocket (120), computed and bounds-checked the same way (inside bounds; gaps 14 to 18 studs).
+Limits: not built; all three are shorter than the current path; the ring needs a curvature rule that allows non-90-degree turns (T179).

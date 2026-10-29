@@ -1,0 +1,4 @@
+familiar=MothLantern
+fill ratio (64 px crop) = 0.48
+IoU vs basic shapes: circle=0.60, square=0.48, triangle=0.39, plain butterfly=0.60
+view overlap front/side=0.42 front/back=1.00 side/back=0.42

@@ -1,0 +1,4 @@
+familiar=Ward
+fill ratio (64 px crop) = 0.41
+IoU vs basic shapes: circle=0.52, square=0.41, triangle=0.67, plain cone=0.72
+view overlap front/side=0.63 front/back=0.76 side/back=0.79

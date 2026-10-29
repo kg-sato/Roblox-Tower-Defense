@@ -1,0 +1,3 @@
+PASS
+Note: Roblox Dev/Research/Game Design and Market/Boss telegraphs.md
+Deviation (read before trusting this PASS): the task asked for timings of Dark Souls, Hollow Knight and Cuphead telegraphs. No source gave them (Gamer Guides: "a second or two" cool-down only; GMTK transcript 403). The note holds qualitative points, a reaction-time basis (160 to 250 ms, loosely sourced) and a recommendation of 1 s for our bosses. The user should judge.

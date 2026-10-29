@@ -1,0 +1,3 @@
+PASS
+Note: Roblox Dev/Research/UI/Clash Royale card art and frame hierarchy.md
+Deviation (read before trusting this PASS): frame colours, frame shape and cost-badge placement not found in any readable source (fandom 402, iMore text lacks colours). Two sources read (Wikipedia fetched 2026-10-28; iMore 2018-04-24). Card layout is my recommendation. The user should judge.

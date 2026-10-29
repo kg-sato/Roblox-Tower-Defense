@@ -1,0 +1,7 @@
+glb: 1 mesh, 1 materials, 1 images ok
+triangles 564 (budget 3000, project limit 20000) ok
+highest front silhouette IoU against any familiar front: 0.30 (front vs Ember; limit 0.5) ok; worst over all views 0.39 (side vs Mourner, information only)
+views differ from each other (smallest 1-IoU 0.51) ok
+size: [8.724, 2.1, 5.831]
+length_over_height: None
+enemy model StarChoirEcho: problems 0

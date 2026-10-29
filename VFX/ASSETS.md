@@ -153,3 +153,41 @@ Image ids are what the game uses (`ReplicatedStorage.ArtIds`, `LoadingScreen.ART
 | 86057593341535 | 113377141576674 | lantern_frame | make_tree_art.py |
 | 111449519715306 | 119952060714159 | lantern_glass | make_tree_art.py |
 | 94380979849766 | 108628251203855 | eye_soft (eye cut by brightness, no halo) | make_menu_art eye + Pillow |
+| 105163622904187 / 114712957649223 | Brass Sentinel v3 / v3b (Hunyuan + paint; v3 baked, v3b projected) | `Blender/sentinel_hy.py` | superseded |
+| 130297520521948 | Lampwick ward lantern v5b (primitives, 0.85 metal) | `Blender/lantern.py` | superseded |
+| 88575378535516 | Lampwick ward lantern v6 (in use as `ServerStorage.WardLampwickMesh`) | Hunyuan3D from `ref_steamlantern_s22.png` + `Blender/sentinel_hy.py` | reviewer 8/7/6/5/6 |
+| 138630723685732 | Brass Sentinel v4 (in use as `ReplicatedStorage.EnemyTankMesh`) | Hunyuan3D from `ref_sentinel_s33.png` + `Blender/sentinel_hy.py` | reviewer 6/4/4/4/3 |
+
+### Round 4 (2026-10-28 night, user feedback round)
+| Image id | Decal id | What |
+|---|---|---|
+| 74748169702520 | 76620136303235 | coin: make_tree_art.py brass gear coin |
+| 123781250890962 | 88951244412072 | eye_iris: eye_soft, iris cut out (turns and looks) |
+| 133137332599356 | 96351845847287 | eye_socket: eye_soft with the iris painted out |
+| 139036559395065 | 80877214144827 | gem: make_tree_art.py faceted gem |
+| 112373119685454 | 115706748369785 | road_lane: make_menu_art.py, progression horizon 1 |
+| 99544291548389 | 139847034960914 | road_stars: make_menu_art.py, progression horizon 3 |
+| 93038594791730 | 78210865840707 | road_veil: make_menu_art.py, progression horizon 2 |
+| 102117649984377 | Brass Sentinel v5 (in use; slate steel + brass repaint of the concept) | Hunyuan3D + `Blender/sentinel_hy.py` | |
+| 85579492882374 | Brass Sentinel v6 (flat colours, metal 0.6: rendered sky-blue in Studio) | Hunyuan3D + `Blender/sentinel_hy.py` | superseded |
+| 105590661234199 / 115745072343324 | Brass Sentinel v7 / v7b (metal 0.1, roughness 0.65; v7b warm dark repaint) | `Blender/sentinel_hy.py` | superseded |
+| 103893658539937 | Brass Sentinel v7c (in use as `ReplicatedStorage.EnemyTankMesh`; small specks removed, deep brass) | `Blender/sentinel_hy.py`, paint `Blender/out_art/sentinel_paint.png` | |
+| 124300641110722 | Brass Sentinel v8 (in use as `ReplicatedStorage.EnemyTankMesh`; user: "Yes, brass": brass plates, dark iron, gold trim; metal 0.35) | `Blender/sentinel_hy.py` | reviewer 5/3/4/4/5 |
+| 73478931319348 / 116076795526880 | Brass Sentinel v9 / v9b hard-surface rebuild (v9 in use as `ReplicatedStorage.EnemyTankMesh`; parts joined by material, so limbs can't move yet; v9b: one dial + vent, deeper brass, bigger head, not inserted) | `Blender/sentinel_hs.py` | not reviewed |
+| 78294245385172 | Brass Sentinel v10 (in use as `ReplicatedStorage.EnemyTankMesh`): hard-surface, 10 parts (Body, Eye, Arm/Leg L/R Upper/Lower) so Models.luau can walk it | `Blender/sentinel_hs.py` | |
+| 98742361543875 / 100036524167793 | Brass Sentinel v11 / v11b (v11b in use as `ReplicatedStorage.EnemyTankMesh`): square copper pauldrons, tighter bevels, orange-gold brass (v11 read lime in the lantern's cyan light) | `Blender/sentinel_hs.py` | v11b reviewer 6/4/5/5/6 |
+| 126424928512371 | 94971387475577 | tree_glitch: haze-free cut of tree.png (lit branches only) for the loading-screen glitch bands |
+| 116085173525728 | 124961483788709 | eyelid_upper: make_eyelids.py, brass lid for the loading screen's great eye (v1 Image 134236186916976 superseded) |
+| 119106061812770 | 112157058826647 | eyelid_lower: make_eyelids.py (v1 Image 104814287012401 superseded) |
+| 108973641961739 | 139867308010154 | brass_eye: make_menu_art.py brasseye s43 (ComfyUI FLUX, local), the loading screen's great eye |
+| 108916853756921 | 83927624271063 | brass_rim: make_brass_eye.py, the eye with its opening cut out plus a dark occluder |
+| 73029784679990 | 119128236012573 | brass_lid_up: make_brass_eye.py, riveted shutter from brassplate s44 |
+| 97141457319980 | 85540292646891 | brass_lid_down: make_brass_eye.py |
+| 129711096701406 | 86968654690830 | brass_rim v2: soft elliptical shadow instead of a box (v1 108916853756921 superseded) |
+| 112008873412775 | 110707533897263 | bloom_rays: make_brass_eye.py, gold rays for the dive's bloom |
+| 83413513375766 / 112596667131794 / 83519131280569 | 86186853388556 / 128141392993924 / 110387929458894 | eye_lids_0..2: make_eye_lids_flip.py, 18-frame brass eyelid flipbook (6 per sheet), replaces the shutters |
+| 111901277604979 / 101978614771389 / 76589767635756 | 91524651716605 / 119253317135181 / 131496445156561 | eye_iris_inner / eye_iris_outer / eye_pupil_disc: make_iris_rings.py, the two numeral dials of brass_eye cut as rings (counter-rotating) and a dilating pupil disc (2026-10-29) |
+| 140363661036149 / 95721032705289 / 132156400657957 / 112103918822049 / 79253164906379 / 80463341491403 | 78389502825820 / 117645687511252 / 72764772565444 / 73528688250232 / 94511724571607 / 121317208864344 | etched_brass_eye / etched_iris_inner / etched_iris_outer / etched_lids_0..2: recolor_etched.py, the great eye layers in the etched eye's gold-ink palette (the user: "i wanted these colors", 2026-10-29) |
+| 95646501629562 | 121057959639956 | etched_eye_lashes: make_eye_lashes.py, etched lash fringe and crease lines around the great eye's rim (the user: "the eyelashes are why the original model was so defined", 2026-10-29) |
+| 88935995065985 | 131230619338082 | etched_eye_lashes_black: make_eye_lashes.py v2, BLACK lashes over a cream lid band (the user: "the screenshots eyelashes are pure black"; measured lid band 74 % dark, reference 62-78 %), replaces 95646501629562 |
+| 117521992225366 / 131055110018506 | 115537900971155 / 72357432024114 | etched_iris_inner / etched_iris_outer: make_etched_iris_rings.py, the etched clock iris split at r 141 so its rings counter-rotate in the 2D great eye (2026-10-29) |

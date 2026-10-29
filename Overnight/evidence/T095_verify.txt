@@ -1,0 +1,14 @@
+model            anim   chan  secs joints    f6   f12   f24   f36 rest_err
+Archivist        Banish    9  1.20      3  1.05  0.79  0.31  0.02  0.00000  ok
+BrassHound       Banish    3  1.20      1  1.05  0.80  0.32  0.02  0.00000  ok
+Ember            Banish    3  1.20      1  1.05  0.80  0.32  0.02  0.00000  ok
+Frostling        Banish    9  1.20      3  1.05  0.80  0.32  0.02  0.00000  ok
+Gargoyle         Banish    9  1.20      3  1.07  0.79  0.33  0.02  0.00000  ok
+GreyVeilWraith   Banish    9  1.20      3  1.05  0.80  0.31  0.02  0.00000  ok
+MirrorChorister  Banish    9  1.20      3  1.05  0.81  0.33  0.02  0.00000  ok
+MothLantern      Banish    9  1.20      3  1.06  0.77  0.31  0.02  0.00000  ok
+Mourner          Banish    9  1.20      3  1.05  0.79  0.31  0.02  0.00000  ok
+Sentinel         Banish    9  1.20      3  1.05  0.80  0.32  0.02  0.00000  ok
+StarDrake        Banish    3  1.20      1  1.05  0.80  0.32  0.02  0.00000  ok
+Ward             Banish    9  1.20      3  1.05  0.80  0.32  0.02  0.00000  ok
+models: 12 problems: 0

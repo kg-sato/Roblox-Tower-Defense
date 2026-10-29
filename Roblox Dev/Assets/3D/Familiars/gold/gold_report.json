@@ -1,0 +1,136 @@
+{
+ "reference_top5_rgb": [
+  212.4,
+  197.6,
+  166.8
+ ],
+ "keep": 0.2,
+ "Archivist": {
+  "top5_rgb": [
+   231.6,
+   213.1,
+   165.5
+  ],
+  "distance_to_reference": 24.7
+ },
+ "BrassHound": {
+  "top5_rgb": [
+   249.1,
+   222.0,
+   168.2
+  ],
+  "distance_to_reference": 44.1
+ },
+ "CantorVesper": {
+  "top5_rgb": [
+   216.6,
+   195.5,
+   150.9
+  ],
+  "distance_to_reference": 16.6
+ },
+ "DameOrrery": {
+  "top5_rgb": [
+   202.5,
+   180.7,
+   132.9
+  ],
+  "distance_to_reference": 39.2
+ },
+ "Ember": {
+  "top5_rgb": [
+   250.9,
+   220.8,
+   152.2
+  ],
+  "distance_to_reference": 47.3
+ },
+ "Frostling": {
+  "top5_rgb": [
+   242.1,
+   219.8,
+   173.2
+  ],
+  "distance_to_reference": 37.6
+ },
+ "Gargoyle": {
+  "top5_rgb": [
+   223.0,
+   203.5,
+   164.2
+  ],
+  "distance_to_reference": 12.4
+ },
+ "GreyVeilWraith": {
+  "top5_rgb": [
+   219.4,
+   201.2,
+   163.7
+  ],
+  "distance_to_reference": 8.5
+ },
+ "MirrorChorister": {
+  "top5_rgb": [
+   203.9,
+   188.9,
+   156.5
+  ],
+  "distance_to_reference": 15.9
+ },
+ "MothLantern": {
+  "top5_rgb": [
+   241.1,
+   214.8,
+   160.6
+  ],
+  "distance_to_reference": 34.0
+ },
+ "Mourner": {
+  "top5_rgb": [
+   220.6,
+   200.9,
+   159.8
+  ],
+  "distance_to_reference": 11.3
+ },
+ "Sentinel": {
+  "top5_rgb": [
+   237.0,
+   211.8,
+   161.3
+  ],
+  "distance_to_reference": 28.9
+ },
+ "StarDrake": {
+  "top5_rgb": [
+   249.1,
+   222.3,
+   169.1
+  ],
+  "distance_to_reference": 44.3
+ },
+ "TheLamplighter": {
+  "top5_rgb": [
+   172.1,
+   149.5,
+   104.5
+  ],
+  "distance_to_reference": 88.4
+ },
+ "VeilWalker": {
+  "top5_rgb": [
+   223.9,
+   196.1,
+   143.5
+  ],
+  "distance_to_reference": 26.0
+ },
+ "Ward": {
+  "top5_rgb": [
+   227.4,
+   207.8,
+   162.1
+  ],
+  "distance_to_reference": 18.7
+ }
+}

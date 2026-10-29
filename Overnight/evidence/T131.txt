@@ -1,0 +1,4 @@
+PASS (familiar textures are uploaded and load, but as part of the models, not as separate image assets)
+The familiar textures (flat or projected colours, one image per model) are embedded in each GLB, and Roblox's import turns the embedded image into the MeshPart's texture; there are no separate texture decals for them. Re-verified 2026-10-29 in Studio Edit mode: all 24 uploaded familiar models (12 static, 12 rigged, ids in Overnight/evidence/T130.txt) load with a texture on their MeshPart (textured=1 each).
+Separate image uploads that exist (Decal type, tools/uploads.json): 95 images, including the familiar cutouts and lore cards used by the collection screen (Studio_Export/FamiliarArt.luau). The planned 512 px per-family texture atlases (T123) are not made, so no atlas was uploaded.
+Limits: textures are the embedded ones from the import pipeline, not hand-checked in Play; no roughness, normal or emissive maps are uploaded (T123 to T128 are open).

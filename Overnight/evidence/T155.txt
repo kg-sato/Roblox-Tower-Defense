@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Stage Set Plans.md, section "Path shapes")
+Serpentine (384 studs), inward spiral (288) and a split with a merge point (branches 132 and 160), as waypoint lists; a script computed length, corners, sharpest turn, smallest gap between non-adjacent legs and the board-bounds check (all inside the bounds; gaps 14 to 22 studs). The split needs engine support for two branches.
+Limits: not built or placed in Studio; slot positions not designed; branches shorter than the current 234-stud path.

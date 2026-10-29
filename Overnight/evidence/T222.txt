@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Content Plans.md, section "Twenty quests")
+10 daily quests and 10 story quests tied to the stage sets and the lore beats, with gem rewards sized against the economy (3 dailies about 60 gems; story quests about 300 gems and 2 skill points in total). Quest D8 depends on the lantern power (T211), which is not built.
+Limits: design only, not implemented; the numbers are not tested against the economy.

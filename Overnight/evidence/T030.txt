@@ -1,0 +1,4 @@
+PASS
+Note: Roblox Dev/Research/UI/Colour theory for readable teams.md
+Machine check: python Overnight/evidence/T030_cvd.py (rerun and output verified). Result: 7 Okabe-Ito hues min deltaE 16.1 (tritan); adding 3 neutrals gives deutan min 9.7 (green vs grey), so ten colours need a shape/glyph cue.
+Caveats: simulation matrices written from memory (unverified); hex codes from third-party snippets; delta E threshold of ~15 is my rule of thumb. The user should judge.

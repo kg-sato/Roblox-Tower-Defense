@@ -1,0 +1,4 @@
+familiar=Sentinel
+fill ratio (64 px crop) = 0.35
+IoU vs basic shapes: circle=0.44, square=0.35, triangle=0.47, plain robot=0.55
+view overlap front/side=0.43 front/back=1.00 side/back=0.43

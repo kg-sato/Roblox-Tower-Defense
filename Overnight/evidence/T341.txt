@@ -1,0 +1,3 @@
+PASS (Roblox Dev/Playtest Checklist.md)
+Ten timed steps (15 minutes) each with a question only a person can answer, plus five decisions the user owes. Built from the real open items: Bug Log #1 (drag input), the collection button hide, the loading screen fix, the rigged and textured familiars (UNVERIFIED), the stage 5 boss, settings, and the console.
+Limits: not run by anyone; times are estimates.

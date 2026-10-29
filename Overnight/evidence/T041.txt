@@ -1,0 +1,3 @@
+PASS
+Note: Roblox Dev/Research/UI/Hearthstone reveal and rarity presentation.md
+Sources: Wikipedia and the Hearthstone fan wiki (Card packs) read, fetched 2026-10-28; pity numbers from the fan wiki are labelled as such. Reveal animation timing not found. Recommendations are mine.

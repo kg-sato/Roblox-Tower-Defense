@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Stage Set Plans.md, section "Stage intro and clear cards")
+Five clear cards: title from the existing set-clear captions, gem reward 50 to 100 rising with the set, a draft flavour line.
+Limits: rewards are not tested against the economy; no UI built.

@@ -1,0 +1,3 @@
+PASS
+Note: Roblox Dev/Research/UI/Skill tree UX in ARPGs.md
+Deviation (read before trusting this PASS): only Path of Exile has a read source with structure facts. Last Epoch Wikipedia has no tree content; both Icy Veins pages returned 403 so Diablo claims are snippets, marked unverified. No formal "reads at a glance" analysis found; takeaways are recommendations. The user should judge.

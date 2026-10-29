@@ -83,7 +83,8 @@ SHELL_DENY = [
     (r"\bgit\s+branch\s+(-[a-zA-Z]*[dDmM]|--delete|--move)", "no branch deletion"),
     (r"\b(pip3?|uv|cargo|npm|yarn|pnpm|winget|choco|scoop)\b.*\b(install|add|i|upgrade|update)\b|\bnpx\b|\buvx\b|python\S*\s+-m\s+pip", "no new dependencies"),
     (r"\b(gh|glab|az|aws|gcloud|supabase|wrangler|vercel|netlify|firebase|ssh|scp|ftp|telnet|nc|ncat)\b", "external service CLI"),
-    (r"upload_asset\.py|install-for-codex|publish|deploy", "upload, publish and deploy need the user"),
+    # upload_asset.py is allowed: the user pre-approved uploads on 2026-10-28.
+    (r"install-for-codex|publish|deploy", "publish and deploy need the user"),
     (r"\b(shutdown|Restart-Computer|Stop-Computer|logoff|schtasks|netsh|setx|icacls|takeown|Set-ExecutionPolicy|Set-MpPreference|Add-MpPreference|reg\s+(add|delete|import))\b", "system or security setting"),
     (r"\b(Stop-Process|taskkill|kill|pkill)\b.*(Studio|Roblox|claude|explorer|node|MsMpEng|Defender)", "must not stop Studio, Claude or system processes"),
     (r"\.env\b|id_rsa|[\\/]\.ssh\b|[\\/]\.aws\b|\.npmrc|\.netrc|credentials\.json|api[_-]?key\s*=|Login Data|OPEN_?CLOUD|ROBLOX_API", "secret access"),
@@ -148,10 +149,9 @@ if tool == "mcp__roblox-studio__execute_luau":
     decide(not m, f"Luau uses {m.group(0)}" if m else "Studio script in policy")
 if tool == "mcp__roblox-studio__http_get":
     decide(bool(LOOPBACK.match(inp.get("url", ""))), "localhost only")
-if tool in ("mcp__roblox-studio__upload_image", "mcp__roblox-studio__insert_asset", "mcp__roblox-studio__store_image",
-            "mcp__roblox-studio__generate_mesh", "mcp__roblox-studio__generate_texture", "mcp__roblox-studio__generate_material",
-            "mcp__roblox-studio__generate_procedural_model", "mcp__roblox-studio__subagent", "mcp__roblox-studio__skill"):
-    decide(False, "uploads, catalog inserts and paid generation need the user")
+# Uploads, Creator Store inserts and Studio AI generation are pre-approved by the user (2026-10-28) and fall through to "Studio MCP".
+if tool in ("mcp__roblox-studio__subagent", "mcp__roblox-studio__skill"):
+    decide(False, "Studio subagent and skill calls stay with the user")
 if tool.startswith("mcp__roblox-studio__"):
     decide(True, "Studio MCP")
 if tool.startswith("mcp__terminal__"):

@@ -1,0 +1,7 @@
+glb: 1 mesh, 1 materials, 1 images ok
+triangles 380 (budget 3000, project limit 20000) ok
+highest front silhouette IoU against any familiar front: 0.28 (front vs Ember; limit 0.5) ok; worst over all views 0.43 (three_quarter vs Ember, information only)
+views differ from each other (smallest 1-IoU 0.56) ok
+size: [8.25, 6.6, 7.99]
+length_over_height: None
+enemy model UnboundP2: problems 0

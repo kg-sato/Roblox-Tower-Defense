@@ -19,6 +19,13 @@ ART = {
     # mask: "lum" = alpha from brightness, "round" = soft circle, "oval" = soft eye-shaped oval
     "eye": ("extreme close-up of a single wide open human eye, the iris is an intricate clockwork dial with tiny roman numerals "
             "and a glowing sigil at the pupil, long detailed eyelashes, wet glossy highlights, veins, " + INK, "oval"),
+    # 2026-10-28 night (review: "a human-eye engraving, not brass clockwork"): the loading screen's great eye
+    "brasseye": ("front view of a single giant mechanical steampunk automaton eye, almond shaped, the eyeball is polished ivory "
+                 "enamel and the iris is an intricate brass clockwork dial with roman numerals, tiny gears and a glowing amber "
+                 "pupil, set in a socket of riveted polished brass and copper plates with engraved filigree, warm golden rim "
+                 "light, photorealistic, symmetrical, centred, wide aspect, pure black background, no text, no face, no skin", "oval", (1024, 640)),
+    "brassplate": ("close-up of a smooth curved polished brass armour plate with fine engraved filigree and a row of small rivets "
+                   "along one edge, warm golden light, photorealistic, fills the whole frame edge to edge, no background, no text", "none"),
     "clock": ("front view of an ornate antique steampunk pocket watch face without hands, aged polished brass and copper, "
               "exposed interlocking gears and cogs visible through cut-outs in the dial, engraved roman numerals on an ivory "
               "enamel chapter ring, rivets, filigree, warm golden rim light, photorealistic, perfectly circular, centred, fills the frame, "
@@ -37,6 +44,15 @@ ART = {
                "thin art nouveau filigree along the sides, Victorian gaslight style, the frame is thin and elegant, the inside "
                "of the frame is completely empty pure black, pure black background outside, symmetrical, flat front view, "
                "no text, no picture inside, no faces, no creatures", "frame", (576, 768)),
+    "road_lane": ("wide panoramic painting of a Victorian gaslit city skyline at night seen from a cobbled lane, rows of "
+                  "rooftops and chimneys, a distant brass clock tower, warm lit windows, gas lamps, thin fog, a large pale "
+                  "moon, deep blue night sky with stars, painterly, atmospheric, no people, no text", "none", (1024, 512)),
+    "road_veil": ("wide panoramic painting of a misty violet valley at night where magic shows itself, floating stones with "
+                  "glowing runes, ruined arches, soft purple fog, glowing motes, deep violet sky, painterly, atmospheric, "
+                  "no people, no text", "none", (1024, 512)),
+    "road_stars": ("wide panoramic painting of deep space seen from a stairway of light, a vast galaxy band, nebula clouds "
+                   "in pale blue and white, a faint glowing rune circle in the sky, countless stars, cosmic, serene, "
+                   "painterly, no planets close up, no people, no text", "none", (1024, 512)),
 }
 
 
@@ -44,6 +60,8 @@ def cut(png, mask):
     im = Image.open(io.BytesIO(png)).convert("RGB")
     w, h = im.size
     lum = im.convert("L")
+    if mask == "none":
+        return im.convert("RGBA")
     if mask == "lum":
         a = lum.point(lambda v: 0 if v < 12 else min(255, int((v - 12) * 1.6)))
     elif mask == "frame":  # metal is mid-bright; the empty inside and outside are near black

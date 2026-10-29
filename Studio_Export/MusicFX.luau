@@ -33,6 +33,9 @@ end
 Music.states = {
 	menu = { "shinsei", "iremos_forest" },
 	play = { "chill_lofi", "rising_moon" },
+	harbour = { "artifact_room" }, -- stage set 2 (T114)
+	cathedral = { "shinsei", "iremos_forest" }, -- stage set 3 (T114)
+	veil = { "rising_moon" }, -- stage set 5, Above the Grey Veil (T154)
 	wish = { "iremos_forest" },
 }
 Music.volumes = { music = 1 }

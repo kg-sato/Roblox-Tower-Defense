@@ -36,7 +36,9 @@ local function paint(key, w, h, fn)
 	local img = AssetService:CreateEditableImage({ Size = Vector2.new(w, h) })
 	local buf = buffer.create(w * h * 4)
 	local i = 0
+	local canYield = coroutine.isyieldable()
 	for y = 0, h - 1 do
+		if canYield and y % 24 == 23 then task.wait() end -- big textures paint over a few frames instead of freezing one
 		for x = 0, w - 1 do
 			local r, g, b, a = fn(x + 0.5, y + 0.5)
 			buffer.writeu8(buf, i, math.floor(clamp01(r) * 255 + 0.5))
@@ -370,6 +372,69 @@ function FA.hex(kind)
 			local inside = 1 - smooth(-0.8, 0.8, d)
 			return 1, 1, 1, inside * (1 - smooth(0.0, 0.55, t)) * 0.9
 		end
+	end)
+end
+
+-- 2026-10-28 texture pass. Measured gap (tools/look_quality.py): the reference games have texture in their dark areas
+-- (grain 0.011..0.067) and one hue family per screen; ours had empty flat black (0.004..0.012) and 4-5 mixed hues.
+-- These painters give soft, textured light without uploads.
+local function vnoise(x, y)
+	local xi, yi = math.floor(x), math.floor(y)
+	local xf, yf = x - xi, y - yi
+	local u, v = xf * xf * (3 - 2 * xf), yf * yf * (3 - 2 * yf)
+	local a, b = hash(xi, yi), hash(xi + 1, yi)
+	local c, d = hash(xi, yi + 1), hash(xi + 1, yi + 1)
+	return lerp(lerp(a, b, u), lerp(c, d, u), v)
+end
+local function fbm(x, y)
+	local s, amp, f = 0, 0.5, 1
+	for _ = 1, 4 do
+		s += vnoise(x * f, y * f) * amp
+		amp *= 0.5
+		f *= 2.03
+	end
+	return s
+end
+
+-- a soft cloud of nebula: fractal noise shaped by a round falloff, two colours mixed by a second noise; alpha only
+-- where there is cloud, so several can be layered. seed changes the shape.
+function FA.nebula(c1, c2, seed)
+	local S = 128 -- stretched large and soft anyway; 192 cost 2.25x the work
+	seed = seed or 1
+	return paint("neb" .. ckey(c1) .. ckey(c2) .. seed, S, S, function(x, y)
+		local u, v = x / S, y / S
+		local r = math.sqrt((u - 0.5) ^ 2 + (v - 0.5) ^ 2) * 2
+		local n = fbm(u * 4 + seed * 7.1, v * 4 + seed * 3.3)
+		local m = fbm(u * 3 + 11 + seed, v * 3 + 5)
+		local dens = clamp01((n - 0.35) * 2.2) * (1 - smooth(0.35, 1, r))
+		local t = clamp01(m * 1.6 - 0.3)
+		local cr, cg, cb = lerp(c1.R, c2.R, t), lerp(c1.G, c2.G, t), lerp(c1.B, c2.B, t)
+		local hot = smooth(0.55, 0.9, n) * 0.5 -- brighter wisps inside the cloud
+		return cr + hot, cg + hot, cb + hot, dens ^ 1.3
+	end)
+end
+
+-- film grain / dust: a tiling noise tile, used at low opacity over a whole screen (ScaleType Tile)
+function FA.grain()
+	local S = 128
+	return paint("grain", S, S, function(x, y)
+		local g = hash(x * 1.37, y * 2.11)
+		local speck = g > 0.985 and 1 or 0 -- rare bright dust
+		local a = math.abs(g - 0.5) * 0.5 + speck * 0.6
+		local v = g > 0.5 and 1 or 0
+		return v, v, v, a
+	end)
+end
+
+-- soft light rays fanning from the bottom centre (god rays), white; tint with ImageColor3
+function FA.rays()
+	local S = 256
+	return paint("rays", S, S, function(x, y)
+		local dx, dy = x / S - 0.5, 1 - y / S
+		local ang = math.atan2(dx, dy)
+		local band = (math.sin(ang * 23) * 0.5 + 0.5) * (math.sin(ang * 9 + 1.7) * 0.5 + 0.5)
+		local fall = (1 - smooth(0, 1, math.sqrt(dx * dx + dy * dy) * 1.25)) * (1 - smooth(0.3, 0.9, math.abs(ang)))
+		return 1, 1, 1, band ^ 1.6 * fall * 0.9
 	end)
 end
 

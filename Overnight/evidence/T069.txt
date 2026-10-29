@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Lore/NPC - Pip the Apprentice.md (identity, role, look, voice, behaviour rules, 36 lines in 16 pools, open questions).
+Machine check: python Overnight/evidence/T069_check.py (run this session, final exit 0). Output: lines=36 pools=16; PROBLEMS: none. First run flagged PIP-28 at 15 words (limit 14); shortened and rerun. The check covers 36 lines, 14-word limit, banned words and spoiler terms (Clockmaker's real name, motive).
+Decision flagged for the user: Pip is a younger later apprentice, not the lost one, to protect the story twist. Voice and the decision are proposals; UNVERIFIED by a human. Not built.

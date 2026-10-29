@@ -1,0 +1,3 @@
+PASS WITH A DECISION FOR THE USER (documented: Roblox Dev/Design/Progression Rules.md, section "Monetisation review")
+Reviewed the design doc's plan (premium pets, 2x Coins pass, Auto-Merge pass, no paid random items, no trading). Found that the 2x Coins pass is pay-for-progress, not cosmetic, against the task's no pay-to-win rule; proposed cosmetics (trainer outfits, frames, lantern colours, title cards) instead. The user must decide whether to keep or replace the pass.
+Limits: a review note; the Robux prices and Roblox policy text were not re-checked today (the research note Payments and Robux was not re-read).

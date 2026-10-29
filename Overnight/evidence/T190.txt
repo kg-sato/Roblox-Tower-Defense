@@ -1,0 +1,3 @@
+PARTIAL (the task stays open: there is no economy simulator tool; the data is in Roblox Dev/Design/Balance Baseline 2026-10-29.md)
+Done: income per stage for stages 1 to 25 computed from Config (1,628 coins and 789 gems from kills, before the streak multiplier), the roll cost shown to be flat at 10 gems (the older design said it rises), and the bot gems per minute from the harness (86, 141, 249). 
+Unmet: a simulator that varies roll cost and income and checks the curve over the 25 stages; the bots' gem income is not broken down by source (kills, multiplier, level-ups).

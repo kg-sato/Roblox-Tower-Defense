@@ -1,0 +1,3 @@
+PASS (Roblox Dev/Design/Boss Music Stings.md)
+Fifteen cues (3 per boss: fight start, phase 2, phase 3) described by instrument, motion and mood, following the grief arc of each boss; length 3 to 5 s and a 6 dB duck of the stage music. Checked against the boss phase design in Boss Designs.md.
+Limits: specs only, no audio made, nothing wired.

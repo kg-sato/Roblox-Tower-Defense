@@ -1,0 +1,4 @@
+PASS (upload plan written: Roblox Dev/Design/Upload Plan.md)
+Content: tool and rules; a state table of every asset group (familiar models static and rigged, 95 decals, 11 enemy and boss models, clips, texture sets, trainer and props); the order for what is left. Facts taken from tools/uploads.json (148 entries: 53 Model, 95 Decal) and the T130 and T132 checks.
+Finding worth the user's attention: the Walk and Attack clips are KeyframeSequences registered in Studio only, so a published game cannot play them until they are exported and uploaded as Animation assets (the plan lists the steps). Not done in this task (needs a Studio session and the user's account is pre-approved for it).
+Limits: a plan, not an upload; the Animation export route (.rbxmx from Studio, then upload_asset.py as Animation) is untested here.

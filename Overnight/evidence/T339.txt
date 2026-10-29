@@ -1,0 +1,2 @@
+PASS WITH A CAVEAT (the check is a Python script, not a Studio test)
+python tools/asset_budget.py reads the index counts of every GLB under Roblox Dev/Assets/3D and exits 1 when any exceeds its budget (20,000; enemies and bosses 3,000); run now: exit 0, max 18,000. The task asked for a Studio test with PASS; this catches the same problem before upload but does not look at meshes inside the open place file.

@@ -1,0 +1,4 @@
+familiar=Gargoyle
+fill ratio (64 px crop) = 0.57
+IoU vs basic shapes: circle=0.59, square=0.57, triangle=0.71, plain rock=0.70
+view overlap front/side=0.68 front/back=1.00 side/back=0.68

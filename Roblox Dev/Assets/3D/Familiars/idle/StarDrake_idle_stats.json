@@ -1,0 +1,1 @@
+{"name": "StarDrake", "frames": 121, "fps": 30, "bones": ["Root"], "max_vertex_motion_by_frame": {"1": 0.0, "15": 0.1207, "30": 0.0385, "48": 0.2489, "60": 0.4024, "72": 0.2929, "84": 0.0202, "96": 0.4517, "108": 0.0847, "121": 0.0}, "max_motion": 0.4517, "loop_closure_error": 0.0, "height": 4.0}

@@ -65,7 +65,7 @@ local function crane(x, z, facing)
 	part(Vector3.new(2, 1, 2), base * CFrame.new(0, 20, -24), Color3.fromRGB(40, 40, 44), Enum.Material.Metal)
 end
 crane(-70, -60, 0)
-crane(40, -62, math.rad(10))
+crane(40, -40, math.rad(10)) -- T104: pulled in so its base sits in the top band of the default board camera
 crane(84, 60, math.rad(180))
 
 -- steamship silhouettes in the fog
@@ -81,7 +81,7 @@ local function ship(x, z, len, rot)
 		w.Transparency = 0.2
 	end
 end
-ship(-30, -118, 70, 0)
+ship(-30, -40, 70, 0) -- T104: pulled in from -118 so the hull shows in the top band of the default camera
 ship(70, -132, 90, math.rad(-6))
 ship(-90, 130, 80, math.rad(178))
 

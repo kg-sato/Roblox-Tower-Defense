@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Lore/Story/Stage Captions.md (40 captions: 25 stage intros + 5 boss warnings + 5 boss defeats + 5 set clears).
+Machine check: python Overnight/evidence/T067_check.py (run this session, exit 0). Output: captions=40 unique=40 intros=25; intro captions not found in chapter scripts: none; PROBLEMS: none. The check covers bracket format, 2 to 5 words, no duplicates, no banned words, and an intro for each of stages 1 to 25.
+Note: Lore/Tone Guide.md caption rule widened from 2-4 to 2-5 words (two edits) so the guide matches the chapter scripts. Voice and wording are proposals; human judgement is UNVERIFIED.

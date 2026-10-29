@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Stage Set Plans.md, section "Enemy variants by stage set")
+A table of how each set re-skins the same families (wet and verdigris, gilded, soot and heat, starlit), within the research rule of one palette per layer; build route: a tint through the palette texture or SurfaceAppearance plus one or two prop swaps.
+Limits: a plan; nothing built, no models tinted.

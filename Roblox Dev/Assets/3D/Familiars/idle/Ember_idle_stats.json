@@ -1,0 +1,1 @@
+{"name": "Ember", "frames": 121, "fps": 30, "bones": ["Root"], "max_vertex_motion_by_frame": {"1": 0.0, "15": 0.1201, "30": 0.0, "48": 0.7699, "60": 0.492, "72": 0.502, "84": 0.0, "96": 0.0211, "108": 0.0545, "121": 0.0}, "max_motion": 0.7699, "loop_closure_error": 0.0, "height": 4.0}

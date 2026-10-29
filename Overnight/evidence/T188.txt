@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Progression Rules.md, section "Daily reward ladder")
+Seven days of free-currency rewards, repeating with +10% gems per full cycle (cap 50%), missed day pauses the streak, no fake countdowns; the 7-day total is about 140 gems plus 3 rolls (about 17 rolls a week at 10 gems per roll). PROPOSAL, numbers not tested against the economy; the economy simulator (T190) is open.
+Limits: no code; nothing in the game gives daily rewards yet.

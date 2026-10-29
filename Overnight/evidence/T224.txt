@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Content Plans.md, section "Battle pass")
+40 levels at about 100 XP, free track (gems, lantern colours, title cards, a frame) and premium track (outfits, palette skins, emotes, a loading-eye variant, a golden lantern trail); premium never gives gems, rolls, skill points or stats.
+Limits: design only; the Robux price and whether to ship in v1 are the user's calls; the XP rate is a guess.

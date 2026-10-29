@@ -1,0 +1,4 @@
+familiar=Ember
+fill ratio (64 px crop) = 0.34
+IoU vs basic shapes: circle=0.43, square=0.34, triangle=0.56, plain flame=0.56
+view overlap front/side=0.66 front/back=0.89 side/back=0.67

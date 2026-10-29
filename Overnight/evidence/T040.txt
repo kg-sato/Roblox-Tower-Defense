@@ -1,0 +1,3 @@
+PASS
+Note: Roblox Dev/Research/UI/Balatro scoring feedback and card readability.md
+Deviation (read before trusting this PASS): card/Joker rarity presentation not found; timing numbers come from a third-party guide (Blake Crosley) that presents them as illustrative, flagged as such. Three sources read (Wikipedia and PSU 2026-09-09 and the guide). Recommendations are mine. The user should judge.

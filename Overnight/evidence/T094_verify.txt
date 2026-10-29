@@ -1,0 +1,14 @@
+model            anim   chan  secs joints    f1    f4   f12   f30 rest_err
+Archivist        Spawn     9  1.50      3  0.04  0.11  0.42  1.07  0.00000  ok
+BrassHound       Spawn     3  1.50      1  0.04  0.11  0.42  1.07  0.00000  ok
+Ember            Spawn     3  1.50      1  0.04  0.11  0.42  1.07  0.00000  ok
+Frostling        Spawn     9  1.50      3  0.04  0.11  0.42  1.07  0.00000  ok
+Gargoyle         Spawn     9  1.50      3  0.04  0.11  0.43  1.06  0.00000  ok
+GreyVeilWraith   Spawn     9  1.50      3  0.04  0.11  0.42  1.07  0.00000  ok
+MirrorChorister  Spawn     9  1.50      3  0.04  0.11  0.42  1.07  0.00000  ok
+MothLantern      Spawn     9  1.50      3  0.04  0.11  0.43  1.06  0.00000  ok
+Mourner          Spawn     9  1.50      3  0.04  0.11  0.42  1.07  0.00000  ok
+Sentinel         Spawn     9  1.50      3  0.04  0.11  0.42  1.07  0.00000  ok
+StarDrake        Spawn     3  1.50      1  0.04  0.11  0.42  1.07  0.00000  ok
+Ward             Spawn     9  1.50      3  0.04  0.11  0.42  1.07  0.00000  ok
+models: 12 problems: 0

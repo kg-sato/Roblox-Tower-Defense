@@ -44,9 +44,9 @@ for _, z in { -64, 66 } do
 	part(Vector3.new(240, 46, 4), CFrame.new(0, 23, z), STONE, Enum.Material.Brick)
 	for k = -4, 4 do
 		local x = k * 22
-		local w = part(Vector3.new(6, 20, 0.4), CFrame.new(x, 18, z + (z > 0 and -2.2 or 2.2)), GLASS[(k + 5) % 4 + 1], Enum.Material.Glass)
+		local w = part(Vector3.new(6, 20, 0.4), CFrame.new(x, 11, z + (z > 0 and -2.2 or 2.2)), GLASS[(k + 5) % 4 + 1], Enum.Material.Glass)
 		w.Transparency = 0.15
-		local tip = part(Vector3.new(6, 6, 0.4), CFrame.new(x, 30, z + (z > 0 and -2.2 or 2.2)) * CFrame.Angles(0, 0, math.rad(45)), GLASS[(k + 6) % 4 + 1], Enum.Material.Glass)
+		local tip = part(Vector3.new(6, 6, 0.4), CFrame.new(x, 23, z + (z > 0 and -2.2 or 2.2)) * CFrame.Angles(0, 0, math.rad(45)), GLASS[(k + 6) % 4 + 1], Enum.Material.Glass)
 		tip.Size = Vector3.new(4.2, 4.2, 0.4)
 		tip.Transparency = 0.15
 	end

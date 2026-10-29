@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Content Plans.md, section "Friend invites")
+Plan: Roblox's own invite prompt only from a player-pressed button, one prompt a day, a 30-gem reward only after an invited friend finishes the tutorial (5 friends a week, once per friend, server-checked).
+Limits: design only; the SocialService API names are from memory and not checked today (UNVERIFIED).

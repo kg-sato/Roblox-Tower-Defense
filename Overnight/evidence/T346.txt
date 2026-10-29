@@ -1,0 +1,3 @@
+PASS WITH A GAP (Roblox Dev/Design/Stage Bible Index.md)
+A table of the five sets (stages, place, faction lean, boss, story chapter) linking Stage Set Lore, captions, chapters, ending and the new design notes (Stage Set Plans, Boss Designs, Enemy Bible, Difficulty Curve, Enemy Models); states what is built in Studio (four backdrops in the exports, none for Above the Grey Veil, one path for all stages; checked by grep of Studio_Export).
+Gap: not linked from the Game Design Doc (T242).

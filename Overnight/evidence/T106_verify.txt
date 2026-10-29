@@ -1,0 +1,21 @@
+model            archetype  bones joints infl          wsum  head spine  limb  result
+Archivist        biped         14     14    4 1.000-1.000   556  2926  1227  ok
+BrassHound       quadruped     16     16    4 1.000-1.000  1846  4239  1033  ok
+Ember            floater       10     10    4 1.000-1.000   232  1811   863  ok
+Frostling        biped         14     14    4 1.000-1.000   350  1825   750  ok
+Gargoyle         quadruped     16     16    4 1.000-1.000  2032  3306   951  ok
+GreyVeilWraith   floater       10     10    4 1.000-1.000   539  2152   547  ok
+MirrorChorister  biped         14     14    4 1.000-1.000  2055  4002  1374  ok
+MothLantern      flyer         12     12    4 1.000-1.000   843  3951  1677  ok
+Mourner          biped         14     14    4 1.000-1.000   710  2717  1296  ok
+Sentinel         biped         14     14    4 1.000-1.000   771  3373  1017  ok
+StarDrake        flyer         12     12    4 1.000-1.000   928  3628  1844  ok
+Ward             biped         14     14    4 1.000-1.000   700  3632  1414  ok
+core chain identical in all familiars: Root > Pelvis > Spine > Chest > Neck > Head
+archetypes: {'floater': 2, 'flyer': 2, 'quadruped': 2, 'biped': 6} | bone counts: {'floater': 10, 'flyer': 12, 'quadruped': 16, 'biped': 14}
+WARNING BrassHound (quadruped): bones with under 30 owned vertices: Pelvis 3, Tail1 0, Tail2 0
+WARNING Ember (floater): bones with under 30 owned vertices: Spine 5
+WARNING Gargoyle (quadruped): bones with under 30 owned vertices: Pelvis 0, Spine 1, Tail1 14, Tail2 6
+WARNING MirrorChorister (biped): bones with under 30 owned vertices: LowerArm.L 19, LowerArm.R 25
+WARNING Mourner (biped): bones with under 30 owned vertices: Pelvis 20, Spine 15, Chest 18
+models: 12 problems: 0

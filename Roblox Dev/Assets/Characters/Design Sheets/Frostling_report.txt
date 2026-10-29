@@ -1,0 +1,4 @@
+familiar=Frostling
+fill ratio (64 px crop) = 0.33
+IoU vs basic shapes: circle=0.41, square=0.33, triangle=0.61, plain snowball=0.46
+view overlap front/side=0.66 front/back=1.00 side/back=0.66

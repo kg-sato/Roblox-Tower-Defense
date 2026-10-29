@@ -1,0 +1,3 @@
+PASS
+Page: Roblox Dev/Lore/Tutorial Story Beats.md (who speaks, stakes, Ember's bond, six beats with mechanic, caption, voice line and success condition, failure lines).
+Check: existing intro tour beats read from Studio_Export/IntroTour.luau this session and extended, not replaced; stakes match the "keep it lit / lane goes dark" rule and Config enemy leak values; wording is a proposal in the Tone Guide style; not yet built, so feel is UNVERIFIED.

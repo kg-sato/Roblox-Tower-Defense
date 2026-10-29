@@ -1,0 +1,5 @@
+Ember      min pair diff   3.5 (reference vs happy 4.2, fierce 4.8, hurt 5.2; happy vs fierce 3.5, fierce vs hurt 4.4) ok
+Frostling  min pair diff   4.3 (reference vs happy 5.5, fierce 6.1, hurt 6.7; happy vs fierce 4.3, fierce vs hurt 5.5) ok
+BrassHound min pair diff   2.2 (reference vs happy 3.3, fierce 3.9, hurt 4.4; happy vs fierce 2.2, fierce vs hurt 3.2) ok
+Gargoyle   min pair diff   4.0 (reference vs happy 4.0, fierce 5.7, hurt 6.4; happy vs fierce 4.0, fierce vs hurt 6.8) ok
+familiars: 4 problems: 0
