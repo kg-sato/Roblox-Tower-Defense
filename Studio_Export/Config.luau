@@ -19,6 +19,9 @@ Config.OVERRUN_COIN_LOSS = 0.3
 Config.ROLL_COST = 10
 Config.PITY_EVERY = 20 -- guaranteed Epic or better within this many rolls
 Config.UPGRADE_MAX = 5
+Config.CRIT_CAP = 0.75 -- crit chance never exceeds this, whatever upgrades and skills add
+Config.RESPEC_COST = 50 -- gems for resetting the skill tree
+Config.RESPEC_COOLDOWN = 120 -- sim seconds between respecs in one run
 
 Config.PATH = {
 	Vector3.new(-44, 1, -20),
@@ -349,6 +352,33 @@ end
 
 function Config.skillCost(node: any, level: number): number
 	return node.base * math.ceil((level + 1) / 2)
+end
+
+-- The cheapest node the player can buy right now (reachable, not maxed, affordable), for the skill tree's next-best hint (T199).
+-- Ties go to the node listed first in Config.TREE (the inner ring). Returns nil when nothing can be bought.
+function Config.nextBestSkill(levels: { [string]: number }, sp: number): (string?, number?)
+	local best: string?, bestCost: number? = nil, nil
+	for _, node in Config.TREE do
+		if node.id ~= "Start" then
+			local level = levels[node.id] or 0
+			if level < node.max then
+				local reachable = false
+				for _, n in Config.TREE_NEIGHBORS[node.id] do
+					if (levels[n] or 0) > 0 then
+						reachable = true
+						break
+					end
+				end
+				if reachable then
+					local cost = Config.skillCost(node, level)
+					if cost <= sp and (bestCost == nil or cost < bestCost) then
+						best, bestCost = node.id, cost
+					end
+				end
+			end
+		end
+	end
+	return best, bestCost
 end
 
 -- Total effect of one kind, given a { [nodeId]: level } table.

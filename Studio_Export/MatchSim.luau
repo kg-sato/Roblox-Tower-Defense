@@ -98,6 +98,39 @@ function MatchSim.sv(self: Sim, kind: string): number
 	return Config.skillValue(self.tree, kind)
 end
 
+-- Progress that carries between visits (what the server saves with ProfileStore).
+function MatchSim.meta(self: Sim): { [string]: any }
+	return { level = self.level, xp = self.xp, sp = self.sp, gems = self.gems, tree = table.clone(self.tree) }
+end
+
+-- Load saved progress, clamping every value so a corrupt or edited save can't give an impossible state.
+-- Gems never drop below the starting amount, so a returning player can always roll.
+function MatchSim.loadMeta(self: Sim, d: any)
+	if type(d) ~= "table" then
+		return
+	end
+	local function num(v: any, lo: number, hi: number, fallback: number): number
+		if type(v) ~= "number" or v ~= v then
+			return fallback
+		end
+		return math.clamp(math.floor(v), lo, hi)
+	end
+	self.level = num(d.level, 1, Config.LEVEL_MAX, 1)
+	self.xp = num(d.xp, 0, 1e9, 0)
+	self.sp = num(d.sp, 0, 1e6, 0)
+	self.gems = math.max(self.gems, num(d.gems, 0, 1e9, 0))
+	local tree = { Start = 1 }
+	if type(d.tree) == "table" then
+		for id, lvl in d.tree do
+			local node = type(id) == "string" and Config.TREE_BY_ID[id]
+			if node and id ~= "Start" and type(lvl) == "number" and lvl == lvl then
+				tree[id] = math.clamp(math.floor(lvl), 0, node.max)
+			end
+		end
+	end
+	self.tree = tree
+end
+
 function MatchSim.maxHp(self: Sim): number
 	return Config.CRYSTAL_HP + self:sv("crystal")
 end
@@ -148,6 +181,36 @@ function MatchSim.skill(self: Sim, id: any): (boolean, string?)
 	self.sp -= cost
 	self.tree[id] = level + 1
 	self.emit("SkillBought", { id = id, level = level + 1 })
+	return true, nil
+end
+
+-- Reset the skill tree: every point spent comes back as Skill Points, for a gem fee and a cooldown (T198).
+-- The cooldown counts sim seconds within one run (it is not saved between runs); nothing is refunded for nodes that no longer exist.
+function MatchSim.respec(self: Sim): (boolean, string?)
+	local spent = 0
+	for id, level in self.tree do
+		local node = Config.TREE_BY_ID[id]
+		if node and id ~= "Start" then
+			for l = 0, level - 1 do
+				spent += Config.skillCost(node, l)
+			end
+		end
+	end
+	if spent == 0 then
+		return false, "Nothing to refund"
+	end
+	if self.t - ((self :: any).lastRespec or -1e9) < Config.RESPEC_COOLDOWN then
+		return false, "Respec is cooling down"
+	end
+	if self.gems < Config.RESPEC_COST then
+		return false, "Not enough gems"
+	end
+	self.gems -= Config.RESPEC_COST
+	self.sp += spent
+	self.tree = { Start = 1 }
+	;(self :: any).lastRespec = self.t
+	self.crystalHp = math.min(self.crystalHp, self:maxHp()) -- Crystal Armor may have been refunded
+	self.emit("Respec", { refunded = spent, cost = Config.RESPEC_COST })
 	return true, nil
 end
 
@@ -236,6 +299,18 @@ function MatchSim.pickRarity(self: Sim): string
 	return "Common"
 end
 
+-- A random pet of this rarity; an empty rarity (its Characters folders removed) steps down to the next lower one.
+function MatchSim.pickPet(self: Sim, rarity: string): (string?, string)
+	local at = table.find(Config.RARITY_ORDER, rarity) or 1
+	for i = at, 1, -1 do
+		local list = Config.petsOfRarity(Config.RARITY_ORDER[i])
+		if #list > 0 then
+			return list[self.rng:NextInteger(1, #list)], Config.RARITY_ORDER[i]
+		end
+	end
+	return nil, rarity
+end
+
 function MatchSim.roll(self: Sim): (boolean, string?)
 	if self:unitCount() >= Config.MAX_UNITS then
 		return false, "Too many pets (max " .. Config.MAX_UNITS .. ")"
@@ -255,8 +330,10 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 		end
 	else
 		rarity = self:pickRarity()
-		local list = Config.petsOfRarity(rarity)
-		pet = list[self.rng:NextInteger(1, #list)]
+		pet, rarity = self:pickPet(rarity)
+		if not pet then
+			return false, "No characters configured"
+		end
 		x, z = self:findSpot(pet)
 	end
 	if not x or not z then
@@ -275,10 +352,11 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 	-- Double Hatch: a free bonus pet
 	local chance = self:sv("doubleHatch")
 	if chance > 0 and not self.tutorial and self.rng:NextNumber() < chance and self:unitCount() < Config.MAX_UNITS then
-		local bonusRarity = self:pickRarity()
-		local list = Config.petsOfRarity(bonusRarity)
-		local bonusPet = list[self.rng:NextInteger(1, #list)]
-		local bx, bz = self:findSpot(bonusPet)
+		local bonusPet, bonusRarity = self:pickPet(self:pickRarity())
+		local bx, bz
+		if bonusPet then
+			bx, bz = self:findSpot(bonusPet)
+		end
 		if bx and bz then
 			local bid = self:addUnit(bonusPet, bx, bz)
 			self.emit("Roll", { slot = bid, pet = bonusPet, rarity = bonusRarity, bonus = true, x = bx, z = bz })
@@ -393,8 +471,26 @@ function MatchSim.castUlt(self: Sim): (boolean, string?)
 		return false, "Not charged"
 	end
 	self.ult = math.min(self:ultNeed() - 1, self:sv("ultRefund"))
-	self.emit("Ult", {})
-	local dmg = Config.ULT_DAMAGE * Config.hpScale(self.stage) * (1 + self:sv("ultDamage"))
+	-- a featured familiar on the board performs its signature instead (highest tier, then rarity)
+	local caster, best = nil, -1
+	for id, u in self.grid do
+		local def = Config.PETS[u.pet]
+		if def and def.signature then
+			local score = u.tier * 10 + Config.RARITIES[def.rarity].order
+			if score > best then
+				caster, best = id, score
+			end
+		end
+	end
+	local power = 1
+	if caster then
+		local def = Config.PETS[self.grid[caster].pet]
+		power = def.signaturePower
+		self.emit("Ult", { signature = def.signature, slot = caster, pet = self.grid[caster].pet })
+	else
+		self.emit("Ult", {})
+	end
+	local dmg = Config.ULT_DAMAGE * Config.hpScale(self.stage) * (1 + self:sv("ultDamage")) * power
 	for _, e in self.enemies do
 		if not e.dead then
 			self:damage(e, dmg, false)
@@ -540,7 +636,7 @@ function MatchSim.effective(self: Sim, u: Unit): (number, number, number)
 	local up = self.upgrades[u.pet]
 	local dmg = Config.petDamage(u.pet, u.tier) * (1 + Config.UPGRADES.Power.per * up.Power) * (1 + self:sv("damage"))
 	local cd = Config.PETS[u.pet].cooldown / ((1 + Config.UPGRADES.Haste.per * up.Haste) * (1 + self:sv("haste")))
-	local crit = Config.UPGRADES.Crit.per * up.Crit + self:sv("crit")
+	local crit = math.min(Config.CRIT_CAP, Config.UPGRADES.Crit.per * up.Crit + self:sv("crit"))
 	return dmg, cd, crit
 end
 

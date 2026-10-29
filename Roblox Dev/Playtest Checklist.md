@@ -15,10 +15,10 @@ Fifteen minutes, in Studio (Play) with a phone-sized window if possible. Each st
 | 10 | 1 | Look at the console (Output) | Any red errors beyond the known "not authorized to access Asset" line? |
 
 After the 15 minutes, answer these decisions (each is open in a design note):
-1. Which model does the gold-ink colour request apply to: the 12 familiars or the loading-screen eye?
+1. (Answered: gold-ink on the 12 familiars, applied.) Do the gold-ink familiars look right in Play, or should the identity blend (20% of the original colour) change?
 2. Keep or replace the 2x Coins pass ([[Design/Progression Rules]])?
 3. Cap tier by rarity (Legendary 3, Epic 4) or keep 5 for all?
-4. Is the Unbound a faceless fog figure (lore, modelled) or a mage with a crown of arms (research note)?
+4. (Answered: faceless fog figure.)
 5. Which path shapes first ([[Design/Stage Set Plans]])?
 
 If anything fails, add a row to [[Bug Log]] with the steps. Related: [[Known Issues]].

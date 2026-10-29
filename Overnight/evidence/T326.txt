@@ -1,0 +1,4 @@
+PASS (Tests/SaveMigration.test.luau, Studio Edit mode: "PASS SaveMigration: 14 of 14 checks")
+Old-shaped profiles (only level, xp, gems; a future version with unknown fields and a removed tree node; a level above the cap) load without error and keep what is still valid; meta() then loadMeta round-trips twice unchanged; missing or partial settings become full defaults and junk keys are dropped. Stated gap, tested as such: skill points spent on a tree node that no longer exists are not refunded.
+Side finding: Studio_Export/MatchSim.luau was the stale 693-line copy (no loadMeta); refreshed from the current 760-line module (compared by line count and loadMeta, after the loading-eye chat's warning). The stale 694-line module is still in Studio (Bug Log #3).
+Limits: tests MatchSim.loadMeta and SettingsDefaults, not the ProfileStore Reconcile library call or a real DataStore.

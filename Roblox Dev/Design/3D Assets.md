@@ -33,3 +33,5 @@ New folders (BrassHound, Sentinel, Ward, Archivist, Mourner, GreyVeilWraith) car
 Concept-grade models from [[Enemy Models]], uploaded as Model assets (Open Cloud) and loaded in Studio Edit mode with LoadAsset (all load): FogWisp 128040982375596; BrassSentinel 95028100682755; ClockworkCrow 85256591738111; LanternThief 107872593870870; Unbound 77114404609027 (phases 2 and 3: 132477005165063, 108536993980488); ClockmakerAutomaton 105773609287319; StarChoirEcho 83373040785070; HollowCourtRegent 112741419053232; Clockmaker 117038627587754. Logged in `tools/uploads.json`.
 
 HollowParishioner (self-assigned, 2026-10-29): asset 94567177585107, listed with the other enemy meshes above; not yet loaded back in Studio.
+
+Gold-ink familiar textures (2026-10-29): 12 images uploaded (Gold_<Name>_BaseColor), ids in [[Design/Gold Ink Recolour]] and tools/uploads.json.

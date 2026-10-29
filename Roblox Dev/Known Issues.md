@@ -20,7 +20,6 @@ Compiled 2026-10-29: every open row of [[Bug Log]] plus the gaps found while wor
 | minor | No Idle clips for the familiars in Roblox | Idle animations exist as Blender GLBs (T092, `Assets/3D/Familiars/idle/`) but `FamiliarClips` has only Walk and Attack recipes |
 | minor | Familiar textures are a first-pass projection | Blotches and stray colours; the 512 px maps in [[Design/Texture Maps]] inherit them |
 | minor | Best stage reached is not saved | Nothing carries over for stage progress; [[Design/Progression Rules]] proposes `bestStage` |
-| minor | The Unbound is described two ways | Research note: a mage with a crown of arms; lore: a faceless figure of fog; models follow the lore ([[Design/Enemy Bible]]) |
 | minor | Tier cap mismatch in the notes | Config and the design doc say 5; a task text says tier 8; the merge evolution note defines 3 looks |
 | minor | Stage set 5 is installed but never run in Play | `BackdropVeil`, its `StageSets` entry and the `veil` music state exist in the open Studio session and `Studio_Export/` (2026-10-29); the place file is not saved and the set has not been seen in Play ([[Design/Stage Set 5 Plan]]) |
 | minor | One 234-stud path serves all 25 stages | Only hp and count change; [[Design/Difficulty Curve]], [[Design/Stage Set Plans]] |

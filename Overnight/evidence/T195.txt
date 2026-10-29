@@ -1,0 +1,3 @@
+PASS WITH A GAP (clamp installed in Studio and mirrored, tested)
+Change: Config.CRIT_CAP = 0.75 and MatchSim.effective now returns min(CRIT_CAP, upgrade chance + skill chance). Before, the sum was unclamped (the real maximum is 0.6: 5 upgrade levels x 0.08 plus 5 Critical Eye levels x 0.04). Damage on a crit stays 2.5x (Config.UPGRADES text). Tests (3 new in ServerRules.test.luau, "PASS ServerRules: 58 of 58"): a huge skill value is clamped to the cap; with no crit upgrades the chance is 0 and damage and cooldown are positive; two levels give 2 x 0.08.
+Gap: crit feedback (a flash or number) belongs to the HUD and was not built or checked; the crit damage multiplier itself is not under test.

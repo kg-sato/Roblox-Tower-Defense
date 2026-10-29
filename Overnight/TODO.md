@@ -73,10 +73,7 @@ Ids are in priority order: T001 is first. Research and lore come before characte
 - [ ] T190 | Economy simulator: coins and gems per wave, roll cost curve, checked over 25 stages | verify: studio: evidence T190
 - [ ] T193 | Ability synergy list: which familiars combo and why (data, not hard-coded) | verify: studio: evidence T193
 - [ ] T194 | Status effects: burn, chill, stun, mark, lantern-bright, each with duration and stack rule | verify: studio: evidence T194 (test PASS)
-- [ ] T195 | Crit system: chance, damage, feedback, tested for clamping | verify: studio: evidence T195 (test PASS)
 - [ ] T197 | Skill tree: 40 nodes, each with a short description and a clear effect; no dead nodes | verify: studio: evidence T197
-- [ ] T198 | Skill tree respec with cost and cooldown, tested | verify: studio: evidence T198 (test PASS)
-- [ ] T199 | Next-best hint in the skill tree (suggests the cheapest useful node) | verify: studio: evidence T199
 - [ ] T002 | Achievement unlock logic on the server, tested | verify: studio: evidence T202 (test PASS)
 - [ ] T003 | Tutorial rewrite: 6 steps, each teaching one mechanic, with a lore line | verify: studio: evidence T203
 - [ ] T004 | Difficulty modes: Normal and Hard (more enemies, more gold), clearly labelled | verify: studio: evidence T204
@@ -214,7 +211,6 @@ Ids are in priority order: T001 is first. Research and lore come before characte
 - [ ] T199 | Move balance numbers into data modules, one table per system | verify: studio: evidence T321 (test PASS)
 - [ ] T200 | Strict typing on the pure modules (NumberFormat, SettingsDefaults, StageSets, MatchSim helpers) | verify: studio: evidence T322 (test PASS)
 - [ ] T201 | Luau type check on every module, zero errors | verify: studio: evidence T323
-- [ ] T204 | Save migration test: old profile to new template, no data loss | verify: studio: evidence T326 (test PASS)
 - [ ] T205 | Memory check after 10 waves on each stage set | verify: studio: evidence T327
 - [ ] T206 | Frame-time probe on Low, Default and High | verify: studio: evidence T328
 

@@ -1,7 +1,7 @@
 # Next-night plan: the 20 most important open items (T241)
 Chosen 2026-10-29 by what blocks a playable, publishable build first, then what the user will notice. "Needs" says what must come first.
 
-1. ASK the user: which model the gold-ink recolour applies to (familiars or the loading-screen eye); then do it. Needs the answer.
+1. DONE 2026-10-29: gold-ink recolour of the 12 familiars applied in Studio ([[Design/Gold Ink Recolour]]); next, look at it in Play and decide whether to also recolour the on-disk GLBs and the enemy models.
 2. Save `Claude.rbxl` with today's Studio changes (rigged familiars, scripts). Needs the user (the place file is theirs to save).
 3. Export the Walk and Attack clips as Animation assets and upload them (see [[Design/Upload Plan]]); without this a published game cannot animate. Needs a Studio session.
 4. Verify rig deformation in Roblox with a working viewport (the blank captures never showed it). Needs a Studio claim.

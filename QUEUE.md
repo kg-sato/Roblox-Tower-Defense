@@ -29,7 +29,7 @@ main chat's family could see. It is not committed on its own; it is a live file.
 ## Shared resources (one holder at a time)
 | Resource | Holder | Since |
 |---|---|---|
-| Roblox Studio (Edit edits, Play, recordings) | FREE (Sonnet released, Edit mode; set 5 installed, preview destroyed, Lighting restored) | 2026-10-29 |
+| Roblox Studio (Edit edits, Play, recordings) | FREE (Sonnet released, Edit mode; temp modules deleted) | 2026-10-29 |
 | ComfyUI 127.0.0.1:8188 (GPU, 8 GB) | FREE (server stopped) | 2026-10-29 |
 | GPU for Hunyuan3D (shares the 8 GB with ComfyUI) | FREE | |
 | Blender (CPU, headless; several runs are fine) | FREE | |
@@ -46,7 +46,8 @@ main chat's family could see. It is not committed on its own; it is a live file.
 | shared, append-only | VFX/ASSETS.md, UI Kit/art/upload_1028/ids.txt and decal_ids.txt, Roblox Dev/Session Log.md (add lines, never rewrite) |
 
 ## Queue: loading-eye (main UI chat)
-- Now: the great eye's black etched eyelashes (asset in VFX/ASSETS.md), then the loading screen in Studio.
+- Now: idle, holding nothing. Loading screen done (2D etched eye, text panel below the tunnel; Bug Log #5 fixed).
+- Next, only if the user asks: a Respec button on the skill tree screen (server side by Sonnet: `Action:FireServer("Respec")`, answer event "Respec" {refunded, cost}).
 - Done 2026-10-29: eye forming, twitch fix, counter-rotating dials, whirlpool suck-in, etched gold-ink recolour.
 - For Sonnet: the user's colour request ("make the new 3D model similar in coloring", "i wanted these colors"). The
   reference is the etched loading-screen eye, `UI Kit/art/menu_art/etched_eye_onscreen.png`: a gold-ink engraving on
@@ -55,7 +56,7 @@ main chat's family could see. It is not committed on its own; it is a live file.
 
 ## Queue: Sonnet (familiar art)
 (Sonnet keeps this section.)
-- Now: working through `Overnight/TODO.md` without Studio (Blender models, design notes in `Roblox Dev/Design/`, Python checks). Holding nothing. Colour request still paused until the user says which model is meant (12 familiars or the loading-screen eye).
+- Done: gold-ink recolour of the 12 familiar textures applied in Studio (user said yes). Now: working through `Overnight/TODO.md` without Studio (Blender models, design notes in `Roblox Dev/Design/`, Python checks). Holding nothing. Colour request still paused until the user says which model is meant (12 familiars or the loading-screen eye).
 - Next (needs a Studio CLAIM first): hide the FAMILIARS button on the start menu (done earlier by CollectionScreen change, needs a Play check); wire the 512 px maps; Idle clips.
 - Done 2026-10-29: T074 to T110 (familiars), T111 to T122 (eye system, props, trainer sheet, eleven enemy and boss models (nine designs, three Unbound phases), uploads checked in Edit mode), texture maps, enemy bible, boss designs, progression, difficulty curve, content plans, stage set plans, indexes, known issues, playtest checklist, decision log, next-night plan.
 - Studio state I left: Edit mode, nothing loaded, place file not saved by me. Commit `dbf8634` is pushed on `overnight/2026-10-27`; no PR yet (no `gh`, GitKraken not signed in).

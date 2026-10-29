@@ -154,6 +154,49 @@ return function(Shared)
 		check("the level never passes the cap", sim.level == Config.LEVEL_MAX, sim.level)
 		check("xp stays non-negative", sim.xp >= 0, sim.xp)
 
+		-- respec (T198): refund, fee, cooldown, clamps
+		sim = newSim(8)
+		sim.gems, sim.sp = 1000, 100
+		check("respec with nothing spent is refused", select(1, sim:respec()) == false)
+		sim:skill("Claws")
+		sim:skill("Claws")
+		sim:skill("Armor")
+		local spentSp = 100 - sim.sp
+		local hpBefore = sim:maxHp()
+		sim.crystalHp = sim:maxHp()
+		local gemsR, spR = sim.gems, sim.sp
+		check("respec succeeds after spending points", select(1, sim:respec()) == true)
+		check("respec refunds every point spent", sim.sp - spR == spentSp, sim.sp - spR .. " of " .. spentSp)
+		check("respec costs the fee in gems", gemsR - sim.gems == Config.RESPEC_COST, gemsR - sim.gems)
+		check("respec resets the tree to Start only", sim.tree.Start == 1 and sim.tree.Claws == nil and sim.tree.Armor == nil)
+		check("respec emits Respec", has("Respec"))
+		check("crystal hp is clamped to the new maximum", sim.crystalHp <= sim:maxHp() and sim:maxHp() < hpBefore, sim.crystalHp .. " / " .. sim:maxHp())
+		sim:skill("Claws")
+		check("a second respec inside the cooldown is refused", select(1, sim:respec()) == false)
+		sim.t += Config.RESPEC_COOLDOWN + 1
+		check("a respec after the cooldown works", select(1, sim:respec()) == true)
+		sim:skill("Claws")
+		sim.t += Config.RESPEC_COOLDOWN + 1
+		sim.gems = Config.RESPEC_COST - 1
+		check("a respec without enough gems is refused and keeps the tree", select(1, sim:respec()) == false and sim.tree.Claws == 1)
+
+		-- crit clamp (T195)
+		sim = newSim(9)
+		sim.gems = 1000
+		sim:roll()
+		local _, cu = firstUnit(sim)
+		sim.upgrades[cu.pet].Crit = Config.UPGRADE_MAX
+		sim.tree.Eye = 50 -- far more crit than any real tree allows
+		local _, _, critChance = sim:effective(cu)
+		check("crit chance is clamped to the cap", critChance == Config.CRIT_CAP, critChance)
+		sim.tree.Eye = nil
+		sim.upgrades[cu.pet].Crit = 0
+		local dmg0, cd0, crit0 = sim:effective(cu)
+		check("with no crit upgrades the chance is zero and damage and cooldown are positive", crit0 == 0 and dmg0 > 0 and cd0 > 0)
+		sim.upgrades[cu.pet].Crit = 2
+		local _, _, crit2 = sim:effective(cu)
+		check("crit rises with upgrade levels below the cap", math.abs(crit2 - 2 * Config.UPGRADES.Crit.per) < 1e-9, crit2)
+
 		-- ultimate
 		sim = newSim(7)
 		check("an uncharged ultimate is refused", select(1, sim:castUlt()) == false)

@@ -22,6 +22,6 @@ Six enemy families. Numbers marked PROPOSAL are design targets, not in the game:
 **Lantern Thief (T137).** Walks the path to the nearest lit lamp, takes it (the lamp goes dark and the thief glows), then runs for the exit at speed 11 (PROPOSAL, 40 hp). If killed carrying a lamp it drops the stolen light as a pickup that relights the lamp and pays a small coin bonus; if it escapes, the lamp stays dark for the rest of the stage and the player loses 1 life. Telegraph: the sack rustles and the thief hunches before it grabs. Counter: put damage near lamps.
 
 ## Open questions for the user
-1. The research note describes the Unbound as a mage (top hat, crown of arms, one huge eye); the lore and chapter 1 describe a faceless figure of fog. I modelled the lore version. Which should stand?
+1. RESOLVED 2026-10-29 (the user: "yes faceless"): the Unbound is the faceless figure of fog, as modelled; the research note's mage design is dropped.
 2. Are 6 families the right count?
 3. Are the numbers above acceptable as starting points for balance tests?

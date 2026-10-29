@@ -52,7 +52,7 @@ end
 
 local TICK = 0.1
 local MIN_ACTION_GAP = 0.05
-local ACTION_KINDS = { Roll = true, Drop = true, Move = true, Recycle = true, Upgrade = true, Ult = true, StartWave = true, AutoWave = true, Skill = true, EndTutorial = true }
+local ACTION_KINDS = { Roll = true, Drop = true, Move = true, Recycle = true, Upgrade = true, Ult = true, StartWave = true, AutoWave = true, Skill = true, Respec = true, EndTutorial = true }
 local lastStart: { [Player]: number } = {}
 
 local remotes = Instance.new("Folder")
@@ -324,6 +324,8 @@ toServer.OnServerEvent:Connect(function(player: Player, kind: any, a: any, b: an
 		ok, reason = sim:setAuto(a)
 	elseif kind == "Skill" then
 		ok, reason = sim:skill(a)
+	elseif kind == "Respec" then
+		ok, reason = sim:respec()
 	elseif kind == "EndTutorial" then
 		sim:endTutorial()
 		ok = true

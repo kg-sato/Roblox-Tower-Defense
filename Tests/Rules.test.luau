@@ -131,6 +131,25 @@ return function(Shared)
 		check("mean tier-1 dps climbs Common < Rare < Epic < Legendary", mean.Common < mean.Rare and mean.Rare < mean.Epic and mean.Epic < mean.Legendary)
 		check("a Legendary is under 30x a Common at tier 1 (dps ratio)", mean.Legendary / mean.Common < 30, string.format("%.1f", mean.Legendary / mean.Common))
 
+		-- next-best skill hint (T199)
+		local nb, nbCost = Config.nextBestSkill({ Start = 1 }, 0)
+		check("no hint with zero skill points", nb == nil)
+		nb, nbCost = Config.nextBestSkill({ Start = 1 }, 5)
+		check("the hint is a neighbour of Start", nb ~= nil and table.find(Config.TREE_NEIGHBORS.Start, nb) ~= nil, nb)
+		check("the hint is the cheapest reachable node", nbCost == 1, nbCost)
+		nb = Config.nextBestSkill({ Start = 1, Claws = 5 }, 5)
+		check("a maxed node is never suggested", nb ~= "Claws")
+		nb = Config.nextBestSkill({ Start = 1 }, 1)
+		check("an unreachable node is never suggested", nb ~= "Heavy" and nb ~= "Mega")
+		nb = Config.nextBestSkill({ Start = 1, Claws = 4 }, 2)
+		check("a node costing more than the points held is skipped", nb ~= "Claws" or select(2, Config.nextBestSkill({ Start = 1, Claws = 4 }, 2)) <= 2)
+		local allMax = { Start = 1 }
+		for _, node in Config.TREE do
+			allMax[node.id] = node.max
+		end
+		check("nothing to suggest when everything is maxed", Config.nextBestSkill(allMax, 99) == nil)
+		check("crit cap is below 1", Config.CRIT_CAP > 0 and Config.CRIT_CAP < 1)
+
 		-- pity (T200): over many rolls the dry streak without an Epic or better never reaches the pity interval
 		local worst, rolls, pityHits = 0, 0, 0
 		for seed = 1, 6 do

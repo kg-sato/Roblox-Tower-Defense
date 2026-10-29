@@ -22,5 +22,6 @@ Time stop; reverses one merge per wave. Hp 3.0x. Phase 1: it walks behind its ow
 - None of this exists in code: Config.ENEMIES has one `Boss`. Implementing it needs per-boss definitions, phase logic in MatchService and a client phase bar.
 
 ## Open questions for the user
+0. The Unbound is faceless fog (the user confirmed 2026-10-29).
 1. Is a unique mechanic per boss (above) wanted, or a lighter reskin of one boss?
 2. Is un-merging a unit (boss 5) acceptable, given it undoes the player's progress? The lore says the Clockmaker will undo merges; it is still a design call for the user.

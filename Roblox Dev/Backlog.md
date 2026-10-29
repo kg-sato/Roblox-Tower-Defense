@@ -113,7 +113,7 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [ ] Add `Handoff:` to unfinished Session Log lines; monthly vault lint
 
 ## From the familiar art session (2026-10-29)
-- [ ] Ask the user which model the gold-ink recolour means (the 12 familiars or the loading-screen eye), then do it
+- [x] (2026-10-29) Gold-ink recolour of the 12 familiars, applied after the user said yes ([[Design/Gold Ink Recolour]])
 - [ ] Export the Walk and Attack clips as Animation assets and upload them (a published game cannot play Studio-only clips) ([[Design/Upload Plan]])
 - [ ] Build stage set 5 (Above the Grey Veil) in `StageSets`: lighting data is ready ([[Design/Stage Set 5 Plan]]); `python tools/check_stages_complete.py` fails until it exists
 - [ ] Implement familiar roles (Hasten, Ward, Reveal, Hush, Echo, Starfall, Drain) and the statuses ([[Design/Familiar Systems]])
@@ -124,3 +124,4 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [x] (2026-10-29) 12 familiars: data, lore, cards, models, textures, rigs, Walk and Attack clips, collection screen
 - [x] (2026-10-29) 11 enemy and boss concept models (Fog Wisp to the Clockmaker) built, checked against the familiar silhouettes, uploaded, loaded back in Studio
 - [x] (2026-10-29) Headless tests: Rules (37), ServerRules (45), Balance integration run; 12 of 12 suites PASS
+- [ ] Respec button on the skill tree screen: `Action:FireServer("Respec")`, reply event `Respec {refunded, cost}`; fee 50 gems, cooldown 120 s (server done 2026-10-29, T198)
