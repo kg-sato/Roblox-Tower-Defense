@@ -124,3 +124,4 @@ One line per work session: date, what got done, what's next. Newest at the botto
 - 2026-10-28 (night): Sentinel v7c (asset 103893658539937, flat paint, 1.4x) 5/3/4/4/4 FAIL; lantern v8 pulse 8/6/7/6/8 FAIL (best yet, board read 8). Studio released, Edit mode. Not committed.
 - 2026-10-28 (night): Sentinel v8 brass (asset 124300641110722) 5/3/4/4/5 FAIL; paint-on-Hunyuan route at its ceiling. Studio released, Edit mode. Not committed.
 - 2026-10-28 (night): Sentinel v9 hard-surface rebuild (`Blender/sentinel_hs.py`, assets 73478931319348 / 116076795526880): clean plates, rivets, furnace grill; joined by material so limbs are not separate yet. Not reviewed. Studio released. Not committed.
+- 2026-10-28 (night): Sentinel hard-surface rebuild with separate limbs (`Blender/sentinel_hs.py`) and a distance-driven stomp walk in Models.luau (v11b, asset 100036524167793): 6/4/5/5/6 FAIL, best Sentinel yet. Studio released, Edit mode. Not committed.

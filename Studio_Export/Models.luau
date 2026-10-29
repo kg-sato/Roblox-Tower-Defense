@@ -410,7 +410,7 @@ end
 -- a roll onto the planted leg, arms swinging against the legs, a dust puff under the landing boot.
 local RunService = game:GetService("RunService")
 local walkers = {}
-local STRIDE = 7 -- studs per full cycle (two steps) at the 10.5-stud Sentinel
+local STRIDE = 9 -- studs per full cycle (two steps) at the 10.5-stud Sentinel; v11 slower, heavier
 local TAU = math.pi * 2
 local walkConn
 local function stepWalkers(dt)
@@ -426,9 +426,9 @@ local function stepWalkers(dt)
 		local a, ph = w.amp, w.phase
 		if a > 0.3 and math.sign(math.cos(ph)) ~= math.sign(before) then -- a boot lands
 			local dust = w.dust[math.cos(ph) < 0 and "L" or "R"]
-			if dust then dust:Emit(7) end
+			if dust then dust:Emit(14) end
 		end
-		local body = pivot * CFrame.new(0, -0.35 * a * math.abs(math.sin(ph)) ^ 3, 0) * CFrame.Angles(0, 0, 0.05 * a * math.sin(ph))
+		local body = pivot * CFrame.new(0, -0.7 * a * math.abs(math.sin(ph)) ^ 4, 0) * CFrame.Angles(0, 0, 0.08 * a * math.sin(ph))
 		for p, r in w.rest do
 			local limb = w.limb[p]
 			if not limb then
@@ -439,7 +439,7 @@ local function stepWalkers(dt)
 			local swing = (limb.arm and -0.35 or 0.45) * a * math.sin(sideph)
 			local cf = body * CFrame.new(limb.top) * CFrame.Angles(swing, 0, 0) * CFrame.new(-limb.top)
 			if limb.mid then
-				local bend = limb.arm and (0.2 + 0.2 * a * math.max(0, -math.sin(sideph))) or (-0.7 * a * math.max(0, math.cos(sideph)))
+				local bend = limb.arm and (0.2 + 0.2 * a * math.max(0, -math.sin(sideph))) or (-1.0 * a * math.max(0, math.cos(sideph)))
 				cf = cf * CFrame.new(limb.mid) * CFrame.Angles(bend, 0, 0) * CFrame.new(-limb.mid)
 			end
 			p.CFrame = cf * r
@@ -451,7 +451,7 @@ function addWalk(model)
 	local piv = model:GetPivot()
 	local w = { last = piv.Position, phase = 0, amp = 0, rest = {}, limb = {}, dust = {} }
 	for _, p in model:GetChildren() do
-		if p:IsA("BasePart") then w.rest[p] = piv:ToObjectSpace(p.CFrame) end
+		if p:IsA("BasePart") and p ~= model.PrimaryPart then w.rest[p] = piv:ToObjectSpace(p.CFrame) end -- the pivot part never moves, so GetPivot stays clean
 	end
 	local function topOf(name) -- joint = top centre of the part, in pivot space (the meshes import axis-aligned)
 		local p = model:FindFirstChild(name)

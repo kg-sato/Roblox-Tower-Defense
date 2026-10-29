@@ -54,3 +54,5 @@ Lantern next (written, not yet in Studio): WardFX pulse 0.8 s +-25% with flicker
 
 Sentinel v6 (flat colours, metal 0.6) rendered sky-blue in Studio: metal mirrors the blue night sky, so keep metal low on painted meshes. Next: either a brass-dominant repaint (user call: flat colours were chosen) or a texture made from several views instead of one front projection; the walk needs a hand-off for GameClient's mover.
 | Sentinel | v8 (brass-dominant flat paint, metal 0.35, roughness 0.5) | 5 | 3 | 4 | 4 | 5 | FAIL: reads as brass now, but the Hunyuan surface is lumpy ("clay golem"), the front projection leaves blotches, no gait. The paint route has hit its ceiling: next needs a hard-surface rebuild or a multi-view texture |
+| Sentinel | v10 (hard-surface rebuild, 10 limb parts, walk in Models.luau) | 5 | 4 | 5 | 4 | 5 | FAIL: puffy shoulders, lemon colour, weak stomp |
+| Sentinel | v11b (square copper pauldrons, orange-gold brass, slower heavier gait with dust) | 6 | 4 | 5 | 5 | 6 | FAIL: "matte yellow plastic", short stub legs, small on the board. Next: longer piston legs, higher foot lift, darker desaturated brass with edge highlights, 1.3x |

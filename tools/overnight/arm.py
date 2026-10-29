@@ -24,7 +24,7 @@ if a.off:
     print("disarmed")
     sys.exit(0)
 
-dirty = [l for l in git("status", "--porcelain", "--untracked-files=no").splitlines() if "Claude.rbxl" not in l]
+dirty = [l for l in git("status", "--porcelain", "--untracked-files=no").splitlines() if "Claude.rbxl" not in l and "Overnight/PROGRESS.md" not in l]  # checkpoint.py appends to PROGRESS.md after each commit
 if dirty:
     sys.exit("uncommitted tracked changes, commit or stash first:\n" + "\n".join(dirty[:20]))
 branch = "overnight/" + time.strftime("%Y-%m-%d")

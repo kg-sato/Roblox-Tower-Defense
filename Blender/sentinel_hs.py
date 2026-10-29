@@ -22,10 +22,10 @@ parts = {}
 PART = ["Body"]
 # flat zone colours (linear), metal, roughness
 SPEC = {
-    "brass": ((0.40, 0.19, 0.035), 0.45, 0.38),  # v9 read pale lemon
+    "brass": ((0.30, 0.105, 0.012), 0.3, 0.35),  # v9-v11 read lemon, then lime in the lantern's cyan light: orange-leaning gold, less sky reflection
     "ivory": ((0.62, 0.55, 0.40), 0.0, 0.45),
-    "iron": ((0.045, 0.043, 0.048), 0.4, 0.55),
-    "copper": ((0.38, 0.10, 0.03), 0.45, 0.4),
+    "iron": ((0.03, 0.025, 0.022), 0.4, 0.5),  # warm near-black (v10 read navy)
+    "copper": ((0.24, 0.055, 0.015), 0.35, 0.4),  # v11 pauldrons read peach
     "eye": ((1.0, 0.18, 0.03), 0.0, 0.3),
 }
 MATS = {}
@@ -116,7 +116,7 @@ def pipe(kind, pts, r):
 
 
 # ---- torso: brass barrel chest, riveted chest plate, iron belly with furnace grill, brass pelvis
-box("brass", (2.5, 1.8, 1.7), (0, 0, 3.55), bev=0.38)
+box("brass", (2.5, 1.8, 1.7), (0, 0, 3.55), bev=0.16)  # v11: tighter bevels read as machined, not clay
 box("brass", (1.5, 0.12, 0.95), (0, -0.92, 3.75), bev=0.05)                     # raised chest plate
 for k in range(7):
     rivet((-0.66 + k * 0.22, -0.99, 4.17))
@@ -132,7 +132,7 @@ box("iron", (1.9, 1.45, 0.75), (0, 0, 2.3), bev=0.15)                           
 box("iron", (1.15, 0.1, 0.55), (0, -0.75, 2.3), bev=0.03)                       # furnace frame
 for k in range(4):                                                              # glowing slits between bars
     box("eye", (0.95, 0.06, 0.07), (0, -0.78, 2.12 + k * 0.12), bev=0.0)
-box("brass", (2.0, 1.5, 0.45), (0, 0, 1.85), bev=0.12)                          # pelvis
+box("brass", (2.0, 1.5, 0.45), (0, 0, 1.85), bev=0.08)                          # pelvis
 # ---- head: iron collar, small brass helmet sunk between the shoulders, brow, single red eye in a copper bezel
 cyl("iron", 0.55, 0.25, (0, -0.15, 4.42), v=28)
 ball("brass", 0.66, (0, -0.25, 4.74), (1, 1, 0.82))
@@ -154,10 +154,11 @@ for s in (-1, 1):
 for s in (-1, 1):
     side = "L" if s > 0 else "R"
     PART[0] = "Body"
-    ball("brass", 0.8, (s * 1.65, 0, 4.15), (1, 1, 0.78))
-    ring("copper", 0.66, 0.07, (s * 1.65, 0, 3.78))
+    # v11: square armoured pauldrons in copper (reviewer: "puffy balloon domes", copper only as thin trim)
+    box("copper", (1.25, 1.35, 0.7), (s * 1.7, 0, 4.2), (0, s * math.radians(-12), 0), bev=0.1)
+    box("iron", (1.3, 1.4, 0.12), (s * 1.7, 0, 3.85), (0, s * math.radians(-12), 0), bev=0.03)
     for a in (-0.5, 0, 0.5):
-        rivet((s * 1.65 + math.sin(a) * 0.45, -0.62 * math.cos(a), 4.45))
+        rivet((s * 1.7 + math.sin(a) * 0.5, -0.69, 4.25))
     PART[0] = "Arm%s_Upper" % side
     cyl("iron", 0.24, 1.0, (s * 1.75, 0, 3.25), v=16)
     cyl("brass", 0.1, 0.9, (s * 1.75, -0.32, 3.25), v=12)                       # piston rod in front
