@@ -248,3 +248,6 @@
 - 07:02 T106 DONE (attested): Rig template for familiars (shared skeleton for quadrupeds, bipeds, flyers and floaters)
 - 07:07 T107 DONE (attested): Re-rig Ember, Gargoyle and Frostling onto the template and test one walk and one attack each
 - 07:08 loop turned off by the user's request (ACTIVE renamed); work continues without the Stop hook or the task gate
+- 19:18 CHECKPOINT c8c1696 on overnight/2026-10-27: Add Epic and Legendary humans, boss framework, Crow and Thief client models, UILib split, comms and notify tools. Promote the overnight board and relax the guardrails for per-task commits.
+
+## Run 2026-10-29 19:18 on overnight/2026-10-27 (9.0 h, 150 loops)

@@ -10,9 +10,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: docs-tooling | needs: Studio | depends: none | size: S | owner-files: ReplicatedStorage.Shared (delete only the stale 694-line MatchSim), ReplicatedStorage._GameSpeedTest
 - [ ] T606 | Fix SoundFX cap so a lower priority never stops a higher | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SoundCap.test.luau (new, 8 voices at priority 3 then priority 2))
   lane: fx-audio | needs: Studio | depends: none | size: S | owner-files: SoundFX, Tests/SoundCap.test.luau
-- [ ] T232 | Stage completeness check passes for all 25 stages | verify: python tools/check_stages_complete.py
+- [x] T232 | Stage completeness check passes for all 25 stages | verify: python tools/check_stages_complete.py
   lane: docs-tooling | needs: none | depends: none | size: S | owner-files: Studio_Export/StageCaptions.luau, tools/gen_stage_captions.py
-- [ ] T422 | Lore, cards, voice lines complete for all 20 familiars | verify: python tools/check_familiars_complete.py
+- [x] T422 | Lore, cards, voice lines complete for all 20 familiars | verify: python tools/check_familiars_complete.py
   lane: docs-tooling | needs: none | depends: none | size: S | owner-files: Roblox Dev/Lore/*, tools/voice_lines.py
 - [ ] T153 | Play-verify stage sets 4 and 5: stages 16 and 21, edge rings, console clean | verify: studio: evidence with captures at stages 16 and 21, Bug Log #10 closed
   lane: world | needs: Studio | depends: none | size: M | owner-files: Backdrop*.luau, Shared.StageSets entries 4 and 5, BackdropFoundry, BackdropVeil

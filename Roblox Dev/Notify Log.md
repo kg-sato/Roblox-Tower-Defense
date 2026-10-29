@@ -9,3 +9,4 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-29 19:09 Title art layers built and viewed (art only); Studio build, uploads and Play checks pending
 - 2026-10-29 19:14 main: coordinating; overnight board drafted; last: 19:14 silent mode + comms files
 - 2026-10-29 19:16 Title page live: faceless fog figure, drifting layers; motion verified by property sampling, window capture stale
+- 2026-10-29 19:18 Overnight armed until 04:18: 84 tasks in 7 lanes, one commit per task, ledger and morning digest on.
