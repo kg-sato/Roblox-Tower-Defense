@@ -1,0 +1,13 @@
+Archivist.glb          tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+BrassHound.glb         tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+Ember.glb              tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+Frostling.glb          tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+Gargoyle.glb           tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+GreyVeilWraith.glb     tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+MirrorChorister.glb    tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+MothLantern.glb        tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+Mourner.glb            tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+Sentinel.glb           tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+StarDrake.glb          tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+Ward.glb               tris   6000  height  4.00  min_y  0.000  centre x  0.000 z  0.000  fbx True  ok
+models: 12 problems: 0

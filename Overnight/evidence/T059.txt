@@ -1,0 +1,3 @@
+PASS
+Page: Roblox Dev/Lore/The Clockmaker.md (identity, motive, five-act reveal table matched to stage sets and bosses T143 to T147, boss mechanics tie-in, ending options, open questions).
+Check: acts match the five sets and boss list in the task list; consistent with World Bible, Factions and The Cosmic Turn; tone limits respected (loss implied). The name, backstory and twist are proposals; fit is UNVERIFIED and open questions are listed for the user.

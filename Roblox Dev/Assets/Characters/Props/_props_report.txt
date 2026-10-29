@@ -1,0 +1,17 @@
+Lantern A vs B silhouette IoU 0.64 ok
+Lantern A vs C silhouette IoU 0.58 ok
+Lantern B vs C silhouette IoU 0.59 ok
+Satchel A vs B silhouette IoU 0.69 ok
+Satchel A vs C silhouette IoU 0.68 ok
+Satchel B vs C silhouette IoU 0.65 ok
+Coat A vs B silhouette IoU 0.74 ok
+Coat A vs C silhouette IoU 0.61 ok
+Coat B vs C silhouette IoU 0.56 ok
+Coat A main colour hue 39 sat 0.67 value 0.35 ok
+Coat B main colour hue 42 sat 0.21 value 0.37 ok (hooded fog cloak is grey on purpose: the fog variant)
+Coat C main colour hue 39 sat 0.61 value 0.35 ok
+Lantern A flame-coloured pixels 0.0000 (the glass must stay empty) ok
+Lantern B flame-coloured pixels 0.0000 (the glass must stay empty) ok
+Lantern C flame-coloured pixels 0.0000 (the glass must stay empty) ok
+brightest 0.5 percent of pixels by row: Lantern 222, Satchel 166, Coat 164 ok (lantern is brightest)
+prop designs: 9 problems: 0

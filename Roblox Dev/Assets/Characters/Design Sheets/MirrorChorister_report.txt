@@ -1,0 +1,4 @@
+familiar=MirrorChorister
+fill ratio (64 px crop) = 0.35
+IoU vs basic shapes: circle=0.42, square=0.35, triangle=0.37, plain column=0.52
+view overlap front/side=0.56 front/back=1.00 side/back=0.56

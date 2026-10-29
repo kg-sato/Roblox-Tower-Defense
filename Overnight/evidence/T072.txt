@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Lore/Story/Ending - The Clock Turns.md (principle, trigger and length, 8-shot list to 45 s with captions and sound, rewards decided by the server, world changes after, open questions).
+Machine check: python Overnight/evidence/T072_check.py (final exit 0). Output: captions=['[ THE CLOCK TURNS ]', '[ A LIGHT HOLDS ]'] lines_checked=4 shots=8 end=45s; PROBLEMS: none. First run failed because my shot list shortened a chapter 5 narration line; I restored the full line and reran. The check covers caption format, that captions and quoted lines appear in chapter 5, and that shot times run contiguously to 45 s.
+No player choice, per the task. Not built; wording and pacing are proposals and UNVERIFIED by a human.

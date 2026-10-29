@@ -1,0 +1,7 @@
+glb: 1 mesh, 1 materials, 1 images ok
+triangles 368 (budget 3000, project limit 20000) ok
+highest front silhouette IoU against any familiar front: 0.47 (front vs Gargoyle; limit 0.5) ok; worst over all views 0.60 (three_quarter vs Ward, information only)
+views differ from each other (smallest 1-IoU 0.45) ok
+size: [4.6, 2.75, 4.41]
+length_over_height: None
+enemy model BrassSentinel: problems 0

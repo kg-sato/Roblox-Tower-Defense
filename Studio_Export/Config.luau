@@ -106,6 +106,31 @@ do
 	end
 end
 
+-- ===== Familiar data (T101) =====
+-- The 12-familiar cast (Shared.Familiars, generated from Roblox Dev/Lore). Every familiar has a character folder (T102), and its Config.PETS
+-- entry gets the cast's name, role, faction and loreId. Rarity, damage, range and cooldown stay the folder's attributes.
+-- FindFirstChild, never WaitForChild: the headless tests clone only Config, Path and MatchSim into a temporary folder, and a wait would hang them.
+do
+	local shared = game:GetService("ReplicatedStorage"):FindFirstChild("Shared")
+	local mod = script.Parent:FindFirstChild("Familiars") or (shared and shared:FindFirstChild("Familiars"))
+	if mod and mod:IsA("ModuleScript") then
+		local Familiars = require(mod)
+		Config.FAMILIARS = Familiars.byId
+		Config.FAMILIAR_ORDER = Familiars.order
+		for id, def in Config.PETS do
+			local f = Familiars.forChar(id)
+			if f then
+				local d = def :: any
+				d.name, d.role, d.faction, d.loreId, d.familiar = f.name, f.role, f.faction, f.loreId, f.id
+			end
+		end
+	else
+		warn("Config: Shared.Familiars not found; familiar data skipped")
+		Config.FAMILIARS = {}
+		Config.FAMILIAR_ORDER = {}
+	end
+end
+
 -- ===== Free placement (Bloons-style) =====
 -- Pets go anywhere on the street inside the fence, off the path, without footprints overlapping.
 -- Shared by server (validation) and client (preview), so both always agree.

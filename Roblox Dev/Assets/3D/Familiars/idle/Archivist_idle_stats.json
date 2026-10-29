@@ -1,0 +1,1 @@
+{"name": "Archivist", "frames": 121, "fps": 30, "bones": ["Root", "Torso", "Head"], "max_vertex_motion_by_frame": {"1": 0.0, "15": 0.0962, "30": 0.0, "48": 0.9748, "60": 1.4609, "72": 1.4539, "84": 0.9691, "96": 0.0325, "108": 0.0437, "121": 0.0}, "max_motion": 1.4609, "loop_closure_error": 0.0, "height": 4.0}

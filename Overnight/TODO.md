@@ -9,133 +9,18 @@ Ids are in priority order: T001 is first. Research and lore come before characte
 # 1. Research and lore
 
 ## A. Research (sources, notes in Roblox Dev/Research)
-- [ ] T001 | Research note: what Bloons TD6 does with tower upgrades and path variety | verify: manual: evidence T001 (note with 5 cited sources, links, dates)
-- [ ] T002 | Research note: Kingdom Rush hero and tower identity (distinct silhouettes, abilities, roles) | verify: manual: evidence T002 (note with cited sources)
-- [ ] T003 | Research note: Plants vs Zombies character readability (silhouettes at small size, one idea per plant) | verify: manual: evidence T003
-- [ ] T004 | Research note: Hollow Knight creature design (silhouette, lore through visuals, limited palette) | verify: manual: evidence T004
-- [ ] T005 | Research note: Arcane (Netflix) character art direction and lighting vocabulary | verify: manual: evidence T005
-- [ ] T006 | Research note: Genshin Impact character kit design and element identity | verify: manual: evidence T006
-- [ ] T007 | Research note: Pokemon-style creature archetypes that work as merge units (role, colour, lore hook) | verify: manual: evidence T007
-- [ ] T008 | Research note: Dungeon Defenders hero and tower loop, and what makes a roster feel full | verify: manual: evidence T008
-- [ ] T009 | Research note: Brawl Stars brawler cards (name, role, backstory length, art style) | verify: manual: evidence T009
-- [ ] T010 | Research note: Pinterest boards for mystic Victorian creature design (gothic, clockwork, occult), saved as a board with source links | verify: manual: evidence T010
-- [ ] T011 | Research note: Pinterest boards for cosmic and star-themed UI and characters | verify: manual: evidence T011
-- [ ] T012 | Research note: clockwork and steampunk creature silhouettes (gears, cogs, brass plating) with references | verify: manual: evidence T012
-- [ ] T013 | Research note: occult and alchemy iconography as a symbol language for the game | verify: manual: evidence T013
-- [ ] T014 | Research note: how strong Roblox TD games handle merge and evolve loops (top 10 by visits, what they do) | verify: manual: evidence T014
-- [ ] T015 | Research note: merge-game progression curves (Merge Mansion, Merge Dragons) and what keeps players for 30 days | verify: manual: evidence T015
-- [ ] T016 | Research note: roll and gacha reveal pacing in games that are not predatory (Pokemon Go, Brawl Stars) | verify: manual: evidence T016
-- [ ] T017 | Research note: boss telegraphs (Dark Souls, Hollow Knight, Cuphead) with timings | verify: manual: evidence T017
-- [ ] T018 | Research note: skill tree UX in Path of Exile, Diablo and Last Epoch: what reads at a glance | verify: manual: evidence T018
-- [ ] T019 | Research note: loading screen and title art references (Hades, Hollow Knight, Bastion) | verify: manual: evidence T019
-- [ ] T020 | Research note: tower defense map design (path length, corners, choke points) from Bloons, Kingdom Rush and Vampire Survivors-style pacing | verify: manual: evidence T020
-- [ ] T021 | Research note: game feel references for hit-stop, screen shake and squash (Celeste, Vlambeer talks) | verify: manual: evidence T021
-- [ ] T022 | Research note: how enemies show health and status at a glance in top TD games | verify: manual: evidence T022
-- [ ] T023 | Research note: music in tower defense (dynamic layers, stage themes, Kingdom Rush soundtrack) | verify: manual: evidence T023
-- [ ] T024 | Research note: accessibility (colour-blind palettes, reduced motion, text size) from the Game Accessibility Guidelines | verify: manual: evidence T024
-- [ ] T025 | Research note: Roblox engine limits for particles, lights, shadows and mesh triangle budgets on phones | verify: manual: evidence T025
-- [ ] T026 | Research note: Luau performance patterns for tower defense (object pools, batched updates) with Roblox docs links | verify: manual: evidence T026
-- [ ] T027 | Research note: monetisation the community accepts (cosmetics, battle passes) versus what players hate | verify: manual: evidence T027
-- [ ] T028 | Research note: how strong games write short lore (item text, character bios, environmental storytelling) | verify: manual: evidence T028
-- [ ] T029 | Research note: naming in whimsical dark fantasy games (memorable names, not generic ones) | verify: manual: evidence T029
-- [ ] T030 | Research note: colour theory for readable teams (ten distinct hues, colour-blind safe) | verify: manual: evidence T030
 
 ## L. More research (cited, saved to Roblox Dev/Research)
-- [ ] T031 | Research note: Hades character voice and lore delivery (short lines, relationships, unlock pacing) | verify: manual: evidence T031
-- [ ] T032 | Research note: Hollow Knight boss design (one mechanic per boss, arena shape, reading the telegraph) | verify: manual: evidence T032
-- [ ] T033 | Research note: Monster Hunter Rise monster design (animal logic, weak points readable from afar) | verify: manual: evidence T033
-- [ ] T034 | Research note: Gris and Journey colour storytelling (one hue per emotion) | verify: manual: evidence T034
-- [ ] T035 | Research note: Dishonored and Prey environmental lore (objects that tell stories) | verify: manual: evidence T035
-- [ ] T036 | Research note: Bloodborne lantern and fog design (light as gameplay and as mood) | verify: manual: evidence T036
-- [ ] T037 | Research note: Mystic Messenger style character cards and profile screens | verify: manual: evidence T037
-- [ ] T038 | Research note: Fortnite and Roblox Dress To Impress costume and cosmetic presentation | verify: manual: evidence T038
-- [ ] T039 | Research note: Clash Royale card art and card frame hierarchy | verify: manual: evidence T039
-- [ ] T040 | Research note: Balatro UI (readable card rarity and the joy of scoring) | verify: manual: evidence T040
-- [ ] T041 | Research note: Hearthstone reveal and rarity presentation | verify: manual: evidence T041
-- [ ] T042 | Research note: Cult of the Lamb cult-building UI and cute-but-dark tone | verify: manual: evidence T042
-- [ ] T043 | Research note: Slay the Spire map and node readability | verify: manual: evidence T043
-- [ ] T044 | Research note: Disco Elysium voice and ui text | verify: manual: evidence T044
-- [ ] T045 | Research note: Pinterest boards for Victorian interiors and lamplight palettes | verify: manual: evidence T045
-- [ ] T046 | Research note: Pinterest boards for brass, verdigris and tarnish material references | verify: manual: evidence T046
-- [ ] T047 | Research note: Pinterest boards for Art Nouveau ornament (plant lines, whiplash curves) | verify: manual: evidence T047
-- [ ] T048 | Research note: stained glass patterns and how they read at a distance | verify: manual: evidence T048
-- [ ] T049 | Research note: Gothic architecture silhouettes for backdrops (buttress, lancet, spire rhythm) | verify: manual: evidence T049
-- [ ] T050 | Research note: fog, haze and volumetric light in Roblox (Atmosphere and lighting settings) | verify: manual: evidence T050
-- [ ] T051 | Research note: Roblox Creator Store free asset licence rules for anything we might use | verify: manual: evidence T051
 
 ## B. Lore and world bible
-- [ ] T052 | World bible: the city of Lampwick Lane, the fog, the clock, why the familiars exist (one page) | verify: manual: evidence T052 (page in Roblox Dev/Lore/World Bible.md)
-- [ ] T053 | Faction list: the Clockwork Guild, the Hollow Court, the Star Choir, the Lantern Keepers (goals and enemies for each) | verify: manual: evidence T053
-- [ ] T054 | The cosmic turn: why the sky opens late in the game, and what changes visually and mechanically | verify: manual: evidence T054
-- [ ] T055 | Lore of each stage set (Lampwick Lane, Harbour of Brass, Silent Cathedral, Clockwork Foundry, Above the Grey Veil): history, residents, what went wrong | verify: manual: evidence T055
-- [ ] T056 | Character bible rules: silhouette first, one hue per character, a lore line, a gesture, a flaw, a voice | verify: manual: evidence T056
-- [ ] T057 | Tone guide: how narration, captions and item text sound (examples and banned phrases) | verify: manual: evidence T057
-- [ ] T058 | Glossary: places, currencies, factions, familiar rarities, status effects | verify: manual: evidence T058
-- [ ] T059 | Main antagonist: a clockmaker who stopped time over the city, with motive and a five-act reveal plan | verify: manual: evidence T059
-- [ ] T060 | Tutorial story beats (who speaks, what is at stake, the first familiar's bond to the player) | verify: manual: evidence T060
-- [ ] T061 | Backstory of the player's Lantern role (why they summon familiars) | verify: manual: evidence T061
 
 ## P. Story, quests and narrative
-- [ ] T062 | Story chapter 1 script (tutorial to stage 5), 800 words, in the lore table | verify: manual: evidence T062
-- [ ] T063 | Story chapter 2 script (stages 6 to 10) | verify: manual: evidence T063
-- [ ] T064 | Story chapter 3 script (stages 11 to 15) | verify: manual: evidence T064
-- [ ] T065 | Story chapter 4 script (stages 16 to 20) | verify: manual: evidence T065
-- [ ] T066 | Story chapter 5 script (stages 21 to 25 and the cosmic turn) | verify: manual: evidence T066
-- [ ] T067 | Captions: 40 stage captions across the chapters, bracketed style | verify: manual: evidence T067
-- [ ] T068 | Familiar dialogue: 2 short exchanges per pair of familiars that share a stage | verify: manual: evidence T068
-- [ ] T069 | NPC: the Clockmaker's apprentice (a friendly voice in the lobby) | verify: manual: evidence T069
-- [ ] T070 | NPC: a Lantern Keeper who sells supplies (lore-driven shop text) | verify: manual: evidence T070
-- [ ] T071 | Collectible lore fragments found in stages (12 per chapter) | verify: studio: evidence T071
-- [ ] T072 | Ending: the cosmic ending text and the choice (none, just a closing scene) | verify: manual: evidence T072
-- [ ] T073 | Credits and thanks screen, with the CC0 and licence list | verify: manual: evidence T073
 
 # 2. Characters and enemies
 
 ## C. Character redesign (replaces the sprout and fox families; each character gets a bio, design sheet, model and portrait)
-- [ ] T074 | Cast list: 12 core familiars across rarities, each with role, faction and one-line hook | verify: manual: evidence T074
-- [ ] T075 | Familiar 1 bio and design sheet: Ember (fire, a Lantern Keeper's companion), 3 turnarounds, greyscale silhouette test | verify: manual: evidence T075
-- [ ] T076 | Familiar 2 bio and design sheet: Gargoyle (stone, watcher of the cathedral), silhouette and palette | verify: manual: evidence T076
-- [ ] T077 | Familiar 3 bio and design sheet: Frostling (ice, child of the Hollow Court), silhouette and palette | verify: manual: evidence T077
-- [ ] T078 | Familiar 4 bio and design sheet: Star Drake (cosmic, last of the Star Choir), silhouette and palette | verify: manual: evidence T078
-- [ ] T079 | Familiar 5 bio and design sheet: Sentinel (clockwork guardian of the Foundry), silhouette and palette | verify: manual: evidence T079
-- [ ] T080 | Familiar 6 bio and design sheet: Ward (lantern glass, a lighthouse spirit), silhouette and palette | verify: manual: evidence T080
-- [ ] T081 | Familiar 7 bio and design sheet: Star Choir mirror-cat (replaces the Arcane Fox, no fox), silhouette and palette | verify: manual: evidence T081
-- [ ] T082 | Familiar 8 bio and design sheet: Clockwork Owl (memory keeper of the Guild), silhouette and palette | verify: manual: evidence T082
-- [ ] T083 | Familiar 9 bio and design sheet: a mourner who gave up its face (Hollow Court), silhouette and palette | verify: manual: evidence T083
-- [ ] T084 | Familiar 10 bio and design sheet: Brass Hound (guild hound, gears for joints), silhouette and palette | verify: manual: evidence T084
-- [ ] T085 | Familiar 11 bio and design sheet: Moth-Lantern (a light that flies in the fog), silhouette and palette | verify: manual: evidence T085
-- [ ] T086 | Familiar 12 bio and design sheet: Grey Veil Wraith (the unbound, a boss-tier familiar), silhouette and palette | verify: manual: evidence T086
-- [ ] T087 | Greyscale silhouette test for all 12 at 64 px: each must read as a different shape | verify: manual: evidence T087
-- [ ] T088 | Colour test for all 12: distinct hues, colour-blind safe (deuteranopia and protanopia simulation) | verify: manual: evidence T088
-- [ ] T089 | Hunyuan3D shape generation for each familiar reference sheet (shape only), under 20,000 triangles each | verify: manual: evidence T089 (list of .glb with triangle counts)
-- [ ] T090 | Blender cleanup for each generated familiar: scale, origin, rig-ready base pose | verify: manual: evidence T090
-- [ ] T091 | Familiar textures: hand-painted base colour and roughness maps per familiar (Blender bake) | verify: manual: evidence T091
-- [ ] T092 | Familiar idle animation (breathing and one signature motion) for each of the 12 | verify: manual: evidence T092
-- [ ] T093 | Familiar attack animation (windup, release, recover) for each of the 12 | verify: manual: evidence T093
-- [ ] T094 | Familiar spawn animation (summoned in, not a pop) for each of the 12 | verify: manual: evidence T094
-- [ ] T095 | Familiar banish animation for each of the 12 | verify: manual: evidence T095
-- [ ] T096 | Familiar portrait cards: 12 cards with name, faction, one-line lore, painted frame | verify: manual: evidence T096
-- [ ] T097 | Familiar lore cards: full bio per familiar (120 to 200 words) shown in the collection | verify: manual: evidence T097
-- [ ] T098 | Familiar voice lines: 3 short lines per familiar (summon, attack, victory) as text for later recording | verify: manual: evidence T098
-- [ ] T099 | Rarity variants: how each rarity changes the silhouette, not just the colour | verify: manual: evidence T099
-- [ ] T100 | Merge evolution: what each merge tier looks like (3 tiers per familiar) | verify: manual: evidence T100
-- [ ] T101 | Wire the new familiar data into Config (name, rarity, role, faction, lore id) with tests | verify: studio: evidence T101 (test PASS)
-- [ ] T102 | Replace the sprout and fox models in ReplicatedStorage.Characters with the new familiars | verify: studio: evidence T102 (each model spawns, console clean)
-- [ ] T103 | Collection screen shows the new lore cards and each familiar's silhouette | verify: studio: evidence T103
 
 ## M. Characters, models and textures (follow the character bible, T056)
-- [ ] T104 | Character visual lookbook for all 12 familiars: 6 poses each, greyscale and colour | verify: manual: evidence T104
-- [ ] T105 | Familiar material library: brass, bone, glass, stone, ember, frost, ink, star-dust (one shader recipe each) | verify: manual: evidence T105
-- [ ] T106 | Rig template for familiars (shared skeleton for quadrupeds, bipeds, flyers and floaters) | verify: manual: evidence T106
-- [ ] T107 | Re-rig Ember, Gargoyle and Frostling onto the template and test one walk and one attack each | verify: studio: evidence T107
-- [ ] T108 | Re-rig Star Drake, Sentinel and Ward onto the template | verify: studio: evidence T108
-- [ ] T109 | Re-rig the remaining 6 familiars onto the template | verify: studio: evidence T109
-- [ ] T110 | Facial expression set for the 4 familiars with faces (3 expressions each) | verify: manual: evidence T110
-- [ ] T111 | Familiar eye design system: eye shape reads personality (matches the bible) | verify: manual: evidence T111
-- [ ] T112 | Props for the trainer: the Lantern itself, a satchel, a coat (lore-matched, 3 designs) | verify: manual: evidence T112
-- [ ] T113 | Trainer character model (the player's Lantern Keeper avatar outfit, 4 cosmetic variants) | verify: manual: evidence T113
-- [ ] T114 | Enemy models: Fog Wisp redesign model, triangle budget checked | verify: manual: evidence T114
-- [ ] T115 | Enemy models: Brass Sentinel redesign model | verify: manual: evidence T115
 - [ ] T116 | Enemy models: Clockwork Crow (new) | verify: manual: evidence T116
 - [ ] T117 | Enemy models: Lantern Thief (new) | verify: manual: evidence T117
 - [ ] T118 | Boss model: The Unbound (phase variants) | verify: manual: evidence T118
@@ -231,7 +116,6 @@ Ids are in priority order: T001 is first. Research and lore come before characte
 - [ ] T198 | Skill tree respec with cost and cooldown, tested | verify: studio: evidence T198 (test PASS)
 - [ ] T199 | Next-best hint in the skill tree (suggests the cheapest useful node) | verify: studio: evidence T199
 - [ ] T200 | Pity system for rare familiars, documented and tested | verify: studio: evidence T200 (test PASS)
-- [ ] T001 | Achievements list: 30 achievements with names, icons and rewards | verify: manual: evidence T201
 - [ ] T002 | Achievement unlock logic on the server, tested | verify: studio: evidence T202 (test PASS)
 - [ ] T003 | Tutorial rewrite: 6 steps, each teaching one mechanic, with a lore line | verify: studio: evidence T203
 - [ ] T004 | Difficulty modes: Normal and Hard (more enemies, more gold), clearly labelled | verify: studio: evidence T204

@@ -1,0 +1,3 @@
+PASS
+Note: Roblox Dev/Research/Game Design and Market/Monetisation players accept vs hate.md
+Sources: 3 Wikipedia pages and the Roblox paid-random-items doc read, fetched 2026-10-28. No survey data on Roblox players; "accepted" is inferred from backlash and regulation history, stated in note.

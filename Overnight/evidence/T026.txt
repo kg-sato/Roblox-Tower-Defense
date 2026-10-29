@@ -1,0 +1,3 @@
+PASS
+Note: Roblox Dev/Research/Roblox Engine/Luau performance patterns for tower defense.md
+Sources: Luau.org and 3 Roblox docs pages read, fetched 2026-10-28 (undated pages). Object pooling and one-loop batching have no official doc; only DevForum snippets, flagged in note.

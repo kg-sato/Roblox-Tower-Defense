@@ -1,0 +1,4 @@
+familiar=Archivist
+fill ratio (64 px crop) = 0.31
+IoU vs basic shapes: circle=0.39, square=0.31, triangle=0.50, plain egg=0.52
+view overlap front/side=0.68 front/back=1.00 side/back=0.68

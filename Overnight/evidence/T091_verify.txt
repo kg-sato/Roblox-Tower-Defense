@@ -1,0 +1,14 @@
+model              uv  colTex rghTex       size painted% colours  rough min-max   tris
+Archivist          True True   True    1024x1024     75.8     219      1-207      6000  ok
+BrassHound         True True   True    1024x1024     81.4     182      1-218      6000  ok
+Ember              True True   True    1024x1024     78.4     209      1-218      6000  ok
+Frostling          True True   True    1024x1024     72.6     195      1-220      6000  ok
+Gargoyle           True True   True    1024x1024     78.9     130      1-219      6000  ok
+GreyVeilWraith     True True   True    1024x1024     71.0     111      1-218      6000  ok
+MirrorChorister    True True   True    1024x1024     70.3     214      1-223      6000  ok
+MothLantern        True True   True    1024x1024     78.8     188      1-202      6000  ok
+Mourner            True True   True    1024x1024     68.8      87      5-218      6000  ok
+Sentinel           True True   True    1024x1024     70.6     140      1-215      6000  ok
+StarDrake          True True   True    1024x1024     70.1     270      1-219      6000  ok
+Ward               True True   True    1024x1024     81.2     181      1-223      6000  ok
+models: 12 problems: 0

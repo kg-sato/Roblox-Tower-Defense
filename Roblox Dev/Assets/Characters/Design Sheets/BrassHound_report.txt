@@ -1,0 +1,4 @@
+familiar=BrassHound
+fill ratio (64 px crop) = 0.44
+IoU vs basic shapes: circle=0.52, square=0.44, triangle=0.56, plain dog loaf=0.30
+view overlap front/side=0.30 front/back=0.53 side/back=0.36

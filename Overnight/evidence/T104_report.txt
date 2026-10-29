@@ -1,0 +1,13 @@
+Archivist        fill 0.88-0.88 margin>=14 min pose diff  8.87 grey spread  122  ok
+BrassHound       fill 0.87-0.88 margin>=14 min pose diff  3.75 grey spread   82  ok
+Ember            fill 0.88-0.88 margin>=14 min pose diff 10.43 grey spread  108  ok
+Frostling        fill 0.88-0.88 margin>=14 min pose diff 12.80 grey spread  120  ok
+Gargoyle         fill 0.82-0.88 margin>=14 min pose diff 32.89 grey spread   86  ok
+GreyVeilWraith   fill 0.86-0.88 margin>=14 min pose diff 15.90 grey spread  127  ok
+MirrorChorister  fill 0.85-0.88 margin>=14 min pose diff 12.97 grey spread  103  ok
+MothLantern      fill 0.86-0.88 margin>=14 min pose diff 10.05 grey spread  137  ok
+Mourner          fill 0.87-0.88 margin>=14 min pose diff  9.46 grey spread   94  ok
+Sentinel         fill 0.88-0.88 margin>=14 min pose diff 17.33 grey spread   98  ok
+StarDrake        fill 0.88-0.88 margin>=14 min pose diff 16.38 grey spread   74  ok
+Ward             fill 0.88-0.88 margin>=14 min pose diff 11.20 grey spread   92  ok
+familiars: 12 problems: 0

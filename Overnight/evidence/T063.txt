@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Lore/Story/Chapter 2 - Harbour of Brass.md (72 rows keyed by trigger, stages 6 to 10 plus reactive lines).
+Machine check: Python word count over the text column of the C2-xx rows gave 72 rows, 802 words (matched to chapter 1's 800-word target; the task itself gave no length).
+Check: act 2 clues planted (fresh crank, the order "hold"); links back to Chapter 1 and forward to the Cathedral; tone rules followed. Not built into the game; quality is a proposal and UNVERIFIED by a human.

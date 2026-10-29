@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Lore/Story/Chapter 5 - Above the Grey Veil.md (71 rows keyed by trigger, stages 21 to 25 plus the cosmic turn scene and the closing scene).
+Machine check: Python word count over the text column of the C5-xx rows gave 71 rows, 823 words (matched to chapter 1's 800-word target; the task itself gave no length).
+Check: stage 21 is the turn per Lore/The Cosmic Turn.md; the Clockmaker's act 5 reveal resolves the clues from chapters 1 to 4; the ending follows the default option in Lore/The Clockmaker.md (closing scene, no branch; T072 decides). The Voice's identity is left open on purpose. Not built; quality is UNVERIFIED by a human.

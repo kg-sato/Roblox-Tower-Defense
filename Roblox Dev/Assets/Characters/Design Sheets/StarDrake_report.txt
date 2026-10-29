@@ -1,0 +1,4 @@
+familiar=StarDrake
+fill ratio (64 px crop) = 0.28
+IoU vs basic shapes: circle=0.34, square=0.28, triangle=0.29, plain pole=0.19
+view overlap front/side=0.42 front/back=1.00 side/back=0.42

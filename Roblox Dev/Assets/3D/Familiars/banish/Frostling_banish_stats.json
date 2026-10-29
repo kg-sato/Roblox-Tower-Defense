@@ -1,0 +1,1 @@
+{"name": "Frostling", "frames": 36, "fps": 30, "bones": ["Root", "Torso", "Head"], "height": 4.0, "height_ratio_by_frame": {"1": 1.0, "6": 1.0496, "12": 0.7978, "18": 0.5448, "24": 0.316, "30": 0.1192, "36": 0.02}, "max_height_ratio": 1.0496, "rest_error": 0.0}

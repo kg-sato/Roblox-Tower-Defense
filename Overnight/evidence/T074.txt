@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Lore/Cast List - 12 Familiars.md (12 familiars with rarity, one-verb role, faction, home set, one-line hook and what each replaces in the current Config).
+Machine check: python Overnight/evidence/T074_check.py (exit 0). Output: familiars: 12 {'Common': 4, 'Rare': 4, 'Epic': 2, 'Legendary': 2} factions: Keepers 3, Guild 3, Hollow Court 3, Star Choir 2, Unaligned 1; PROBLEMS: none. It also checks unique names and unique one-word roles, hooks of 20 words or fewer, and no fox or sprout designs.
+Grounding: current code has 7 pets (Ember, Sprout, Zap, Frostling, Boulder, VoltFox, StarDrake; read from Studio_Export/Config.luau earlier), rarities Common/Rare/Epic/Legendary with odds 60/28/10/2. Rarity spread, roles and effects are proposals (not balanced or built); 3 open questions listed. UNVERIFIED by a human.

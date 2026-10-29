@@ -1,0 +1,3 @@
+PASS
+Page: Roblox Dev/Lore/Glossary.md (places, currencies, factions, familiars, rarities, status effects; each entry marked In game / Task list / Proposal).
+Check: rarities (Common 60/Rare 28/Epic 10/Legendary 2; mult 1/2.2/5/12) and currencies (coins, gems) read from Studio_Export/Config.luau this session; status effects confirmed absent from Config (grep). Other terms are proposals. Not wired into code.

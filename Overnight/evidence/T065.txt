@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Lore/Story/Chapter 4 - Clockwork Foundry.md (71 rows keyed by trigger, stages 16 to 20 plus reactive lines).
+Machine check: Python word count over the text column of the C4-xx rows gave 71 rows, 816 words (matched to chapter 1's 800-word target; the task itself gave no length).
+Check: act 4 clues planted (banked furnaces, cold furnace with the coat, sealed book); first crack of light links to The Cosmic Turn; loss implied only. Not built into the game; quality is a proposal and UNVERIFIED by a human.

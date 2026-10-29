@@ -1,0 +1,5 @@
+PASS
+Built: Studio_Export/LoreFragments.luau (60 fragments, 12 per chapter, helpers chapterForStage/forStage/byId/count), installed in Studio as ReplicatedStorage.Shared.LoreFragments (new ModuleScript, Edit mode; the place file is NOT saved, saving needs the user). Test: Tests/LoreFragments.test.luau. Vault page: Roblox Dev/Lore/Lore Fragments.md (all 60 texts).
+Test run (Studio Edit mode via execute_luau, temp ModuleScript requiring the test): first line PASS, 22 checks ok: 60 total; 12 per chapter; ids unique; every stage lies in its chapter; none over 25 words; none empty; every stage 1 to 25 has a fragment; chapterForStage edge cases (0, 26, -3 nil; 5.9 floors); byId hit and miss.
+Honest notes: the first run failed with a load error caused by a bad newline escape in my generated test file; I fixed the file and reran to PASS. loadstring is not available through execute_luau here, so the test ran via a temp module. Local file server used for the pull was stopped afterwards (my PID only).
+Not built: placing fragments in stages, pickup, saving finds in the profile (server decides), strict type check run (T201). Writing quality UNVERIFIED by a human.

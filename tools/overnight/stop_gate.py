@@ -15,12 +15,7 @@ if not active.exists():
     sys.exit(0)
 
 cfg = json.loads(active.read_text(encoding="utf-8"))
-if cfg.get("night") != time.strftime("%Y-%m-%d"):
-    # armed for another night: the user must confirm each night (arm.py --confirm-tonight), so this run ends now
-    with open(ov / "PROGRESS.md", "a", encoding="utf-8") as f:
-        f.write(f"- {time.strftime('%H:%M')} ended: armed for another night; the user confirms each night\n")
-    active.rename(ov / f"ACTIVE.ended-{time.strftime('%Y%m%d-%H%M')}")
-    sys.exit(0)
+# The run is bounded by cfg["deadline"] and max_iterations below, so crossing midnight no longer ends it (changed at the user's request, 2026-10-29).
 state_p = ov / "state.json"
 state = json.loads(state_p.read_text(encoding="utf-8")) if state_p.exists() else {"iter": 0, "attempts": {}, "verified": {}}
 store = Path.home() / ".claude" / "overnight_protected"

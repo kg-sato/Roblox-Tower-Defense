@@ -1,0 +1,4 @@
+familiar=GreyVeilWraith
+fill ratio (64 px crop) = 0.21
+IoU vs basic shapes: circle=0.27, square=0.21, triangle=0.38, plain ghost sheet=0.48
+view overlap front/side=0.55 front/back=1.00 side/back=0.55

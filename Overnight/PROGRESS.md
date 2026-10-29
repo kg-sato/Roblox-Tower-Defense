@@ -133,3 +133,118 @@
 - 21:00 T126 DONE (attested): Tests/RunAll runs all 7 suites, 7 of 7 PASS.
 - 21:00 T126 DONE (attested): One test runner: `Tests/RunAll` executes every Tests/*.test.luau in Studio and writes one summary line per suite
 - 21:01 T127 PARTIAL: Foundry set built and captured in Edit, test PASS; stage-16 Play check not done (stage jumps unreliable, T114).
+
+## Run 2026-10-28 22:21 on overnight/2026-10-27 (8.0 h, 220 loops)
+- 22:21 T001 PARTIAL: note written, not ticked (dates missing for most sources, two pages blocked).
+- 22:21 T001 DONE (manual): five dated sources in the note; Paragon date conflict recorded.
+- 22:23 T001 DONE (attested): Research note: what Bloons TD6 does with tower upgrades and path variety
+- 22:23 T002 DONE (attested): Research note: Kingdom Rush hero and tower identity (distinct silhouettes, abilities, roles)
+- 22:24 T003 DONE (attested): Research note: Plants vs Zombies character readability (silhouettes at small size, one idea per plant)
+- 22:25 T004 DONE (attested): Research note: Hollow Knight creature design (silhouette, lore through visuals, limited palette)
+- 22:25 T005 DONE (attested): Research note: Arcane (Netflix) character art direction and lighting vocabulary
+- 22:26 T006 DONE (attested): Research note: Genshin Impact character kit design and element identity
+- 22:27 T007 DONE (attested): Research note: Pokemon-style creature archetypes that work as merge units (role, colour, lore hook)
+- 22:27 T008 DONE (attested): Research note: Dungeon Defenders hero and tower loop, and what makes a roster feel full
+- 22:27 T009 DONE (attested): Research note: Brawl Stars brawler cards (name, role, backstory length, art style)
+- 22:28 T010 DONE (attested): Research note: Pinterest boards for mystic Victorian creature design (gothic, clockwork, occult), saved as a board with source links
+- 22:29 T011 DONE (attested): Research note: Pinterest boards for cosmic and star-themed UI and characters
+- 22:29 T012 DONE (attested): Research note: clockwork and steampunk creature silhouettes (gears, cogs, brass plating) with references
+- 22:30 T013 DONE (attested): Research note: occult and alchemy iconography as a symbol language for the game
+- 22:30 T014 verify FAILED (attempt 1): needs Overnight/evidence/T014.txt whose first line is PASS, followed by the real test output
+- 22:31 T014 DONE (attested): Research note: how strong Roblox TD games handle merge and evolve loops (top 10 by visits, what they do)
+- 22:31 T015 DONE (attested): Research note: merge-game progression curves (Merge Mansion, Merge Dragons) and what keeps players for 30 days
+- 22:32 T016 DONE (attested): Research note: roll and gacha reveal pacing in games that are not predatory (Pokemon Go, Brawl Stars)
+- 22:33 T017 DONE (attested): Research note: boss telegraphs (Dark Souls, Hollow Knight, Cuphead) with timings
+- 22:34 T018 DONE (attested): Research note: skill tree UX in Path of Exile, Diablo and Last Epoch: what reads at a glance
+- 22:34 T019 DONE (attested): Research note: loading screen and title art references (Hades, Hollow Knight, Bastion)
+- 22:35 T020 DONE (attested): Research note: tower defense map design (path length, corners, choke points) from Bloons, Kingdom Rush and Vampire Survivors-style pacing
+- 22:36 T021 DONE (attested): Research note: game feel references for hit-stop, screen shake and squash (Celeste, Vlambeer talks)
+- 22:36 T022 DONE (attested): Research note: how enemies show health and status at a glance in top TD games
+- 22:37 T023 DONE (attested): Research note: music in tower defense (dynamic layers, stage themes, Kingdom Rush soundtrack)
+- 22:38 T024 DONE (attested): Research note: accessibility (colour-blind palettes, reduced motion, text size) from the Game Accessibility Guidelines
+- 22:38 T025 DONE (attested): Research note: Roblox engine limits for particles, lights, shadows and mesh triangle budgets on phones
+- 22:39 T026 DONE (attested): Research note: Luau performance patterns for tower defense (object pools, batched updates) with Roblox docs links
+- 22:40 T027 DONE (attested): Research note: monetisation the community accepts (cosmetics, battle passes) versus what players hate
+- 22:41 T028 DONE (attested): Research note: how strong games write short lore (item text, character bios, environmental storytelling)
+- 22:41 T029 DONE (attested): Research note: naming in whimsical dark fantasy games (memorable names, not generic ones)
+- 22:42 T030 DONE (attested): Research note: colour theory for readable teams (ten distinct hues, colour-blind safe)
+- 22:43 T031 DONE (attested): Research note: Hades character voice and lore delivery (short lines, relationships, unlock pacing)
+- 22:43 T032 DONE (attested): Research note: Hollow Knight boss design (one mechanic per boss, arena shape, reading the telegraph)
+- 22:44 T033 DONE (attested): Research note: Monster Hunter Rise monster design (animal logic, weak points readable from afar)
+- 22:45 T034 DONE (attested): Research note: Gris and Journey colour storytelling (one hue per emotion)
+- 22:45 T035 DONE (attested): Research note: Dishonored and Prey environmental lore (objects that tell stories)
+- 22:46 T036 DONE (attested): Research note: Bloodborne lantern and fog design (light as gameplay and as mood)
+- 22:46 T037 DONE (attested): Research note: Mystic Messenger style character cards and profile screens
+- 22:47 T038 DONE (attested): Research note: Fortnite and Roblox Dress To Impress costume and cosmetic presentation
+- 22:47 T039 DONE (attested): Research note: Clash Royale card art and card frame hierarchy
+- 22:48 T040 DONE (attested): Research note: Balatro UI (readable card rarity and the joy of scoring)
+- 22:49 T041 DONE (attested): Research note: Hearthstone reveal and rarity presentation
+- 22:50 T042 DONE (attested): Research note: Cult of the Lamb cult-building UI and cute-but-dark tone
+- 22:50 T043 DONE (attested): Research note: Slay the Spire map and node readability
+- 22:51 T044 DONE (attested): Research note: Disco Elysium voice and ui text
+- 22:51 T045 DONE (attested): Research note: Pinterest boards for Victorian interiors and lamplight palettes
+- 22:52 T046 DONE (attested): Research note: Pinterest boards for brass, verdigris and tarnish material references
+- 22:52 T047 DONE (attested): Research note: Pinterest boards for Art Nouveau ornament (plant lines, whiplash curves)
+- 22:53 T048 DONE (attested): Research note: stained glass patterns and how they read at a distance
+- 22:54 T049 DONE (attested): Research note: Gothic architecture silhouettes for backdrops (buttress, lancet, spire rhythm)
+- 22:54 T050 DONE (attested): Research note: fog, haze and volumetric light in Roblox (Atmosphere and lighting settings)
+- 22:55 T051 DONE (attested): Research note: Roblox Creator Store free asset licence rules for anything we might use
+- 22:56 T052 DONE (attested): World bible: the city of Lampwick Lane, the fog, the clock, why the familiars exist (one page)
+- 22:56 T053 DONE (attested): Faction list: the Clockwork Guild, the Hollow Court, the Star Choir, the Lantern Keepers (goals and enemies for each)
+- 22:57 T054 DONE (attested): The cosmic turn: why the sky opens late in the game, and what changes visually and mechanically
+- 22:57 T055 DONE (attested): Lore of each stage set (Lampwick Lane, Harbour of Brass, Silent Cathedral, Clockwork Foundry, Above the Grey Veil): history, residents, what went wrong
+- 22:57 T056 DONE (attested): Character bible rules: silhouette first, one hue per character, a lore line, a gesture, a flaw, a voice
+- 22:58 T057 DONE (attested): Tone guide: how narration, captions and item text sound (examples and banned phrases)
+- 22:58 T058 DONE (attested): Glossary: places, currencies, factions, familiar rarities, status effects
+- 22:59 T059 DONE (attested): Main antagonist: a clockmaker who stopped time over the city, with motive and a five-act reveal plan
+- 22:59 T060 DONE (attested): Tutorial story beats (who speaks, what is at stake, the first familiar's bond to the player)
+- 23:00 T061 DONE (attested): Backstory of the player's Lantern role (why they summon familiars)
+- 23:01 T062 DONE (attested): Story chapter 1 script (tutorial to stage 5), 800 words, in the lore table
+- 23:01 T063 DONE (attested): Story chapter 2 script (stages 6 to 10)
+- 23:02 T064 DONE (attested): Story chapter 3 script (stages 11 to 15)
+- 23:03 T065 DONE (attested): Story chapter 4 script (stages 16 to 20)
+- 23:04 T066 DONE (attested): Story chapter 5 script (stages 21 to 25 and the cosmic turn)
+- 23:04 T067 DONE (attested): Captions: 40 stage captions across the chapters, bracketed style
+- 23:05 T068 DONE (attested): Familiar dialogue: 2 short exchanges per pair of familiars that share a stage
+- 23:06 T069 DONE (attested): NPC: the Clockmaker's apprentice (a friendly voice in the lobby)
+- 23:07 T070 DONE (attested): NPC: a Lantern Keeper who sells supplies (lore-driven shop text)
+- 23:09 T071 DONE (attested): Collectible lore fragments found in stages (12 per chapter)
+- 23:10 T072 DONE (attested): Ending: the cosmic ending text and the choice (none, just a closing scene)
+- 23:11 T073 DONE (attested): Credits and thanks screen, with the CC0 and licence list
+- 23:12 T074 DONE (attested): Cast list: 12 core familiars across rarities, each with role, faction and one-line hook
+- 23:15 T075 DONE (attested): Familiar 1 bio and design sheet: Ember (fire, a Lantern Keeper's companion), 3 turnarounds, greyscale silhouette test
+- 23:16 T076 DONE (attested): Familiar 2 bio and design sheet: Gargoyle (stone, watcher of the cathedral), silhouette and palette
+- 23:18 T077 DONE (attested): Familiar 3 bio and design sheet: Frostling (ice, child of the Hollow Court), silhouette and palette
+- 23:19 T078 DONE (attested): Familiar 4 bio and design sheet: Star Drake (cosmic, last of the Star Choir), silhouette and palette
+- 23:21 T079 DONE (attested): Familiar 5 bio and design sheet: Sentinel (clockwork guardian of the Foundry), silhouette and palette
+- 23:22 T080 DONE (attested): Familiar 6 bio and design sheet: Ward (lantern glass, a lighthouse spirit), silhouette and palette
+- 23:23 T081 DONE (attested): Familiar 7 bio and design sheet: Star Choir mirror-cat (replaces the Arcane Fox, no fox), silhouette and palette
+- 23:24 T082 DONE (attested): Familiar 8 bio and design sheet: Clockwork Owl (memory keeper of the Guild), silhouette and palette
+- 23:25 T083 DONE (attested): Familiar 9 bio and design sheet: a mourner who gave up its face (Hollow Court), silhouette and palette
+- 23:26 T084 DONE (attested): Familiar 10 bio and design sheet: Brass Hound (guild hound, gears for joints), silhouette and palette
+- 23:27 T085 DONE (attested): Familiar 11 bio and design sheet: Moth-Lantern (a light that flies in the fog), silhouette and palette
+- 23:28 T086 DONE (attested): Familiar 12 bio and design sheet: Grey Veil Wraith (the unbound, a boss-tier familiar), silhouette and palette
+- 23:29 T087 DONE (attested): Greyscale silhouette test for all 12 at 64 px: each must read as a different shape
+- 23:31 T088 DONE (attested): Colour test for all 12: distinct hues, colour-blind safe (deuteranopia and protanopia simulation)
+- 23:43 T089 DONE (attested): Hunyuan3D shape generation for each familiar reference sheet (shape only), under 20,000 triangles each
+- 23:46 T090 DONE (attested): Blender cleanup for each generated familiar: scale, origin, rig-ready base pose
+- 23:49 T091 DONE (attested): Familiar textures: hand-painted base colour and roughness maps per familiar (Blender bake)
+- 23:52 T092 DONE (attested): Familiar idle animation (breathing and one signature motion) for each of the 12
+- 23:55 T093 DONE (attested): Familiar attack animation (windup, release, recover) for each of the 12
+- 23:57 T094 DONE (attested): Familiar spawn animation (summoned in, not a pop) for each of the 12
+- 23:59 T095 DONE (attested): Familiar banish animation for each of the 12
+- 00:00 ended: armed for another night; the user confirms each night
+- 06:15 re-armed at the user's request after the midnight cutoff: 8 h from now, 400 loops, state kept, midnight check removed from stop_gate.py
+- 06:16 T096 DONE (attested): Familiar portrait cards: 12 cards with name, faction, one-line lore, painted frame
+- 06:16 T097 DONE (attested): Familiar lore cards: full bio per familiar (120 to 200 words) shown in the collection
+- 06:16 T098 DONE (attested): Familiar voice lines: 3 short lines per familiar (summon, attack, victory) as text for later recording
+- 06:19 T099 DONE (attested): Rarity variants: how each rarity changes the silhouette, not just the colour
+- 06:20 T100 DONE (attested): Merge evolution: what each merge tier looks like (3 tiers per familiar)
+- 06:33 T101 DONE (attested): Wire the new familiar data into Config (name, rarity, role, faction, lore id) with tests
+- 06:49 T102 DONE (attested): Replace the sprout and fox models in ReplicatedStorage.Characters with the new familiars
+- 06:55 T103 DONE (attested): Collection screen shows the new lore cards and each familiar's silhouette
+- 06:56 T104 DONE (attested): Character visual lookbook for all 12 familiars: 6 poses each, greyscale and colour
+- 06:59 T105 DONE (attested): Familiar material library: brass, bone, glass, stone, ember, frost, ink, star-dust (one shader recipe each)
+- 07:02 T106 DONE (attested): Rig template for familiars (shared skeleton for quadrupeds, bipeds, flyers and floaters)
+- 07:07 T107 DONE (attested): Re-rig Ember, Gargoyle and Frostling onto the template and test one walk and one attack each
+- 07:08 loop turned off by the user's request (ACTIVE renamed); work continues without the Stop hook or the task gate

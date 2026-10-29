@@ -16,6 +16,7 @@ Severity: `crash` / `major` (breaks a feature) / `minor` / `cosmetic`
 
 | # | Date found | Date fixed | Bug | Fix |
 |---|---|---|---|---|
+| 5 | 2026-10-29 | 2026-10-29 | Loading screen parts overlapped and were not centred (the user) | Audited in Play by Sonnet (tools/loading_audit.luau). Fixes: the clock tunnel glides to the screen centre for the finale (concentric with the eye, measured 0, 0), gears centred on their faces, key parts named, and (the user: "move it") the title, bar and status moved into a dark panel along the bottom below the tunnel (tunnel raised to 0.36). Verified by Play capture: text legible on the panel; the title still grazes the largest clock face's lower rim |
 | 1 | 2026-10-24 | 2026-10-24 | Enemies froze and showed only a health bar after the tutorial | Spawn time was taken from a sim clock that stands still while the tutorial is paused, so enemies looked far past the lane end. Server now stamps real server time at spawn. Verified in Play: enemies move 8.1 studs/s after a 3.5 s idle |
 | 2 | 2026-10-24 | 2026-10-24 | Pets looked off-centre from their coloured pads | Floating spheres sat above the pad and the tilted camera shifted them. Pets are now models standing on the pad. Verified: pivot offset 0.00 studs on slots 2 to 4 |
 | 3 | 2026-10-24 | 2026-10-24 | Dragged pet glitched | Now snaps to the pad centre under the pointer, with green/red pad hint for valid/invalid merge. Not verified by a human |

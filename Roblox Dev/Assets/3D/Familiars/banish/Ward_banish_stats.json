@@ -1,0 +1,1 @@
+{"name": "Ward", "frames": 36, "fps": 30, "bones": ["Root", "Torso", "Head"], "height": 4.0, "height_ratio_by_frame": {"1": 1.0, "6": 1.0461, "12": 0.8022, "18": 0.5511, "24": 0.3204, "30": 0.1203, "36": 0.02}, "max_height_ratio": 1.0461, "rest_error": 0.0}

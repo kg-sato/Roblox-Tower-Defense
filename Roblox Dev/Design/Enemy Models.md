@@ -1,0 +1,13 @@
+# Enemy Models
+
+Procedural enemy models for the stage sets, built in Blender headless and checked by `tools/verify_enemy_model.py <Name> [budget]` (GLB parses, triangle budget, silhouette unlike any familiar). Files in `Assets/3D/Enemies/<Name>/`. Enemy triangle budget used so far: 3,000 (the project limit for any mesh is 20,000). Not imported into Roblox yet; look UNVERIFIED by the user.
+
+## Fog Wisp (T114)
+Design from [[Backgrounds and Enemies - Mystic Victorian]]: "torn cloak with no body, glides low, trails mist; long trailing tail, no legs; pale cold blue".
+`Blender/make_fog_wisp.py`: a flattened hooded cloak along a gentle S-curve (domed hood with a dark recess and two pale eye points), tapering into a long tail, seven ragged tatters trailing back and down, three thin mist strands. 3.95 long, 1.58 high, floats 0.04 to 1.6 above the ground plane, faces -Y. 1,405 triangles, 789 vertices. Texture `FogWisp_BaseColor.png` (RGBA gradient: cold blue at the head, lighter mist and fading alpha toward the tail; use AlphaMode Transparency and DoubleSided in Roblox). Stills and `_FogWisp_sheet.png` beside the GLB.
+Known flaws: it reads as a hooded tadpole more than torn cloth (smooth hood, thin tatters); the tear texture is not painted; the lantern-eating idea of the later Fog Wisp redesign (T134) is not in this model; no animation, no rig (a floater template from [[Rig Template]] would fit).
+
+## Brass Sentinel (T115)
+Design from the same research table: "steam automaton, boxy torso, chimney on its back; square shoulders plus a back chimney; dark brass, red eye slit" (the heavy tank). `Blender/make_brass_sentinel.py`: a squat tank of beveled-free boxes: deep torso with a riveted chest plate, huge square shoulder pads, long thick arms ending in big fists, a small head sunk between the shoulders with a red eye slit, a deep boiler on the back with two tapered chimneys. 4.6 wide, 2.75 deep, 4.41 high, faces -Y. 368 triangles, one 4 by 4 palette texture (`BrassSentinel_Palette.png`, flat colours: dark brass, brass, worn dark, red, iron, rivet gold, black, soot). Files in `Assets/3D/Enemies/BrassSentinel/` with `_BrassSentinel_sheet.png`.
+It must not be mistaken for the familiar [[Sentinel]] (also a boxy brass automaton): the first build, slim and tall, scored a side silhouette overlap of 0.59 against the familiar, so the enemy was rebuilt squat and wide with a deep boiler, and now reads as a different shape (front view 0.47 against the nearest familiar front, Gargoyle).
+Known flaws: very blocky (368 triangles, no bevels), flat palette colours, no wear or steam (the steam puff is a VFX task), no rig; the three-quarter view still overlaps Ward at 0.60 at 48 px, information only.

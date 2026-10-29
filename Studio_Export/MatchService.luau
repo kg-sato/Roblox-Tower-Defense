@@ -16,9 +16,39 @@ local ProfileStore = require(ServerScriptService:WaitForChild("ProfileStore")) :
 
 -- What is saved between visits (see MatchSim.meta / loadMeta). Only account-level progress: the pets on the board
 -- and the current stage belong to a single run and are not saved.
-local TEMPLATE = { version = 1, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, tutorialDone = false, settings = SettingsDefaults.copyDefaults() }
+local TEMPLATE = { version = 1, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, tutorialDone = false, settings = SettingsDefaults.copyDefaults(), seen = {} }
 local store = ProfileStore.New("PlayerData_v1", TEMPLATE)
 local profiles: { [Player]: any } = {}
+
+-- Collection (T103): the familiars a player has pulled. The server decides; the client only reads the player attribute SeenPets (comma list).
+local seenCache: { [Player]: { [string]: boolean } } = {}
+local function publishSeen(player: Player)
+	local ids = {}
+	for id in seenCache[player] or {} do
+		table.insert(ids, id)
+	end
+	table.sort(ids)
+	player:SetAttribute("SeenPets", table.concat(ids, ","))
+end
+local function markSeen(player: Player, pet: any)
+	if type(pet) ~= "string" or not Config.PETS[pet] then
+		return
+	end
+	local seen = seenCache[player]
+	if not seen then
+		seen = {}
+		seenCache[player] = seen
+	end
+	if seen[pet] then
+		return
+	end
+	seen[pet] = true
+	local profile = profiles[player]
+	if profile and type(profile.Data.seen) == "table" then
+		profile.Data.seen[pet] = true
+	end
+	publishSeen(player)
+end
 
 local TICK = 0.1
 local MIN_ACTION_GAP = 0.05
@@ -64,6 +94,9 @@ local function startRun(player: Player, tutorial: boolean)
 		if kind == "Spawn" then
 			local s = sessions[player]
 			payload.spawnTime = s and s.gclock or 0
+		end
+		if kind == "Roll" then
+			markSeen(player, payload.pet)
 		end
 		-- a Legendary pull is the one shared moment: other players in the server get a short banner (T20)
 		if kind == "Roll" and payload.rarity == "Legendary" and not payload.bonus then
@@ -144,6 +177,21 @@ local function loadProfile(player: Player)
 	end
 	tree.Start = 1
 	d.tree = tree
+	-- collection (T103): keep only real familiar ids, then merge with what was pulled before the profile finished loading
+	local seen = {}
+	if type(d.seen) == "table" then
+		for id, v in d.seen do
+			if type(id) == "string" and Config.PETS[id] ~= nil and v == true then
+				seen[id] = true
+			end
+		end
+	end
+	for id in seenCache[player] or {} do
+		seen[id] = true
+	end
+	d.seen = seen
+	seenCache[player] = table.clone(seen)
+	publishSeen(player)
 	d.version = TEMPLATE.version -- no migration is needed yet; add one here before bumping TEMPLATE.version
 	profile.OnSessionEnd:Connect(function()
 		profiles[player] = nil
@@ -348,6 +396,7 @@ Players.PlayerRemoving:Connect(function(player)
 		profile:EndSession()
 	end
 	sessions[player] = nil
+	seenCache[player] = nil
 	lastSkip[player] = nil
 	lastSetting[player] = nil
 end)

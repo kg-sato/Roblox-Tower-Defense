@@ -13,6 +13,7 @@ Solo, one-month Roblox game. Place file: `Claude.rbxl`. Studio is connected thro
 - `Animation Kit/`: third-party R6/R15 humanoid animation pipeline by fwjelaa (credit required). Read `Animation Kit/START-HERE.md` and `Roblox Dev/Research/3D and Art/Animation Kit Review.md` before using it. Not a VFX tool; not for our procedural pets. Installed in `Claude.rbxl` on 2026-10-24 as `ServerStorage.AnimKit` (no HttpService helpers); test emote `R6_Cheer` is in `ServerStorage.Animations`, test dummy in `ServerStorage.TestRigs`. Do not set up Blender, add an API key, upload or publish animations without the user's OK.
 
 ## Every session
+0. Read `QUEUE.md` (repo root). Whenever more than one chat is working on this project, its rules are mandatory for every part of the project: claim a shared resource (Studio, ComfyUI, GPU, Blender, file server, git) or another chat's area before touching it, release it when done, only the Studio holder starts or stops Play, and keep your queue section current (the user, 2026-10-29).
 1. Read `Roblox Dev/Home.md`, then `Roblox Dev/Backlog.md` and any notes it links that matter for today's task.
 2. When work is done, update the vault: tick items in `Backlog.md`, add or close bugs in `Bug Log.md`, update statuses in `Systems.md`, and add one line to `Roblox Dev/Session Log.md`.
 

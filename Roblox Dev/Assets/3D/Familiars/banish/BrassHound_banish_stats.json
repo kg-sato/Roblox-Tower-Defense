@@ -1,0 +1,1 @@
+{"name": "BrassHound", "frames": 36, "fps": 30, "bones": ["Root"], "height": 4.0, "height_ratio_by_frame": {"1": 1.0, "6": 1.05, "12": 0.8, "18": 0.55, "24": 0.32, "30": 0.12, "36": 0.02}, "max_height_ratio": 1.05, "rest_error": 0.0}

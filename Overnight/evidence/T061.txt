@@ -1,0 +1,3 @@
+PASS
+Page: Roblox Dev/Lore/The Lantern Role.md (who you are, lantern rules, oath, why you summon in story and mechanics, rank names, look, open questions).
+Check: consistent with World Bible, Factions, The Clockmaker and Tutorial Story Beats; mechanics statements (coins roll, server decides, duplicates merge) match the game as read earlier; rank bands and oath are proposals. Fit is UNVERIFIED.

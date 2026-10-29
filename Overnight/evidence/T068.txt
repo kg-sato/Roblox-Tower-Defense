@@ -1,0 +1,4 @@
+PASS
+Page: Roblox Dev/Lore/Story/Familiar Dialogue.md (9 pairs x 2 exchanges = 18, with home sets, voice tags and trigger rule).
+Machine check: python Overnight/evidence/T068_check.py (run this session, exit 0). Output: exchanges=18 pairs=9; PROBLEMS: none. It checks 18 exchanges, 9 pairs with exchanges 1 and 2 each, known speakers, lines of 12 words or fewer, no banned words.
+Note: "share a stage" needed an assignment of home sets, which is my proposal (listed on the page); cross-set pairs are not written. Wording and voices are UNVERIFIED by a human.

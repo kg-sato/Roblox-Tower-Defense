@@ -1,0 +1,14 @@
+Archivist        area growth 1.33 / 1.28 | ok
+BrassHound       area growth 1.32 / 1.29 | ok
+Ember            area growth 1.32 / 1.28 | ok
+Frostling        area growth 1.32 / 1.29 | ok
+Gargoyle         area growth 1.32 / 1.28 | ok
+GreyVeilWraith   area growth 1.32 / 1.28 | ok
+MirrorChorister  area growth 1.32 / 1.28 | ok
+MothLantern      area growth 1.32 / 1.28 | ok
+Mourner          area growth 1.32 / 1.28 | ok
+Sentinel         area growth 1.35 / 1.27 | ok
+StarDrake        area growth 1.32 / 1.28 | ok
+Ward             area growth 1.32 / 1.28 | ok
+familiars: 12 problems: 0
+

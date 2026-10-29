@@ -1,0 +1,1 @@
+{"name": "GreyVeilWraith", "frames": 121, "fps": 30, "bones": ["Root", "Torso", "Head"], "max_vertex_motion_by_frame": {"1": 0.0, "15": 0.096, "30": 0.0, "48": 0.2774, "60": 0.6686, "72": 0.7285, "84": 0.7172, "96": 0.1168, "108": 0.0436, "121": 0.0}, "max_motion": 0.7285, "loop_closure_error": 0.0, "height": 4.0}

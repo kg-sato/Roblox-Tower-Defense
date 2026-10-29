@@ -1,0 +1,1 @@
+{"name": "Gargoyle", "frames": 121, "fps": 30, "bones": ["Root", "Torso", "Head"], "max_vertex_motion_by_frame": {"1": 0.0, "15": 0.0975, "30": 0.0, "48": 0.0472, "60": 0.0, "72": 1.4388, "84": 1.4407, "96": 0.033, "108": 0.0443, "121": 0.0}, "max_motion": 1.4407, "loop_closure_error": 0.0, "height": 4.0}

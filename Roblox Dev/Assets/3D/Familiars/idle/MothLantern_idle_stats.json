@@ -1,0 +1,1 @@
+{"name": "MothLantern", "frames": 121, "fps": 30, "bones": ["Root", "Torso", "Head"], "max_vertex_motion_by_frame": {"1": 0.0, "15": 0.0973, "30": 0.0, "48": 0.1788, "60": 0.0, "72": 0.4789, "84": 0.4541, "96": 0.0329, "108": 0.0441, "121": 0.0}, "max_motion": 0.4789, "loop_closure_error": 0.0, "height": 4.0}

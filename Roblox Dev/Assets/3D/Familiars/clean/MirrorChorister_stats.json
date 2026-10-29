@@ -1,0 +1,1 @@
+{"name": "MirrorChorister", "triangles_before": 17992, "triangles_after": 6000, "height": 4.0, "min_z": 0.0, "centre_x": 0.0, "centre_y": 0.0, "width_x": 3.519, "depth_y": 1.847, "bones": ["Root", "Torso", "Head"], "vertex_groups": ["Torso", "Head"], "smooth_iters": 6}

@@ -1,0 +1,3 @@
+PASS
+Page: Roblox Dev/Lore/Stage Set Lore.md (five sets: history, residents, what went wrong, three landmarks, faction lean, hue, boss).
+Check: stage ranges and boss assignments match the task list (T143 to T147); consistent with Lore/World Bible.md, Factions.md and The Cosmic Turn.md; all content beyond the project's set names and ranges is a proposal. Fit and feel are UNVERIFIED.

@@ -664,5 +664,227 @@
   "type": "Decal",
   "assetId": "110387929458894",
   "time": "2026-10-28 21:54"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Ember.glb",
+  "type": "Model",
+  "assetId": "136282546009058",
+  "time": "2026-10-29 06:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/MothLantern.glb",
+  "type": "Model",
+  "assetId": "106702237676803",
+  "time": "2026-10-29 06:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/BrassHound.glb",
+  "type": "Model",
+  "assetId": "107681100958369",
+  "time": "2026-10-29 06:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Sentinel.glb",
+  "type": "Model",
+  "assetId": "126744188043602",
+  "time": "2026-10-29 06:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Frostling.glb",
+  "type": "Model",
+  "assetId": "110445808538728",
+  "time": "2026-10-29 06:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Gargoyle.glb",
+  "type": "Model",
+  "assetId": "129809830834583",
+  "time": "2026-10-29 06:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Ward.glb",
+  "type": "Model",
+  "assetId": "97817781664100",
+  "time": "2026-10-29 06:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Archivist.glb",
+  "type": "Model",
+  "assetId": "95811615878114",
+  "time": "2026-10-29 06:39"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/Mourner.glb",
+  "type": "Model",
+  "assetId": "86178666978786",
+  "time": "2026-10-29 06:39"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/MirrorChorister.glb",
+  "type": "Model",
+  "assetId": "118154808652383",
+  "time": "2026-10-29 06:39"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/StarDrake.glb",
+  "type": "Model",
+  "assetId": "101965399666864",
+  "time": "2026-10-29 06:39"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/textured/GreyVeilWraith.glb",
+  "type": "Model",
+  "assetId": "112474997904243",
+  "time": "2026-10-29 06:40"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r8/iris_inner.png",
+  "type": "Decal",
+  "assetId": "91524651716605",
+  "time": "2026-10-29 06:58"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r8/iris_outer.png",
+  "type": "Decal",
+  "assetId": "119253317135181",
+  "time": "2026-10-29 06:58"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r8/pupil_disc.png",
+  "type": "Decal",
+  "assetId": "131496445156561",
+  "time": "2026-10-29 06:59"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Ember_rigged.glb",
+  "type": "Model",
+  "assetId": "85376765624655",
+  "time": "2026-10-29 07:02"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Gargoyle_rigged.glb",
+  "type": "Model",
+  "assetId": "125271154356664",
+  "time": "2026-10-29 07:02"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Frostling_rigged.glb",
+  "type": "Model",
+  "assetId": "117971301582045",
+  "time": "2026-10-29 07:03"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/StarDrake_rigged.glb",
+  "type": "Model",
+  "assetId": "98402544238537",
+  "time": "2026-10-29 07:07"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Sentinel_rigged.glb",
+  "type": "Model",
+  "assetId": "71386221720784",
+  "time": "2026-10-29 07:08"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Ward_rigged.glb",
+  "type": "Model",
+  "assetId": "130314925093755",
+  "time": "2026-10-29 07:08"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/brass_eye.png",
+  "type": "Decal",
+  "assetId": "78389502825820",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/iris_inner.png",
+  "type": "Decal",
+  "assetId": "117645687511252",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/iris_outer.png",
+  "type": "Decal",
+  "assetId": "72764772565444",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/lids_0.png",
+  "type": "Decal",
+  "assetId": "73528688250232",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/lids_1.png",
+  "type": "Decal",
+  "assetId": "94511724571607",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r9/lids_2.png",
+  "type": "Decal",
+  "assetId": "121317208864344",
+  "time": "2026-10-29 07:09"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/MothLantern_rigged.glb",
+  "type": "Model",
+  "assetId": "113430321163375",
+  "time": "2026-10-29 07:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/BrassHound_rigged.glb",
+  "type": "Model",
+  "assetId": "123751284885975",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Archivist_rigged.glb",
+  "type": "Model",
+  "assetId": "112184846704013",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/Mourner_rigged.glb",
+  "type": "Model",
+  "assetId": "112028680163148",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r10/eye_lashes.png",
+  "type": "Decal",
+  "assetId": "121057959639956",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/MirrorChorister_rigged.glb",
+  "type": "Model",
+  "assetId": "134426666795009",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/GreyVeilWraith_rigged.glb",
+  "type": "Model",
+  "assetId": "75356704130854",
+  "time": "2026-10-29 07:23"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r10/eye_lashes.png",
+  "type": "Decal",
+  "assetId": "131230619338082",
+  "time": "2026-10-29 07:33"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r11/etched_iris_inner.png",
+  "type": "Decal",
+  "assetId": "115537900971155",
+  "time": "2026-10-29 07:41"
+ },
+ {
+  "file": "UI Kit/art/upload_1028/r11/etched_iris_outer.png",
+  "type": "Decal",
+  "assetId": "72357432024114",
+  "time": "2026-10-29 07:41"
  }
 ]

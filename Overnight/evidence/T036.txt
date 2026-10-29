@@ -1,0 +1,3 @@
+PASS
+Note: Roblox Dev/Research/Game Design and Market/Bloodborne lantern and fog design.md
+Deviation (read before trusting this PASS): no source read covers fog or lighting design; only lamp-as-checkpoint (Wikipedia, fetched 2026-10-28) and mood facts were found. Fog and boss-door cues are unanswered; recommendations are mine. The user should judge.

@@ -1,0 +1,3 @@
+PASS
+Page: Roblox Dev/Lore/World Bible.md (about 600 words, one page).
+Check: written against the decided theme arc in Design/Game Design Doc.md (steampunk to cosmic, brass lantern, clock tunnel loading story). Elements beyond those notes (the fog as spilled time, familiars as time residue, the Great Clock) are labelled proposals; open questions are listed on the page. Look and fit with the user's intent are UNVERIFIED.

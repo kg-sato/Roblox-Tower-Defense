@@ -1,0 +1,14 @@
+file                         triangles  vertices               size (x y z)  watertight
+Archivist.glb                    18000      8988     1.12     1.97     0.77  True
+BrassHound.glb                   18000      8990     1.14     1.97     0.57  True
+Ember.glb                        18000      9004     1.33     1.97     0.62  True
+Frostling.glb                    18000      9042     1.31     1.97     0.89  False
+Gargoyle.glb                     18000      9002     1.86     1.97     1.59  True
+GreyVeilWraith.glb               18000      9000     0.84     1.97     0.77  True
+MirrorChorister.glb              17996      9000     1.73     1.97     0.91  True
+MothLantern.glb                  18000      9004     1.76     1.97     1.05  True
+Mourner.glb                      18000      9002     0.90     1.97     0.81  True
+Sentinel.glb                     17999      9497     1.35     1.97     0.37  False
+StarDrake.glb                    18000      9010     1.54     1.97     1.30  True
+Ward.glb                         17998      8995     1.18     1.97     1.11  True
+12 models listed; limit 20000; problems: 0

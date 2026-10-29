@@ -1,0 +1,3 @@
+PASS
+Page: Roblox Dev/Lore/Factions.md (four factions with goal, method, allies, enemies, familiars, flaw, colour and glyph).
+Check: consistent with Lore/World Bible.md and the 12-familiar cast in the task list; all 12 familiars assigned (Wraith unaligned). Colours from the colour-blind-safe note; names/goals beyond the task list are proposals with open questions listed. Fit with the user's intent is UNVERIFIED.
