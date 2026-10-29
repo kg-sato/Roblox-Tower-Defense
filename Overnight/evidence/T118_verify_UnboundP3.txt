@@ -1,0 +1,7 @@
+glb: 1 mesh, 1 materials, 1 images ok
+triangles 204 (budget 3000, project limit 20000) ok
+highest front silhouette IoU against any familiar front: 0.20 (front vs Archivist; limit 0.5) ok; worst over all views 0.32 (three_quarter vs Archivist, information only)
+views differ from each other (smallest 1-IoU 0.81) ok
+size: [4.63, 5.224, 3.4]
+length_over_height: None
+enemy model UnboundP3: problems 0

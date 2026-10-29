@@ -1,0 +1,3 @@
+PASS (Roblox Dev/Planning/Design Decision Log 2026-10-29.md)
+19 decisions made today on my own, each with the reason and the cost; the ones that need the user are marked ASK (the Unbound's design, the recolour target, the tier cap, the 2x Coins pass, fusion).
+Limits: covers my chat only; the other chat's decisions (loading screen, menu, fonts) are in the Session Log.

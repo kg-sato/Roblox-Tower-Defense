@@ -1,0 +1,4 @@
+PASS (documented: Roblox Dev/Design/Progression Rules.md, section "Run-end rewards")
+Facts taken from MatchService TEMPLATE (level, xp, sp, gems, tree, tutorialDone, settings, seen) and Config (Overrun rules). Table of what stays and what resets, two examples.
+Finding worth the user's attention: the best stage reached is not saved anywhere, so nothing carries over for it; a bestStage field with a gem bonus per new record is proposed (needs a TEMPLATE field).
+Limits: a design note; no code; the proposal is not approved.

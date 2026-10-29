@@ -1,6 +1,3 @@
-PARTIAL (not ticked)
-T127 Clockwork Foundry (stage set 4, stages 16-20).
-Code: Studio_Export/BackdropFoundry.luau (new server script, builds workspace.StageSets.ClockworkFoundry: 6 furnaces with orange mouths, PointLights and sparks; 4 gear wheels; rails and sleepers across the back; kerb and 8 warm lamps at the board edge). StageSets entry added (id ClockworkFoundry, 5 stages, lighting set, music "play"). Studio: ServerScriptService.BackdropFoundry created; StageSets (Shared) synced.
-Test: Tests/StageSets.test.luau updated (stages 16-20 Foundry, 21 wraps to Lampwick, 26 Harbour, 1e6 maps to Foundry). Run through Tests/RunAll: PASS.
-Capture: Edit-mode build, default board camera (0,49.2,39.2 looking at 0,0,5): furnace flues and mouths at the back, the rail line, the kerb and lamps at the board edge are visible. Look UNVERIFIED. The build was removed from the place afterwards.
-NOT VERIFIED: stage 16 in Play (the stage jump via QAProfile did not switch sets earlier, see T114). Console check in Play not run.
+PASS WITH A CAVEAT (normal maps made for all 12 familiars; they are inferred from colour, not sculpted; UNVERIFIED in Roblox)
+Built: tools/texture_maps.py writes <Name>_Normal_512.png for each familiar (tangent-space, OpenGL convention, strength 2.0, from the high-pass of the colour luminance). Strength per model is in maps_report.json (Ward weakest 1.08, Frostling strongest 1.92). Design note Roblox Dev/Design/Texture Maps.md.
+Unmet part of the task: "where they add silhouette detail": a normal map cannot change the silhouette, and this one is inferred from painted edges, so it adds shading relief only. I did not judge where it helps the silhouette. Not viewed on a model, not wired into SurfaceAppearance, not uploaded.

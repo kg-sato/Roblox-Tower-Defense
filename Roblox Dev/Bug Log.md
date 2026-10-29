@@ -7,6 +7,8 @@ Severity: `crash` / `major` (breaks a feature) / `minor` / `cosmetic`
 
 | # | Date | Severity | Bug | Steps to reproduce | System |
 |---|---|---|---|---|---|
+| 10 | 2026-10-29 | minor | Stage set 5 (Above the Grey Veil) was missing, so stages 21 to 25 reused set 1. Added 2026-10-29 (`BackdropVeil`, `StageSets` entry, `veil` music) but never run in Play and not saved in the place file | Play stage 21 | StageSets |
+| 11 | 2026-10-29 | minor | `SoundFX.play` can stop a higher-priority sound: with all 8 voices at priority 3, a priority 2 sound stops a priority 3 one | read `Studio_Export/SoundFX.luau` lines 72 to 90; fix in [[Design/Sound Priority]] | SoundFX |
 | 1 | 2026-10-24 | unverified | Drag-to-merge input (mouse and touch) never exercised by a real pointer; tested only by firing remotes from a script | Play in Studio, drag one pet onto a matching pet with three on the grid | Client input |
 | 2 | 2026-10-24 | minor | Console shows "User is not authorized to access Asset" from `cloud_3976620715.Sprint Execute`. Not our script; source unidentified (likely Studio/plugin) | Start Play | Studio |
 | 4 | 2026-10-28 | minor | Ward lantern's MetalnessMap fails: `rbxassetid://84849520457882` is a Decal id, not an Image id ("Asset type does not match requested type"), so its SurfaceAppearance does not generate. Open Cloud uploads of type Decal return the Decal id; resolve the Image id with `InsertService:LoadAsset(id)` (the Decal's Texture) | Start Play, read the Output | Workspace.Map.WardLantern (3D art session) |

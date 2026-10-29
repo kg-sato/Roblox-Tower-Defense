@@ -1,0 +1,4 @@
+PASS (design written, not implemented): Brass Sentinel redesign: stiff guard with telegraphed steps
+Where: Roblox Dev/Design/Enemy Bible.md, the section for this enemy: behaviour, numbers (PROPOSAL), telegraph, counter, silhouette; model status in Roblox Dev/Design/Enemy Models.md.
+Checked: uses only facts from Config.ENEMIES, the research roster and the lore; the numbers are targets for balance tests, not tested.
+Limits: no code, no sound (the sound cue is described, not made), no Studio test; the silhouette is judged only by the model checks (tools/verify_enemy_model.py).

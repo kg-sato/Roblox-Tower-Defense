@@ -1,0 +1,7 @@
+glb: 1 mesh, 1 materials, 1 images ok
+triangles 416 (budget 3000, project limit 20000) ok
+highest front silhouette IoU against any familiar front: 0.22 (front vs MothLantern; limit 0.5) ok; worst over all views 0.50 (side vs MothLantern, information only)
+views differ from each other (smallest 1-IoU 0.51) ok
+size: [5.532, 4.35, 2.685]
+length_over_height: None
+enemy model ClockworkCrow: problems 0

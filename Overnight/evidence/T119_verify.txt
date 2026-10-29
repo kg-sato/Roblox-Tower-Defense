@@ -1,0 +1,7 @@
+glb: 1 mesh, 1 materials, 1 images ok
+triangles 568 (budget 3000, project limit 20000) ok
+highest front silhouette IoU against any familiar front: 0.44 (front vs MothLantern; limit 0.5) ok; worst over all views 0.44 (front vs MothLantern, information only)
+views differ from each other (smallest 1-IoU 0.50) ok
+size: [7.15, 4.4, 7.2]
+length_over_height: None
+enemy model ClockmakerAutomaton: problems 0

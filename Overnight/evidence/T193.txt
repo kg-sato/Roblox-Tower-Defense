@@ -1,0 +1,3 @@
+PARTIAL (design written; implementation and test NOT done, so the task stays open): Ability synergy list (design only; data file and code not made)
+Where: Roblox Dev/Design/Familiar Systems.md. Facts from the lore verbs and factions (Roblox Dev/Lore/Familiars/) and Config.UPGRADES; all numbers are PROPOSAL.
+Unmet: the data table or code and the PASS test the task asks for (nothing implemented in Studio).

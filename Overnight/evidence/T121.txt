@@ -1,4 +1,5 @@
-PARTIAL (not ticked)
-NavFocus LocalScript (Studio_Export/NavFocus.luau) added. Play: real arrow key presses (Right, Down, Right) moved GuiService.SelectedObject from the start menu's first button to FlashToggle (Flashes: ON).
-Not shown: the HUD main buttons. In Play the start-menu button (Return) hid the menu and left 0 visible HUD buttons in the test, and only 2 of 2 visible buttons had links (the link pass runs every 2 s from positions).
-Settings panel not opened in the test. Look and feel UNVERIFIED.
+PASS (Hollow Court Regent boss model built and checked; blocky concept-grade; not imported into Roblox; look UNVERIFIED by the user)
+Built: Blender/make_regent.py (on Blender/enemy_lib.py). Output Roblox Dev/Assets/3D/Enemies/HollowCourtRegent/ (.glb, .fbx, _Palette.png, _stats.json, three stills). Model: tall thin figure in a long ash-brown coat with thin legs, a hollow dark face with two ember eyes, a wide ring crown of seven candles with ember flames, one arm raised holding a big brass bell on a hook, the other arm out with a small hand-bell; 484 triangles.
+Checks (tools/verify_enemy_model.py HollowCourtRegent, Overnight/evidence/T121_verify.txt, "problems 0"): GLB parses; 484 triangles against the 3,000 budget; front silhouette against the 12 familiar fronts: highest 0.49 (Archivist; limit 0.5), worst over all views 0.57 (three-quarter vs Archivist, information only); views differ (smallest 1-IoU 0.40). It passes by 0.01 only, so the Regent is close to a familiar in outline and the bell is what separates it.
+Visual check: viewed the front still: candle crown, long coat, big bell on the right.
+Limits: very low detail, flat colours, flames are flat palette colour (not emissive), no rig, nothing tested in Roblox, mourner summoning is T146.

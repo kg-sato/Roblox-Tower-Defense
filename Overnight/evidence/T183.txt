@@ -1,0 +1,3 @@
+PARTIAL (analysis and recommendation written; the flag is NOT implemented, so this task stays open)
+Where: Roblox Dev/Design/Progression Rules.md, section "Merge factor against the rarity cap". Numbers computed from the Config formulas (damage = base x rarity multiplier x 3.5^(tier-1); a Legendary at tier 1 equals a Common at tier 3; a Legendary at tier 5 is 12x a Common at tier 5). Recommendation: cap by rarity (Common and Rare 5, Epic 4, Legendary 3) behind a flag Config.RARITY_TIER_CAP, default off. Needs the user's decision.
+Unmet: the flag and its test in Config and MatchService (Studio work; not done).

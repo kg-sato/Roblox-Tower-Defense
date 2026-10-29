@@ -1,0 +1,3 @@
+PASS (tools/asset_budget.py scans the disk; output Overnight/evidence/asset_budget.json)
+Result 2026-10-29: 127 GLB meshes, most triangles 18,000 (concept models and the cleaned familiars; project limit 20,000, enemies and bosses 3,000 so far all under 1,000), largest embedded texture 1024 px (limit 1024); 106 audio files, 96 with a readable length (WAV), longest 5.4 s (limit 120 s for effects); all within budget.
+Limits: only local files; 10 audio files (OGG or MP3) have no readable length so their lengths are unchecked; meshes already in the open Studio place are not scanned; the limits other than 20,000 triangles are my choices.

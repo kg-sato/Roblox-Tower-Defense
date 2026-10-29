@@ -42,6 +42,13 @@ StageSets.list = {
 		music = "play",
 		lighting = { ClockTime = 22, Brightness = 0.8, Ambient = Color3.fromRGB(60, 40, 36), OutdoorAmbient = Color3.fromRGB(90, 60, 50), FogColor = Color3.fromRGB(110, 70, 50), AtmosphereColor = Color3.fromRGB(170, 120, 90), AtmosphereDecay = Color3.fromRGB(120, 70, 40), Density = 0.5, Haze = 2.4 },
 	},
+	{
+		id = "AboveTheGreyVeil",
+		name = "Above the Grey Veil",
+		stages = 5,
+		music = "veil",
+		lighting = { ClockTime = 0, Brightness = 0.7, Ambient = Color3.fromRGB(28, 34, 64), OutdoorAmbient = Color3.fromRGB(52, 66, 118), FogColor = Color3.fromRGB(24, 30, 58), AtmosphereColor = Color3.fromRGB(150, 170, 230), AtmosphereDecay = Color3.fromRGB(60, 60, 120), Density = 0.18, Haze = 0.6 },
+	},
 } :: { StageSet }
 
 -- Which set a stage belongs to: stages 1-5 the first set, 6-10 the second, then the order repeats.

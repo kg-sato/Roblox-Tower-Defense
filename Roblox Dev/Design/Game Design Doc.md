@@ -29,6 +29,16 @@ User feedback: start too slow, camera too far, coins left with menus beside them
 - **v2.3 (2026-10-24, fourth playtest):** **Merge rule changed:** two matching pets that touch plus a third dragged from anywhere onto one of the pair (the older all-touching chain still works); hovering shows green pads and highlights the pair. **Skill Tree** (honeycomb, 19 nodes, Skill Points from level-ups, bosses, tutorial), see [[Research/VFX and Animation/Skill Tree, Effects and Characters|Skill Tree, Effects and Characters]]. **Ultimate** is now a short cinematic (gather, orb, release, meteor storm). **Final hatch** will be Blender-made: see [[Research/3D and Art/Blender Cinematic Pipeline|Blender Cinematic Pipeline]]; the current in-engine hatch is the demo.
 - **Open design risk:** with 7 pet types in 12 slots, triples are rare without recycling; watch it in playtests.
 
+## Refresh 2026-10-29 (new lore, roster and systems; older sections below are partly out of date)
+What changed since the sections below were written, with where to read more. Nothing here replaces a decision the user made; PROPOSAL means not approved.
+- **World:** five stage sets of five stages each (not the three worlds Meadow, Frost, Volcano): Lampwick Lane, Harbour of Brass, Silent Cathedral, Clockwork Foundry, Above the Grey Veil, with a boss at stages 5, 10, 15, 20, 25. The mystery of the Clockmaker runs through them. See [[Stage Bible Index]], [[Stage Set Lore]], [[The Clockmaker]].
+- **Roster:** twelve familiars in four factions replace the seven pets (Common: Ember, Moth-Lantern, Brass Hound, Sentinel; Rare: Frostling, Gargoyle, Ward, Archivist; Epic: Mourner, Mirror Chorister; Legendary: Star Drake, Grey Veil Wraith), each with a bio, card, model, rig and Walk and Attack clips. See [[Character Bible Index]]. Roles (one verb each) are in the lore notes but not in code.
+- **Enemies:** six families (Hollow Parishioner, Fog Wisp, Brass Sentinel, Clockwork Crow, Lantern Thief and the five bosses) with concept models for every family. See [[Enemy Bible]], [[Boss Designs]], [[Enemy Models]].
+- **Numbers (computed from the code):** [[Difficulty Curve]] (one 234-stud path for all stages; hp 1.2x per stage, count capped at 28), [[Progression Rules]] (rarity against merge tiers; what carries over; daily ladder; monetisation review).
+- **Proposals awaiting the user:** familiar upgrade paths, synergies, statuses, armour ([[Familiar Systems]]); quests, battle pass, challenge stages, fusion, friend invites ([[Content Plans]]); new path shapes and set cards ([[Stage Set Plans]]).
+- **Out of date below:** "tier cap 5" still holds in code, but the merge evolution note gives three tier looks ([[Merge Evolution]]); "Meadow / Frost / Volcano" and the seven pet names are gone; premium pets and the 2x Coins pass are under review.
+- **Open decisions and risks:** [[Known Issues]], [[Next Night Plan]], [[Playtest Checklist]].
+
 ## One-line pitch
 Summon cute guardian pets onto a grid, merge three into a stronger one, and hold the crystal against waves of gloom monsters and bosses.
 

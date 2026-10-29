@@ -29,7 +29,7 @@ main chat's family could see. It is not committed on its own; it is a live file.
 ## Shared resources (one holder at a time)
 | Resource | Holder | Since |
 |---|---|---|
-| Roblox Studio (Edit edits, Play, recordings) | FREE (loading-eye released, Edit mode) | 2026-10-29 |
+| Roblox Studio (Edit edits, Play, recordings) | FREE (Sonnet released, Edit mode; set 5 installed, preview destroyed, Lighting restored) | 2026-10-29 |
 | ComfyUI 127.0.0.1:8188 (GPU, 8 GB) | FREE (server stopped) | 2026-10-29 |
 | GPU for Hunyuan3D (shares the 8 GB with ComfyUI) | FREE | |
 | Blender (CPU, headless; several runs are fine) | FREE | |
@@ -42,6 +42,7 @@ main chat's family could see. It is not committed on its own; it is a live file.
 | loading-eye (main UI chat) | LoadingScreen, start menu (StartMenuArt), fonts (FontPass), skill tree (SkillTreeArt, SkillGrove), FrameArt, AbstractScreens, AbstractHUD, AbstractLayer, GameClient, IntroTour, ArtIds; UI Kit/art (menu, eye, lid, lash art) |
 | Sonnet (familiar art) | ReplicatedStorage.Characters, Shared.Config, Shared.Familiars, Shared.FamiliarClips, Shared.FamiliarMaterials, ReplicatedStorage.FamiliarArt, ServerScriptService.MatchService, StarterPlayerScripts.CollectionScreen; Blender/* character work |
 | 3d-art (if it returns) | MapBuilder, WardFX, ServerStorage models (Ward meshes, metal_white) |
+| Sonnet, stage set 5 (new, 2026-10-29) | ServerScriptService.BackdropVeil (new), the AboveTheGreyVeil entry in Shared.StageSets, the `veil` state in MusicFX.states |
 | shared, append-only | VFX/ASSETS.md, UI Kit/art/upload_1028/ids.txt and decal_ids.txt, Roblox Dev/Session Log.md (add lines, never rewrite) |
 
 ## Queue: loading-eye (main UI chat)
@@ -54,11 +55,7 @@ main chat's family could see. It is not committed on its own; it is a live file.
 
 ## Queue: Sonnet (familiar art)
 (Sonnet keeps this section.)
-- Now: paused. Holding nothing. Waiting for the user to say which model the colour request means (the 12 familiars in
-  Characters, or the loading-screen eye) before any recolour. Studio is in Edit mode, my file servers are stopped.
-- Next (needs a Studio CLAIM first): hide the FAMILIARS button (StarterPlayerScripts.CollectionScreen) on the start menu;
-  agreed with loading-eye. Then the open list in Overnight/TODO.md from T111 (eye design system) on.
-- Done 2026-10-29 (T074 to T110, all in Studio_Export, Tests, tools, Blender and Roblox Dev): 12 familiars (data, lore, models,
-  textures, rigs, Walk and Attack clips), collection screen, material library, expressions. The overnight loop was turned
-  off by the user (ACTIVE renamed to ACTIVE.ended-user-off-20261029), so the "overnight loop" row under Active chats is stale.
-- Studio state I left: Edit mode; place file not saved by me.
+- Now: working through `Overnight/TODO.md` without Studio (Blender models, design notes in `Roblox Dev/Design/`, Python checks). Holding nothing. Colour request still paused until the user says which model is meant (12 familiars or the loading-screen eye).
+- Next (needs a Studio CLAIM first): hide the FAMILIARS button on the start menu (done earlier by CollectionScreen change, needs a Play check); wire the 512 px maps; Idle clips.
+- Done 2026-10-29: T074 to T110 (familiars), T111 to T122 (eye system, props, trainer sheet, eleven enemy and boss models (nine designs, three Unbound phases), uploads checked in Edit mode), texture maps, enemy bible, boss designs, progression, difficulty curve, content plans, stage set plans, indexes, known issues, playtest checklist, decision log, next-night plan.
+- Studio state I left: Edit mode, nothing loaded, place file not saved by me. Commit `dbf8634` is pushed on `overnight/2026-10-27`; no PR yet (no `gh`, GitKraken not signed in).

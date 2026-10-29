@@ -886,5 +886,77 @@
   "type": "Decal",
   "assetId": "72357432024114",
   "time": "2026-10-29 07:41"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/FogWisp/FogWisp.glb",
+  "type": "Model",
+  "assetId": "128040982375596",
+  "time": "2026-10-29 11:21"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/BrassSentinel/BrassSentinel.glb",
+  "type": "Model",
+  "assetId": "95028100682755",
+  "time": "2026-10-29 11:21"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/ClockworkCrow/ClockworkCrow.glb",
+  "type": "Model",
+  "assetId": "85256591738111",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/LanternThief/LanternThief.glb",
+  "type": "Model",
+  "assetId": "107872593870870",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/Unbound/Unbound.glb",
+  "type": "Model",
+  "assetId": "77114404609027",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/UnboundP2/UnboundP2.glb",
+  "type": "Model",
+  "assetId": "132477005165063",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/UnboundP3/UnboundP3.glb",
+  "type": "Model",
+  "assetId": "108536993980488",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/ClockmakerAutomaton/ClockmakerAutomaton.glb",
+  "type": "Model",
+  "assetId": "105773609287319",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/StarChoirEcho/StarChoirEcho.glb",
+  "type": "Model",
+  "assetId": "83373040785070",
+  "time": "2026-10-29 11:22"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/HollowCourtRegent/HollowCourtRegent.glb",
+  "type": "Model",
+  "assetId": "112741419053232",
+  "time": "2026-10-29 11:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/Clockmaker/Clockmaker.glb",
+  "type": "Model",
+  "assetId": "117038627587754",
+  "time": "2026-10-29 11:23"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Enemies/HollowParishioner/HollowParishioner.glb",
+  "type": "Model",
+  "assetId": "94567177585107",
+  "time": "2026-10-29 11:39"
  }
 ]

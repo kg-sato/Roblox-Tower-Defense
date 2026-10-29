@@ -30,13 +30,16 @@ return function(Shared)
 	for st = 16, 20 do
 		check("stage " .. st, id(st), "ClockworkFoundry")
 	end
-	check("stage 21 wraps to the first set", id(21), "LampwickLane")
-	check("stage 26 is the second set again", id(26), "HarbourOfBrass")
+	for st = 21, 25 do
+		check("stage " .. st, id(st), "AboveTheGreyVeil")
+	end
+	check("stage 26 wraps to the first set", id(26), "LampwickLane")
+	check("stage 31 is the second set again", id(31), "HarbourOfBrass")
 	check("stage 0 clamps to the first set", id(0), "LampwickLane")
 	check("negative stage clamps", id(-7), "LampwickLane")
 	check("fractional stage floors (5.9 -> 5)", id(5.9), "LampwickLane")
 	check("huge stage stays valid", id(1e6) ~= nil, true)
-	check("stage 1e6: (1e6 - 1) mod 20 + 1 = 20 -> Foundry", id(1000000), "ClockworkFoundry")
+	check("stage 1e6: (1e6 - 1) mod 25 + 1 = 25 -> Veil", id(1000000), "AboveTheGreyVeil")
 	local ok = true
 	for _, s in S.list do
 		ok = ok and type(s.id) == "string" and s.stages > 0 and s.lighting.ClockTime ~= nil

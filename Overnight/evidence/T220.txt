@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Progression Rules.md, section "Inventory limit and expansion")
+12 grid slots today (MAX_UNITS); proposal: +2 slots at trainer levels 10, 15, 20, 25 (20 total), never by purchase. Whether 12 slots suffice for the early stages is untested.
+Limits: a proposal; no code.

@@ -1,7 +1,5 @@
-PASS (scale verified; HUD frame AbsoluteSize is constant by design, child sizes not measured)
-Play via ReplicatedStorage.Remotes.Action Setting batches (the same path as the panel), read HUD UIScale after each:
-small: scale=0.847 hudAbsX=1333 hudAbsY=777
-large: scale=1.195 hudAbsX=1333 hudAbsY=777
-normal: scale=0.996 hudAbsX=1332 hudAbsY=776
-Settings checks (uiSize default normal, small/large accepted, huge and number rejected) run in Studio on the current source: PASS, 5 of 5. Tests/SettingsDefaults.test.luau extended with the same four checks; the full file was not re-run.
-Console: only pre-existing asset lines.
+PASS (Lantern Thief enemy model built and checked; blocky concept-grade; not imported into Roblox; look UNVERIFIED by the user)
+Built: Blender/make_lantern_thief.py (Blender 5.3 beta headless, procedural). Output Roblox Dev/Assets/3D/Enemies/LanternThief/: LanternThief.glb and .fbx, LanternThief_Palette.png, LanternThief_stats.json and three stills. Model: crouched hooded thief with a pointed hood and two pale eyes, wide bent legs with boots, one arm flung up holding a glowing stolen lantern, one arm trailing a grabbing hand, a big sack with a knot on its back; 4.45 wide, 2.48 deep, 4.0 high, faces -Y; 264 triangles.
+Checks (tools/verify_enemy_model.py LanternThief, Overnight/evidence/T117_verify.txt, "problems 0"): GLB parses with 1 mesh, 1 material, 1 image; 264 triangles against the 3,000 budget (project limit 20,000); front silhouette at 48 px against the 12 familiar fronts: highest 0.31 (Archivist; limit 0.5), worst over all views 0.44 (information only); the three views differ (smallest 1-IoU 0.65).
+What changed along the way: the first build, a standing hooded figure with a hand lantern, failed the check (0.56 against Ward). I redesigned it as a wide crouch with a raised lantern instead of loosening the check. A boot gap under the legs was closed after viewing the stills.
+Limits: very low detail (264 triangles, flat colours), no rig or animation, nothing tested in Roblox, lantern glow is a flat palette colour (not emissive), the lamp-stealing behaviour is a later task (T137).

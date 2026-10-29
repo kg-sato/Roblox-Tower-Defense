@@ -1,0 +1,1298 @@
+{
+ "meshes": [
+  {
+   "file": "Roblox Dev/Assets/3D/Boulder_concept_v1.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Ember_concept_v1.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/BrassSentinel/BrassSentinel.glb",
+   "triangles": 368,
+   "limit": 3000,
+   "max_texture": 64
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/Clockmaker/Clockmaker.glb",
+   "triangles": 724,
+   "limit": 3000,
+   "max_texture": 64
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/ClockmakerAutomaton/ClockmakerAutomaton.glb",
+   "triangles": 568,
+   "limit": 3000,
+   "max_texture": 64
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/ClockworkCrow/ClockworkCrow.glb",
+   "triangles": 416,
+   "limit": 3000,
+   "max_texture": 64
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/FogWisp/FogWisp.glb",
+   "triangles": 1405,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/HollowCourtRegent/HollowCourtRegent.glb",
+   "triangles": 484,
+   "limit": 3000,
+   "max_texture": 64
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/LanternThief/LanternThief.glb",
+   "triangles": 264,
+   "limit": 3000,
+   "max_texture": 64
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/StarChoirEcho/StarChoirEcho.glb",
+   "triangles": 564,
+   "limit": 3000,
+   "max_texture": 64
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/Unbound/Unbound.glb",
+   "triangles": 300,
+   "limit": 3000,
+   "max_texture": 64
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/UnboundP2/UnboundP2.glb",
+   "triangles": 380,
+   "limit": 3000,
+   "max_texture": 64
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/UnboundP3/UnboundP3.glb",
+   "triangles": 204,
+   "limit": 3000,
+   "max_texture": 64
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/Archivist.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/Archivist_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/BrassHound_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/Ember_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/Frostling_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/Gargoyle_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/GreyVeilWraith_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/MirrorChorister_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/MothLantern_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/Mourner_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/Sentinel_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/StarDrake_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/attack/Ward_attack.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/Archivist_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/BrassHound_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/Ember_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/Frostling_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/Gargoyle_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/GreyVeilWraith_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/MirrorChorister_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/MothLantern_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/Mourner_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/Sentinel_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/StarDrake_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/banish/Ward_banish.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/BrassHound.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/Archivist.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/BrassHound.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/Ember.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/Frostling.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/Gargoyle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/GreyVeilWraith.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/MirrorChorister.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/MothLantern.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/Mourner.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/Sentinel.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/StarDrake.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/Ward.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/Ember.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/Frostling.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/Gargoyle.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/GreyVeilWraith.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/Archivist_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/BrassHound_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/Ember_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/Frostling_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/Gargoyle_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/GreyVeilWraith_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/MirrorChorister_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/MothLantern_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/Mourner_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/Sentinel_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/StarDrake_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/idle/Ward_idle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/MirrorChorister.glb",
+   "triangles": 17996,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/MothLantern.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/Mourner.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/Archivist_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/BrassHound_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/Ember_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/Frostling_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/Gargoyle_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/GreyVeilWraith_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/MirrorChorister_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/MothLantern_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/Mourner_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/Sentinel_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/StarDrake_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/Ward_rigged.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/Sentinel.glb",
+   "triangles": 17999,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/Archivist_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/BrassHound_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/Ember_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/Frostling_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/Gargoyle_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/GreyVeilWraith_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/MirrorChorister_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/MothLantern_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/Mourner_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/Sentinel_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/StarDrake_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/spawn/Ward_spawn.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/StarDrake.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/Archivist.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/BrassHound.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/Ember.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/Frostling.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/Gargoyle.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/GreyVeilWraith.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/MirrorChorister.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/MothLantern.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/Mourner.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/Sentinel.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/StarDrake.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/Ward.glb",
+   "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/Ward.glb",
+   "triangles": 17998,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/Archivist.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/BrassHound.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/Ember.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/Frostling.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/Gargoyle.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/GreyVeilWraith.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/MirrorChorister.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/MothLantern.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/Mourner.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/Sentinel.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/StarDrake.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars_flat_v0/Ward.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Frostling_concept_v1.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Sprout_concept_v1.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/StarDrake_concept_v1.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/StarDrake_T1.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/VoltFox_concept_v1.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Zap_concept_v1.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  }
+ ],
+ "audio": [
+  {
+   "file": "Audio/Music/game/artifact_room.ogg",
+   "seconds": null,
+   "limit": 600
+  },
+  {
+   "file": "Audio/Music/game/chill_lofi.ogg",
+   "seconds": null,
+   "limit": 600
+  },
+  {
+   "file": "Audio/Music/game/iremos_forest.ogg",
+   "seconds": null,
+   "limit": 600
+  },
+  {
+   "file": "Audio/Music/game/rising_moon.ogg",
+   "seconds": null,
+   "limit": 600
+  },
+  {
+   "file": "Audio/Music/game/shinsei.ogg",
+   "seconds": null,
+   "limit": 600
+  },
+  {
+   "file": "Audio/Music/raw/artifact_room.ogg",
+   "seconds": null,
+   "limit": 600
+  },
+  {
+   "file": "Audio/Music/raw/chill_lofi.mp3",
+   "seconds": null,
+   "limit": 600
+  },
+  {
+   "file": "Audio/Music/raw/iremos_forest.ogg",
+   "seconds": null,
+   "limit": 600
+  },
+  {
+   "file": "Audio/Music/raw/rising_moon.mp3",
+   "seconds": null,
+   "limit": 600
+  },
+  {
+   "file": "Audio/Music/raw/shinsei.mp3",
+   "seconds": null,
+   "limit": 600
+  },
+  {
+   "file": "Audio/Upload/sfx/anticipation.wav",
+   "seconds": 4.0,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/bank.wav",
+   "seconds": 0.8,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/bell_toll.wav",
+   "seconds": 3.6,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/brass_click.wav",
+   "seconds": 0.1,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/card_flip.wav",
+   "seconds": 0.2,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/charge_ready.wav",
+   "seconds": 0.9,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/clock_tick.wav",
+   "seconds": 0.1,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/coin_clink.wav",
+   "seconds": 0.6,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/combo.wav",
+   "seconds": 0.8,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/common.wav",
+   "seconds": 0.8,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/discovery.wav",
+   "seconds": 2.6,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/echo.wav",
+   "seconds": 0.8,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/enemy_hit.wav",
+   "seconds": 0.2,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/enemy_poof.wav",
+   "seconds": 0.7,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/epic.wav",
+   "seconds": 3.4,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/glass_crack.wav",
+   "seconds": 0.9,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/ink.wav",
+   "seconds": 3.5,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/iron_clank.wav",
+   "seconds": 1.3,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/legendary_burst.wav",
+   "seconds": 4.6,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/legendary_gather.wav",
+   "seconds": 1.5,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/load_resolve.wav",
+   "seconds": 1.6,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/load_start.wav",
+   "seconds": 1.5,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/load_synced.wav",
+   "seconds": 2.0,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/menu_close.wav",
+   "seconds": 0.5,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/menu_open.wav",
+   "seconds": 0.5,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/merge_1.wav",
+   "seconds": 0.9,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/merge_2.wav",
+   "seconds": 1.1,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/merge_3.wav",
+   "seconds": 1.4,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/merge_4.wav",
+   "seconds": 1.7,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/merge_5.wav",
+   "seconds": 2.1,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/merge_6.wav",
+   "seconds": 2.6,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/merge_7.wav",
+   "seconds": 3.2,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/merge_8.wav",
+   "seconds": 5.2,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/merge_fail.wav",
+   "seconds": 0.3,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/milestone.wav",
+   "seconds": 2.1,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/place_thud.wav",
+   "seconds": 0.2,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/rare.wav",
+   "seconds": 1.9,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/ring.wav",
+   "seconds": 0.6,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/spotlight.wav",
+   "seconds": 0.5,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/summon.wav",
+   "seconds": 0.6,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/surge.wav",
+   "seconds": 1.8,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/ui_click.wav",
+   "seconds": 0.1,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/ultimate_fall.wav",
+   "seconds": 0.6,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/ultimate_impact.wav",
+   "seconds": 5.4,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/ultimate_summon.wav",
+   "seconds": 3.5,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/ultimate_sword.wav",
+   "seconds": 2.5,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/vortex.wav",
+   "seconds": 3.7,
+   "limit": 120
+  },
+  {
+   "file": "Audio/Upload/sfx/wish_pull.wav",
+   "seconds": 1.5,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/anticipation.wav",
+   "seconds": 4.0,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/bank.wav",
+   "seconds": 0.8,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/bell_toll.wav",
+   "seconds": 3.6,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/brass_click.wav",
+   "seconds": 0.1,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/card_flip.wav",
+   "seconds": 0.2,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/charge_ready.wav",
+   "seconds": 0.9,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/clock_tick.wav",
+   "seconds": 0.1,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/coin_clink.wav",
+   "seconds": 0.6,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/combo.wav",
+   "seconds": 0.8,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/common.wav",
+   "seconds": 0.8,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/discovery.wav",
+   "seconds": 2.6,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/echo.wav",
+   "seconds": 0.8,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/enemy_hit.wav",
+   "seconds": 0.2,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/enemy_poof.wav",
+   "seconds": 0.7,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/epic.wav",
+   "seconds": 3.4,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/glass_crack.wav",
+   "seconds": 0.9,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/ink.wav",
+   "seconds": 3.5,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/iron_clank.wav",
+   "seconds": 1.3,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/legendary_burst.wav",
+   "seconds": 4.6,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/legendary_gather.wav",
+   "seconds": 1.5,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/load_resolve.wav",
+   "seconds": 1.6,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/load_start.wav",
+   "seconds": 1.5,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/load_synced.wav",
+   "seconds": 2.0,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/menu_close.wav",
+   "seconds": 0.5,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/menu_open.wav",
+   "seconds": 0.5,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/merge_1.wav",
+   "seconds": 0.9,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/merge_2.wav",
+   "seconds": 1.1,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/merge_3.wav",
+   "seconds": 1.4,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/merge_4.wav",
+   "seconds": 1.7,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/merge_5.wav",
+   "seconds": 2.1,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/merge_6.wav",
+   "seconds": 2.6,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/merge_7.wav",
+   "seconds": 3.2,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/merge_8.wav",
+   "seconds": 5.2,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/merge_fail.wav",
+   "seconds": 0.3,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/milestone.wav",
+   "seconds": 2.1,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/place_thud.wav",
+   "seconds": 0.2,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/rare.wav",
+   "seconds": 1.9,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/ring.wav",
+   "seconds": 0.6,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/spotlight.wav",
+   "seconds": 0.5,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/summon.wav",
+   "seconds": 0.6,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/surge.wav",
+   "seconds": 1.8,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/ui_click.wav",
+   "seconds": 0.1,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/ultimate_fall.wav",
+   "seconds": 0.6,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/ultimate_impact.wav",
+   "seconds": 5.4,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/ultimate_summon.wav",
+   "seconds": 3.5,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/ultimate_sword.wav",
+   "seconds": 2.5,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/vortex.wav",
+   "seconds": 3.7,
+   "limit": 120
+  },
+  {
+   "file": "VFX/sfx/out/wish_pull.wav",
+   "seconds": 1.5,
+   "limit": 120
+  }
+ ]
+}

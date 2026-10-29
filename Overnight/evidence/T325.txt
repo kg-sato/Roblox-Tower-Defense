@@ -1,0 +1,3 @@
+PASS (Tests/Balance.test.luau extended with an integration check and run in Studio Edit mode: "PASS balance baseline ran")
+The "full" bot (roll, merge, upgrade, recycle) plays the real MatchSim headless on seeds 1, 2, 3 and clears all 25 stages in every seed without error: stage 26 reached at 330 s, 334 s and 335 s of simulated time (about 5.5 minutes). A failure to clear would list as a problem and flip the first line to FAIL.
+Limits: the bot plays a headless sim, not the client or server scripts; it asserts only that the run completes; 3 seeds; no check on what the bot spent.

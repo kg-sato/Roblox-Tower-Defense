@@ -1,0 +1,4 @@
+PASS (Tests/Balance.test.luau extended and run in Studio Edit mode: "PASS balance baseline ran"; results in Roblox Dev/Design/Balance Baseline 2026-10-29.md)
+Change: run() now records the sim time at which each stage is first reached; the report prints "clear time per stage (avg s, runs that cleared it)" for every strategy. Results: full bot clears each of the 25 stages in 7 to 21 s (about 5 minutes in all); the upgrade bot gets stuck on boss stages (s20 202 s in 2 of 3 seeds, never clears 25); the roll bot reaches stage 14 in one seed; the idle bot clears stages 1 to 3 only.
+Finding: a perfect bot finishes the 25 stages in about 5 minutes, against the 8 to 12 minute match the design doc wants; an upper bound, since no human is that fast.
+Limits: 3 seeds only; clear time is from first reaching a stage to first reaching the next (Overrun pushbacks are ignored); the harness change is in Tests/ and mirrors nothing in the game; numbers are baselines, not assertions.

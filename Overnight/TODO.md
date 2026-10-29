@@ -21,58 +21,26 @@ Ids are in priority order: T001 is first. Research and lore come before characte
 ## C. Character redesign (replaces the sprout and fox families; each character gets a bio, design sheet, model and portrait)
 
 ## M. Characters, models and textures (follow the character bible, T056)
-- [ ] T116 | Enemy models: Clockwork Crow (new) | verify: manual: evidence T116
-- [ ] T117 | Enemy models: Lantern Thief (new) | verify: manual: evidence T117
-- [ ] T118 | Boss model: The Unbound (phase variants) | verify: manual: evidence T118
-- [ ] T119 | Boss model: Clockmaker's Automaton | verify: manual: evidence T119
-- [ ] T120 | Boss model: Star Choir's Echo | verify: manual: evidence T120
-- [ ] T121 | Boss model: Hollow Court Regent | verify: manual: evidence T121
-- [ ] T122 | Boss model: the Clockmaker (endgame) | verify: manual: evidence T122
-- [ ] T123 | Texture set: familiar base colours and roughness, 512 px, one atlas per family | verify: manual: evidence T123
 - [ ] T124 | Texture set: enemy families, 512 px, weathering per stage set | verify: manual: evidence T124
 - [ ] T125 | Texture set: boss surfaces with phase wear | verify: manual: evidence T125
 - [ ] T126 | Texture set: stage props (brass, wood, stone, glass) matched to the material library | verify: manual: evidence T126
-- [ ] T127 | Normal maps for the 12 familiars where they add silhouette detail | verify: manual: evidence T127
-- [ ] T128 | Emissive maps for lantern and glow parts (one rule across the cast) | verify: manual: evidence T128
-- [ ] T129 | Upload plan for every new mesh and texture (ids logged in VFX/ASSETS.md; uploads pre-approved) | verify: manual: evidence T129
-- [ ] T130 | Upload the 12 familiar meshes and log their asset ids | verify: studio: evidence T130 (ids listed, each loads in Play)
-- [ ] T131 | Upload the 12 familiar textures and log their asset ids | verify: studio: evidence T131
-- [ ] T132 | Upload enemy and boss meshes and log their asset ids | verify: studio: evidence T132
 
 ## D. Enemies and bosses
-- [ ] T133 | Enemy bible: 6 enemy families (Hollow Parishioner, Fog Wisp, Brass Sentinel, The Unbound, plus 2 new), with lore and roles | verify: manual: evidence T133
-- [ ] T134 | Fog Wisp redesign: a lantern-eating wisp with a readable silhouette and a sound cue | verify: manual: evidence T134
-- [ ] T135 | Brass Sentinel redesign: a stiff guard with telegraphed steps | verify: manual: evidence T135
-- [ ] T136 | New enemy: the Clockwork Crow (fast flyer, takes a unit's place for one wave) | verify: manual: evidence T136
-- [ ] T137 | New enemy: the Lantern Thief (goes for the path's lamps, drops a stolen light) | verify: manual: evidence T137
 - [ ] T138 | Enemy telegraphs: a one-second warning before each special move | verify: studio: evidence T138
 - [ ] T139 | Enemy health bars and status icons readable at the board camera (contrast checked) | verify: studio: evidence T139
 - [ ] T140 | Enemy hit reactions per family (flinch, stagger, knockback, feathers or sparks) | verify: studio: evidence T140
 - [ ] T141 | Enemy death animations per family (dissolve, shatter, sink, fly off) | verify: studio: evidence T141
 - [ ] T142 | Enemy walk cycles: 4 frames each, looping, no sliding feet | verify: studio: evidence T142
-- [ ] T143 | Boss 1 design: The Unbound at stage 5 (a faceless figure of fog, three phases, telegraphed attacks) | verify: manual: evidence T143
-- [ ] T144 | Boss 2 design: the Clockmaker's Automaton at stage 10 (a gear-engine boss that slows the board) | verify: manual: evidence T144
-- [ ] T145 | Boss 3 design: the Star Choir's Echo at stage 15 (sings, pushes familiars, a choir mechanic) | verify: manual: evidence T145
-- [ ] T146 | Boss 4 design: the Hollow Court Regent at stage 20 (a crown of candles, summons mourners) | verify: manual: evidence T146
-- [ ] T147 | Boss 5 design: the Clockmaker at the endgame (time stop, reverses one merge per wave) | verify: manual: evidence T147
 - [ ] T148 | Boss phase transitions: a clear visual change and a sound per phase | verify: studio: evidence T148
 - [ ] T149 | Boss health bar with phases marked (not just a number) | verify: studio: evidence T149
-- [ ] T150 | Enemy scaling curve per stage (health, speed, count) documented and tested | verify: studio: evidence T150 (test PASS)
-- [ ] T151 | Enemy variants by stage set (a Harbour enemy looks wet, a Cathedral enemy looks gilded) | verify: manual: evidence T151
 - [ ] T152 | Enemy spawn telegraph at the portal (a gate opens, a sound, a shadow) | verify: studio: evidence T152
 
 # 3. World and gameplay
 
 ## E. Stages and maps
 - [ ] T153 | Stage set 4 Clockwork Foundry: finish the build (rails, furnaces, gears, sparks) and verify stage 16 in Play | verify: studio: evidence T153 (stage 16 shows the set, console clean)
-- [ ] T154 | Stage set 5 Above the Grey Veil: design, lighting, props, music | verify: manual: evidence T154
-- [ ] T155 | Map design: 3 new path shapes for stage set 4 (long serpentine, double-back, split with a merge point) | verify: manual: evidence T155
-- [ ] T156 | Map design: 3 new path shapes for stage set 5 | verify: manual: evidence T156
 - [ ] T157 | Path blockers: fences, carts and lamps that change routes (data-driven, tested) | verify: studio: evidence T157 (test PASS)
-- [ ] T158 | Path length vs difficulty curve documented for all 25 stages | verify: manual: evidence T158
 - [ ] T159 | Choke points: which stages need a mid-path gate and where (documented, tested in MatchSim) | verify: studio: evidence T159
-- [ ] T160 | Stage intro card per set (title, lore line, art plate) | verify: manual: evidence T160
-- [ ] T161 | Stage clear card per set (reward, flavour line) | verify: manual: evidence T161
 - [ ] T162 | Stage backdrop variety: each set gets 3 distinct landmarks visible from the board camera | verify: studio: evidence T162
 - [ ] T163 | Board edge rings for sets 4 and 5 visible at the default camera (capture) | verify: studio: evidence T163
 - [ ] T164 | Weather and fog per set (drift, density, colour) tested for performance on Low | verify: studio: evidence T164
@@ -99,23 +67,16 @@ Ids are in priority order: T001 is first. Research and lore come before characte
 
 ## F. Gameplay systems and balance
 - [ ] T183 | Merge factor vs rarity cap: decide the rule, document the reasoning, implement behind a flag | verify: manual: evidence T183
-- [ ] T184 | Run-end rewards: what carries over and what resets, documented with examples | verify: manual: evidence T184
 - [ ] T185 | Roster size and layouts: when a player gets a new slot and what unlocks it | verify: studio: evidence T185
 - [ ] T186 | Collection schema: fields, duplicates, shards, documented and wired to the data store | verify: studio: evidence T186
 - [ ] T187 | Boss attacks as data: each attack with timing, damage and telegraph | verify: studio: evidence T187 (test PASS)
-- [ ] T188 | Daily reward ladder: 7 days, what each day gives and what repeats | verify: manual: evidence T188
-- [ ] T189 | Monetisation review: cosmetic-only plan, no pay-to-win, documented | verify: manual: evidence T189
 - [ ] T190 | Economy simulator: coins and gems per wave, roll cost curve, checked over 25 stages | verify: studio: evidence T190
-- [ ] T191 | Balance harness runs the four bot strategies and reports stage clear time | verify: studio: evidence T191
-- [ ] T192 | Familiar power curve per rarity (damage, range, speed) as a table, tested for outliers | verify: studio: evidence T192 (test PASS)
 - [ ] T193 | Ability synergy list: which familiars combo and why (data, not hard-coded) | verify: studio: evidence T193
 - [ ] T194 | Status effects: burn, chill, stun, mark, lantern-bright, each with duration and stack rule | verify: studio: evidence T194 (test PASS)
 - [ ] T195 | Crit system: chance, damage, feedback, tested for clamping | verify: studio: evidence T195 (test PASS)
-- [ ] T196 | Upgrade paths per familiar: 3 paths each with a clear identity | verify: manual: evidence T196
 - [ ] T197 | Skill tree: 40 nodes, each with a short description and a clear effect; no dead nodes | verify: studio: evidence T197
 - [ ] T198 | Skill tree respec with cost and cooldown, tested | verify: studio: evidence T198 (test PASS)
 - [ ] T199 | Next-best hint in the skill tree (suggests the cheapest useful node) | verify: studio: evidence T199
-- [ ] T200 | Pity system for rare familiars, documented and tested | verify: studio: evidence T200 (test PASS)
 - [ ] T002 | Achievement unlock logic on the server, tested | verify: studio: evidence T202 (test PASS)
 - [ ] T003 | Tutorial rewrite: 6 steps, each teaching one mechanic, with a lore line | verify: studio: evidence T203
 - [ ] T004 | Difficulty modes: Normal and Hard (more enemies, more gold), clearly labelled | verify: studio: evidence T204
@@ -133,16 +94,9 @@ Ids are in priority order: T001 is first. Research and lore come before characte
 - [ ] T014 | Elite enemies: 1 in 10 waves, with a visible marker and a loot bonus | verify: studio: evidence T214
 - [ ] T015 | Wave modifiers: 10 modifiers (no shields, double speed, mirror path) as data | verify: studio: evidence T215 (test PASS)
 - [ ] T016 | Endless mode after stage 25 with scaling (tested to wave 100) | verify: studio: evidence T216 (test PASS)
-- [ ] T017 | Challenge stages: 5 fixed-rule stages unlocked by progress | verify: manual: evidence T217
-- [ ] T018 | Familiar fusion: a tier 8 familiar can fuse with another to make a legend (rules documented) | verify: manual: evidence T218
 - [ ] T019 | Sell and recycle rules: refund percent per tier, tested | verify: studio: evidence T219 (test PASS)
-- [ ] T020 | Inventory limit and a clean way to expand it (no paywall lock on basic play) | verify: manual: evidence T220
-- [ ] T021 | Trade rules: none in v1, a documented reason and a future option | verify: manual: evidence T221
-- [ ] T022 | Quests: 20 short quests (daily and story) with rewards | verify: manual: evidence T222
 - [ ] T023 | Quest tracker in the HUD (one line, collapsible) | verify: studio: evidence T223
-- [ ] T024 | Battle pass structure: 40 levels, free and premium tracks (cosmetic only) | verify: manual: evidence T224
 - [ ] T025 | Leaderboards: weekly best wave, anti-cheat checks on the server | verify: studio: evidence T225 (test PASS)
-- [ ] T026 | Friend invite flow (no spam, clear consent) | verify: manual: evidence T226
 
 # 4. Interface and feel
 
@@ -251,8 +205,6 @@ Ids are in priority order: T001 is first. Research and lore come before characte
 - [ ] T166 | Quest complete sound and a gentle reward chime | verify: studio: evidence T304
 - [ ] T183 | Achievement sound (distinct from reward chime) | verify: studio: evidence T305
 - [ ] T184 | Footstep sounds for the trainer avatar on each stage material | verify: studio: evidence T306
-- [ ] T185 | Enemy voice barks (short, 3 per family, text listed for later recording) | verify: manual: evidence T307
-- [ ] T186 | Boss phase music stings (3 per boss) | verify: manual: evidence T308
 - [ ] T187 | Sound priority list: which sounds may be cut when too many play at once | verify: studio: evidence T309 (test PASS)
 
 # 6. Engineering and docs
@@ -262,32 +214,16 @@ Ids are in priority order: T001 is first. Research and lore come before characte
 - [ ] T199 | Move balance numbers into data modules, one table per system | verify: studio: evidence T321 (test PASS)
 - [ ] T200 | Strict typing on the pure modules (NumberFormat, SettingsDefaults, StageSets, MatchSim helpers) | verify: studio: evidence T322 (test PASS)
 - [ ] T201 | Luau type check on every module, zero errors | verify: studio: evidence T323
-- [ ] T202 | Unit tests for every server rule (roll, merge, upgrade, skill, ult) | verify: studio: evidence T324 (test PASS)
-- [ ] T203 | Integration test: a full 25-stage run headless with bots | verify: studio: evidence T325 (test PASS)
 - [ ] T204 | Save migration test: old profile to new template, no data loss | verify: studio: evidence T326 (test PASS)
 - [ ] T205 | Memory check after 10 waves on each stage set | verify: studio: evidence T327
 - [ ] T206 | Frame-time probe on Low, Default and High | verify: studio: evidence T328
-- [ ] T227 | Remote audit of the new remotes (type checks, rate limits) | verify: studio: evidence T329 (test PASS)
-- [ ] T228 | Asset budget: triangles, texture sizes and sound lengths for every new asset | verify: manual: evidence T330
-- [ ] T229 | Repo hygiene and export check pass | verify: python tools/overnight/checks.py hygiene
-- [ ] T230 | Vault upkeep: Systems.md, Backlog, Bug Log, Session Log | verify: manual: evidence T332
 
 ## T. Quality, measurement and tests
-- [ ] T231 | Automated test: every familiar has a bio, a portrait, a voice line and a silhouette entry | verify: studio: evidence T333 (test PASS)
 - [ ] T232 | Automated test: every stage has lore, caption and music assigned | verify: studio: evidence T334 (test PASS)
 - [ ] T233 | Automated test: every item and enemy has a localisation key | verify: studio: evidence T335 (test PASS)
 - [ ] T234 | Automated test: every button has a tooltip or a clear label | verify: studio: evidence T336 (test PASS)
 - [ ] T235 | Automated test: no text below 14 px on the HUD at 844x390 | verify: studio: evidence T337 (test PASS)
-- [ ] T236 | Automated test: no sound plays longer than its declared length | verify: studio: evidence T338 (test PASS)
-- [ ] T237 | Automated test: no asset above the triangle budget | verify: studio: evidence T339 (test PASS)
 - [ ] T238 | Playtest script: 3 bot runs per stage set, logged to a table | verify: studio: evidence T340
-- [ ] T239 | Playtest checklist for the user to run in the morning (15 minutes, specific questions) | verify: manual: evidence T341
-- [ ] T240 | Design decision log: every decision made tonight with the reason | verify: manual: evidence T342
-- [ ] T241 | Next-night plan: the 20 most important open items for tomorrow | verify: manual: evidence T343
 
 ## K. Documentation
-- [ ] T242 | Game Design Doc refresh: new lore, roster and systems | verify: manual: evidence T344
-- [ ] T243 | Character bible index: one page per familiar, linked from the design doc | verify: manual: evidence T345
-- [ ] T244 | Stage bible index: one page per stage set | verify: manual: evidence T346
-- [ ] T245 | Known issues list: every open bug with severity | verify: manual: evidence T347
 - [ ] T246 | Morning report draft: what was built, what to judge, what to delete | verify: manual: evidence T348

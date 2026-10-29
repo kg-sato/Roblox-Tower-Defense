@@ -1,6 +1,7 @@
-PASS
-T118 Hide UI. Play, real key presses through user_keyboard_input (keyPress H, Client datamodel):
-HUD Enabled before: true; after H: false; after second H: true (restored).
-Saved setting path: ReplicatedStorage.Remotes.Action Setting {hideUi=true} -> HUD Enabled false; {hideUi=false} -> true.
-Console: only the pre-existing asset and ProfileStore lines.
-Code: Studio_Export/HideUI.luau (new LocalScript in StarterPlayerScripts). Settings: hideUi in SettingsDefaults (default false) and a Settings panel toggle. GameClient unchanged (it is at the 200,000-character limit).
+PASS (Unbound boss model, three phase variants, built and checked; blocky concept-grade; not imported into Roblox; look UNVERIFIED by the user)
+Built: Blender/enemy_lib.py (new shared helper for enemy and boss models) and Blender/make_unbound.py. Output Roblox Dev/Assets/3D/Enemies/{Unbound,UnboundP2,UnboundP3}/ each with .glb, .fbx, _Palette.png, _stats.json and three stills.
+Phase 1 (Unbound, 9.0 wide, 9.0 deep, 5.25 high as loaded in Roblox): a wide low bank of fog with a stooped figure rising from one side, an oversized blank pale head floating clear of the shoulders, arms dragging to the ground, fog tatters at the hem. Phase 2 (UnboundP2, 8.25 x 8.0 deep x 6.6 high): risen, arms flung wide, the face split down the middle, a ring of teal shards behind the head. Phase 3 (UnboundP3, 4.6 wide x 3.4 deep x 5.2 high): cloak gone; a floating head, two hands, loose fog shards around a small hollow core with a faint lantern glow.
+Checks (tools/verify_enemy_model.py per phase, Overnight/evidence/T118_verify_*.txt, "problems 0" each): GLB parses; triangles 292 / 380 / 204 against the 3,000 budget; highest front silhouette overlap with any familiar front 0.43 (Archivist) / 0.28 (Ember) / 0.20 (Archivist), limit 0.5; views differ in every phase.
+What changed along the way: the first phase 1 (tall hooded cone) scored 0.71 against Ward and phase 2 scored 0.53 against Mourner, so both were redesigned (wide fog bank with a detached head; tall torso with flung arms and halo) rather than loosening the check.
+Visual check: viewed phase 1 three-quarter and phase 2 front stills; phase 3 not viewed (check numbers only).
+Limits: very low detail (flat boxes and cones), phase 1 has a small pale slit on the blank face (kept pale, no eyes), no rig or transitions between phases, nothing tested in Roblox, fog has no transparency or particles (a VFX task), boss behaviour is T143.

@@ -1,0 +1,86 @@
+{
+ "Ward": {
+  "family": "biped",
+  "painted_fraction": 0.82,
+  "emissive_fraction_of_painted": 0.0043,
+  "normal_strength_std": 1.0768,
+  "roughness_mean": 0.413
+ },
+ "Archivist": {
+  "family": "biped",
+  "painted_fraction": 0.772,
+  "emissive_fraction_of_painted": 0.0002,
+  "normal_strength_std": 1.4644,
+  "roughness_mean": 0.306
+ },
+ "Mourner": {
+  "family": "biped",
+  "painted_fraction": 0.693,
+  "emissive_fraction_of_painted": 0.0,
+  "normal_strength_std": 1.1058,
+  "roughness_mean": 0.436
+ },
+ "MirrorChorister": {
+  "family": "biped",
+  "painted_fraction": 0.717,
+  "emissive_fraction_of_painted": 0.0007,
+  "normal_strength_std": 1.5022,
+  "roughness_mean": 0.289
+ },
+ "Sentinel": {
+  "family": "biped",
+  "painted_fraction": 0.715,
+  "emissive_fraction_of_painted": 0.0045,
+  "normal_strength_std": 1.2589,
+  "roughness_mean": 0.278
+ },
+ "Frostling": {
+  "family": "biped",
+  "painted_fraction": 0.741,
+  "emissive_fraction_of_painted": 0.0002,
+  "normal_strength_std": 1.9215,
+  "roughness_mean": 0.369
+ },
+ "BrassHound": {
+  "family": "quadruped",
+  "painted_fraction": 0.82,
+  "emissive_fraction_of_painted": 0.0001,
+  "normal_strength_std": 1.3404,
+  "roughness_mean": 0.341
+ },
+ "Gargoyle": {
+  "family": "quadruped",
+  "painted_fraction": 0.798,
+  "emissive_fraction_of_painted": 0.0355,
+  "normal_strength_std": 1.2625,
+  "roughness_mean": 0.548
+ },
+ "MothLantern": {
+  "family": "flyer",
+  "painted_fraction": 0.803,
+  "emissive_fraction_of_painted": 0.203,
+  "normal_strength_std": 1.8762,
+  "roughness_mean": 0.372
+ },
+ "StarDrake": {
+  "family": "flyer",
+  "painted_fraction": 0.716,
+  "emissive_fraction_of_painted": 0.0452,
+  "normal_strength_std": 1.4376,
+  "roughness_mean": 0.288
+ },
+ "Ember": {
+  "family": "floater",
+  "painted_fraction": 0.791,
+  "emissive_fraction_of_painted": 0.1691,
+  "normal_strength_std": 1.2175,
+  "roughness_mean": 0.284
+ },
+ "GreyVeilWraith": {
+  "family": "floater",
+  "painted_fraction": 0.724,
+  "emissive_fraction_of_painted": 0.0,
+  "normal_strength_std": 1.5942,
+  "roughness_mean": 0.479
+ }
+}

@@ -1,0 +1,7 @@
+glb: 1 mesh, 1 materials, 1 images ok
+triangles 264 (budget 3000, project limit 20000) ok
+highest front silhouette IoU against any familiar front: 0.31 (front vs Archivist; limit 0.5) ok; worst over all views 0.44 (three_quarter vs MothLantern, information only)
+views differ from each other (smallest 1-IoU 0.65) ok
+size: [4.45, 2.48, 4.0]
+length_over_height: None
+enemy model LanternThief: problems 0

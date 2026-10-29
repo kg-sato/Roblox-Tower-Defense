@@ -38,7 +38,7 @@ def hygiene():
     tests = (root / "Tests").glob("*.luau")
     for t in tests:
         s = t.read_text(encoding="utf-8", errors="replace")
-        if "check(" not in s:
+        if t.name != "RunAll.luau" and "check(" not in s:  # RunAll.luau is the runner, not a suite
             bad.append(f"{t.name} has no checks")
     return bad
 

@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Familiar Systems.md, section "Upgrade paths")
+A table of all 12 familiars: Power and Haste stay generic, Crit is swapped for an identity path tied to the familiar's lore verb (for example Ember: Kindle, Gargoyle: Shatter). Verbs checked against the lore notes in Roblox Dev/Lore/Familiars/.
+Limits: PROPOSAL, not implemented (the game has three global upgrades per unit type); no numbers per level; the user is asked whether to replace Crit.

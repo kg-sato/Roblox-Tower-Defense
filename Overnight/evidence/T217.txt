@@ -1,0 +1,3 @@
+PASS (documented: Roblox Dev/Design/Content Plans.md, section "Challenge stages")
+Five stages (Single File, Brass Only, Quiet Hour, Furnace Run, Backwards Clock), each unlocked by a boss, with rules as data and a one-time cosmetic and 40 gems.
+Limits: design only; depends on wave modifiers (T215), which are not built.

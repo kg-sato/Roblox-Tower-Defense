@@ -1,0 +1,3 @@
+PASS (Roblox Dev/Lore/Enemy Barks.md)
+Ten families (five enemies and five bosses) with an idle, a hit and a leak line each, 2 to 8 words, in the project voice of Roblox Dev/Lore/Tone Guide.md (checked against its rules: short, concrete, no gore, no blame). Non-verbal enemies (Fog Wisp, Choir Echo, Regent) get a described sound.
+Limits: text only; no audio; the lines are drafts for the user to approve; no rate-limit rule for playing them.

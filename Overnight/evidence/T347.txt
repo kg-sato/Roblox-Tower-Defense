@@ -1,0 +1,3 @@
+PASS (Roblox Dev/Known Issues.md)
+Lists the 4 open Bug Log rows and 17 further gaps and risks found today, each with severity. Facts come from the Bug Log (read), the Config and exports (grep), the upload state (tools/uploads.json) and my own earlier checks. The top risks: the clips cannot play in a published game (not uploaded as Animation assets), the Studio changes are not saved in Claude.rbxl, and the familiar roles are not in code.
+Limits: severities are my judgement; Bug Log was not edited (these are gaps, not bugs); some items are repeated from earlier notes.

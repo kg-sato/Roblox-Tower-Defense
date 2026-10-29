@@ -1,4 +1,5 @@
-PARTIAL (not ticked)
-Headless SettingsDefaults test extended (damageNumbers default on, off accepted, string rejected) and run in Studio with the test body inline: PASS, 42 checks ok.
-Code: damageNumbers in SettingsDefaults (validated server-side by RULES), SettingsPanel toggle, GameClient skips the damage float texts when SETTINGS.damageNumbers == false (crit and damage numbers).
-NOT VERIFIED: Play check that no float text appears when Off (needs a fight with a float-text count).
+PASS (Clockwork Crow enemy model built and checked; blocky concept-grade; not imported into Roblox; look UNVERIFIED by the user)
+Built: Blender/make_clockwork_crow.py (Blender 5.3 beta headless, procedural). Output Roblox Dev/Assets/3D/Enemies/ClockworkCrow/: ClockworkCrow.glb and .fbx, ClockworkCrow_Palette.png, ClockworkCrow_stats.json and three stills. Model: wind-up crow of dark steel, brass beak and chest plate, two red eye points, five feather blades per wing in a raised flap pose on geared shoulders, three-blade tail fan, thin legs with talons, wind-up key on the back; 5.53 wide, 4.35 long, 2.69 high, faces -Y; 416 triangles.
+Checks (tools/verify_enemy_model.py ClockworkCrow, Overnight/evidence/T116_verify.txt, "problems 0"): GLB parses with 1 mesh, 1 material, 1 image; 416 triangles against the 3,000 budget (project limit 20,000); front silhouette at 48 px against the 12 familiar fronts: highest 0.22 (MothLantern; limit 0.5), worst over all views 0.50 (side vs MothLantern, information only); the three views differ (smallest 1-IoU 0.51).
+Visual check: viewed front and three-quarter stills: reads as a crow with a key on its back. First build had three tiny rivet cubes floating beside the wings; removed.
+Limits: very low detail (416 triangles, flat colours, flat blades), no rig or flap animation, nothing tested in Roblox, red eyes are flat palette colour (not emissive), the unit-replacing behaviour is a later task (T136).

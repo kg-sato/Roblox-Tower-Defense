@@ -137,6 +137,7 @@ return function(Shared)
 		sim:setAuto(true)
 		local stageAt, last, earned = {}, sim.gems, 0
 		local nextMark = 1
+		local reached, top = { [1] = 0 }, 1 -- sim time (s) at which each stage was first reached, for the clear time per stage
 		local steps = 20 * 60 / DT
 		for _ = 1, steps do
 			sim:step(DT)
@@ -145,13 +146,19 @@ return function(Shared)
 			end
 			act(sim, strategy)
 			last = sim.gems
+			if sim.stage > top then
+				for st = top + 1, sim.stage do
+					reached[st] = sim.t
+				end
+				top = sim.stage
+			end
 			if nextMark <= #MARKS and sim.t >= MARKS[nextMark] * 60 then
 				stageAt[MARKS[nextMark]] = sim.stage
 				nextMark += 1
 			end
 		end
 		check(strategy .. " seed " .. seed .. " ran the full 20 minutes (stage " .. sim.stage .. ", t " .. math.floor(sim.t) .. ")", sim.stage >= 1 and sim.t >= 1190)
-		return { stageAt = stageAt, gpm = earned / (sim.t / 60), firsts = firsts, units = sim:unitCount(), maxTier = sim.maxTier }
+		return { stageAt = stageAt, gpm = earned / (sim.t / 60), firsts = firsts, units = sim:unitCount(), maxTier = sim.maxTier, reached = reached }
 	end
 
 	local ok, err = pcall(function()
@@ -159,8 +166,20 @@ return function(Shared)
 		line("Balance baseline (seeds " .. table.concat(SEEDS, ",") .. ", dt " .. DT .. ", 20 min per run, auto waves on)")
 		for _, strategy in { "idle", "roll", "upgrade", "full" } do
 			local stage, gpm, units, tier, firsts = {}, 0, 0, 0, {}
+			local clear = {} -- stage -> { sum, n }: seconds from reaching the stage to reaching the next one
 			for _, seed in SEEDS do
 				local r = run(strategy, seed)
+				if strategy == "full" then
+					check("integration: the full bot clears all 25 stages on seed " .. seed, r.reached[26] ~= nil)
+					line("    integration: seed " .. seed .. " full bot " .. (r.reached[26] and string.format("cleared all 25 stages at %.0f s", r.reached[26]) or "did NOT clear stage 25"))
+				end
+				for st = 1, 25 do
+					if r.reached[st] and r.reached[st + 1] then
+						clear[st] = clear[st] or { sum = 0, n = 0 }
+						clear[st].sum += r.reached[st + 1] - r.reached[st]
+						clear[st].n += 1
+					end
+				end
 				for _, m in MARKS do
 					stage[m] = (stage[m] or 0) + r.stageAt[m] / #SEEDS
 				end
@@ -187,6 +206,12 @@ return function(Shared)
 				table.insert(fp, rar .. "=" .. (f.n > 0 and string.format("%.0fs(%d/%d)", f.sum / f.n, f.n, #SEEDS) or "never"))
 			end
 			line("    first pull (avg s): " .. table.concat(fp, " "))
+			local cl = {}
+			for st = 1, 25 do
+				local c = clear[st]
+				table.insert(cl, "s" .. st .. "=" .. (c and string.format("%.0f(%d/%d)", c.sum / c.n, c.n, #SEEDS) or "-"))
+			end
+			line("    clear time per stage (avg s, runs that cleared it): " .. table.concat(cl, " "))
 		end
 
 		line("DPS by rarity (mean of pets) at tier 1.." .. Config.TIER_MAX .. " (damage / cooldown, no upgrades or skills):")

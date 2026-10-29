@@ -1,6 +1,6 @@
 """Familiar lore cards (T097): the collection back of each card with the full bio (120 to 200 words) from Roblox Dev/Lore/Familiars/<Name>.md ("Longer bio").
 Reuses the frame, colours and parsing of tools/familiar_cards.py. Writes Roblox Dev/Assets/Characters/Cards/<Name>_lore.png (630 x 880), _lore_sheet.png and _lore_report.txt.
-Run with Hunyuan3D\.venv\Scripts\python tools\familiar_lore_cards.py. Drawn by code: a concept layout, not final art."""
+Run with Hunyuan3D/.venv/Scripts/python tools/familiar_lore_cards.py. Drawn by code: a concept layout, not final art."""
 import pathlib, re, sys
 from PIL import Image, ImageDraw, ImageFilter
 
