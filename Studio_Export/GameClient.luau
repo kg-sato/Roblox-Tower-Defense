@@ -2651,7 +2651,7 @@ do
 	oddsNote.Position = UDim2.new(0.5, 0, 1, -4)
 	function UI.oddsSpread(pct)
 		for r, c in cards do
-			c.pc.Text = string.format(pct[r] < 10 and "%.1f%%" or "%d%%", pct[r] < 10 and pct[r] or math.floor(pct[r] + 0.5))
+			c.pc.Text = string.format(pct[r] < 1 and "%.2f%%" or pct[r] < 10 and "%.1f%%" or "%d%%", pct[r] < 10 and pct[r] or math.floor(pct[r] + 0.5))
 		end
 	end
 	-- the ODDS chip becomes a small crystal ball on the desk

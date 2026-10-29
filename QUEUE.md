@@ -29,7 +29,7 @@ main chat's family could see. It is not committed on its own; it is a live file.
 ## Shared resources (one holder at a time)
 | Resource | Holder | Since |
 |---|---|---|
-| Roblox Studio (Edit edits, Play, recordings) | loading-eye: odds panel check for 6 rarities (GameClient), Edit + short Play; about 20 min | 2026-10-29 |
+| Roblox Studio (Edit edits, Play, recordings) | Sonnet (familiar art): checking 4 human familiars on the board in Play (facing, scale, anims); about 20 min. Odds panel fix for 6 rarities is installed, not saved. | 2026-10-29 |
 | ComfyUI 127.0.0.1:8188 (GPU, 8 GB) | FREE (Sonnet stopped the server) | 2026-10-29 |
 | GPU for Hunyuan3D (shares the 8 GB with ComfyUI) | FREE | |
 | Blender (CPU, headless; several runs are fine) | FREE | |

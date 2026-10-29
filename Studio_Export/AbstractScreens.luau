@@ -265,8 +265,14 @@ return function(env)
 
 	local function oddsPanel(panel)
 		-- each rarity a circle whose AREA is its chance; the tarot cards are hidden
+		local cards = {}
 		for _, card in panel:GetDescendants() do
-			if card:IsA("Frame") and card.Size == UDim2.fromOffset(92, 200) then
+			if card:IsA("Frame") and card.Size == UDim2.fromOffset(92, 200) then table.insert(cards, card) end
+		end
+		-- ring size shrinks with the rarity count so six rings fit side by side in the 440 px panel (2026-10-29)
+		local D = math.min(96, math.floor(400 / math.max(#cards, 1)) - 6)
+		for _, card in cards do
+			do
 				local name, pct, tint
 				for _, k in card:GetChildren() do
 					if k:IsA("Frame") then tint = k.BackgroundColor3; k.Visible = false end
@@ -277,10 +283,10 @@ return function(env)
 				card.Rotation = 0
 				local col = (name and RAR[name.Text]) or tint or PALE
 				local disc = circle(card, UDim2.fromOffset(20, 20), UDim2.new(0.5, 0, 0, 80), col, 0.05, 3)
-				ring(card, UDim2.fromOffset(96, 96), UDim2.new(0.5, 0, 0, 80), col, 1, 2)
+				ring(card, UDim2.fromOffset(D, D), UDim2.new(0.5, 0, 0, 80), col, 1, 2)
 				local function sync()
 					local v = pct and tonumber(pct.Text:match("[%d%.]+")) or 25
-					local dpx = math.clamp(12 + 84 * math.sqrt(v / 100), 8, 96)
+					local dpx = math.clamp(D * (0.125 + 0.875 * math.sqrt(v / 100)), 8, D)
 					disc.Size = UDim2.fromOffset(dpx, dpx)
 				end
 				if pct then pct:GetPropertyChangedSignal("Text"):Connect(function() task.defer(sync) end) end

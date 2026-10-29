@@ -25,6 +25,6 @@ Rigged models: Vesper 87320725806516, Orrery 100541943813006, Lamplighter 100337
 Edit-mode capture of the models next to Mourner and Ward (humans read as real figures; dark in daylight because of the gold-ink palette); Play start with the 16-familiar collection (16 cells, no errors) and `RevealFX.play` for Mythic and Celestial (aliased to the Legendary and Ultimate reveals) without errors; 13 test suites pass.
 ## Not checked, or open
 - The models were NOT seen on the board in Play: the `Yaw` attribute is 180 (the models faced away from the camera at 0, unlike the older ones), so facing and scale on the board are UNVERIFIED. No Idle clip. Hands and faces are soft; the Veil Walker back is stripy; the face of each is the concept's, not hand-made.
-- The Mythic and Celestial reveal screens reuse existing tiers (`TIER_ALIAS` in RevealFX); the odds panel row layout for six rarities is unchecked (UI chat).
+- The Mythic and Celestial reveal screens reuse existing tiers (`TIER_ALIAS` in RevealFX); the odds panel for six rarities was fixed and checked in Play by the loading-eye chat (ring size scales with the count; under 1% shows two decimals).
 - New placeholder stats are not balanced; the full economy rerun with them is open ([[Balance Baseline 2026-10-29]]).
 - Edits to `FXRecipes` (RAMP and ORDER entries) and `RevealFX` (the alias) touched files no chat owns; the loading-eye chat said they were not theirs.

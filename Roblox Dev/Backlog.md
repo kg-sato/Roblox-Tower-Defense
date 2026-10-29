@@ -133,3 +133,4 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [ ] More cutscenes: merge morph on tier-up (needs GameClient's model table), boss phase transitions (needs boss phases), sounds for the captions and set morph ([[Design/Cutscenes and Transitions]])
 - [ ] Look at the four human familiars on the board in Play (facing: Yaw 180, scale, animations) and tune their stats ([[Design/Human Familiars]])
 - [ ] Idle clips and better hands and faces for the human familiars; more humans for Epic and Legendary if wanted
+- [x] (2026-10-29, loading-eye chat) Odds panel for six rarities fixed and checked in a Play capture
