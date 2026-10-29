@@ -364,7 +364,7 @@ local function meshEnemy(model, kind)
 		if d:IsA("PackageLink") then d:Destroy() end
 		if d:IsA("BasePart") then
 			d.Anchored, d.CanCollide, d.CanQuery, d.CanTouch, d.CastShadow = true, false, false, false, true
-			if d.Parent and d.Parent.Name == "Eye" then -- glowing eye: Neon ignores SurfaceAppearance, so drop it
+			if d.Name == "Eye" or (d.Parent and d.Parent.Name == "Eye") then -- glowing eye (v10 names the part itself): Neon ignores SurfaceAppearance, so drop it
 				local sa = d:FindFirstChildOfClass("SurfaceAppearance")
 				if sa then sa:Destroy() end
 				d.Material, d.Color = NEON, Color3.fromRGB(255, 70, 40)

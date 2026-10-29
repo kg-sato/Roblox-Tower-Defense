@@ -92,3 +92,4 @@
 - 21:44 Run ended: all tasks done or blocked
 - 05:29 CHECKPOINT d329d5e on overnight/2026-10-27: Add the overnight work: settings, game speed, effect kit and sheets, stage sets two and three, cutscene upgrades and tests.
 - 11:49 CHECKPOINT 4197bef on overnight/2026-10-27: Add the themed HUD, start menu, odds panel, boss bar, new sounds and the abstract layer from the UI and FX research.
+- 20:27 CHECKPOINT ae6d65c on overnight/2026-10-27: Overnight prep: UI reviews, FX and stage-set work, settings and tools. Videos stay on disk only.
