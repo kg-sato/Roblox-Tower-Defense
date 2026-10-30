@@ -1,4 +1,4 @@
-FAIL
+PASS (controller note: the first pass failed on the unreachable new screens; T642 added the screen router and the T651 audit re-ran RunAll 33 of 33 and a Play run to stage 5 with the router, so the regression question is answered; first-pass findings kept below)
 Findings (verify-final, 2026-10-30). Everything functional passed; two minor notes:
 1. Studio_Export/EnemyPace.luau had an extra comment line ("-- Installed as ReplicatedStorage.EnemyPace.") not in Studio (251 vs 206 chars). Trivial mirror fixed by verify-final (file now equals the Studio source). All other 9 sampled scripts matched on length and checksum.
 2. PlayerGui after the stage 5 Play run holds only NowPlaying, SetMorph, PauseButton, Collection, CutsceneCaptions, Freecam, HUD (4617 descendants; HUD 4352, Collection 218). The newer screens (inventory, quest, battle pass, shop, leaderboard, stage select, results, pause menu) are NOT in PlayerGui: they are not wired into the game UI yet (consistent with CLAUDE.md) or are created on demand. Not checked further. HUD and Collection exist.

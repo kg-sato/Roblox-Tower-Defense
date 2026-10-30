@@ -84,3 +84,4 @@ T084 | commit cfcfbf0 | "button states motion" | attested | client-ui | Overnigh
 T086 | commit cfcfbf0 | "keyboard gamepad focus" | attested | client-ui | Overnight/evidence/T086.txt
 T081 | commit 7f80385 | "icon set added" | attested | client-ui | Overnight/evidence/T081.txt
 T172 | commit 71376f0 | "boss arena variants" | attested | world | Overnight/evidence/T172.txt
+T642 | commit c1992de | "screen router added" | attested | client-ui | Overnight/evidence/T642.txt
