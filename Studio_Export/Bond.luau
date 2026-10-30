@@ -25,6 +25,39 @@ Bond.MOODS = {
 }
 Bond.NEW_MOOD = { id = "Curious", mult = 1 } -- never used yet
 
+-- Duplicate copies (P7, behind Config.P7_DUPE_BOND): each extra copy of a familiar fills a bond bar with 5 small permanent power steps.
+-- dupes = copies owned - 1. A copy beyond the last step pays DUPE_SURPLUS_GEMS. Never required: step 1 is +3%, the top is +15%.
+Bond.DUPE_STEPS = { { dupes = 1, power = 0.03 }, { dupes = 3, power = 0.06 }, { dupes = 6, power = 0.09 }, { dupes = 10, power = 0.12 }, { dupes = 15, power = 0.15 } }
+Bond.DUPE_SURPLUS_GEMS = 10
+
+-- step reached (0 to 5) for this many extra copies
+function Bond.dupeStep(dupes: number): number
+	local step = 0
+	for i, s in Bond.DUPE_STEPS do
+		if dupes >= s.dupes then
+			step = i
+		end
+	end
+	return step
+end
+
+-- permanent damage bonus as a fraction (0.03 = +3%)
+function Bond.dupePower(dupes: number): number
+	local step = Bond.dupeStep(dupes)
+	return step > 0 and Bond.DUPE_STEPS[step].power or 0
+end
+
+-- extra copies needed for the next step, nil at the top
+function Bond.dupeNext(dupes: number): number?
+	local nxt = Bond.DUPE_STEPS[Bond.dupeStep(dupes) + 1]
+	return nxt and nxt.dupes or nil
+end
+
+-- true when one more copy is past the last step (it pays gems instead)
+function Bond.dupeSurplus(dupes: number): boolean
+	return dupes >= Bond.DUPE_STEPS[#Bond.DUPE_STEPS].dupes
+end
+
 -- total xp needed for a level: 25 * n * (n - 1) (level 2 at 50, level 10 at 2,250)
 function Bond.xpFor(level: number): number
 	return 25 * level * (level - 1)
@@ -74,7 +107,7 @@ function Bond.use(state: State, id: any, kind: any, amount: any, now: any): (boo
 	if not Bond.validId(id) then
 		return false, "Bad familiar", nil
 	end
-	local per = type(kind) == "string" and Bond.XP[kind] or nil
+	local per: number? = type(kind) == "string" and (Bond.XP :: any)[kind] or nil
 	if not per then
 		return false, "Bad kind", nil
 	end

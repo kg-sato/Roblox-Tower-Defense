@@ -666,6 +666,10 @@ do -- abstract layer around the objects (AbstractLayer.luau)
 	local ok2, err2 = pcall(function() require(script.Parent:WaitForChild("AbstractHUD", 5))({ rollBtn = rollBtn, rollCost = rollCost, autoBtn = autoBtn, quickBtn = quickBtn, oddsChip = oddsChip, startWaveBtn = startWaveBtn, ultBtn = ultBtn, ultFill = ultFill, coinPill = coinPill, coinLabel = coinLabel, gemPill = gemPill, gemLabel = gemLabel, lvlPill = lvlPill, lvlNum = lvlNum, xpFill = xpFill, stagePill = stagePill, stageLabel = stageLabel, hpPill = hpPill, hpFill = hpFill, hpLabel = hpLabel, dock = dock, reducedMotion = function() return SETTINGS.reducedMotion end }) end)
 	if not ok2 then warn("AbstractHUD: " .. tostring(err2)) end
 end
+if Config.HUD_REWORK then -- HUD rework 2026-10-30 (HudRework.luau): calm plaques, one currency bar, left bar, per-familiar ultimate
+	local okH, errH = pcall(function() UI.hudRework = require(script.Parent:WaitForChild("HudRework", 5))({ Config = Config, SETTINGS = SETTINGS, hud = hud, rail = rail, dock = dock, stagePill = stagePill, stageLabel = stageLabel, hpPill = hpPill, hpFill = hpFill, hpLabel = hpLabel, oddsChip = oddsChip, coinLabel = coinLabel, gemLabel = gemLabel, lvlNum = lvlNum, xpFill = xpFill, xpLabel = xpLabel, rollBtn = rollBtn, rollCost = rollCost, autoBtn = autoBtn, quickBtn = quickBtn, startWaveBtn = startWaveBtn, ultBtn = ultBtn }) end)
+	if not okH then warn("HudRework: " .. tostring(errH)) end
+end
 UI.objectify, UI.objImg = objectify, objImg -- shared with screens built later (familiar ledger)
 -- text above the object art
 coinLabel.ZIndex, gemLabel.ZIndex, rollText.ZIndex, rollCost.ZIndex = 3, 3, 5, 5
@@ -805,22 +809,22 @@ for lv = 1, Config.LEVEL_MAX do
 	local gemT = label(c, "+" .. Config.levelGems(lv), 18, STYLE.gem, Vector2.new(0, 0.5), UDim2.new(0.5, -4, 0, 66), UDim2.fromOffset(50, 22), STYLE.fontB)
 	gemT.TextXAlignment = Enum.TextXAlignment.Left
 	gemT.ZIndex = 13
-	local spT = label(c, "+1 SKILL PT", 13, STYLE.blue, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 92), UDim2.new(1, -6, 0, 16), STYLE.fontB)
+	local spT = label(c, "+1 SKILL PT", 16, STYLE.blue, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 92), UDim2.new(1, -6, 0, 16), STYLE.fontB)
 	spT.ZIndex = 13
-	local luckT = label(c, string.format("LUCK +%d%%", math.floor(Config.luck(lv) * 100 + 0.5)), 13, STYLE.gold, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 112), UDim2.new(1, -6, 0, 16), STYLE.fontB)
+	local luckT = label(c, string.format("LUCK +%d%%", math.floor(Config.luck(lv) * 100 + 0.5)), 16, STYLE.gold, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 112), UDim2.new(1, -6, 0, 16), STYLE.fontB)
 	luckT.ZIndex = 13
 	local special = lv == 3 and "AUTO ROLL" or (lv % 5 == 0 and "MILESTONE" or nil)
 	local sp
 	if special then
-		sp = label(c, special, 13, STYLE.green, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 134), UDim2.new(1, -6, 0, 16), STYLE.fontB)
+		sp = label(c, special, 16, STYLE.green, Vector2.new(0.5, 0), UDim2.new(0.5, 0, 0, 134), UDim2.new(1, -6, 0, 16), STYLE.fontB)
 		sp.ZIndex = 13
 		iconImg(c, lv == 3 and "icon_rebirth" or "icon_chest", UDim2.fromOffset(32, 32), UDim2.new(0.5, 0, 0, 170), nil, 13)
 	end
-	local stateT = label(c, "", 12, STYLE.muted, Vector2.new(0.5, 1), UDim2.new(0.5, 0, 1, -4), UDim2.new(1, 0, 0, 16), STYLE.fontB)
+	local stateT = label(c, "", 15, STYLE.text, Vector2.new(0.5, 1), UDim2.new(0.5, 0, 1, -4), UDim2.new(1, 0, 0, 16), STYLE.fontB)
 	stateT.ZIndex = 13
 	roadCards[lv] = { frame = c, stroke = st, num = num, state = stateT }
 end
-local progFoot = label(progBody, "Earn XP:  defeat monsters  ·  clear stages  ·  beat bosses", 16, STYLE.muted, Vector2.new(0.5, 1), UDim2.new(0.5, 0, 1, -10), UDim2.new(1, -40, 0, 22), STYLE.fontB)
+local progFoot = label(progBody, "Earn XP:  defeat monsters  ·  clear stages  ·  beat bosses", 16, STYLE.text, Vector2.new(0.5, 1), UDim2.new(0.5, 0, 1, -10), UDim2.new(1, -40, 0, 22), STYLE.fontB)
 progFoot.ZIndex = 10
 local progList = progFoot -- old name kept
 
@@ -1771,7 +1775,7 @@ do -- settings panel: shell here, content in the SettingsPanel module
 	local panel, body, scale, close = makePanel(hud, UDim2.fromOffset(440, 560), "Settings", STYLE.blue)
 	UI.blurHolders[panel] = true
 	panel.AnchorPoint = Vector2.new(0.5, 0)
-	panel.Position = UDim2.new(0.5, 0, 0, 70) -- top-anchored so the reset seal clears the desk at the bottom
+	panel.Position = UDim2.new(0.5, 0, 0, Config.HUD_REWORK and 118 or 70) -- top-anchored so the reset seal clears the desk at the bottom
 	panel:GetPropertyChangedSignal("Visible"):Connect(function() -- the desk steps aside while the board is open
 		for _, n in { "RollBar", "Desk" } do
 			local d = hud:FindFirstChild(n)
@@ -1781,7 +1785,7 @@ do -- settings panel: shell here, content in the SettingsPanel module
 	panel.ZIndex = 9
 	local Defaults = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("SettingsDefaults"))
 	FXK.settingsPanel = require(script.Parent:WaitForChild("SettingsPanel"))({
-		new = new, STYLE = STYLE, UI = UI, body = body, tween = tween, defaults = Defaults.defaults,
+		new = new, STYLE = STYLE, UI = UI, body = UI.hudRework and UI.hudRework.scrollBody(body) or body, tween = tween, defaults = Defaults.defaults,
 		apply = function(s) FXK.applySettings(s) end,
 		send = function(batch) ActionRemote:FireServer("Setting", batch) end,
 	})
@@ -2220,7 +2224,7 @@ local Hatch = require(script.Parent.RevealSection)({
 	setPet = setPet, camera = camera, gui = gui,
 	petModel = function(slot) local e = petParts[slot] return e and e.model end,
 	snap = function() return lastSnap end,
-	quick = function() return quickRoll end,
+	quick = function() return quickRoll or game.Players.LocalPlayer:GetAttribute("SummonSkip") == true end, -- Summon menu Skip toggle
 	auto = function() return autoOn end,
 })
 local revealGui, revealQueue, playRoll = Hatch.gui, Hatch.queue, Hatch.playRoll
@@ -2645,6 +2649,10 @@ UserInputService.InputEnded:Connect(function(input)
 end)
 
 rollBtn.Activated:Connect(function() ActionRemote:FireServer("Roll") end)
+if Config.SUMMON_MENU then -- Summon menu (SummonScreen): rolling moves off the HUD outside the tutorial
+	local okS, errS = pcall(function() require(script.Parent:WaitForChild("SummonScreen", 5)).attach({ rollBtn = rollBtn, oddsChip = oddsChip }) end)
+	if not okS then warn("SummonScreen: " .. tostring(errS)) end
+end
 ultBtn.Activated:Connect(function() ActionRemote:FireServer("Ult") end)
 startBtn.Activated:Connect(function() ActionRemote:FireServer("Start") end)
 do -- photosensitivity notice on the start screen (T42): the game has flashes; one tap turns them off before playing
@@ -2791,6 +2799,7 @@ local function applySnapshot(s)
 		setUltReady(ready)
 	end
 	ultBtn.Text = ready and "ULT!" or "ULT"
+	if UI.hudRework then UI.hudRework.snap(s) end
 	for slot in petParts do
 		if not s.grid[tostring(slot)] then
 			removePet(slot, false)

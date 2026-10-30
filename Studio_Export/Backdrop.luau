@@ -218,14 +218,14 @@ local function lamp(x, z)
 	part(mid, Vector3.new(11, 0.6, 0.6), CFrame.new(x, 5.5, z) * CFrame.Angles(0, 0, math.rad(90)), IRON, Enum.Material.Metal, Enum.PartType.Cylinder)
 	part(mid, Vector3.new(1.4, 0.6, 1.4), CFrame.new(x, 0.3, z), IRON, Enum.Material.Metal)
 	local glass = part(mid, Vector3.new(1.3, 1.8, 1.3), CFrame.new(x, 11.6, z), WARM, Enum.Material.Neon)
-	glass.Transparency = 0.15
+	glass.Transparency = 0.5 -- HUD rework 2026-10-30: calmer lamps (the user: the glow takes away from gameplay)
 	part(mid, Vector3.new(1.9, 0.5, 1.9), CFrame.new(x, 12.7, z), IRON, Enum.Material.Metal)
 	local light = Instance.new("PointLight")
 	light.Name = "LampLight" -- the client turns Shadows off when Effects detail is Low
 	light.Color = WARM
-	light.Range = 22
-	light.Brightness = 1.6
-	light.Shadows = true
+	light.Range = 16
+	light.Brightness = 0.7
+	light.Shadows = false
 	light.Parent = glass
 end
 for _, p in { { X0, Z0 }, { X1, Z0 }, { X0, Z1 }, { X1, Z1 }, { -18, Z0 }, { 16, Z0 }, { -18, Z1 }, { 16, Z1 }, { X0, 1 }, { X1, 1 } } do

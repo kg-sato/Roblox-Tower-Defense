@@ -90,3 +90,4 @@ T651 | commit f07ef6f | "wiring audit done" | attested | docs-tooling | Overnigh
 T641 | commit 7762547 | "icons uploaded wired" | attested | client-ui | Overnight/evidence/T641.txt
 T652 | commit fa72a0a | "progress hooks wired" | attested | sim | Overnight/evidence/T652.txt
 T246 | commit 46f759e | "overnight report written" | attested | docs-tooling | Overnight/evidence/T246.txt
+REPORT | commit 37c7d8b | "final report written" | attested | docs-tooling | Overnight/REPORT.md

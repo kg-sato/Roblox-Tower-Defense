@@ -63,6 +63,7 @@ Models, Blender, animation, image generation, backgrounds and enemies.
 ## Game Design and Market
 Genre playbooks, competitors, monetization rules, retention, low-end devices.
 
+- [[Research/Game Design/Gacha Retention Study|Gacha Retention Study]]: HSR, Endfield, Reverse: 1999 and Limbus summon menus, daily loops and dupes; Summon menu layout, 10 mechanics ranked for merge TD, 12 proposals, kid-safe guardrails (2026-10-30)
 - [[Research/Game Design and Market/Competitors and Policy|Competitors and Policy]]: live competitor numbers, UI patterns to copy, and Roblox's paid-random-item rules
 - [[Research/Game Design and Market/Engagement Loop Playbook|Engagement Loop Playbook]]: what makes simple games sticky, plus a one-month build plan
 - [[Research/Game Design and Market/Layouts, Placement and Summoning|Layouts, Placement and Summoning]]: date: 2026-10-27

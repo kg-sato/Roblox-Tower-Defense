@@ -11,13 +11,14 @@ local Config = require(Shared:WaitForChild("Config"))
 local ActionArgs = require(Shared:WaitForChild("ActionArgs"))
 local MatchSim = require(Shared:WaitForChild("MatchSim"))
 local SettingsDefaults = require(Shared:WaitForChild("SettingsDefaults"))
+local Gacha = require(Shared:WaitForChild("Gacha")) -- P3 roll floor and P2 Lantern Oil state (saved as profile.gacha; each feature behind its own Config flag)
 local ProgressHooks = require(Shared:WaitForChild("ProgressHooks")) -- T652: achievements, quests, bond, leaderboard (each behind a Config flag, default OFF)
 
 local ProfileStore = require(ServerScriptService:WaitForChild("ProfileStore")) :: any -- vendor/ProfileStore.luau (MadStudioRoblox, session-locked saving)
 
 -- What is saved between visits (see MatchSim.meta / loadMeta). Only account-level progress: the pets on the board
 -- and the current stage belong to a single run and are not saved.
-local TEMPLATE = { version = 1, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, bestStage = 1, lastStage = 1, tutorialDone = false, settings = SettingsDefaults.copyDefaults(), seen = {}, collection = {}, difficulty = "Normal" }
+local TEMPLATE = { version = 2, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, bestStage = 1, lastStage = 1, tutorialDone = false, settings = SettingsDefaults.copyDefaults(), seen = {}, collection = {}, difficulty = "Normal", gacha = Gacha.new() }
 for k, v in ProgressHooks.fields() do
 	TEMPLATE[k] = v -- achievements, quests, bond (T652)
 end
@@ -56,7 +57,7 @@ end
 
 local TICK = 0.1
 local MIN_ACTION_GAP = 0.05
-local ACTION_KINDS = { Roll = true, Drop = true, Move = true, Recycle = true, Upgrade = true, Ult = true, StartWave = true, AutoWave = true, Skill = true, Respec = true, EndTutorial = true, Difficulty = true, Pause = true, Lantern = true }
+local ACTION_KINDS = { Roll = true, Drop = true, Move = true, Recycle = true, Upgrade = true, Ult = true, StartWave = true, AutoWave = true, Skill = true, Respec = true, EndTutorial = true, Difficulty = true, Pause = true, Lantern = true, Guarantee = true }
 local lastStart: { [Player]: number } = {}
 
 local remotes = Instance.new("Folder")
@@ -107,6 +108,20 @@ local function deliver(player: Player, sim: any, out: any)
 	for _, e in out.events do
 		toClient:FireClient(player, e.kind, e.payload)
 	end
+end
+
+-- Copy the run's account-level progress into the profile (ProfileStore writes it to the DataStore every 30 s and on leave).
+-- Not while in the tutorial: that run starts everyone at the same defaults.
+local function syncProfile(player: Player)
+	local profile, session = profiles[player], sessions[player]
+	if not profile or not session or session.sim.tutorial then
+		return
+	end
+	local meta = session.sim:meta()
+	for k, v in meta do
+		profile.Data[k] = v
+	end
+	profile.Data.tutorialDone = true
 end
 
 local function startRun(player: Player, tutorial: boolean)
@@ -164,20 +179,6 @@ local function startRun(player: Player, tutorial: boolean)
 	if profile then
 		toClient:FireClient(player, "Settings", profile.Data.settings)
 	end
-end
-
--- Copy the run's account-level progress into the profile (ProfileStore writes it to the DataStore every 30 s and on leave).
--- Not while in the tutorial: that run starts everyone at the same defaults.
-local function syncProfile(player: Player)
-	local profile, session = profiles[player], sessions[player]
-	if not profile or not session or session.sim.tutorial then
-		return
-	end
-	local meta = session.sim:meta()
-	for k, v in meta do
-		profile.Data[k] = v
-	end
-	profile.Data.tutorialDone = true
 end
 
 local function loadProfile(player: Player)
@@ -243,7 +244,8 @@ local function loadProfile(player: Player)
 	ProgressHooks.sanitize(d) -- T652: achievements, quests and bond are clamped even with the flags off
 	seenCache[player] = table.clone(seen)
 	publishSeen(player)
-	d.version = TEMPLATE.version -- no migration is needed yet; add one here before bumping TEMPLATE.version
+	d.gacha = Gacha.load(d.gacha) -- version 2 added `gacha`: older profiles get a fresh state, a damaged one is clamped
+	d.version = TEMPLATE.version -- the only migration so far is the gacha field above; add the next one here before bumping TEMPLATE.version
 	profile.OnSessionEnd:Connect(function()
 		profiles[player] = nil
 		player:Kick("Your data was loaded in another server. Please rejoin.")
@@ -401,6 +403,8 @@ toServer.OnServerEvent:Connect(function(player: Player, kind: any, a: any, b: an
 			return
 		end
 		ok, reason = sim:lantern(a.x, a.z) -- T011
+	elseif kind == "Guarantee" then
+		ok, reason = sim:claimGuarantee(a) -- P2: the sim checks the flag, the oil, the rarity and the room
 	elseif kind == "EndTutorial" then
 		sim:endTutorial()
 		ok = true

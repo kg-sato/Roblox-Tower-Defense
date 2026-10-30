@@ -1,6 +1,6 @@
 """Local git checkpoint for overnight runs. The only way the loop may commit (guard.py blocks raw git writes).
   python tools/overnight/checkpoint.py -m "Two plain sentences." --task T### --desc "three words" [--status gate-verified|attested|UNVERIFIED] [--lane L] [--evidence "file or note"]
-                                                                          commit on the overnight branch, one per finished task (no cap since 2026-10-29); recorded in Overnight/LEDGER.md
+                                                                          commit on the overnight branch, one per finished task (max 5 per armed run since 2026-10-30); recorded in Overnight/LEDGER.md
   python tools/overnight/checkpoint.py --restore                          put the last checkpoint's files back (no history rewrite)
 Rules: branch must be overnight/*; never pushes; never stages the .rbxl, Kimi, ComfyUI or anything git-ignored; at most
 two sentences; no Co-Authored-By trailer (commits are under the user's own git identity)."""
@@ -40,6 +40,13 @@ def arg(name):
 
 task, desc = arg("--task"), arg("--desc")
 # 2026-10-29 (user): no cap; one commit per finished task, each recorded in Overnight/LEDGER.md with a three-word description
+# 2026-10-30 (user): 11 commits was too many; at most MAX_COMMITS per armed run (batch finished tasks into one commit; night_close.py does this).
+MAX_COMMITS = 5
+if ACTIVE.exists():
+    since = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(ACTIVE.stat().st_mtime))
+    n = len(git("log", "--since=" + since, "--format=%h").split())
+    if n >= MAX_COMMITS:
+        sys.exit(f"refusing: {n} commits this run, the limit is {MAX_COMMITS}; leave the rest uncommitted for the morning")
 if ACTIVE.exists() and not (task and desc):
     sys.exit('refusing: overnight commits need --task T### --desc "three words" (one commit per finished task)')
 if desc and len(desc.split()) != 3:

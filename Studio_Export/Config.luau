@@ -353,6 +353,14 @@ Config.QUESTS_ON = false -- Quests: daily and story progress, "Quest" event when
 Config.BOND_ON = false -- Bond: bond xp per run for the familiars used, gems on reaching a level
 Config.LEADERBOARD_ON = false -- LeaderboardRules.validate on each stage clear (no DataStore write is built; the accepted score only waits in memory)
 Config.PAUSE_MENU = false
+-- Gacha retention proposals (owner-approved 2026-10-30, Roblox Dev/Research/Game Design/Gacha Retention Study.md). Each default OFF; the server decides all of it.
+Config.P3_ROLL_FLOOR = false -- every 10th roll without a Rare or better is forced to Rare or better (Shared.Gacha)
+Config.P2_CHOSEN_GUARANTEE = false -- each roll earns 1 Lantern Oil; 100 buys one chosen Rare-or-better familiar ("Guarantee" action)
+Config.P7_DUPE_BOND = false -- duplicate copies give a small permanent damage bonus through Bond (Bond.DUPE_STEPS)
+-- Summon menu (SummonScreen, 2026-10-30): rolling, rates, pity and Skip move from the HUD to their own screen. Client-only; rolls stay the server's "Roll" action.
+Config.SUMMON_MENU = false
+-- HUD rework 2026-10-30 (HudRework): new left bar, currency bar, top strip, roll bar, per-familiar ultimate. Off until a blind review scores the HUD 7/10 (r3 gave 5.5); set true to see it.
+Config.HUD_REWORK = false
 Config.ELITE = Waves.ELITE
 Config.MOD_FIRST = Waves.MOD_FIRST
 Config.WAVE_MODIFIERS = Waves.WAVE_MODIFIERS

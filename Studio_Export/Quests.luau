@@ -48,11 +48,11 @@ Quests.story = {
 
 local byId: { [string]: any } = {}
 for _, q in Quests.daily do
-	q.kind = "daily"
+	(q :: any).kind = "daily"
 	byId[q.id] = q
 end
 for _, q in Quests.story do
-	q.kind = "story"
+	(q :: any).kind = "story"
 	byId[q.id] = q
 end
 Quests.byId = byId

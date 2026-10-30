@@ -69,3 +69,20 @@ etched_eye_lashes 95646501629562
 etched_eye_lashes_black 88935995065985
 etched_iris_inner 117521992225366
 etched_iris_outer 131055110018506
+2026-10-30 hud-rework HUD brass art: plate_wide rbxassetid://82951019425618 plate_roll rbxassetid://104923168658684 ring_ult rbxassetid://140206119414503 plate_tall rbxassetid://114829671072849 crest rbxassetid://104170872392766 (source UI Kit/art/hud_art/final)
+2026-10-30 hud-rework trimmed: plate_roll rbxassetid://126438470655888 plate_tall rbxassetid://97427549173948 ring_ult rbxassetid://71897128598210 crest rbxassetid://85204302291581 (the untrimmed ids above are superseded)
+2026-10-30 hud-rework round 4: plate_wide2 rbxassetid://107492275219260 plate_roll2 (amber glass) rbxassetid://75273850564127 (source UI Kit/art/hud_art/final)
+
+# round 7 whimsical vine art (2026-10-30), uploaded via upload_image from hud_art/final/v_*.png
+v_vw wide plate  rbxassetid://139557199781645
+v_vr roll lantern oval rbxassetid://133886245309234
+v_vt tall panel  rbxassetid://84939067776703
+v_vg ring wreath rbxassetid://108453095080271
+v_vp panel frame rbxassetid://132625548479277
+keyed (interior transparent) versions: vwk 117629063018362, vtk 107492972416760, vp2k 72359927534016; vp2 79125394740816
+round 8 steampunk: gear big 74207288462160, gear small 103653817949934, gauge 132728809319640, pipe 97064932194117, cogchain 122061789218481
+ring keyed 107574310585373
+# round 10 Art Nouveau ironwork (2026-10-30), keyed by luminance, from hud_art/final/i_*.png (sources iron_wide_s43, iron_tall_s41, iron_panel_s41, iron_ring_s41)
+i_wide 125691901559686  i_tall 138167356804947  i_panel 77648763399473  i_ring 119143998198845
+# hud-design round 11 baked brass (2026-10-30, procedural numpy bake, UI Kit/art/make_brass_bake.py)
+b_plate 130359814673024 -> image 107915370915613  b_panel 124009865755629 -> 129023355926061  b_roll 124234160388572 -> 123188401890303  b_disc 121116210826331 -> 135420478773352

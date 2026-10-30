@@ -2068,5 +2068,29 @@
   "type": "Decal",
   "assetId": "73416715793376",
   "time": "2026-10-30 01:04"
+ },
+ {
+  "file": "UI Kit/art/hud_art/final/b_plate.png",
+  "type": "Decal",
+  "assetId": "130359814673024",
+  "time": "2026-10-30 15:26"
+ },
+ {
+  "file": "UI Kit/art/hud_art/final/b_panel.png",
+  "type": "Decal",
+  "assetId": "124009865755629",
+  "time": "2026-10-30 15:26"
+ },
+ {
+  "file": "UI Kit/art/hud_art/final/b_roll.png",
+  "type": "Decal",
+  "assetId": "124234160388572",
+  "time": "2026-10-30 15:26"
+ },
+ {
+  "file": "UI Kit/art/hud_art/final/b_disc.png",
+  "type": "Decal",
+  "assetId": "121116210826331",
+  "time": "2026-10-30 15:26"
  }
 ]

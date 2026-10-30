@@ -4,6 +4,15 @@
 
 local Config = require(script.Parent.Config)
 local Path = require(script.Parent.Path)
+-- pure rule modules (Gacha, Bond); a test that clones MatchSim alone finds them through ReplicatedStorage.Shared
+local function sibling(name: string): any
+	local shared = game:GetService("ReplicatedStorage"):FindFirstChild("Shared")
+	local mod = script.Parent:FindFirstChild(name) or (shared and shared:FindFirstChild(name))
+	assert(mod, "Shared." .. name .. " is missing")
+	return require(mod :: ModuleScript)
+end
+local Gacha = sibling("Gacha")
+local Bond = sibling("Bond")
 
 -- Units are keyed by id (the client still calls it "slot") and stand anywhere legal: see Config.canPlace.
 export type Unit = { pet: string, tier: number, cd: number, x: number, z: number }
@@ -39,6 +48,8 @@ export type Sim = typeof(setmetatable({} :: {
 	upgrades: { [string]: { [string]: number } },
 	rolls: number,
 	sincePity: number,
+	gacha: any, -- Shared.Gacha state (floor counter, Lantern Oil), saved in the profile
+	owned: { [string]: number }, -- copies pulled per familiar (profile collection counts plus this run), for the P7 bond bonus
 	tutorial: boolean,
 	paused: boolean,
 	forced: { string },
@@ -90,6 +101,8 @@ function MatchSim.new(rng: Random, emit: (string, any) -> (), tutorial: boolean)
 		upgrades = upgrades,
 		rolls = 0,
 		sincePity = 0,
+		gacha = Gacha.new(),
+		owned = {},
 		tutorial = tutorial,
 		paused = tutorial,
 		forced = tutorial and { "Ember", "Ember", "Ember" } or {},
@@ -124,7 +137,7 @@ end
 
 -- Progress that carries between visits (what the server saves with ProfileStore).
 function MatchSim.meta(self: Sim): { [string]: any }
-	return { level = self.level, xp = self.xp, sp = self.sp, gems = self.gems, tree = table.clone(self.tree), bestStage = math.max(self.bestStage, self.stage), lastStage = self.stage, difficulty = self.difficulty }
+	return { level = self.level, xp = self.xp, sp = self.sp, gems = self.gems, tree = table.clone(self.tree), bestStage = math.max(self.bestStage, self.stage), lastStage = self.stage, difficulty = self.difficulty, gacha = table.clone(self.gacha) }
 end
 
 -- Load saved progress, clamping every value so a corrupt or edited save can't give an impossible state.
@@ -158,6 +171,15 @@ function MatchSim.loadMeta(self: Sim, d: any)
 	-- difficulty (T004): only a known id the saved progress has unlocked
 	local diff = type(d.difficulty) == "string" and Config.DIFFICULTY[d.difficulty] or nil
 	self.difficulty = (diff and self.bestStage >= diff.unlockStage) and d.difficulty or "Normal"
+	self.gacha = Gacha.load(d.gacha)
+	self.owned = {}
+	if type(d.collection) == "table" then
+		for id, e in d.collection do
+			if type(id) == "string" and Config.PETS[id] and type(e) == "table" and type(e.count) == "number" and e.count == e.count then
+				self.owned[id] = math.clamp(math.floor(e.count), 0, Config.COLLECTION_MAX)
+			end
+		end
+	end
 end
 
 -- Pick the difficulty (T004). Only before the first wave of a run (stage 1, ready), never in the tutorial, and only once unlocked by bestStage.
@@ -525,6 +547,7 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 		return false, "Not enough gems"
 	end
 	local pet, rarity, x, z
+	local floored = false
 	if self.tutorial and #self.forced > 0 then
 		pet = self.forced[1]
 		rarity = Config.PETS[pet].rarity
@@ -536,6 +559,17 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 		end
 	else
 		rarity = self:pickRarity()
+		if Config.P3_ROLL_FLOOR and not self.tutorial and Gacha.floorDue(self.gacha) and Config.RARITIES[rarity].order < 2 then
+			-- P3: the 10th roll without a Rare or better is a Rare or better (picked by the same luck-weighted odds)
+			local names = {}
+			for _, r in Config.RARITY_ORDER do
+				if Config.RARITIES[r].order >= 2 then
+					table.insert(names, r)
+				end
+			end
+			rarity = Gacha.weightedPick(Config.rarityWeights(self:luck()), names, self.rng:NextNumber())
+			floored = true
+		end
 		pet, rarity = self:pickPet(rarity)
 		if not pet then
 			return false, "No characters configured"
@@ -552,9 +586,13 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 	self.gems -= self:rollCost()
 	self.rolls += 1
 	self.sincePity = Config.RARITIES[rarity].order >= 3 and 0 or self.sincePity + 1
-	local id = self:addUnit(pet, x, z)
+	local id = self:addUnit(pet :: string, x, z)
 	self.maxTier = math.max(self.maxTier, 1)
-	self.emit("Roll", { slot = id, pet = pet, rarity = rarity, x = x, z = z })
+	local dupeGems = self:countCopy(pet :: string)
+	if not self.tutorial then
+		Gacha.afterRoll(self.gacha, Config.RARITIES[rarity].order, Config.P3_ROLL_FLOOR, Config.P2_CHOSEN_GUARANTEE)
+	end
+	self.emit("Roll", { slot = id, pet = pet, rarity = rarity, x = x, z = z, floored = floored or nil, dupeGems = dupeGems > 0 and dupeGems or nil })
 	-- Double Hatch: a free bonus pet
 	local chance = self:sv("doubleHatch")
 	if chance > 0 and not self.tutorial and self.rng:NextNumber() < chance and self:unitCount() < Config.MAX_UNITS then
@@ -564,11 +602,80 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 			bx, bz = self:findSpot(bonusPet)
 		end
 		if bx and bz then
-			local bid = self:addUnit(bonusPet, bx, bz)
-			self.emit("Roll", { slot = bid, pet = bonusPet, rarity = bonusRarity, bonus = true, x = bx, z = bz })
+			local bid = self:addUnit(bonusPet :: string, bx, bz)
+			local bonusGems = self:countCopy(bonusPet :: string)
+			self.emit("Roll", { slot = bid, pet = bonusPet, rarity = bonusRarity, bonus = true, x = bx, z = bz, dupeGems = bonusGems > 0 and bonusGems or nil })
 		end
 	end
 	return true, nil
+end
+
+-- Counts one pulled copy of a familiar (not in the tutorial, which never touches the collection). With P7 on, a copy past the last bond step pays gems; returns the gems paid.
+function MatchSim.countCopy(self: Sim, pet: string): number
+	if self.tutorial then
+		return 0
+	end
+	local before = self.owned[pet] or 0
+	self.owned[pet] = math.min(before + 1, Config.COLLECTION_MAX)
+	if Config.P7_DUPE_BOND and before >= 1 and Bond.dupeSurplus(before - 1) then
+		self.gems += Bond.DUPE_SURPLUS_GEMS
+		return Bond.DUPE_SURPLUS_GEMS
+	end
+	return 0
+end
+
+-- Permanent damage fraction from extra copies of this familiar (P7_DUPE_BOND; 0 when off).
+function MatchSim.dupePower(self: Sim, pet: string): number
+	if not Config.P7_DUPE_BOND then
+		return 0
+	end
+	return Bond.dupePower(math.max(0, (self.owned[pet] or 0) - 1))
+end
+
+-- P2: spend 100 Lantern Oil on one chosen familiar of Rare or better. Nothing is spent unless the familiar can be placed.
+function MatchSim.claimGuarantee(self: Sim, pet: any): (boolean, string?)
+	if not Config.P2_CHOSEN_GUARANTEE then
+		return false, "Not available"
+	end
+	if self.tutorial then
+		return false, "Not in the tutorial"
+	end
+	local def = type(pet) == "string" and Config.PETS[pet] or nil
+	if not def or Config.RARITIES[def.rarity].order < Gacha.MIN_CLAIM_ORDER then
+		return false, "Pick a Rare or better familiar"
+	end
+	if not Gacha.canClaim(self.gacha) then
+		return false, "Not enough Lantern Oil"
+	end
+	if self:unitCount() >= Config.MAX_UNITS then
+		return false, "Too many pets (max " .. Config.MAX_UNITS .. ")"
+	end
+	local x, z = self:findSpot(pet :: string)
+	if not x or not z then
+		return false, "No room left on the street"
+	end
+	Gacha.spend(self.gacha)
+	local id = self:addUnit(pet :: string, x, z)
+	self.maxTier = math.max(self.maxTier, 1)
+	local gems = self:countCopy(pet :: string)
+	-- bonus = true keeps it out of the roll counters and the shared Legendary banner; chosen = true lets the client stage it
+	self.emit("Roll", { slot = id, pet = pet, rarity = def.rarity, x = x, z = z, bonus = true, chosen = true, dupeGems = gems > 0 and gems or nil })
+	return true, nil
+end
+
+-- Gacha data for the client: floor counter, Lantern Oil, and (P7) the bond bonus of every familiar owned.
+function MatchSim.gachaSnapshot(self: Sim): { [string]: any }
+	local g = Gacha.snapshot(self.gacha, Config.P3_ROLL_FLOOR, Config.P2_CHOSEN_GUARANTEE)
+	g.dupeOn = Config.P7_DUPE_BOND
+	if Config.P7_DUPE_BOND then
+		local dupes = {}
+		for pet, n in self.owned do
+			local extra = math.max(0, n - 1)
+			dupes[pet] = { copies = n, step = Bond.dupeStep(extra), power = Bond.dupePower(extra), nextAt = Bond.dupeNext(extra) }
+		end
+		g.dupes = dupes
+	end
+	return g
 end
 
 -- Move a pet to any legal spot on the street.
@@ -1147,7 +1254,7 @@ end
 
 function MatchSim.effective(self: Sim, u: Unit): (number, number, number)
 	local up = self.upgrades[u.pet]
-	local dmg = Config.petDamage(u.pet, u.tier) * (1 + Config.UPGRADES.Power.per * up.Power) * (1 + self:sv("damage"))
+	local dmg = Config.petDamage(u.pet, u.tier) * (1 + Config.UPGRADES.Power.per * up.Power) * (1 + self:sv("damage")) * (1 + self:dupePower(u.pet))
 	local _, auraHaste, auraDamage = self:auras(u)
 	local globalDamage, globalCrit = self:globals()
 	local synDamage, synHaste = self:synergy(u)
@@ -1562,6 +1669,7 @@ function MatchSim.snapshot(self: Sim): { [string]: any }
 		xpNeed = Config.xpNeed(self.level),
 		luck = self:luck(),
 		sincePity = self.sincePity,
+		gacha = self:gachaSnapshot(),
 		upgrades = ups,
 		grid = grid,
 	}

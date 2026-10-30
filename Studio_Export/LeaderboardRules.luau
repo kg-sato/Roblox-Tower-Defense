@@ -96,11 +96,11 @@ function L.rank(entries: any, limit: number?): { { userId: number, packed: numbe
 			end
 		end
 	end
-	local rows = {}
+	local rows: { { userId: number, packed: number, wave: number, rank: number } } = {}
 	for id, packed in best do
 		table.insert(rows, { userId = id, packed = packed, wave = math.floor(packed / L.TIE_SPAN), rank = 0 })
 	end
-	table.sort(rows, function(a, b)
+	table.sort(rows, function(a: any, b: any)
 		if a.packed ~= b.packed then
 			return a.packed > b.packed
 		end

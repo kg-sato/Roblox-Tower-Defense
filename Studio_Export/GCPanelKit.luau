@@ -7,6 +7,7 @@ local function makePanel(parent, size, title, accent)
 		-- glass panel: emblem breaking the top-left corner, serif caps title + spaced subtitle, tapered divider
 		local panel = new("Frame", { BackgroundTransparency = 1, Size = size, Visible = false, ZIndex = 5 }, parent)
 		UI.glass(panel, accent)
+		if UI.hudRework and UI.hudRework.skinPanel then UI.hudRework.skinPanel(panel) end -- vine frame (HUD rework, flag on only)
 		UI.motes(panel, accent, 7)
 		UI.emblem(panel, accent, UI.SYMS[title] or string.sub(title, 1, 1), 96, UDim2.fromOffset(16, 14), 9)
 		local header = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 70), ZIndex = 6 }, panel)

@@ -61,3 +61,20 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-30 01:42 T652 done: achievements, quests, bond hooked server-side behind OFF flags; RunAll 33/33, bot 10/10. Writing the final report and vault updates.
 - 2026-10-30 01:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
 - 2026-10-30 01:55 Morning digest ready: 89 tasks, 22 commits, 3 blocked. Read Overnight/MORNING.md.
+- 2026-10-30 06:04 Morning digest ready: 89 tasks, 30 commits, 3 blocked. Read Overnight/MORNING.md.
+- 2026-10-30 07:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 07:54 HUD rework built behind Config.HUD_REWORK (off): blind HUD 5.5/10, not 7. 33 suites + bot pass. Phone size unverified.
+- 2026-10-30 07:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 08:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 08:42 HUD brass art built (flag off): blind HUD 5/10, not 7. Look: Overnight/captures/hud_c.png. ComfyUI stopped.
+- 2026-10-30 09:46 HUD brass rounds 4-6: blind 5.5/10, not 7. Flag off. Look: Overnight/captures/hud_e.png
+- 2026-10-30 11:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 11:21 HUD whimsical restyle: blind 5/10, flag off. hud_g.png/hud_h.png saved.
+- 2026-10-30 11:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 12:10 HUD steampunk round: blind 5/10, flag off. hud_i.png/hud_j.png saved.
+- 2026-10-30 12:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 12:15 HUD vines subtler: blind 5.5/10, flag off. hud_k/hud_l saved.
+- 2026-10-30 12:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 14:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | buil
+- 2026-10-30 15:18 P237: RunAll 36/36, lean bot pass
+- 2026-10-30 15:29 Summon menu built (flag off), RunAll 37/37

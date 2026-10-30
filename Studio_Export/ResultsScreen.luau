@@ -131,6 +131,9 @@ function ResultsScreen.show(d)
 	if TextAnim.settings.reducedMotion ~= true then
 		K.popIn(h.panel)
 	end
+	local blank = Instance.new("Frame") -- HUD rework 2026-10-30: gamepad focus without the cyan box
+	blank.BackgroundTransparency = 1
+	h.next.SelectionImageObject = blank
 	game:GetService("GuiService").SelectedObject = h.next
 end
 

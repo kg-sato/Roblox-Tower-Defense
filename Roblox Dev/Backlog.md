@@ -155,3 +155,7 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [ ] Human review of motion and audio (all looks and sounds UNVERIFIED)
 - [ ] Save the place (Claude.rbxl); tonight's Studio changes live in the open session and Studio_Export/ (needs the user)
 - [ ] Fix PauseMenu SelectedObject warnings; resolve the H key clash (HideUI vs PlacementHint)
+
+## Gacha P2/P3/P7 (2026-10-30, builder-p237)
+- [ ] Install Gacha, Bond, MatchSim, MatchService, Config from Studio_Export into Studio; run RunAll (expect 36 suites), lean bot 10 seeds with each flag on, record numbers in [[Balance Baseline 2026-10-29]]
+- [ ] Summon menu (hud-rework) shows `snapshot.gacha` and sends `Guarantee`: see [[Summon Server API]]

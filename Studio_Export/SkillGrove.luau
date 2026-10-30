@@ -48,8 +48,9 @@ return function(ctx)
 	end
 	-- abstract pass (2026-10-28): no wood, cobbles, gas lamps or brick. The tree is a constellation of lines and points
 	-- over a dark ground; the canopy is three af Klint circles; the path is one gold line with points.
-	local INK, DIM = Color3.fromRGB(14, 12, 22), Color3.fromRGB(110, 100, 140)
-	local GOLD, VIOLET = Color3.fromRGB(255, 214, 130), Color3.fromRGB(150, 110, 230)
+	local INK, DIM = Color3.fromRGB(12, 11, 10), Color3.fromRGB(104, 88, 58) -- 2026-10-30: the UI's gold-ink palette (SkillTreeV3), so cutscene and screen match
+	local GOLD, VIOLET = Color3.fromRGB(217, 184, 120), Color3.fromRGB(184, 151, 90) -- VIOLET is now the darker gold
+	local function ncol(n) return Color3.fromRGB(217, 184, 120):Lerp(n.color, 0.1) end
 	local FACE = CFrame.Angles(0, math.pi / 2, 0) -- turns a cylinder's flat side to face the walker (+Z)
 	local function branch(a, b, thick, color)
 		local len = (b - a).Magnitude
@@ -73,21 +74,21 @@ return function(ctx)
 			treeSG.Face, treeSG.LightInfluence, treeSG.Brightness, treeSG.CanvasSize = Enum.NormalId.Back, 0, 1.6, Vector2.new(768, 768)
 			treeSG.Parent = meshTree
 			local halo = Instance.new("ImageLabel")
-			halo.BackgroundTransparency, halo.Image, halo.ImageColor3, halo.ImageTransparency = 1, A.glow, Color3.fromRGB(140, 190, 255), 0.55
+			halo.BackgroundTransparency, halo.Image, halo.ImageColor3, halo.ImageTransparency = 1, A.glow, Color3.fromRGB(217, 184, 120), 0.65
 			halo.AnchorPoint, halo.Position, halo.Size = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.38), UDim2.fromScale(1.1, 0.9)
 			halo.Parent = treeSG
 			for k = 0, 7 do -- eight slices so it can grow from the roots up
 				local im = Instance.new("ImageLabel")
-				im.BackgroundTransparency, im.Image = 1, A.tree
+				im.BackgroundTransparency, im.Image, im.ImageColor3 = 1, A.tree, Color3.fromRGB(255, 226, 170) -- gold cast, to match the gold-ink skill tree screen
 				im.ImageRectOffset, im.ImageRectSize = Vector2.new(0, 96 * k), Vector2.new(768, 96)
 				im.Position, im.Size = UDim2.fromScale(0, k / 8), UDim2.fromScale(1, 1 / 8)
 				im.Parent = treeSG
 				slices[k] = im
 			end
 			local l = Instance.new("PointLight")
-			l.Color, l.Range, l.Brightness, l.Shadows = Color3.fromRGB(170, 210, 255), 30, 1.5, false
+			l.Color, l.Range, l.Brightness, l.Shadows = Color3.fromRGB(217, 184, 120), 30, 1.2, false
 			l.Parent = meshTree
-			if A.ring then
+			if A.ring and false then -- 2026-10-30: the brass watch ring is gone; the screen has no watch, only the gold tree on black ink
 				local sky = part({ Transparency = 1, Size = Vector3.new(44, 44, 0.05), CFrame = CFrame.new(G + Vector3.new(0, 15, -18)) })
 				local sg = Instance.new("SurfaceGui")
 				sg.Face, sg.LightInfluence, sg.Brightness, sg.CanvasSize = Enum.NormalId.Back, 0, 1, Vector2.new(512, 512)
@@ -99,6 +100,9 @@ return function(ctx)
 				TweenService:Create(ring, TweenInfo.new(180, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), { Rotation = 360 }):Play()
 			end
 		end
+		-- 2026-10-30: a far ink floor and wall hide the blue world and the board's skyline behind the tree
+		part({ Material = Enum.Material.SmoothPlastic, Color = INK, Size = Vector3.new(900, 1, 900), CFrame = CFrame.new(G + Vector3.new(0, -0.55, 0)) })
+		part({ Material = Enum.Material.SmoothPlastic, Color = INK, Size = Vector3.new(700, 260, 1), CFrame = CFrame.new(G + Vector3.new(0, 100, -26)) })
 		-- ground: a dark ink disc; the path: one gold line with a point every 6 studs
 		part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.SmoothPlastic, Color = INK, Size = Vector3.new(1, 90, 90), CFrame = CFrame.new(G + Vector3.new(0, -0.47, 10)) * CFrame.Angles(0, 0, math.pi / 2) })
 		part({ Material = Enum.Material.Neon, Color = GOLD, Transparency = 0.3, Size = Vector3.new(0.12, 0.05, 66), CFrame = CFrame.new(G + Vector3.new(0, 0.05, 39)) })
@@ -127,7 +131,7 @@ return function(ctx)
 		-- from spread roots and braid into one at the crown, then a fractal canopy of five limbs. Every decor line has
 		-- two ghost copies, thicker, fainter and nudged a hair off, so it blooms like a long-exposure photo (user:
 		-- "duplicate objects and slightly move them so the animations have more glare / blur").
-		local PALE = Color3.fromRGB(236, 228, 255)
+		local PALE = Color3.fromRGB(239, 230, 207)
 		local function glowLine(a, b, thick, color, tr)
 			local main = branch(a, b, thick, color)
 			main.Transparency = tr
@@ -226,10 +230,10 @@ return function(ctx)
 				nodes[n.id] = {}
 			end
 			-- the lantern: a point inside a faint circle that faces the walker
-			local glass = part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.Neon, Transparency = 0.8, Color = n.color, Size = Vector3.new(0.04, 1.6, 1.6), CFrame = CFrame.new(pos + Vector3.new(0, 0, -0.1)) * FACE })
-			local core = part({ Shape = Enum.PartType.Ball, Material = Enum.Material.Neon, Color = n.color, Size = Vector3.one * 0.75, CFrame = CFrame.new(pos) })
+			local glass = part({ Shape = Enum.PartType.Cylinder, Material = Enum.Material.Neon, Transparency = 0.8, Color = ncol(n), Size = Vector3.new(0.04, 1.6, 1.6), CFrame = CFrame.new(pos + Vector3.new(0, 0, -0.1)) * FACE })
+			local core = part({ Shape = Enum.PartType.Ball, Material = Enum.Material.Neon, Color = ncol(n), Size = Vector3.one * 0.75, CFrame = CFrame.new(pos) })
 			local light = Instance.new("PointLight")
-			light.Color, light.Range, light.Brightness, light.Shadows = n.color, 9, 0, false
+			light.Color, light.Range, light.Brightness, light.Shadows = ncol(n), 9, 0, false
 			light.Parent = core
 			nodes[n.id].glass, nodes[n.id].core, nodes[n.id].light, nodes[n.id].pos = glass, core, light, pos
 			if okA and A and A.lantern_frame and n.id ~= "Start" then
@@ -270,7 +274,7 @@ return function(ctx)
 		local emitterPart = part({ Transparency = 1, Size = Vector3.new(16, 1, 6), CFrame = CFrame.new(G + Vector3.new(0, 15, -1)) })
 		local pe = Instance.new("ParticleEmitter")
 		pe.Texture = "rbxassetid://74135098013493" -- our dot texture
-		pe.Color = ColorSequence.new(Color3.fromRGB(255, 220, 160), Color3.fromRGB(190, 150, 255))
+		pe.Color = ColorSequence.new(Color3.fromRGB(239, 230, 207), Color3.fromRGB(184, 151, 90))
 		pe.LightEmission, pe.LightInfluence, pe.Brightness = 1, 0, 2
 		pe.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(0.2, 0.35), NumberSequenceKeypoint.new(1, 0) })
 		pe.Lifetime, pe.Rate = NumberRange.new(3, 5), 14
@@ -297,7 +301,7 @@ return function(ctx)
 			local n = Config.TREE_BY_ID[id]
 			nd.state = st
 			nd.core.Transparency = st == "locked" and 1 or (st == "available" and 0.45 or 0)
-			nd.core.Color = st == "locked" and Color3.fromRGB(60, 40, 30) or n.color
+			nd.core.Color = st == "locked" and Color3.fromRGB(60, 40, 30) or ncol(n)
 			nd.glass.Transparency = st == "locked" and 1 or (st == "available" and 0.86 or 0.78)
 			nd.light.Brightness = (st == "owned" or st == "maxed") and 1.4 or 0
 			nd.core.Size = Vector3.one * (st == "maxed" and 0.95 or 0.75)
@@ -305,13 +309,13 @@ return function(ctx)
 				nd.core.Transparency, nd.glass.Transparency = 1, 1
 				local lit = st == "owned" or st == "maxed"
 				nd.bb.frame.ImageColor3 = lit and Color3.fromRGB(220, 176, 100) or (st == "available" and Color3.fromRGB(176, 150, 112) or Color3.fromRGB(90, 86, 100))
-				nd.bb.glass.ImageColor3 = lit and n.color or (st == "available" and n.color:Lerp(Color3.fromRGB(30, 26, 30), 0.55) or Color3.fromRGB(26, 24, 32))
-				nd.bb.glyph.ImageColor3 = lit and Color3.fromRGB(255, 244, 232) or n.color:Lerp(Color3.fromRGB(80, 76, 90), st == "available" and 0.2 or 0.6)
+				nd.bb.glass.ImageColor3 = lit and ncol(n) or (st == "available" and ncol(n):Lerp(Color3.fromRGB(30, 26, 30), 0.55) or Color3.fromRGB(26, 24, 32))
+				nd.bb.glyph.ImageColor3 = lit and Color3.fromRGB(255, 244, 232) or ncol(n):Lerp(Color3.fromRGB(80, 76, 90), st == "available" and 0.2 or 0.6)
 				nd.bb.glyph.ImageTransparency = st == "locked" and 0.4 or 0
 			end
 			if nd.branch then -- a lit line in the skill's colour once owned; a faint grey line before
 				local lit = st == "owned" or st == "maxed"
-				nd.branch.Color = lit and n.color or DIM
+				nd.branch.Color = lit and ncol(n) or DIM
 				nd.branch.Transparency = lit and 0 or (st == "locked" and 0.75 or 0.5)
 			end
 		end
@@ -376,6 +380,35 @@ return function(ctx)
 		return tw(fade, t, { BackgroundTransparency = 1 - alpha })
 	end
 
+	-- 2026-10-30: black-ink night with a gold haze, like the skill tree screen (the old scene showed the stage's blue sky)
+	local Lighting = game:GetService("Lighting")
+	local saved
+	local function sceneLight()
+		if saved then return end
+		saved = { ClockTime = Lighting.ClockTime, Brightness = Lighting.Brightness, Ambient = Lighting.Ambient, OutdoorAmbient = Lighting.OutdoorAmbient, ExposureCompensation = Lighting.ExposureCompensation }
+		local atm = Lighting:FindFirstChildOfClass("Atmosphere")
+		if atm then saved.atm = { atm, atm.Density, atm.Color, atm.Decay, atm.Glare, atm.Haze, atm.Offset } end
+		Lighting.ClockTime, Lighting.Brightness, Lighting.ExposureCompensation = 0, 1, 0
+		Lighting.Ambient, Lighting.OutdoorAmbient = Color3.fromRGB(30, 26, 18), Color3.fromRGB(30, 26, 18)
+		if atm then atm.Density, atm.Offset, atm.Haze, atm.Glare, atm.Color, atm.Decay = 0.6, 0.3, 2, 0, Color3.fromRGB(24, 20, 14), Color3.fromRGB(12, 10, 6) end
+		local cc = Lighting:FindFirstChild("GroveGrade") or Instance.new("ColorCorrectionEffect")
+		cc.Name, cc.TintColor, cc.Saturation, cc.Contrast = "GroveGrade", Color3.fromRGB(255, 226, 170), -0.9, 0.1
+		cc.Parent = Lighting
+	end
+	local function restoreLight()
+		if not saved then return end
+		for k, v in saved do
+			if k ~= "atm" then Lighting[k] = v end
+		end
+		if saved.atm then
+			local a = saved.atm
+			a[1].Density, a[1].Color, a[1].Decay, a[1].Glare, a[1].Haze, a[1].Offset = a[2], a[3], a[4], a[5], a[6], a[7]
+		end
+		local cc = Lighting:FindFirstChild("GroveGrade")
+		if cc then cc:Destroy() end
+		saved = nil
+	end
+
 	local VIEW_AT = G + Vector3.new(0, 9.5, 0)
 	function M.open(snap, onArrive)
 		if not folder then build() end
@@ -386,6 +419,7 @@ return function(ctx)
 		local from = G + Vector3.new(0, 5.6, short and 36 or 66)
 		local to = G + Vector3.new(0, 6.6, 24)
 		fadeTo(1, 0.22).Completed:Wait()
+		sceneLight()
 		grow(walkT + 0.3)
 		ctx.sfx("anticipation", { pitch = 0.8 })
 		local t0 = os.clock()
@@ -429,6 +463,7 @@ return function(ctx)
 		if camConn then camConn:Disconnect() camConn = nil end
 		ctx.setCamera(nil)
 		ctx.setFov(nil)
+		restoreLight()
 		if onDone then onDone() end
 		fadeTo(0, 0.3)
 	end

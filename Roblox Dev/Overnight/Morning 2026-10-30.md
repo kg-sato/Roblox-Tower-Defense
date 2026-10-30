@@ -1,7 +1,7 @@
-# Morning digest (2026-10-30 01:55)
-Window: since 2026-10-29 01:55 (base f5231ba4)
+# Morning digest (2026-10-30 06:04)
+Window: since 2026-10-29 06:04 (base a5a1e85e)
 
-**89 tasks finished** (ledger), **22 commits**, 59 phone milestones, 0 tasks still open, 3 blocked.
+**89 tasks finished** (ledger), **30 commits**, 60 phone milestones, 0 tasks still open, 3 blocked.
 Place file: NOT saved by me (save it yourself: File > Save, or Download a Copy). Nothing was pushed or published.
 
 ## Finished, by lane (task | commit | three words | status | lane | evidence)
@@ -103,6 +103,13 @@ Place file: NOT saved by me (save it yourself: File > Save, or Download a Copy).
 - T172 | commit 71376f0 | "boss arena variants" | attested | world | Overnight/evidence/T172.txt
 
 ## Commits
+- dbf8634 11:11 Add twelve rigged familiars with lore, cards, textures, walk and attack clips, a collection screen, and two new enemy models. Update the vault, task log and tests; video files stay on disk only.
+- a9b2339 11:55 Add enemy and boss concept models, texture maps, headless tests, stage set 5 and design notes for the next systems. The balance bots clear all 25 stages in about five minutes, and the vault notes list what still needs the user.
+- 1e9df16 12:08 Recolour the twelve familiars in the gold-ink palette and add skill-tree respec, a next-best skill hint and a crit cap on the server. New save-migration and server-rule tests all pass, and the stale MatchSim export is refreshed.
+- 956b3b3 14:52 Add four human Mythic and Celestial familiars, six rarities and eight tiers, familiar roles, statuses, armour and enemy behaviour, and cutscenes with a morphing stage-set transition. Skill-tree respec, a crit cap, hp growth 1.27 and stage set 5 are in, and all thirteen test suites pass.
+- d72d15f 14:56 Save the latest place, screen scripts and vault notes, plus the main chat summary.
+- c8c1696 19:18 Add Epic and Legendary humans, boss framework, Crow and Thief client models, UILib split, comms and notify tools. Promote the overnight board and relax the guardrails for per-task commits.
+- f5231ba 19:18 Save the live queue and the title background generator before the overnight run. No game logic changed.
 - 4c30cda 19:19 Stage completeness check passes for all 25 stages. Generated the missing front cards for the four new humans so lore, cards and voice lines are complete for 20 familiars.
 - 3d1f029 19:30 Refresh the systems, backlog and design notes, add the HUD, collection and results research boards, and bake 512 px texture sets for enemies and bosses. Evidence files hold the verification output.
 - d17a471 19:40 Add the rigged enemy models, re-baked familiar textures, and the UI, enemy, boss and familiar sound sets with their manifest. Evidence files hold each check's output.
@@ -125,6 +132,7 @@ Place file: NOT saved by me (save it yourself: File > Save, or Download a Copy).
 - 7762547 01:11 Upload the forty-icon set and wire the ids into enemy status icons, rarity chips and faction badges through a StatusIcons module. Look is unverified.
 - fa72a0a 01:42 Hook achievements, quests, bond and leaderboard validation into the server behind four flags that default off, with profile migration and tests. The lean bot and all suites still pass.
 - 46f759e 01:55 Write the overnight report with commit hashes and labels, and reconcile the vault notes with the ledger. Everything visual or audible is unverified.
+- 37c7d8b 01:55 Write the final overnight report and morning digest and reconcile the vault notes with the ledger. All visual and audio results remain unverified.
 
 ## Phone milestones
 - 2026-10-29 19:03 Milestone mode on: ntfy now carries major finishes; chat stays short.
@@ -186,6 +194,7 @@ Place file: NOT saved by me (save it yourself: File > Save, or Download a Copy).
 - 2026-10-30 01:31 T640 failed honestly after 3 blind-review rounds (HUD, collection, results still under 7; needs a human-directed HUD rebuild). Next: T652 server hooks for achievements, quests, bond.
 - 2026-10-30 01:42 T652 done: achievements, quests, bond hooked server-side behind OFF flags; RunAll 33/33, bot 10/10. Writing the final report and vault updates.
 - 2026-10-30 01:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 01:55 Morning digest ready: 89 tasks, 22 commits, 3 blocked. Read Overnight/MORNING.md.
 
 ## Needs you
 - blocked: T076 Harsh Grading pass on HUD, reveal and collection
