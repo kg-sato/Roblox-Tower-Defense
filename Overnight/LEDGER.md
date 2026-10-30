@@ -54,3 +54,8 @@ T160 | commit db328f0 | "music per set" | attested | fx-audio | Overnight/eviden
 T198 | commit e485b75 | "gameclient split done" | attested | client-core | Overnight/evidence/T198.txt
 T149 | commit e485b75 | "boss phase bar" | attested | client-core | Overnight/evidence/T149.txt
 T139 | commit e485b75 | "enemy status icons" | attested | client-core | Overnight/evidence/T139.txt
+T138 | commit 509f979 | "enemy telegraphs added" | attested | client-core | Overnight/evidence/T138.txt
+T194 | commit 509f979 | "damage float text" | attested | client-core | Overnight/evidence/T194.txt
+T178 | commit 509f979 | "placement hint toggle" | attested | client-core | Overnight/evidence/T178.txt
+T148 | commit 509f979 | "boss phase transitions" | attested | client-core | Overnight/evidence/T148.txt
+T166 | commit 509f979 | "ambient loops added" | attested | client-core | Overnight/evidence/T166.txt

@@ -148,17 +148,17 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
 ## Lane: fx-audio (effects-and-audio)
 - [x] T148 | Boss phase transition: visual change, sound and cut per phase | verify: studio: three phases of one boss captured with sound events logged
   lane: fx-audio | needs: Studio | depends: T149 | size: M | owner-files: CutsceneFX, BossFx module (new), SoundCatalog entries
-- [ ] T134 | Hit and death reactions and effects per enemy family | verify: studio: six families, each hit and death captured, emitters under the burst cap
+- [x] T134 | Hit and death reactions and effects per enemy family | verify: studio: six families, each hit and death captured, emitters under the burst cap
   lane: fx-audio | needs: Studio | depends: T142 | size: L | owner-files: ImpactFX, ProjectileFX hit part, VFX/*.luau (new recipes)
-- [ ] T133 | Attack, trail and star effects per familiar (20) | verify: studio: contact sheet of all 20 attacks, burst cap respected
+- [x] T133 | Attack, trail and star effects per familiar (20) | verify: studio: contact sheet of all 20 attacks, burst cap respected
   lane: fx-audio | needs: Studio | depends: none | size: L | owner-files: ProjectileFX, FXRecipes
-- [ ] T601 | Ultimate effect per familiar with a camera move | verify: studio: each ultimate runs to cleanup, no leftover parts
+- [x] T601 | Ultimate effect per familiar with a camera move | verify: studio: each ultimate runs to cleanup, no leftover parts
   lane: fx-audio | needs: Studio | depends: T133 | size: L | owner-files: UltFX, CutsceneFX
-- [ ] T135 | Merge effect and look per tier 1 to 8, incl. morph cut | verify: studio: tier-up captured for 1 to 8
+- [x] T135 | Merge effect and look per tier 1 to 8, incl. morph cut | verify: studio: tier-up captured for 1 to 8
   lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: FXRecipes (merge), TDFeedback, FamiliarMaterials (tier looks)
 - [x] T602 | Hit-stop, shake and camera nudge scaled, off with reduced motion | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/FXScale.test.luau (new, setting off yields zero))
   lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: FXRecipes, ImpactFX, Tests/FXScale.test.luau
-- [ ] T144 | One lantern-light language: spawn sparkle, level column, clear ash, low-lantern vignette, decals | verify: studio: captures per effect, performance on Low
+- [x] T144 | One lantern-light language: spawn sparkle, level column, clear ash, low-lantern vignette, decals | verify: studio: captures per effect, performance on Low
   lane: fx-audio | needs: Studio | depends: none | size: L | owner-files: FeedbackFX, FlipbookFX registry, VFX/flipbooks
 - [x] T155 | Familiar cues: placement, merge tiers 1 to 8, reveal per rarity | verify: manual: tools/check_sound_lengths.py PASS, studio: cues logged in a Play run
   lane: fx-audio | needs: Studio | depends: T606 | size: M | owner-files: SoundCatalog, SoundFX call sites via SoundCues (new), VFX/sfx

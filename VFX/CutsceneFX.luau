@@ -1184,7 +1184,13 @@ CutsceneFX.signatures.FirstPerson = function(ctx)
 	end
 	if ctx.onHit then pcall(ctx.onHit) end
 	-- a slow drift across the impact so the aftermath reads
-	cam.to(CFrame.lookAt(vantage + side * 3 + up * 1, center + up), short and 0.5 or 0.9, Enum.EasingStyle.Sine)
+	local driftCF = CFrame.lookAt(vantage + side * 3 + up * 1, center + up)
+	local okU, UF = pcall(function() return require(RS:WaitForChild("UltFlourish", 2)) end) -- T601: per-familiar ultimate flourish + camera move
+	if okU then
+		local okH, cf = pcall(UF.hit, stage, ctx, center, vantage, side, up)
+		if okH and cf then driftCF = cf end
+	end
+	cam.to(driftCF, short and 0.5 or 0.9, Enum.EasingStyle.Sine)
 	task.wait(short and 0.5 or 0.95)
 
 	-- 5) back to the board

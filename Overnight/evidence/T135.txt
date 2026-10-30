@@ -1,4 +1,8 @@
-PASS (design written, not implemented): Brass Sentinel redesign: stiff guard with telegraphed steps
-Where: Roblox Dev/Design/Enemy Bible.md, the section for this enemy: behaviour, numbers (PROPOSAL), telegraph, counter, silhouette; model status in Roblox Dev/Design/Enemy Models.md.
-Checked: uses only facts from Config.ENEMIES, the research roster and the lore; the numbers are targets for balance tests, not tested.
-Limits: no code, no sound (the sound cue is described, not made), no Studio test; the silhouette is judged only by the model checks (tools/verify_enemy_model.py).
+PASS
+T135 merge effect and look per tier 1 to 8 incl. morph cut, studio-fx2, 2026-10-29. (Replaces an older evidence file with the same id from the archived design list; still in git history.)
+New ReplicatedStorage.MergeTierFX (ladder: 1 ring+motes, 2 column+chevron, 3 second ring+orbit motes, 4 halo+embers, 5 spire crown, 6 ground sigil+ribbons, 7 eight gold rays+second shockwave, 8 pillar+12 rays+falling ash) and StarterPlayerScripts.FxLayer (LocalScript, no GameClient edit) which plays it when the merged familiar's model appears after a Merge event. Morph cut = 0.1 s cream Highlight wash (only while fewer than 28 Highlights exist) + 0.24 s scale pop 1.14 -> 1 on the new model. TDFeedback.upgrade steps aside (TDFeedback.mergeTier) so the old column does not double; FXRecipes.merge takes opts.tier.
+Capture of tiers 1 to 8 side by side (Edit mode, slowed): Overnight/captures/fx2/T135_tiers_1to8.jpg. Emitter peak for all 8 at once: 14 of cap 20.
+Play: a server-fired Merge event (tier 2, Ember) gave counters merge_tier2=1 and morph=1; the game's own merge cutscene ran as normal. Only tier 2 went through a Play merge; tiers 3 to 8 were driven through MergeTierFX.play directly (capture above).
+Console clean. Tests/RunAll in Edit after all changes: 28 of 28 suites PASS.
+UNVERIFIED: look and timing (nobody judged them); the morph wash colour on textured meshes. FamiliarMaterials tier looks were NOT changed (the model look per tier is Models.buildPet's coolness ladder, owned by another chat); the tier-up effect is the new part.
+Files: Studio_Export/MergeTierFX.luau, FxLayer.luau, TDFeedback.luau, FXRecipes.luau, FxCommon.luau.

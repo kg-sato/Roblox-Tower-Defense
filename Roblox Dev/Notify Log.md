@@ -36,3 +36,4 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-29 22:11 Client-core batch done (T198 T149 T139): GameClient now 140K of 200K, boss phase bar, enemy status icons; RunAll 28/28; pixel look unverified.
 - 2026-10-29 22:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
 - 2026-10-29 22:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 22:32 Client batch 8b done (T138 T194 T178 T148 T166): telegraphs, float text, placement hint, boss transitions, ambience; look and audio unverified.

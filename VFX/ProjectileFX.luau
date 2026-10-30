@@ -320,6 +320,10 @@ ProjectileFX.REACT = {
 function ProjectileFX.react(style, at, parent, crit)
 	local r = ProjectileFX.REACT[style] or ProjectileFX.REACT.bolt
 	local k = crit and 1.4 or 1
+	if ProjectileFX.ext and ProjectileFX.ext[style] then -- per-familiar accent from FamiliarShots
+		pcall(ProjectileFX.ext[style], at, parent, crit)
+		return r
+	end
 	if style == "flame" then
 		puff(parent, at, Color3.fromRGB(255, 120, 40), 1.6 * k)
 	elseif style == "leaf" then
@@ -340,4 +344,6 @@ function ProjectileFX.react(style, at, parent, crit)
 end
 
 ProjectileFX.styles = STYLES
+-- T133: 20 per-familiar shot styles ("fs_<PetId>")
+pcall(function() require(script.Parent:WaitForChild("FamiliarShots", 5)).install(ProjectileFX, STYLES) end)
 return ProjectileFX

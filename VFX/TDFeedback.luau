@@ -106,6 +106,7 @@ function T.placement(pos: Vector3, color: Color3)
 end
 
 function T.upgrade(pos: Vector3, color: Color3, tier: number)
+	if T.mergeTier then return end -- T135: FxLayer plays the tier 1 to 8 merge ladder (MergeTierFX) when the new model appears
 	local h = 14
 	local col = part({ Shape = Enum.PartType.Cylinder, Color = color, Transparency = 0.35, Size = Vector3.new(h, 1.6, 1.6), CFrame = CFrame.new(pos + Vector3.new(0, h / 2, 0)) * CFrame.Angles(0, 0, math.rad(90)) })
 	tw(col, 0.15, { Size = Vector3.new(h, 2.6, 2.6) }, Enum.EasingStyle.Back)

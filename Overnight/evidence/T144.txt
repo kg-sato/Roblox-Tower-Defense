@@ -1,4 +1,9 @@
-PASS (boss design written, not implemented): Boss 2 design: the Clockmaker's Automaton at stage 10
-Where: Roblox Dev/Design/Boss Designs.md, the section for this boss: three phases, telegraphs, counters, clue, reward scale (all numbers PROPOSAL).
-Checked: follows the grief arc and clue table in Roblox Dev/Lore/The Clockmaker.md and the stage set lore; the generic Boss in Config.ENEMIES (700 hp, speed 4) is the baseline for the multipliers.
-Limits: a design document; the game has one generic Boss and none of these mechanics exist in code; the user decisions are listed at the end of the note.
+PASS
+T144 one lantern-light language, studio-fx2, 2026-10-29. (Replaces an older evidence file with the same id from the archived design list; still in git history.)
+New ReplicatedStorage.LanternFX, driven by FxLayer from the server events: spawn sparkle (new familiar model, at most 4 a second), level column with one gold tick per level (Upgrade event; LevelUp on the crystal), clear ash (Clear event; 5 emitters Default, 3 Low), low-lantern vignette (State crystal fraction <= 35%, breathes unless flashes are off or reduced motion), ground decals (FrameArt sigil and ring on a SurfaceGui). Palette: antique gold + cream on near-black, familiar colour as the accent.
+Captures: Overnight/captures/fx2/T144_low_lantern_vignette.jpg (vignette in Play), Overnight/captures/fx2/T144_decals_columns.jpg (sigil decals + level columns in Play).
+Play counters from the real event flow: spawn=8, column=1 (Upgrade), ash=2 (Clear). The vignette was shown by calling LanternFX.vignette(0.15) directly (the crystal never fell under 35% in Play).
+Performance on Low (Play in Studio, Heartbeat over 4 s each; 3 spawns + a column every 0.25 s, ash every second): default idle avg 21.54 ms p95 23.15 max 24.88; default with effects 21.66 / 23.08 / 24.26; Low with effects 21.64 / 23.29 / 24.49; Low idle 21.55 / 23.14 / 25.81. No measurable frame cost (noise about 0.1 ms). Emitter peak on Low in a real wave: 7 of 10.
+No flipbook sheets or FlipbookFX registry entries were added (the effects use parts and ParticleEmitters on built-in textures through FxCommon).
+UNVERIFIED: look; vignette strength on a real low-lantern state; clear-ash drift on screen (counter only, no capture).
+Files: Studio_Export/LanternFX.luau, FxLayer.luau, FxCommon.luau.

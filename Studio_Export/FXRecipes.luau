@@ -181,6 +181,10 @@ function FXRecipes.new(deps)
 			end
 			task.wait(0.18)
 		end, function()
+			if opts.tier then -- T135: tier 1 to 8 ladder layers on top of the base flare
+				local okT, MT = pcall(function() return require(ReplicatedStorage:WaitForChild("MergeTierFX", 2)) end)
+				if okT then MT.play(cf.Position, color, opts.tier) end
+			end
 			flare(cf * CFrame.new(0, 1, 0), "glow", color, 2 * k, 9 * k, 0.3, 3)
 			flare(cf * CFrame.new(0, 0.2, 0), "ring", color, 2 * k, 12 * k, 0.45)
 			F.play("Ember", cf * CFrame.new(0, 1, 0), { scale = k, color = color })
