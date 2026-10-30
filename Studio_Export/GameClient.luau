@@ -250,59 +250,7 @@ local function enter(obj, dx, dy, delay)
 end
 
 -- Panel with header bar, title and close button. Returns panel, body, scale, close, titleLabel.
-local function makePanel(parent, size, title, accent)
-	accent = accent or STYLE.blue
-	if UI.fa then
-		-- glass panel: emblem breaking the top-left corner, serif caps title + spaced subtitle, tapered divider
-		local panel = new("Frame", { BackgroundTransparency = 1, Size = size, Visible = false, ZIndex = 5 }, parent)
-		UI.glass(panel, accent)
-		UI.motes(panel, accent, 7)
-		UI.emblem(panel, accent, UI.SYMS[title] or string.sub(title, 1, 1), 96, UDim2.fromOffset(16, 14), 9)
-		local header = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 70), ZIndex = 6 }, panel)
-		header:SetAttribute("Stagger", true)
-		local t = new("TextLabel", { BackgroundTransparency = 1, Text = string.upper(title), FontFace = UI.TITLE_FONT, TextSize = 26, TextColor3 = Color3.fromRGB(246, 240, 255), TextXAlignment = Enum.TextXAlignment.Left, Position = UDim2.fromOffset(74, 10), Size = UDim2.new(1, -120, 0, 32), ZIndex = 8 }, header)
-		new("UIStroke", { Name = "TextStroke", Thickness = 1.5, Color = Color3.new(0, 0, 0), Transparency = 0.5 }, t)
-		local sub = new("TextLabel", { BackgroundTransparency = 1, Text = UI.SUBS[title] or "", Font = STYLE.fontB, TextSize = 12, TextColor3 = shade(accent, 0.25), TextTransparency = 0.15, TextXAlignment = Enum.TextXAlignment.Left, Position = UDim2.fromOffset(76, 40), Size = UDim2.new(1, -120, 0, 16), ZIndex = 8 }, header)
-		-- letter-space by UTF-8 character (byte-wise spacing split the middle dot into two broken bytes)
-		local chars = {}
-		for _, cp in utf8.codes(sub.Text) do
-			table.insert(chars, utf8.char(cp))
-		end
-		sub.Text = table.concat(chars, " ")
-		UI.divider(header, accent, UDim2.new(0.5, 0, 1, -4), UDim2.new(1, -24, 0, 12), 7)
-		local close = new("TextButton", { BackgroundTransparency = 1, Text = "X", FontFace = UI.TITLE_FONT, TextSize = 20, TextColor3 = shade(STYLE.red, 0.15), AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -14, 0, 28), Size = UDim2.fromOffset(32, 32), ZIndex = 9, AutoButtonColor = false }, panel)
-		local halo = new("ImageLabel", { BackgroundTransparency = 1, ImageContent = UI.fa.glow(), ImageColor3 = STYLE.red, ImageTransparency = 0.8, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(48, 48), ZIndex = 8 }, close)
-		close.MouseEnter:Connect(function() tween(halo, 0.15, { ImageTransparency = 0.45 }) end)
-		close.MouseLeave:Connect(function() tween(halo, 0.15, { ImageTransparency = 0.8 }) end)
-		local body = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 1, -72), Position = UDim2.fromOffset(0, 72), ZIndex = 6 }, panel)
-		body:SetAttribute("Stagger", true)
-		local scale = new("UIScale", { Scale = 1 }, panel)
-		return panel, body, scale, close, t
-	end
-	local panel = new("Frame", { BackgroundColor3 = STYLE.panel, Size = size, Visible = false, ZIndex = 5 }, parent)
-	round(panel, 8)
-	new("UIGradient", { Color = ColorSequence.new(shade(STYLE.panel, 0.06), STYLE.panelDark), Rotation = 90 }, panel)
-	-- open header: sigil + title + a divider that fades out at both ends
-	local header = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 50), ZIndex = 6 }, panel)
-	local sigil = UI.diamond(header, 26, accent, UDim2.fromOffset(30, 27), 7)
-	new("UIGradient", { Rotation = 90, Color = ColorSequence.new(shade(accent, 0.4), shade(accent, -0.45)) }, sigil)
-	UI.diamond(sigil, 10, STYLE.panelDark, UDim2.fromScale(0.5, 0.5), 8).Rotation = 0
-	local t = label(header, title, 26, shade(accent, 0.55), Vector2.new(0, 0.5), UDim2.new(0, 54, 0.5, 2), UDim2.new(1, -110, 1, 0), STYLE.font)
-	t.TextXAlignment = Enum.TextXAlignment.Left
-	t.ZIndex = 8
-	local divider = new("Frame", { BackgroundColor3 = accent, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, 0), Size = UDim2.new(1, -36, 0, 2), ZIndex = 7 }, header)
-	new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.5, 0.15), NumberSequenceKeypoint.new(1, 1) }) }, divider)
-	UI.diamond(divider, 8, accent, UDim2.fromScale(0.5, 0.5), 8)
-	local close = makeButton(header, "X", UDim2.fromOffset(32, 32), UDim2.new(1, -12, 0.5, 0), STYLE.red, Vector2.new(1, 0.5))
-	close.TextSize = 18
-	close.ZIndex = 8
-	close:FindFirstChildOfClass("UICorner").CornerRadius = UDim.new(1, 0)
-	local body = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 1, -50), Position = UDim2.fromOffset(0, 50), ZIndex = 6 }, panel)
-	body:SetAttribute("Stagger", true)
-	local scale = new("UIScale", { Scale = 1 }, panel)
-	UI.scroll(panel, accent)
-	return panel, body, scale, close, t
-end
+local makePanel = require(script.Parent:WaitForChild("GCPanelKit"))({ STYLE = STYLE, UI = UI, label = label, makeButton = makeButton, new = new, round = round, shade = shade, tween = tween })
 
 -- ===== HUD skeleton =====
 local gui = new("ScreenGui", { Name = "HUD", ResetOnSpawn = false, IgnoreGuiInset = true, ZIndexBehavior = Enum.ZIndexBehavior.Sibling }, player:WaitForChild("PlayerGui"))
@@ -711,89 +659,7 @@ do
 	local deck = new("ImageLabel", { Name = "Obj_deck", BackgroundTransparency = 1, Image = "rbxassetid://88735086829516", ScaleType = Enum.ScaleType.Fit, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 48, 0.5, 10), Size = UDim2.fromOffset(104, 108), ZIndex = 3 }, rollBtn)
 	deck:SetAttribute("Tint", true)
 end
--- crystal life: a brass-capped glass vial of violet lamp-oil hanging under the stage sign (was a blue progress bar).
--- The liquid shimmers; under 30% it turns red and the glass pulses. Trainer: a brass clock-bezel medallion with a
--- flame behind the level, XP as a brass rail with an amber channel (same rail as the settings board).
-do
-	local GOLD, BRASS = Color3.fromRGB(255, 208, 110), Color3.fromRGB(190, 140, 60)
-	local SERIF = Font.fromName("Merriweather", Enum.FontWeight.Bold)
-	local function strip(g)
-		for _, c in g:GetChildren() do
-			if c:IsA("UIStroke") or c:IsA("UIGradient") then c:Destroy() end
-		end
-	end
-	-- the vial
-	strip(hpBg)
-	hpBg.BackgroundColor3, hpBg.BackgroundTransparency = Color3.fromRGB(20, 12, 30), 0.1
-	new("UIStroke", { Color = BRASS, Thickness = 2, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }, hpBg)
-	for _, x in { 0, 1 } do -- brass end caps
-		local cap = new("Frame", { Name = "Cap", BackgroundColor3 = BRASS, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(x, 0.5), Size = UDim2.new(0, 12, 1, 10), ZIndex = 6 }, hpBg)
-		round(cap, 4)
-		new("UIGradient", { Rotation = 90, Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 230, 160)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(190, 140, 60)), ColorSequenceKeypoint.new(1, Color3.fromRGB(110, 70, 30)) }) }, cap)
-	end
-	strip(hpFill)
-	hpFill.BackgroundColor3 = Color3.new(1, 1, 1)
-	local liquid = new("UIGradient", { Color = ColorSequence.new(Color3.fromRGB(120, 60, 220), Color3.fromRGB(200, 150, 255)) }, hpFill)
-	local glint = new("Frame", { Name = "Glint", BackgroundColor3 = Color3.new(1, 1, 1), Size = UDim2.fromScale(1, 1), ZIndex = 3 }, hpFill)
-	round(glint, 11)
-	local gg = new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.45, 1), NumberSequenceKeypoint.new(0.5, 0.55), NumberSequenceKeypoint.new(0.55, 1), NumberSequenceKeypoint.new(1, 1) }), Offset = Vector2.new(-1, 0) }, glint)
-	TweenService:Create(gg, TweenInfo.new(2.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1), { Offset = Vector2.new(1, 0) }):Play()
-	-- glass reflection along the top of the tube
-	local shine = new("Frame", { Name = "Shine", BackgroundColor3 = Color3.new(1, 1, 1), BackgroundTransparency = 0.82, Position = UDim2.new(0, 8, 0, 3), Size = UDim2.new(1, -16, 0, 3), ZIndex = 4 }, hpBg)
-	round(shine, 2)
-	for _, c in hpPill:GetChildren() do -- the crystal icon sits on top of the left cap
-		if c:IsA("ImageLabel") then c.ZIndex = 8 end
-	end
-	hpLabel.FontFace = SERIF
-	hpLabel.TextColor3 = Color3.fromRGB(255, 240, 210)
-	hpLabel.ZIndex = 7
-	local pulse
-	hpFill:GetPropertyChangedSignal("Size"):Connect(function()
-		local low = hpFill.Size.X.Scale < 0.3
-		liquid.Color = low and ColorSequence.new(Color3.fromRGB(170, 30, 40), Color3.fromRGB(255, 120, 110)) or ColorSequence.new(Color3.fromRGB(120, 60, 220), Color3.fromRGB(200, 150, 255))
-		if low and not pulse then
-			pulse = TweenService:Create(hpBg, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundColor3 = Color3.fromRGB(70, 14, 20) })
-			pulse:Play()
-		elseif not low and pulse then
-			pulse:Cancel()
-			pulse = nil
-			hpBg.BackgroundColor3 = Color3.fromRGB(20, 12, 30)
-		end
-	end)
-
-	-- the trainer medallion
-	strip(lvlBadge)
-	lvlBadge.BackgroundColor3 = Color3.fromRGB(44, 28, 20)
-	new("UIStroke", { Color = GOLD, Thickness = 3, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }, lvlBadge)
-	new("UIGradient", { Rotation = 45, Color = ColorSequence.new(Color3.fromRGB(255, 235, 200), Color3.fromRGB(120, 90, 70)) }, lvlBadge)
-	local inner = new("Frame", { Name = "Bezel", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.74, 0.74), ZIndex = 4 }, lvlBadge)
-	round(inner, 23)
-	new("UIStroke", { Color = BRASS, Thickness = 1.5, Transparency = 0.2 }, inner)
-	for i = 0, 11 do -- clock ticks round the bezel
-		local a = math.rad(i * 30)
-		local big = i % 3 == 0
-		new("Frame", { BackgroundColor3 = big and GOLD or BRASS, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5 + 0.43 * math.sin(a), 0.5 - 0.43 * math.cos(a)), Size = UDim2.fromOffset(2, big and 6 or 4), Rotation = i * 30, ZIndex = 5 }, lvlBadge)
-	end
-	local flame = new("ImageLabel", { Name = "Flame", BackgroundTransparency = 1, Image = "rbxassetid://108574647086501", ImageTransparency = 0.55, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.46), Size = UDim2.fromScale(0.62, 0.62), ZIndex = 4 }, lvlBadge)
-	TweenService:Create(flame, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { ImageTransparency = 0.35, Size = UDim2.fromScale(0.58, 0.66) }):Play()
-	lvlNum.FontFace = SERIF
-	lvlNum.TextColor3 = Color3.fromRGB(255, 236, 200)
-	lvlNum.ZIndex = 6
-	lvlTitle.FontFace = SERIF
-	-- XP rail
-	strip(xpBg)
-	xpBg.BackgroundColor3 = Color3.fromRGB(28, 18, 12)
-	new("UIStroke", { Color = BRASS, Thickness = 1.5 }, xpBg)
-	strip(xpFill)
-	xpFill.BackgroundColor3 = Color3.new(1, 1, 1)
-	new("UIGradient", { Color = ColorSequence.new(Color3.fromRGB(150, 60, 20), Color3.fromRGB(255, 220, 140)) }, xpFill)
-	for i = 1, 3 do
-		new("Frame", { BackgroundColor3 = BRASS, BackgroundTransparency = 0.3, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Size = UDim2.new(0, 2, 0.5, 0), Position = UDim2.fromScale(i / 4, 0.5), ZIndex = 4 }, xpBg)
-	end
-	xpLabel.FontFace = SERIF
-	xpLabel.TextColor3 = Color3.fromRGB(255, 240, 210)
-	xpLabel.ZIndex = 5
-end
+require(script.Parent:WaitForChild("GCHudDressing"))({ TweenService = TweenService, hpBg = hpBg, hpFill = hpFill, hpLabel = hpLabel, hpPill = hpPill, lvlBadge = lvlBadge, lvlNum = lvlNum, lvlTitle = lvlTitle, new = new, round = round, xpBg = xpBg, xpFill = xpFill, xpLabel = xpLabel })
 do -- abstract layer around the objects (AbstractLayer.luau)
 	local ok, err = pcall(function() UI.abstract = require(script.Parent:WaitForChild("AbstractLayer", 5))({ hud = hud, rollBtn = rollBtn, autoBtn = autoBtn, quickBtn = quickBtn, startWaveBtn = startWaveBtn, ultBtn = ultBtn, oddsChip = oddsChip, coinPill = coinPill, gemPill = gemPill, rail = rail, dock = dock, stagePill = stagePill, abstractHUD = true, reducedMotion = function() return SETTINGS.reducedMotion end }) end)
 	if not ok then warn("AbstractLayer: " .. tostring(err)) end
@@ -865,33 +731,7 @@ end
 local deleteBtn = makeButton(upBody, "Delete", UDim2.new(1, -20, 0, 44), UDim2.new(0.5, 0, 1, -10), STYLE.red, Vector2.new(0.5, 1))
 deleteBtn.TextSize = 18
 deleteBtn.ZIndex = 8
--- familiar panel as a keeper's ledger (2026-10-28, /make-creative): each upgrade's level is a row of five little lamps
--- that light one by one; the price is a brass coin plate; Delete becomes "Release" under a wax seal
-do
-	for _, r in upRows do
-		for _, pip in r.pips do
-			pip.Size = UDim2.fromOffset(14, 14)
-			pip.Position = pip.Position + UDim2.fromOffset(0, -4)
-			pip.BackgroundColor3 = Color3.fromRGB(40, 30, 24)
-			for _, c in pip:GetChildren() do if c:IsA("UICorner") or c:IsA("UIGradient") then c:Destroy() end end
-			round(pip, 7)
-			glowStroke(pip, Color3.fromRGB(150, 110, 50), 1.5, 0)
-			local fl = new("ImageLabel", { Name = "Flame", BackgroundTransparency = 1, Image = "rbxassetid://108574647086501", AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 0.75), Size = UDim2.fromOffset(14, 18), ZIndex = pip.ZIndex + 1, Visible = false }, pip)
-		end
-		UI.objectify(r.buy)
-		UI.objImg(r.buy, "plaque", UDim2.new(1, 10, 1, 6), UDim2.fromScale(0.5, 0.5), nil, 7, Enum.ScaleType.Stretch)
-		local coin = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://93007984461409", AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 6, 0.5, 0), Size = UDim2.fromOffset(24, 24), ZIndex = 9 }, r.buy)
-		coin:SetAttribute("Tint", true)
-		new("UIPadding", { PaddingLeft = UDim.new(0, 26) }, r.buy)
-		local t = r.buy:FindFirstChild("Txt")
-		if t then t.ZIndex = 9 end
-	end
-	UI.objectify(deleteBtn)
-	UI.objImg(deleteBtn, "plaque", UDim2.new(1, 12, 1, 8), UDim2.fromScale(0.5, 0.5), nil, 7, Enum.ScaleType.Stretch)
-	local seal = UI.objImg(deleteBtn, "seal", UDim2.fromOffset(40, 40), UDim2.new(0, 22, 0.5, 0), nil, 9)
-	local t = deleteBtn:FindFirstChild("Txt")
-	if t then t.ZIndex = 9 end
-end
+require(script.Parent:WaitForChild("GCUpgradeRows"))({ UI = UI, deleteBtn = deleteBtn, glowStroke = glowStroke, new = new, round = round, upRows = upRows })
 
 -- Odds panel
 local oddsPanel, oddsBody, oddsScale, oddsClose = makePanel(hud, UDim2.fromOffset(440, 360), "Roll Odds", STYLE.gold)
@@ -1000,48 +840,7 @@ if UI.fa then
 else
 	UI.scroll(tutCard, STYLE.gold, true)
 end
--- the tutorial is a note from the Lamplighter (/make-creative 2026-10-28): parchment, ink that writes itself in, a wax
--- seal with the lamp's flame as the guide's portrait, a signature, and Skip as a small brass tag
-do
-	local g = tutCard:FindFirstChild("Glass")
-	if g then g.Visible = false end
-	tutCard.BackgroundTransparency = 0
-	tutCard.BackgroundColor3 = Color3.fromRGB(236, 222, 190)
-	tutCard.Size = UDim2.fromOffset(540, 92)
-	for _, c in tutCard:GetChildren() do if c:IsA("UIStroke") then c.Color = Color3.fromRGB(150, 110, 60); c.Thickness = 2 end end
-	new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(250, 240, 216), Color3.fromRGB(208, 188, 150)) }, tutCard)
-	local seal = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://78303286285946", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 6, 0.5, 0), Size = UDim2.fromOffset(78, 78), ZIndex = 8 }, tutCard)
-	local fl = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://108574647086501", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.45), Size = UDim2.fromScale(0.5, 0.6), ZIndex = 9 }, seal)
-	TweenService:Create(fl, TweenInfo.new(0.4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Rotation = 6 }):Play()
-	tutText.Position = UDim2.new(0, 52, 0.5, -6)
-	tutText.Size = UDim2.new(1, -150, 1, -26)
-	tutText.TextColor3 = Color3.fromRGB(58, 40, 26)
-	tutText.TextStroke.Transparency = 1
-	local sig = label(tutCard, "- the Lamplighter", 14, Color3.fromRGB(120, 40, 30), Vector2.new(1, 1), UDim2.new(1, -104, 1, -4), UDim2.fromOffset(160, 18), STYLE.font)
-	sig.ZIndex = 8
-	sig.TextXAlignment = Enum.TextXAlignment.Right
-	sig.TextStroke.Transparency = 1
-	-- ink writes itself in whenever the step changes
-	tutText:GetPropertyChangedSignal("Text"):Connect(function()
-		if SETTINGS.reducedMotion then tutText.MaxVisibleGraphemes = -1 return end
-		tutText.MaxVisibleGraphemes = 0
-		if tutText.Text ~= "" and UI.play then UI.play("menu_open", { pitch = 0.75, volume = 0.6 }) end
-		local n = utf8.len(tutText.Text) or #tutText.Text
-		local t0 = os.clock()
-		task.spawn(function()
-			while tutText.MaxVisibleGraphemes ~= -1 do
-				local k = math.floor((os.clock() - t0) * 60)
-				if k >= n then tutText.MaxVisibleGraphemes = -1 break end
-				tutText.MaxVisibleGraphemes = k
-				task.wait()
-			end
-		end)
-	end)
-	UI.objectify(tutSkip) -- Skip as a small brass tag
-	UI.objImg(tutSkip, "plaque", UDim2.new(1, 8, 1, 6), UDim2.fromScale(0.5, 0.5), nil, 6, Enum.ScaleType.Stretch)
-	local st = tutSkip:FindFirstChild("Txt")
-	if st then st.ZIndex = 8; st.TextColor3 = Color3.fromRGB(255, 224, 150) end
-end
+require(script.Parent:WaitForChild("GCTutSeal"))({ SETTINGS = SETTINGS, STYLE = STYLE, TweenService = TweenService, UI = UI, label = label, new = new, tutCard = tutCard, tutSkip = tutSkip, tutText = tutText })
 
 -- Start screen
 -- ===== Start menu (2026-10-28 rework): the world stays visible behind a left-side shade; logo, tagline and a big PLAY
@@ -1140,41 +939,7 @@ do
 	startBtn.Activated:Connect(function() tween(flame, 0.15, { Size = UDim2.fromOffset(90, 120) }) end)
 end
 
--- featured familiar: a Legendary turning on a glowing pedestal (ViewportFrame + WorldModel)
-do
-	local legend = Config.petsOfRarity("Legendary")[1] or next(Config.PETS)
-	local stage = new("Frame", { Name = "Featured", BackgroundTransparency = 1, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.fromScale(0.95, 0.52), Size = UDim2.fromScale(0.36, 0.64), ZIndex = 11 }, startScreen)
-	new("UIAspectRatioConstraint", { AspectRatio = 0.9 }, stage)
-	local halo = new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.52), Size = UDim2.fromScale(0.62, 0.55), BackgroundColor3 = Config.RARITIES.Legendary.color, BackgroundTransparency = 0.8, ZIndex = 11 }, stage)
-	new("UICorner", { CornerRadius = UDim.new(1, 0) }, halo)
-	new("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(0.7, 0.85), NumberSequenceKeypoint.new(1, 1) }) }, halo)
-	TweenService:Create(halo, TweenInfo.new(1.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundTransparency = 0.9 }):Play()
-	local vpf = new("ViewportFrame", { BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 12, Ambient = Color3.fromRGB(150, 140, 170), LightColor = Color3.fromRGB(255, 230, 190), LightDirection = Vector3.new(-1, -1, -0.6) }, stage)
-	local world = new("WorldModel", {}, vpf)
-	local vcam = new("Camera", { FieldOfView = 30 }, vpf)
-	vpf.CurrentCamera = vcam
-	local ok, model = pcall(function() return (Models.buildPet(legend, 3)) end)
-	if ok and model then
-		model.Parent = world
-		local cf, size = model:GetBoundingBox()
-		local radius = math.max(size.X, size.Y, size.Z)
-		local focus = cf.Position
-		local spin = 0
-		local conn
-		conn = RunService.RenderStepped:Connect(function(dt)
-			if not startScreen.Parent then conn:Disconnect() return end
-			if not startScreen.Visible then return end
-			spin += dt * 0.6
-			model:PivotTo(CFrame.new(focus) * CFrame.Angles(0, spin, 0) * (cf - cf.Position))
-			vcam.CFrame = CFrame.lookAt(focus + Vector3.new(0, radius * 0.35, radius * 2.6), focus)
-		end)
-		pcall(function() Models.playClip(model, "Idle") end)
-	end
-	local name = label(stage, string.upper(Config.PETS[legend].name), 30, Color3.fromRGB(255, 236, 190), Vector2.new(0.5, 1), UDim2.fromScale(0.5, 0.97), UDim2.fromScale(1, 0.08), STYLE.display)
-	name.ZIndex = 13
-	local tag = label(stage, "FEATURED  ·  LEGENDARY", 15, Config.RARITIES.Legendary.color, Vector2.new(0.5, 1), UDim2.fromScale(0.5, 1.03), UDim2.fromScale(1, 0.05), STYLE.fontB)
-	tag.ZIndex = 13
-end
+require(script.Parent:WaitForChild("GCFeatured"))({ Config = Config, Models = Models, RunService = RunService, STYLE = STYLE, TweenService = TweenService, label = label, new = new, startScreen = startScreen })
 do -- refined start menu (StartMenuArt, 2026-10-28): Beyond Wonderland title, one clean column, lamp plate
 	local okM, errM = pcall(function() require(script.Parent:WaitForChild("StartMenuArt", 3))({ startScreen = startScreen, startBtn = startBtn, reduced = function() return SETTINGS.reducedMotion end }) end)
 	if not okM then warn("StartMenuArt: " .. tostring(errM)) end
@@ -1346,90 +1111,7 @@ do
 		pcall(function() game:GetService("ContentProvider"):PreloadAsync(list) end)
 	end)
 end
--- Player settings from the server (SettingsDefaults). SETTINGS is changed in place so every reader sees the new values.
-function FXK.applySettings(s)
-	if type(s) ~= "table" then
-		return
-	end
-	SETTINGS.flashes = s.flashes ~= false
-	SETTINGS.reducedMotion = s.reducedMotion == true
-	SETTINGS.shake = s.shake ~= false
-	if FXK.flashToggle then
-		FXK.flashToggle.Text = SETTINGS.flashes and "Flashes: ON" or "Flashes: OFF"
-	end
-	SETTINGS.uiSize = UI_SIZE_MUL[s.uiSize] and s.uiSize or "normal"
-	relayout() -- T117: the HUD scale follows the UI size
-	SETTINGS.gameSpeed = s.gameSpeed == 2 and 2 or 1 -- CutsceneFX skips signatures by itself at 2x
-	SETTINGS.cinematics = (s.cinematics == "short" or s.cinematics == "off") and s.cinematics or "full"
-	local particles = s.particles == "low" and "Low" or (s.particles == "high" and "High" or "Default")
-	-- Low effects detail: the Lampwick Lane lamps stop casting shadows (10 shadowed lights are the costliest part of the set)
-	FXK.lowGfx = s.particles == "low"
-	if s.numberFormat and s.numberFormat ~= UI.numberMode then
-		UI.numberMode = s.numberFormat
-		UI.refreshNumbers()
-	end
-	FXK.quality = FXK.CAP[s.particles] and s.particles or "default"
-	if FXK.proj then
-		FXK.proj.quality = FXK.quality
-		FXK.proj.timeScale = s.gameSpeed == 2 and 2 or 1
-	end
-	for _, d in workspace:GetDescendants() do
-		if d:IsA("PointLight") and d.Name == "LampLight" then
-			d.Shadows = not FXK.lowGfx
-		end
-	end
-	-- Emitter budget for everything that lives in the world (familiars, fog, portal; burst emitters have Rate 0 and are left to burst()): Rate scales with the quality, and on
-	-- Low the 2nd and later emitter on one part (the secondary layers) is switched off. Bursts have their own cap in burst().
-	function FXK.budgetEmitter(pe)
-		if pe:GetAttribute("BaseRate") == nil then
-			pe:SetAttribute("BaseRate", pe.Rate)
-			pe:SetAttribute("BaseEnabled", pe.Enabled)
-		end
-		local base = pe:GetAttribute("BaseRate")
-		if base > 0 then
-			pe.Rate = base * (FXK.quality == "low" and 0.5 or (FXK.quality == "high" and 1.25 or 1))
-		end
-		local secondary = false
-		if FXK.quality == "low" and pe.Parent then
-			local first
-			for _, c in pe.Parent:GetChildren() do
-				if c:IsA("ParticleEmitter") then
-					first = first or c
-				end
-			end
-			secondary = first ~= pe
-		end
-		pe.Enabled = pe:GetAttribute("BaseEnabled") and not secondary
-	end
-	for _, d in workspace:GetDescendants() do
-		if d:IsA("ParticleEmitter") then
-			FXK.budgetEmitter(d)
-		end
-	end
-	if not FXK.lampHook then
-		FXK.lampHook = workspace.DescendantAdded:Connect(function(d)
-			if d:IsA("PointLight") and d.Name == "LampLight" then
-				d.Shadows = not FXK.lowGfx
-			elseif d:IsA("ParticleEmitter") then
-				task.defer(FXK.budgetEmitter, d)
-			end
-		end)
-	end
-	local okR, Reveal = pcall(function() return require(ReplicatedStorage:WaitForChild("RevealFX", 2)) end)
-	if okR and Reveal then
-		Reveal.setSettings({ flashes = SETTINGS.flashes, reducedMotion = SETTINGS.reducedMotion, particles = particles })
-	end
-	if FXK.sfx and type(s.sfxVolume) == "number" then
-		pcall(FXK.sfx.setVolumes, { sfx = s.sfxVolume })
-	end
-	local okM, Music = pcall(function() return require(ReplicatedStorage:WaitForChild("MusicFX", 2)) end)
-	if okM and Music and type(s.musicVolume) == "number" then
-		pcall(Music.setVolumes, { music = s.musicVolume })
-	end
-	if game:GetService("RunService"):IsStudio() then
-		script:SetAttribute("AppliedSettings", game:GetService("HttpService"):JSONEncode({ s = SETTINGS, reveal = okR and Reveal and { f = Reveal.settings.flashes, r = Reveal.settings.reducedMotion, p = Reveal.settings.particles } or false, music = okM and Music and Music.volumes and Music.volumes.music or false }))
-	end
-end
+require(script.Parent:WaitForChild("GCSettingsApply"))({ FXK = FXK, ReplicatedStorage = ReplicatedStorage, RunService = RunService, SETTINGS = SETTINGS, UI = UI, UI_SIZE_MUL = UI_SIZE_MUL, relayout = relayout, script = script })
 -- play a SoundFX cue if the module is present (sounds are Studio-preview files until uploaded)
 function FXK.play(name, o)
 	if FXK.sfx then
@@ -1581,6 +1263,7 @@ local function clearEnemies()
 	table.clear(enemies)
 end
 
+local EnemyBars = require(script.Parent:WaitForChild("EnemyBars"))({ new = new, enemies = enemies, SETTINGS = SETTINGS, tween = tween }) -- T139 readable health bars and status icons
 local function spawnEnemy(data)
 	local def = Config.ENEMIES[data.kind]
 	local model = Models.buildEnemy(data.kind)
@@ -1597,6 +1280,7 @@ local function spawnEnemy(data)
 	-- Roblox draws at most 31 highlights at once, so in huge waves some enemies lose the outline
 	local hl = new("Highlight", { Adornee = model, FillColor = Color3.new(1, 1, 1), FillTransparency = 1, OutlineColor = Color3.fromRGB(205, 220, 255), OutlineTransparency = 0.55, DepthMode = Enum.HighlightDepthMode.Occluded }, model)
 	enemies[data.id] = { model = model, fill = fill, spawnTime = data.spawnTime, speed = def.speed, hp = data.maxHp, maxHp = data.maxHp, kind = data.kind, popT = 0, flash = 0, hl = hl, big = isBoss }
+	EnemyBars.decorate(enemies[data.id], bb, bg, fill)
 end
 
 local function killEnemy(data)
@@ -1651,91 +1335,7 @@ local function killEnemy(data)
 	end
 end
 
--- ===== Boss plate "The Wick" (2026-10-28; user: "a more unique boss bar"). An iron-framed plate swings down on its
--- chains when a boss walks in: the boss's name, its life as a blood-red ribbon with a pale trail that catches up after
--- each hit, and the escape timer as a lamp wick burning down toward the left with a live flame. Under 10 s the flame
--- turns red and a pocket watch ticks every second. The old bar stays as the data source (applySnapshot sets it).
-do
-	local B = { last = -1, shown = false, ghost = 1, hp = 1, t = 1, drop = 0 }
-	B.titles = { "THE GASLIGHT WARDEN", "THE BRASS LEVIATHAN", "THE HOLLOW BISHOP" } -- same names as the boss cutscene
-	B.serif = Font.fromName("Merriweather", Enum.FontWeight.Bold)
-	for _, c in bossBarBg:GetChildren() do
-		if c:IsA("UIStroke") or c:IsA("UICorner") or c:IsA("UIGradient") then c:Destroy() end
-	end
-	for _, c in bossBar:GetChildren() do
-		if c:IsA("UIStroke") or c:IsA("UICorner") or c:IsA("UIGradient") then c:Destroy() end
-	end
-	bossBarBg.BackgroundTransparency, bossBar.BackgroundTransparency, bossBarLabel.Visible = 1, 1, false
-	bossBarBg.Size = UDim2.fromOffset(320, 78) -- compact: the top lane stays visible
-	B.plate = new("Frame", { Name = "Plate", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0), Size = UDim2.fromScale(1, 1), ZIndex = 2 }, bossBarBg)
-	for _, x in { 0.2, 0.8 } do -- the chains it hangs from
-		new("Frame", { BackgroundColor3 = Color3.fromRGB(40, 36, 40), BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(x, 0.08), Size = UDim2.fromOffset(3, 22), ZIndex = 1 }, B.plate)
-	end
-	B.art = UI.objImg(B.plate, "plaque", UDim2.fromScale(1, 1), UDim2.fromScale(0.5, 0.5), nil, 2, Enum.ScaleType.Stretch)
-	B.art.ImageColor3 = Color3.fromRGB(175, 95, 90)
-	B.title = new("TextLabel", { BackgroundTransparency = 1, FontFace = B.serif, TextScaled = true, TextColor3 = Color3.fromRGB(255, 200, 160), Text = "", AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 8), Size = UDim2.new(0.8, 0, 0, 17), ZIndex = 5 }, B.plate)
-	new("UIStroke", { Color = Color3.fromRGB(30, 8, 8), Thickness = 1.5 }, B.title)
-	-- life ribbon
-	B.rib = new("Frame", { BackgroundColor3 = Color3.fromRGB(30, 8, 10), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 29), Size = UDim2.new(0.84, 0, 0, 14), ZIndex = 3 }, B.plate)
-	new("UIStroke", { Color = Color3.fromRGB(190, 140, 60), Thickness = 1.5 }, B.rib)
-	B.ribScale = new("UIScale", { Scale = 1 }, B.rib)
-	B.ghostF = new("Frame", { BackgroundColor3 = Color3.fromRGB(255, 225, 205), BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 3 }, B.rib)
-	B.fill = new("Frame", { BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, Size = UDim2.fromScale(1, 1), ZIndex = 4 }, B.rib)
-	new("UIGradient", { Rotation = 90, Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 110, 100)), ColorSequenceKeypoint.new(0.45, Color3.fromRGB(190, 20, 40)), ColorSequenceKeypoint.new(1, Color3.fromRGB(90, 0, 20)) }) }, B.fill)
-	for i = 1, 3 do
-		new("Frame", { BackgroundColor3 = Color3.fromRGB(190, 140, 60), BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(i / 4, 0.5), Size = UDim2.new(0, 2, 1, 0), ZIndex = 5 }, B.rib)
-	end
-	B.hpText = new("TextLabel", { BackgroundTransparency = 1, FontFace = B.serif, TextScaled = true, TextColor3 = Color3.fromRGB(255, 240, 225), Text = "", Size = UDim2.fromScale(1, 0.85), Position = UDim2.fromScale(0, 0.08), ZIndex = 6 }, B.rib)
-	new("UIStroke", { Color = Color3.fromRGB(40, 0, 0), Thickness = 1.2 }, B.hpText)
-	-- the wick: charred trail behind, rope ahead, flame at the burning end
-	B.ash = new("Frame", { BackgroundColor3 = Color3.fromRGB(40, 30, 28), BackgroundTransparency = 0.3, BorderSizePixel = 0, Position = UDim2.new(0.08, 0, 0, 51), Size = UDim2.new(0.84, 0, 0, 3), ZIndex = 3 }, B.plate)
-	B.wick = new("Frame", { BackgroundColor3 = Color3.fromRGB(225, 205, 160), BorderSizePixel = 0, Position = UDim2.new(0.08, 0, 0, 50), Size = UDim2.new(0.84, 0, 0, 5), ZIndex = 4 }, B.plate)
-	round(B.wick, 2)
-	new("UIGradient", { Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, Color3.fromRGB(240, 225, 190)), ColorSequenceKeypoint.new(0.93, Color3.fromRGB(200, 170, 120)), ColorSequenceKeypoint.new(1, Color3.fromRGB(60, 30, 20)) }) }, B.wick)
-	B.flame = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://108574647086501", AnchorPoint = Vector2.new(0.5, 0.85), Size = UDim2.fromOffset(18, 25), ZIndex = 6 }, B.plate)
-	TweenService:Create(B.flame, TweenInfo.new(0.18, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Size = UDim2.fromOffset(15, 29), Rotation = 6 }):Play()
-	B.timer = new("TextLabel", { BackgroundTransparency = 1, FontFace = B.serif, TextScaled = true, TextColor3 = Color3.fromRGB(255, 220, 170), Text = "", AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 58), Size = UDim2.new(0.6, 0, 0, 13), ZIndex = 5 }, B.plate)
-	RunService.Heartbeat:Connect(function(dt)
-		if not bossBarBg.Visible then
-			B.shown = false
-			return
-		end
-		if not B.shown then -- entrance: the plate swings down on its chains with an iron clank
-			B.shown, B.ghost, B.hp, B.t, B.last = true, 1, 1, 1, -1
-			B.title.Text = B.titles[math.clamp(math.ceil(((lastSnap and lastSnap.stage) or 5) / 5), 1, #B.titles)]
-			B.plate.Position, B.plate.Rotation = UDim2.new(0.5, 0, 0, -110), -9
-			tween(B.plate, 0.6, { Position = UDim2.fromScale(0.5, 0), Rotation = 0 }, Enum.EasingStyle.Back)
-			FXK.play("iron_clank")
-		end
-		local boss
-		for _, e in enemies do
-			if e.big then boss = e break end
-		end
-		local hp = boss and math.clamp(boss.hp / boss.maxHp, 0, 1) or B.hp
-		if hp < B.hp - 0.001 then -- a hit: the ribbon jolts and the pale trail waits a beat before catching up
-			B.drop = os.clock()
-			B.ribScale.Scale = 1.06
-			tween(B.ribScale, 0.18, { Scale = 1 })
-		end
-		B.hp = hp
-		if os.clock() - B.drop > 0.35 then B.ghost = math.max(hp, B.ghost - dt * 0.8) end
-		B.fill.Size = UDim2.fromScale(hp, 1)
-		B.ghostF.Size = UDim2.fromScale(math.max(hp, B.ghost), 1)
-		B.hpText.Text = boss and (fmt(math.clamp(math.ceil(boss.hp), 0, math.ceil(boss.maxHp))) .. " / " .. fmt(math.ceil(boss.maxHp))) or ""
-		B.t += (bossBar.Size.X.Scale - B.t) * math.min(1, dt * 6) -- the wick burns smoothly between snapshots
-		B.wick.Size = UDim2.new(0.84 * B.t, 0, 0, 5)
-		B.flame.Position = UDim2.new(0.08 + 0.84 * B.t, 0, 0, 53)
-		local secs = math.max(0, math.ceil(bossBar.Size.X.Scale * Config.BOSS_TIME))
-		B.timer.Text = "ESCAPES IN " .. secs .. "s"
-		if secs ~= B.last then
-			if secs <= 10 and B.last ~= -1 then FXK.play("clock_tick", { pitch = secs % 2 == 0 and 1 or 0.8 }) end
-			B.last = secs
-		end
-		local low = secs <= 10
-		B.flame.ImageColor3 = low and Color3.fromRGB(255, 90, 70) or Color3.new(1, 1, 1)
-		B.timer.TextColor3 = low and Color3.fromRGB(255, 120, 110) or Color3.fromRGB(255, 220, 170)
-	end)
-end
+require(script.Parent:WaitForChild("GCBossPlate"))({ Config = Config, FXK = FXK, RunService = RunService, TweenService = TweenService, UI = UI, bossBar = bossBar, bossBarBg = bossBarBg, bossBarLabel = bossBarLabel, enemies = enemies, fmt = fmt, new = new, round = round, tween = tween, getSnap = function() return lastSnap end })
 
 local function shotFx(data)
 	local e = enemies[data.id]
@@ -2070,51 +1670,7 @@ local function updateOdds()
 	if UI.oddsSpread then UI.oddsSpread(pct) end
 end
 
--- Odds as a fortune-teller's spread (2026-10-28, /make-creative): four tarot cards fanned on the panel, one per rarity,
--- tinted in its colour; the chance is written under each card; rarer cards glow and sway. The text rows stay hidden.
-do
-	local cards, tweens = {}, {}
-	local n = #Config.RARITY_ORDER
-	for i, r in Config.RARITY_ORDER do
-		oddsRows[r].Visible = false
-		local nameL = oddsRows[r]
-		for _, c in oddsBody:GetChildren() do
-			if c:IsA("TextLabel") and c ~= nameL and c ~= oddsNote and c.Position.Y.Offset == 36 + (i - 1) * 62 then c.Visible = false end
-			if c:IsA("ImageLabel") and c.ZIndex == 9 then c.Visible = false end -- old row dividers
-		end
-		local color = Config.RARITIES[r].color
-		local slot = new("Frame", { BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new((i - 0.5) / n, 0, 0, 8), Size = UDim2.fromOffset(92, 200), ZIndex = 10 }, oddsBody)
-		local glow = new("Frame", { BackgroundColor3 = color, BackgroundTransparency = 0.7 + 0.05 * (n - i), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(46, 70), Size = UDim2.fromOffset(100, 150), ZIndex = 10 }, slot)
-		round(glow, 18)
-		local card = new("ImageLabel", { BackgroundTransparency = 1, Image = "rbxassetid://93758813189086", ImageColor3 = color:Lerp(Color3.new(1, 1, 1), 0.1), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(46, 70 + math.abs(i - (n + 1) / 2) * 6), Size = UDim2.fromOffset(78, 132), Rotation = (i - (n + 1) / 2) * 9, ZIndex = 11 }, slot)
-		card:SetAttribute("NoStagger", true)
-		local nm = label(slot, string.upper(r), 15, color, Vector2.new(0.5, 0), UDim2.fromOffset(46, 142), UDim2.fromOffset(100, 20), STYLE.fontB)
-		nm.ZIndex = 12
-		local pc = label(slot, "", 22, STYLE.text, Vector2.new(0.5, 0), UDim2.fromOffset(46, 162), UDim2.fromOffset(100, 26), STYLE.fontB)
-		pc.ZIndex = 12
-		cards[r] = { card = card, pc = pc }
-		if i >= 3 then -- rarer cards breathe
-			table.insert(tweens, TweenService:Create(card, TweenInfo.new(1.4 - 0.3 * (i - 3), Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Rotation = card.Rotation + 4 }))
-			table.insert(tweens, TweenService:Create(glow, TweenInfo.new(1.1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundTransparency = 0.45 }))
-		end
-	end
-	for _, t in tweens do t:Play() end
-	oddsNote.Position = UDim2.new(0.5, 0, 1, -4)
-	function UI.oddsSpread(pct)
-		for r, c in cards do
-			c.pc.Text = string.format(pct[r] < 1 and "%.2f%%" or pct[r] < 10 and "%.1f%%" or "%d%%", pct[r] < 10 and pct[r] or math.floor(pct[r] + 0.5))
-		end
-	end
-	-- the ODDS chip becomes a small crystal ball on the desk
-	UI.objectify(oddsChip)
-	local ball = new("Frame", { BackgroundColor3 = Color3.fromRGB(150, 110, 255), BackgroundTransparency = 0.25, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 2, 0.5, 0), Size = UDim2.fromOffset(26, 26), ZIndex = 7 }, oddsChip)
-	round(ball, 13)
-	new("UIGradient", { Rotation = 45, Color = ColorSequence.new(Color3.fromRGB(240, 220, 255), Color3.fromRGB(80, 40, 160)) }, ball)
-	glowStroke(ball, Color3.fromRGB(255, 210, 120), 2, 0)
-	TweenService:Create(ball, TweenInfo.new(1.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { BackgroundTransparency = 0 }):Play()
-	local t = oddsChip:FindFirstChild("Txt")
-	if t then t.ZIndex = 8; t.TextColor3 = STYLE.gold end
-end
+require(script.Parent:WaitForChild("GCOddsRows"))({ Config = Config, STYLE = STYLE, TweenService = TweenService, UI = UI, glowStroke = glowStroke, label = label, new = new, oddsBody = oddsBody, oddsChip = oddsChip, oddsNote = oddsNote, oddsRows = oddsRows, round = round })
 
 oddsChip.Activated:Connect(function()
 	if oddsPanel.Visible then
@@ -3266,6 +2822,10 @@ local function applySnapshot(s)
 	updateTutorial(s)
 end
 
+local mergeCut = require(script.Parent:WaitForChild("GCMergeCut"))({ FXK = FXK, ReplicatedStorage = ReplicatedStorage, SETTINGS = SETTINGS, STYLE = STYLE, burst = burst, camera = camera, floatText = floatText, flying = flying, groundOf = groundOf, pending = pending, petParts = petParts, rarityColor = rarityColor, ring = ring, screenFlash = screenFlash, setPet = setPet, shake = shake, tween = tween })
+
+local BossBar = require(script.Parent:WaitForChild("BossBar"))({ hud = hud, bossBarBg = bossBarBg, STYLE = STYLE, new = new, tween = tween, showBanner = showBanner, showToast = showToast, floatText = floatText, petParts = petParts, groundOf = groundOf, FXK = FXK, SETTINGS = SETTINGS }) -- T149 boss phase bar, deny and freeze feedback
+
 EventRemote.OnClientEvent:Connect(function(kind, data)
 	if kind == "Begin" then
 		clearWorld()
@@ -3308,6 +2868,11 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 		end
 	elseif kind == "State" then
 		applySnapshot(data)
+		BossBar.snap(data.boss)
+	elseif kind == "Status" then
+		EnemyBars.status(data)
+	elseif kind == "BossPhase" or kind == "BossFx" then
+		BossBar.event(kind, data)
 	elseif kind == "Denied" then
 		showToast(data.reason or "Can't do that")
 		FXK.play("merge_fail", { pitch = 1.25, volume = 0.6 })
@@ -3322,103 +2887,7 @@ EventRemote.OnClientEvent:Connect(function(kind, data)
 		end
 		playRoll(data.slot, data.pet, data.rarity)
 	elseif kind == "Merge" then
-		-- Merge cutscene (2026-10-28, user: "every action a cutscene"): the camera drops to a low orbit, the three
-		-- familiars crouch and leap together, collide in a burst of light above the target, the new one drops and lands
-		-- with a stomp. Full (2.1 s) for the first two merges and tier 3+; short (0.9 s, no camera) after that or at 2x.
-		pending[data.to] = true
-		FXK.merges = (FXK.merges or 0) + 1
-		local full = FXK.cut and not FXK.cineOff() and not FXK.cineShort() and (FXK.merges <= 2 or data.tier >= 3)
-		local base = groundOf(data.to)
-		local color = rarityColor(data.pet)
-		local fxColor = (color.R + color.G + color.B > 2.6) and STYLE.gold or color -- white rarity washed the frame out
-		local apex = base + Vector3.new(0, full and 7 or 1, 0)
-		local leapT = full and 0.7 or 0.24
-		local i = 0
-		for _, sl in data.from do
-			local entry = petParts[sl]
-			if entry then
-				petParts[sl] = nil
-				i += 1
-				if full then -- the brass footprint plates stay on the ground (v1 flipped up with the familiars)
-					for _, n in { "Footprint", "FootprintRim" } do
-						local fp = entry.model:FindFirstChild(n)
-						if fp then fp:Destroy() end
-					end
-				end
-				table.insert(flying, { model = entry.model, from = entry.model:GetPivot().Position, to = apex, t = 0,
-					dur = full and leapT or nil, delay = full and 0.25 + i * 0.05 or nil, arc = full and 6 or nil,
-					spin = full and 10 or nil, flip = full, shrink = full and 0.4 or nil })
-				if not SETTINGS.reducedMotion then -- multiples: three fading copies trail the leap (Animation Craft note)
-					require(ReplicatedStorage.Shared.Motion).echoModel(entry.model, { count = 3, gap = 2 })
-				end
-			end
-		end
-		local land = function()
-			pending[data.to] = nil
-			setPet(data.to, data.pet, data.tier, true)
-			burst(base + Vector3.new(0, 3, 0), Color3.new(1, 1, 1), 24, nil, true)
-			ring(base, color, 10 + data.tier * 2, 0.6)
-			local sheet = FXK.sheetReady("upgrade")
-			if sheet then
-				FXK.pfx.play(sheet, CFrame.new(base + Vector3.new(0, 3, 0)), { color = color })
-			elseif FXK.td then
-				FXK.td.upgrade(base, color, data.tier) -- light column + one chevron per tier
-			end
-			floatText(base + Vector3.new(0, 7, 0), data.tier >= 4 and "EVOLVED!" or "MERGE!", STYLE.gold, 26)
-		end
-		if not full then
-			task.delay(0.24, land)
-		else
-			local K = FXK.cut.kit
-			local cctx = { gameCamera = function() return FXK.gameCF or camera.CFrame end, setCamera = function(cf) FXK.camOverride = cf end, settings = SETTINGS }
-			local stage = K.stage()
-			local ov = K.overlay()
-			ov.open(0.08)
-			local cam = K.camera(cctx)
-			local side = Vector3.new(1, 0, 0.35).Unit
-			-- 1. drop to a low three-quarter shot beside the target
-			cam.to(CFrame.lookAt(base + side * 13 + Vector3.new(0, 3.5, 6), base + Vector3.new(0, 3, 0)), 0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
-			FXK.play("anticipation", { pitch = 0.9 })
-			task.spawn(function()
-				task.wait(0.3)
-				-- 2. leap: slow orbit up toward the apex while they fly
-				cam.to(CFrame.lookAt(base - side * 6 + Vector3.new(0, 5, 13), apex), leapT, Enum.EasingStyle.Sine)
-				K.gather(stage, apex, fxColor, 14, 6, leapT)
-				task.wait(leapT)
-				-- 3. collide: flash, orb, shockwave, shake
-				FXK.play("ring", { pitch = 1.1 })
-				K.flash(ov, cctx, Color3.new(1, 1, 1), 0.55, 0.2)
-				local orb = Instance.new("Part")
-				orb.Shape, orb.Anchored, orb.CanCollide, orb.CanQuery, orb.Material = Enum.PartType.Ball, true, false, false, Enum.Material.Neon
-				orb.Color, orb.Size, orb.Position, orb.Parent = fxColor:Lerp(Color3.new(1, 1, 1), 0.3), Vector3.one * 1.5, apex, stage
-				tween(orb, 0.2, { Size = Vector3.one * 3.2 }, Enum.EasingStyle.Back)
-				K.shockwave(stage, apex - Vector3.new(0, 0.2, 0), fxColor, 9, 0.45)
-				shake.t, shake.amp = 0.3, 1.2
-				task.wait(0.28)
-				-- 4. drop and land with a stomp
-				tween(orb, 0.22, { Position = base + Vector3.new(0, 1.2, 0), Size = Vector3.one * 1.2 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-				cam.to(CFrame.lookAt(base + side * 9 + Vector3.new(0, 2.2, 5), base + Vector3.new(0, 2.5, 0)), 0.22, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-				task.wait(0.22)
-				orb:Destroy()
-				land()
-				K.impact(stage, base, fxColor, 0.8 + data.tier * 0.1)
-				cam.shake(0.6, 0.35)
-				FXK.play("summon")
-				-- 5. hold on the new familiar, then back to the board
-				cam.to(CFrame.lookAt(base + side * 8 + Vector3.new(0, 3, 6), base + Vector3.new(0, 3, 0)), 0.55, Enum.EasingStyle.Sine)
-				task.wait(0.55)
-				ov.close()
-				cam.done(0.4)
-				task.wait(0.45)
-				stage:Destroy()
-			end)
-		end
-		if (data.coins or 0) > 0 then
-			floatText(base + Vector3.new(2.5, 5, 0), "+" .. data.coins, STYLE.gold, 20)
-		end
-		if data.tier >= 4 then
-			screenFlash(color, 0.25)
-		end
+		mergeCut(data)
 	elseif kind == "Move" then
 		FXK.pos[data.id] = Vector3.new(data.x, GROUND, data.z)
 		if selectedSlot == data.id and petParts[data.id] then

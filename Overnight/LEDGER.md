@@ -47,3 +47,7 @@ T162 | commit ba682dc | "set landmarks added" | attested | world | Overnight/evi
 T164 | commit ba682dc | "fog frame cost" | attested | world | Overnight/evidence/T164.txt
 T152 | commit ba682dc | "spawn gates added" | attested | world | Overnight/evidence/T152.txt
 T205 | commit ba682dc | "performance probe added" | attested | world | Overnight/evidence/T205.txt
+T630 | commit db328f0 | "sound cues wired" | attested | fx-audio | Overnight/evidence/T630.txt
+T602 | commit db328f0 | "fx scale settings" | attested | fx-audio | Overnight/evidence/T602.txt
+T605 | commit db328f0 | "mix sliders ducking" | attested | fx-audio | Overnight/evidence/T605.txt
+T160 | commit db328f0 | "music per set" | attested | fx-audio | Overnight/evidence/T160.txt

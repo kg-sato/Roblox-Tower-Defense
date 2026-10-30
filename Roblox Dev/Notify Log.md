@@ -31,3 +31,5 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-29 20:49 Chars batch done (T403 T404 T405 T409 T406): 36 clips uploaded, maps wired, rigs checked for 20; motion on screen unverified.
 - 2026-10-29 21:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
 - 2026-10-29 21:30 World batch done (T153 T414 T162 T164 T152 T205): sets 4 and 5 Play-verified, landmarks and gates added, perf probe; RunAll 26/26; visuals unverified.
+- 2026-10-29 21:51 FX-audio batch done (T630 T602 T605 T160): cues wired, mix sliders, music per set; RunAll 28/28; ear unverified.
+- 2026-10-29 21:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,

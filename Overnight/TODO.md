@@ -32,9 +32,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: chars | needs: Blender | depends: none | size: L | owner-files: Blender/* enemy scripts, Blender/out/, Roblox Dev/Assets/3D/Enemies, Models.luau (enemy clips)
 - [x] T124 | 512 px texture sets for enemies, bosses and stage props | verify: manual: tools/texture_maps.py report, tools/asset_budget.py PASS
   lane: chars | needs: Blender | depends: none | size: M | owner-files: tools/texture_maps.py, Roblox Dev/Assets/3D/Textures
-- [ ] T198 | Split GameClient below 150,000 characters into modules | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (RunAll PASS plus studio: Play shows HUD identical, script size in evidence)
+- [x] T198 | Split GameClient below 150,000 characters into modules | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (RunAll PASS plus studio: Play shows HUD identical, script size in evidence)
   lane: client-core | needs: Studio | depends: QUEUE release of GameClient | size: L | owner-files: StarterPlayerScripts.GameClient, new modules next to UILib (OnClientEvent handler, killEnemy, sealButton/hideIcon, RenderStepped loop), Studio_Export/GameClient.luau
-- [ ] T149 | Client boss phase bar, banner per phase, deny and freeze feedback | verify: studio: BossPhase and BossFx events drive bar ticks and banner in a Play run to stage 5 boss; console clean
+- [x] T149 | Client boss phase bar, banner per phase, deny and freeze feedback | verify: studio: BossPhase and BossFx events drive bar ticks and banner in a Play run to stage 5 boss; console clean
   lane: client-core | needs: Studio | depends: T198 | size: M | owner-files: StarterPlayerScripts.BossBar (new), GameClient (one hook)
 - [x] T185 | Roster slot unlock rules (when a new slot opens) in data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Rules.test.luau)
   lane: sim | needs: Studio | depends: none | size: S | owner-files: Shared.Config, Tests/Rules.test.luau
@@ -74,7 +74,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: sim | needs: Studio | depends: T004,T015,T016,T019 | size: L | owner-files: Shared.Config (split into Shared.Data.*), all Tests/*.test.luau requires
 
 ## Lane: client-core (GameClient family; HELD by ui-rework per QUEUE.md: claim first, minimal hooks)
-- [ ] T139 | Enemy health bars and status icons readable at the board camera | verify: studio: capture plus contrast numbers for burn, chill, stun, mark, hush
+- [x] T139 | Enemy health bars and status icons readable at the board camera | verify: studio: capture plus contrast numbers for burn, chill, stun, mark, hush
   lane: client-core | needs: Studio | depends: T198 | size: M | owner-files: GameClient enemy renderer or new EnemyBars module, Models.luau (bar only)
 - [ ] T138 | Enemy telegraphs one second before Sentinel plant, Crow perch, Thief steal | verify: studio: telegraph fires 1 s before each special in a scripted wave
   lane: client-core | needs: Studio | depends: T198 | size: M | owner-files: new EnemyTelegraph module, GameClient (one hook), Shared.MatchSim events (read only)
