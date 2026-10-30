@@ -10,7 +10,7 @@ return function(Shared)
 	local tmp = Instance.new("Folder")
 	tmp.Name = "_MatchSimTest"
 	tmp.Parent = game:GetService("ReplicatedStorage")
-	for _, n in { "Config", "Path", "MatchSim" } do
+	for _, n in { "Config", "Path", "MatchSim", "StageSets" } do
 		Shared[n]:Clone().Parent = tmp
 	end
 	local Config = require(tmp.Config)
@@ -225,6 +225,141 @@ return function(Shared)
 		tut:startWave()
 		runUntil(tut, function(s) return s.stage == 2 end)
 		check("tutorial leaks cost no crystal hp", tut.crystalHp == tutHp, tut.crystalHp)
+
+		-- path blockers and gates (T157): StageSets blockers, flag Config.PATH_BLOCKERS
+		do
+			local Path = require(tmp.Path)
+			local SS = require(tmp.StageSets)
+			check("PATH_BLOCKERS is off by default", Config.PATH_BLOCKERS == false and #Config.blockersFor(11) == 0)
+			local function started(stage, seed)
+				local s = newSim(seed or 21, false)
+				local log = record(s)
+				s.stage, s.crystalHp = stage, 1e6
+				s:startWave()
+				return s, log
+			end
+			-- flag off: nothing in the way
+			local off, offLog = started(11)
+			local passed = runUntil(off, function(s)
+				for _, e in s.enemies do
+					if e.dist > 0.45 * Path.length then
+						return true
+					end
+				end
+				return false
+			end, 2000)
+			check("flag off: no blockers and enemies walk past 45% of the lane", #off.blockers == 0 and offLog.Blockers == nil and passed)
+
+			Config.PATH_BLOCKERS = true
+			-- the data
+			local ids, dataOk = {}, true
+			for _, set in SS.list do
+				local last = -1
+				for _, b in set.blockers or {} do
+					local good = ids[b.id] == nil and (b.kind == "fence" or b.kind == "gate") and b.at > 0.1 and b.at < 0.9 and b.at - last >= 0.1
+					if b.kind == "fence" then
+						good = good and b.hp > 0 and b.breakDps > 0
+					elseif b.kind == "gate" then
+						good = good and b.open > 0 and b.closed > 0
+					end
+					dataOk = dataOk and good
+					ids[b.id] = true
+					last = b.at
+				end
+			end
+			check("every set's blockers are well formed, unique, and 0.1 of the lane apart", dataOk)
+			check("the first set has no blockers (stage 1 to 5 play as today)", SS.list[1].blockers == nil and #Config.blockersFor(3) == 0)
+			local copy = Config.blockersFor(11)
+			copy[1].hp = 0
+			check("blockersFor hands out a fresh copy each time", Config.blockersFor(11)[1].hp == SS.list[3].blockers[1].hp and SS.list[3].blockers[1].hp > 0)
+
+			-- a fence holds enemies until they break it
+			local sim, log = started(11)
+			local fence = sim.blockers[1]
+			check("flag on: stage 11 loads the Cathedral fence at 40% of the lane", #sim.blockers == 1 and fence.kind == "fence" and math.abs(fence.D - 0.4 * Path.length) < 1e-6 and log.Blockers ~= nil and log.Blockers[1].list[1].id == "PewBarrier")
+			local past, waited, stopPace = false, false, false
+			local startHp = fence.hp
+			for _ = 1, 3000 do
+				sim:step(0.1)
+				for _, e in sim.enemies do
+					if fence.hp > 0 and e.dist > fence.D + 1e-6 then
+						past = true
+					end
+					if e.dist == fence.D and fence.hp > 0 then
+						waited = true
+					end
+				end
+				if log.BlockerBroken then
+					break
+				end
+			end
+			for _, ev in log.Pace or {} do
+				if ev.speed == 0 then
+					stopPace = true
+				end
+			end
+			check("no enemy passes a standing fence", not past)
+			check("enemies wait at the fence and the client is told their speed is 0", waited and stopPace)
+			check("waiting enemies break the fence and one BlockerBroken event is sent", log.BlockerBroken ~= nil and #log.BlockerBroken == 1 and fence.hp <= 0 and startHp > 0)
+			local gone = runUntil(sim, function(s)
+				for _, e in s.enemies do
+					if e.dist > fence.D + 5 then
+						return true
+					end
+				end
+				return false
+			end, 600)
+			check("after the fence breaks enemies walk on", gone)
+
+			-- a gate holds enemies while closed
+			local g, glog = started(6)
+			local gate = g.blockers[1]
+			check("stage 6 loads the Harbour gate, open first", #g.blockers == 1 and gate.kind == "gate" and g:blockerActive(gate) == false)
+			gate.open, gate.closed = 1, 1000 -- closed from 1 s on
+			local reached = runUntil(g, function(s)
+				for _, e in s.enemies do
+					if e.dist >= gate.D then
+						return true
+					end
+				end
+				return false
+			end, 2000)
+			local stuck = true
+			for _ = 1, 100 do
+				g:step(0.1)
+				for _, e in g.enemies do
+					if e.dist > gate.D + 1e-6 then
+						stuck = false
+					end
+				end
+			end
+			check("enemies reach a closed gate and stay behind it", reached and stuck and g:blockerActive(gate) == true)
+			check("a Gate event announced the closing", glog.Gate ~= nil and glog.Gate[1].closed == true and glog.Gate[1].id == "QuayGate")
+			gate.open = 1e6 -- open for good
+			local through = runUntil(g, function(s)
+				for _, e in s.enemies do
+					if e.dist > gate.D + 4 then
+						return true
+					end
+				end
+				return false
+			end, 300)
+			check("when the gate opens the waiting enemies pass", through and glog.Gate[#glog.Gate].closed == false)
+
+			-- a gate that is open as they arrive costs nothing
+			local fast, flog = started(6, 22)
+			fast.blockers[1].open, fast.blockers[1].closed = 1e6, 1
+			local free = runUntil(fast, function(s)
+				for _, e in s.enemies do
+					if e.dist > fast.blockers[1].D + 4 then
+						return true
+					end
+				end
+				return false
+			end, 2000)
+			check("an open gate lets enemies straight through, no Gate event", free and flog.Gate == nil)
+			Config.PATH_BLOCKERS = false
+		end
 	end)
 	if not ok then
 		failed += 1

@@ -26,3 +26,9 @@ T011 | commit 6c2a79d | "lantern power added" | attested | sim | Overnight/evide
 T015 | commit 6c2a79d | "elite wave modifiers" | attested | sim | Overnight/evidence/T015.txt (new features default OFF where flagged; client UI not built)
 T009 | commit 6c2a79d | "day night weather" | attested | sim | Overnight/evidence/T009.txt (new features default OFF where flagged; client UI not built)
 T417 | commit 6c2a79d | "hollow enemies flagged" | attested | sim | Overnight/evidence/T417.txt (new features default OFF where flagged; client UI not built)
+T416 | commit 4961f6b | "boss mechanics added" | attested | sim | Overnight/evidence/T416.txt
+T002 | commit 4961f6b | "achievements logic added" | attested | sim | Overnight/evidence/T002.txt
+T023 | commit 4961f6b | "quests logic added" | attested | sim | Overnight/evidence/T023.txt
+T007 | commit 4961f6b | "bond levels added" | attested | sim | Overnight/evidence/T007.txt
+T025 | commit 4961f6b | "leaderboard rules added" | attested | sim | Overnight/evidence/T025.txt
+T016 | commit 4961f6b | "endless mode tested" | attested | sim | Overnight/evidence/T016.txt

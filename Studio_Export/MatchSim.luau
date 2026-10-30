@@ -242,7 +242,7 @@ function MatchSim.importRun(self: Sim, d: any): boolean
 	if type(d.grid) == "table" then
 		for _, u in d.grid do
 			if type(u) == "table" and type(u.pet) == "string" and Config.PETS[u.pet] and type(u.x) == "number" and type(u.z) == "number" and self:unitCount() < Config.MAX_UNITS then
-				if Config.canPlace(self.grid, u.pet, u.x, u.z) then
+				if Config.canPlace(self.grid, u.pet, u.x, u.z, nil, Config.mapRules(self.stage)) then
 					local id = self:addUnit(u.pet, u.x, u.z)
 					self.grid[id].tier = num(u.tier, 1, Config.TIER_MAX, 1)
 				end
@@ -455,17 +455,18 @@ function MatchSim.findSpot(self: Sim, pet: string): (number?, number?)
 		local j = self.rng:NextInteger(1, i)
 		order[i], order[j] = order[j], order[i]
 	end
+	local rules = Config.mapRules(self.stage)
 	for _, i in order do
 		local p = Config.SLOTS[i]
-		if Config.canPlace(self.grid, pet, p.X, p.Z) then
+		if Config.canPlace(self.grid, pet, p.X, p.Z, nil, rules) then
 			return p.X, p.Z
 		end
 	end
-	local b = Config.PLACE_BOUNDS
+	local b = rules and rules.bounds or Config.PLACE_BOUNDS
 	local bestX, bestZ, bestD = nil, nil, math.huge
 	for x = b.minX + 2, b.maxX - 2, 3 do
 		for z = b.minZ + 2, b.maxZ - 2, 3 do
-			if Config.canPlace(self.grid, pet, x, z) then
+			if Config.canPlace(self.grid, pet, x, z, nil, rules) then
 				local d = x * x + (z + 8) * (z + 8) -- prefer spots near the middle of the board
 				if d < bestD then
 					bestX, bestZ, bestD = x, z, d
@@ -528,7 +529,7 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 		pet = self.forced[1]
 		rarity = Config.PETS[pet].rarity
 		local p = Config.SLOTS[self.forcedSlots[1]]
-		if p and Config.canPlace(self.grid, pet, p.X, p.Z) then
+		if p and Config.canPlace(self.grid, pet, p.X, p.Z, nil, Config.mapRules(self.stage)) then
 			x, z = p.X, p.Z
 		else
 			x, z = self:findSpot(pet)
@@ -576,7 +577,7 @@ function MatchSim.move(self: Sim, id: number, x: number, z: number): (boolean, s
 	if not u then
 		return false, "Pick a pet"
 	end
-	local ok, reason = Config.canPlace(self.grid, u.pet, x, z, id)
+	local ok, reason = Config.canPlace(self.grid, u.pet, x, z, id, Config.mapRules(self.stage))
 	if not ok then
 		return false, reason
 	end
@@ -801,6 +802,22 @@ function MatchSim.startStage(self: Sim)
 			q.mod = mod.id
 		end
 		table.insert(self.queue, q)
+	end
+	-- fences and gates (T157): a fresh copy per stage; the lane position is a fraction of Path.length
+	local blockers = Config.blockersFor(self.stage)
+	for _, b in blockers do
+		b.D, b.t0, b.closedNow = b.at * Path.length, self.t, false
+		if b.kind == "fence" then
+			b.hp = b.hp or 50
+		end
+	end
+	;(self :: any).blockers = blockers
+	if #blockers > 0 then
+		local info = {}
+		for _, b in blockers do
+			table.insert(info, { id = b.id, kind = b.kind, at = b.at })
+		end
+		self.emit("Blockers", { stage = self.stage, list = info })
 	end
 	self.emit("Stage", { stage = self.stage, boss = Config.isBossStage(self.stage), combo = self.combo, mod = mod and mod.id or nil, modName = mod and mod.name or nil, elites = eliteCount })
 end
@@ -1036,6 +1053,26 @@ function MatchSim.roleHit(self: Sim, slot: number, u: any, e: any, dmg: number, 
 end
 
 -- per-enemy ticks: burn damage, the Brass Sentinel's plant, the Lantern Thief's steal, the Clockwork Crow's perch; returns the speed multiplier
+-- Is this fence standing or this gate closed right now (T157)? A gate opens first: open seconds, then closed, repeating.
+function MatchSim.blockerActive(self: Sim, b: any): boolean
+	if b.kind == "fence" then
+		return b.hp > 0
+	end
+	local cycle = (b.open or 0) + (b.closed or 0)
+	return cycle > 0 and (self.t - b.t0) % cycle >= (b.open or 0)
+end
+
+-- The nearest active blocker at or ahead of an enemy, or nil.
+function MatchSim.blockerAhead(self: Sim, e: any): any
+	local best: any = nil
+	for _, b in (self :: any).blockers do
+		if b.D >= e.dist and (not best or b.D < best.D) and self:blockerActive(b) then
+			best = b
+		end
+	end
+	return best
+end
+
 function MatchSim.enemyTick(self: Sim, e: any, dt: number): number
 	local mult = 1
 	if e.status then
@@ -1216,7 +1253,7 @@ function MatchSim.bossPush(self: Sim, e: any, push: any)
 		local u = self.grid[near] :: any
 		local len = math.max(math.sqrt(nd), 1e-6)
 		local x, z = u.x + (u.x - bp.X) / len * push.dist, u.z + (u.z - bp.Z) / len * push.dist
-		local ok = Config.canPlace(self.grid, u.pet, x, z, near)
+		local ok = Config.canPlace(self.grid, u.pet, x, z, near, Config.mapRules(self.stage))
 		if ok then
 			u.x, u.z = x, z
 			self.emit("Move", { id = near, x = x, z = z })
@@ -1346,15 +1383,42 @@ function MatchSim.step(self: Sim, dt: number)
 		self.emit("Spawn", { id = e.id, kind = e.kind, t = self.t, maxHp = hp, boss = bossDef and bossDef.id or nil, bossName = bossDef and bossDef.name or nil, elite = (e :: any).elite })
 	end
 
+	local blockers = (self :: any).blockers
+	if blockers and #blockers > 0 then
+		for _, b in blockers do
+			if b.kind == "gate" then
+				local closed = self:blockerActive(b)
+				if closed ~= b.closedNow then
+					b.closedNow = closed
+					self.emit("Gate", { id = b.id, closed = closed })
+				end
+			end
+		end
+	else
+		blockers = nil
+	end
 	for _, e in self.enemies do
 		local pace = self:enemyTick(e, dt)
 		-- the speed multiplier the client must follow: movement effects (when on) times the boss phase's speedMult; "Pace" tells the client when it changes
 		local mult = (Config.MOVEMENT_EFFECTS and pace or 1) * self:bossTick(e, dt) * ((e :: any).speedMult or 1) * (skyFx and skyFx.enemySpeed or 1)
+		local blk = blockers and self:blockerAhead(e) or nil
+		if blk and blk.D - e.dist < 1e-6 then
+			mult = 0 -- waiting at the fence or gate; a fence takes damage from each enemy at it
+			if blk.kind == "fence" and not e.dead then
+				blk.hp -= (blk.breakDps or 8) * dt
+				if blk.hp <= 0 then
+					self.emit("BlockerBroken", { id = blk.id })
+				end
+			end
+		end
 		if ((e :: any).mult or 1) ~= mult then
 			(e :: any).mult = mult
 			self.emit("Pace", { id = e.id, dist = e.dist, speed = Config.ENEMIES[e.kind].speed * mult, t = self.t })
 		end
 		e.dist += Config.ENEMIES[e.kind].speed * mult * dt
+		if blk and e.dist > blk.D then
+			e.dist = blk.D
+		end
 		if e.dist >= Path.length and not e.dead then
 			e.dead = true
 			if not self.tutorial then

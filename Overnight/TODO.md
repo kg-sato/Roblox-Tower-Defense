@@ -64,13 +64,13 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: sim | needs: Studio | depends: none | size: L | owner-files: Shared.Config.BOSSES, Shared.MatchSim bossTick, Tests/Boss.test.luau
 - [x] T417 | Hollow Parishioner enemy and Fog Wisp lamp-eating in the sim | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Combat.test.luau (new cases), Balance still clears)
   lane: sim | needs: Studio | depends: none | size: M | owner-files: Shared.Config enemies, Shared.MatchSim, Tests/Combat.test.luau
-- [ ] T167 | Per-set path shapes as data with a curvature test | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/StageSets.test.luau (new curvature cases), py: tools/check_stages_complete.py)
+- [x] T167 | Per-set path shapes as data with a curvature test | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/StageSets.test.luau (new curvature cases), py: tools/check_stages_complete.py)
   lane: sim | needs: Studio | depends: none | size: L | owner-files: Shared.Path, Shared.Config path data, Shared.StageSets (path field), Tests/StageSets.test.luau
-- [ ] T157 | Path blockers and mid-path gates as data, tested in MatchSim | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/MatchSim.test.luau (new cases))
+- [x] T157 | Path blockers and mid-path gates as data, tested in MatchSim | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/MatchSim.test.luau (new cases))
   lane: sim | needs: Studio | depends: T167 | size: L | owner-files: Shared.MatchSim, Shared.Config, Tests/MatchSim.test.luau
-- [ ] T177 | Placement rules per map, decorations never block, tested | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Rules.test.luau (placement cases))
+- [x] T177 | Placement rules per map, decorations never block, tested | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Rules.test.luau (placement cases))
   lane: sim | needs: Studio | depends: T167 | size: M | owner-files: Shared.Config canPlace, Tests/Rules.test.luau
-- [ ] T199 | Move balance numbers into data modules, one table per system | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (RunAll all suites PASS, outputs unchanged)
+- [x] T199 | Move balance numbers into data modules, one table per system | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (RunAll all suites PASS, outputs unchanged)
   lane: sim | needs: Studio | depends: T004,T015,T016,T019 | size: L | owner-files: Shared.Config (split into Shared.Data.*), all Tests/*.test.luau requires
 
 ## Lane: client-core (GameClient family; HELD by ui-rework per QUEUE.md: claim first, minimal hooks)

@@ -9,7 +9,7 @@ return function(Shared)
 	local tmp = Instance.new("Folder")
 	tmp.Name = "_RulesTest"
 	tmp.Parent = game:GetService("ReplicatedStorage")
-	for _, n in { "Config", "Path", "MatchSim" } do
+	for _, n in { "Config", "Path", "MatchSim", "StageSets" } do
 		Shared[n]:Clone().Parent = tmp
 	end
 	local Config = require(tmp.Config)
@@ -332,6 +332,93 @@ return function(Shared)
 			sim = plain(7)
 			sim:loadMeta({ bestStage = 50, difficulty = "Godmode" })
 			check("an unknown saved difficulty loads as Normal", sim.difficulty == "Normal")
+		end
+		do
+			-- placement rules per map (T177): data in StageSets place, read through Config.mapRules, flag Config.MAP_RULES
+			local SS = require(tmp.StageSets)
+			local pet = Config.PET_ORDER[1]
+			local fp = Config.footprint(pet)
+			check("MAP_RULES is off by default and mapRules gives nil", Config.MAP_RULES == false and Config.mapRules(7) == nil)
+			local function gridLegal(rules, label)
+				local map, n = {}, 0
+				for x = -50, 46, 2 do
+					for z = -26, 28, 2 do
+						local ok2 = Config.canPlace({}, pet, x, z, nil, rules)
+						map[x .. "," .. z] = ok2
+						n += ok2 and 1 or 0
+					end
+				end
+				return map, n
+			end
+			local base, baseCount = gridLegal(nil)
+			local function sameMap(a, b)
+				for k, v in a do
+					if b[k] ~= v then
+						return false
+					end
+				end
+				return true
+			end
+			Config.MAP_RULES = true
+			Config.PATH_PER_SET = true -- the zones and decorations are authored against each set's own lane
+			local first = Config.mapRules(1)
+			check("flag on: rules for stage 1 carry bounds, path, noBuild and decor", first ~= nil and first.bounds == Config.PLACE_BOUNDS and #first.path == #Config.PATH and #first.noBuild == 0 and #first.decor == 2)
+			check("flag on: the first set's legal spots equal today's rules everywhere", sameMap(base, (gridLegal(first))) and sameMap((gridLegal(first)), base))
+			for si, set in SS.list do
+				local stage = 1
+				for k = 1, si - 1 do
+					stage += SS.list[k].stages
+				end
+				local rules = Config.mapRules(stage)
+				local n = set.id
+				check(n .. ": rules come from the set (path and no-build zones)", rules ~= nil and #rules.noBuild == #(set.place and set.place.noBuild or {}) and #rules.path == #Config.pathFor(stage))
+				for zi, zone in set.place.noBuild do
+					local ok3, why = Config.canPlace({}, pet, zone.x, zone.z, nil, rules)
+					check(n .. ": no-build zone " .. zi .. " centre is refused as a blocked area", ok3 == false and why == "Blocked area", why)
+					check(n .. ": the same spot is legal under the old rules unless it is on the path", select(1, Config.canPlace({}, pet, zone.x, zone.z)) == (Config.distToPath(zone.x, zone.z) >= Config.PATH_HALF_WIDTH + fp * 0.6))
+					check(n .. ": just outside the zone is legal", select(1, Config.canPlace({}, pet, zone.x + zone.r + fp * 0.6 + 0.2, zone.z, nil, rules)) == true)
+				end
+				for di, d in set.place.decor do
+					check(n .. ": decoration " .. di .. " never blocks placement on it", select(1, Config.canPlace({}, pet, d.x, d.z, nil, rules)) == true)
+				end
+				local noDecor = { bounds = rules.bounds, path = rules.path, noBuild = rules.noBuild, decor = {} }
+				local m1, count = gridLegal(rules)
+				check(n .. ": removing every decoration changes no spot", sameMap(m1, (gridLegal(noDecor))))
+				check(n .. ": at least 60 legal spots on the 2 stud grid", count >= 60, count)
+				local wp = rules.path[3]
+				local okp, whyp = Config.canPlace({}, pet, wp.X, wp.Z, nil, rules)
+				check(n .. ": the set's own lane is refused", okp == false and whyp == "Not on the path", whyp)
+			end
+			-- the sim follows the rules for its stage
+			local function simAt(stage)
+				local sim = plain(11)
+				sim.stage = stage
+				return sim
+			end
+			local zone = SS.list[2].place.noBuild[1]
+			Config.MAP_RULES = false
+			local sim = simAt(6)
+			local id = sim:addUnit(pet, 0, 24)
+			check("flag off: the sim lets a unit stand in the Harbour no-build circle", select(1, sim:move(id, zone.x, zone.z)) == true)
+			Config.MAP_RULES = true
+			sim = simAt(6)
+			id = sim:addUnit(pet, 0, 24)
+			local okm, whym = sim:move(id, zone.x, zone.z)
+			check("flag on: the sim refuses a move into the Harbour no-build circle", okm == false and whym == "Blocked area", whym)
+			local sim1 = simAt(1)
+			check("flag on: the same move at stage 1 is allowed (set 1 has no zones)", select(1, sim1:move(sim1:addUnit(pet, 0, 24), zone.x, zone.z)) == (Config.distToPath(zone.x, zone.z) >= Config.PATH_HALF_WIDTH + fp * 0.6))
+			sim = simAt(6)
+			local allLegal = true
+			for _ = 1, 10 do
+				local fx, fz = sim:findSpot(pet)
+				if fx == nil or not Config.canPlace(sim.grid, pet, fx, fz, nil, Config.mapRules(6)) then
+					allLegal = false
+					break
+				end
+				sim:addUnit(pet, fx, fz)
+			end
+			check("flag on: ten auto-placed units at stage 6 all stand on legal spots", allLegal)
+			Config.MAP_RULES, Config.PATH_PER_SET = false, false
 		end
 	end)
 	if not ok then
