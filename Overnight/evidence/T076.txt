@@ -1,4 +1,11 @@
-PASS
-Built: Gargoyle added to tools/familiar_sheet.py (now a multi-familiar script with per-familiar metadata); outputs in Roblox Dev/Assets/Characters/Design Sheets/ (Gargoyle_sheet.png 1220x710 with 3 turnarounds and a 6-swatch palette, Gargoyle_silhouette.png, Gargoyle_report.txt). Bio and card: Roblox Dev/Lore/Familiars/Gargoyle.md. New generic checker: Overnight/evidence/familiar_check.py (used for the remaining familiars).
-Machine check: python Overnight/evidence/familiar_check.py Gargoyle Ember (final exit 0). Output: overlap with circle 0.60, square 0.60, triangle 0.71, plain rock 0.71; front/side overlap 0.68; lore line 23 words; bio 161 words; fields present; no fox or sprout wording; Gargoyle vs Ember front silhouette IoU 0.52 (limit 0.60). The first run failed the pair test (0.61) because my mask normalisation stretched tall and wide shapes to the same box; I fixed the checker to keep aspect ratio (a more honest test) and reran.
-Visual check: I viewed the sheet and silhouette strip. It reads as a hunched stone watcher with horns, folded wings, tail, plinth and sky-blue scarf; in greyscale the folded wings read as spikes (noted on the page for modelling). Concept sheet only, drawn by code, not final art. Look and feel UNVERIFIED by a human.
+FAIL (valid result: reviewer scored every screen under 7; no look claim is made)
+T076 Harsh Grading pass on HUD, reveal, collection (2026-10-30). Rules: Roblox Dev/Research/Harsh Grading.md.
+Captures (Play, Studio screen_capture): Overnight/captures/cap_hud_idle.jpg, cap_hud_wave.jpg, cap_reveal.jpg (one mid-sequence frame only), cap_collection.jpg.
+Blind reviewer (Sonnet subagent, saw only the 4 stills, scored a shape, b texture, c colour, d readability, e polish; motion not scored). Full text: Overnight/evidence/T076_review.md
+ HUD idle      a5 b5 c6 d4 e4 FAIL
+ HUD in wave   a5 b5 c6 d3 e4 FAIL
+ Reveal        a4 b4 c5 d5 e3 FAIL (single frame caught mid-flip, so unfair to the sequence; still unscored as a whole)
+ Collection    a6 b6 c6 d5 e5 FAIL
+Top issues: left-rail and rarity/lore text about 9-10 px and thin; bottom bar ROLL/AUTO/QUICK/BEGIN lack button bodies; enemies and towers tiny and low contrast on dark cobble, no wave counter or HP bars; collection silhouettes locked vs unlocked read alike, HUD shows through the modal.
+Fixes: none made. Those files (GameClient HUD, CollectionScreen, reveal) belong to other chats per QUEUE.md Ownership, not to this lane; the cheap fixes (larger label sizes, button plates, wave counter, locked-vs-unlocked contrast) are listed above for the owners.
+Not verified: motion, the full reveal sequence, a human judgement. The reviewer is a model and the stills are one 1617x777 capture.

@@ -45,3 +45,6 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-29 23:52 UI batch 11 done (T074 T075 T057 T058 T095 T097): results, controls settings, new reveals, collection filter, detail panel, pause menu; look unverified.
 - 2026-10-29 23:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
 - 2026-10-30 00:03 UI batch 12 done (T090 T091 T092 T093 T084 T086): inventory, quests, pass and shop (cosmetic), leaderboard, button states, focus; look unverified.
+- 2026-10-30 00:13 T081 done: 40-icon gold-ink set with contact sheet (not uploaded, look unverified).
+- 2026-10-30 00:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | icon-worker: idle;
+- 2026-10-30 00:21 T172 done (boss arenas). T200 blocked (no type checker; modules already strict). T076 blind review FAILED all 4 screens; fix task T640 queued, plus final regression T650.

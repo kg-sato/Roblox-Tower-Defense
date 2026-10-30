@@ -82,3 +82,4 @@ T092 | commit cfcfbf0 | "pass shop screens" | attested | client-ui | Overnight/e
 T093 | commit cfcfbf0 | "leaderboard stage select" | attested | client-ui | Overnight/evidence/T093.txt
 T084 | commit cfcfbf0 | "button states motion" | attested | client-ui | Overnight/evidence/T084.txt
 T086 | commit cfcfbf0 | "keyboard gamepad focus" | attested | client-ui | Overnight/evidence/T086.txt
+T081 | commit 7f80385 | "icon set added" | attested | client-ui | Overnight/evidence/T081.txt

@@ -120,9 +120,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: client-ui | needs: Studio | depends: T098 | size: M | owner-files: StarterPlayerScripts.PassScreen, ShopScreen (new)
 - [x] T093 | Leaderboard and stage-select screens | verify: studio: both open in Play with fake rows
   lane: client-ui | needs: Studio | depends: T025,T098 | size: M | owner-files: StarterPlayerScripts.BoardScreen, StageSelect (new)
-- [ ] T081 | One-style icon set for status, currency, rarity, faction | verify: manual: contact sheet in UI Kit/art/icons_set/, 40 files with alpha
+- [x] T081 | One-style icon set for status, currency, rarity, faction | verify: manual: contact sheet in UI Kit/art/icons_set/, 40 files with alpha
   lane: client-ui | needs: ComfyUI | depends: none | size: M | owner-files: UI Kit/art/icons_set/ (new), VFX/ASSETS.md (append)
-- [ ] T076 | Harsh Grading pass on HUD, reveal and collection | verify: manual: reviewer subagent scores 7 of 10 or fixes logged
+- [!] T076 | Harsh Grading pass on HUD, reveal and collection | verify: manual: reviewer subagent scores 7 of 10 or fixes logged
   lane: client-ui | needs: Studio | depends: T057,T058,T074 | size: M | owner-files: Roblox Dev/Research/UI/Captures (notes only)
 
 ## Lane: chars (characters-and-models)
@@ -176,7 +176,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
 ## Lane: docs-tooling (docs, vault, tooling, content)
 - [x] T414 | Confirm Bug #4 Ward MetalnessMap is fixed and fix the Bug Log row | verify: studio: Play console has no asset-type error; Bug Log updated
   lane: docs-tooling | needs: Studio | depends: none | size: S | owner-files: Roblox Dev/Bug Log.md
-- [ ] T200 | Strict typing on pure modules and zero type errors on all modules | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (type-check output saved, RunAll PASS (checker availability UNVERIFIED))
+- [!] T200 | Strict typing on pure modules and zero type errors on all modules | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (type-check output saved, RunAll PASS (checker availability UNVERIFIED))
   lane: docs-tooling | needs: Studio | depends: T199 | size: L | owner-files: Shared.NumberFormat, SettingsDefaults, StageSets, MatchSim helpers
 - [x] T205 | Memory after 10 waves per set and frame-time probe Low/Default/High | verify: studio: numbers table in evidence
   lane: docs-tooling | needs: Studio | depends: T153 | size: M | owner-files: tools/perf_probe.luau (new)
@@ -190,3 +190,11 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
 ## Lane: fx-audio (added by the controller during the run)
 - [x] T630 | Wire the new sound sets (UI, enemy, boss, familiar cues, uploaded ids in VFX/ASSETS.md) into SoundCatalog and call sites | verify: studio: cue log of a Play run shows ui click, enemy hit, boss intro, reveal per rarity, placement and merge cues fired
   lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: SoundCatalog, SoundCues (new), AudioIds, SoundFX call sites (no GameClient edits)
+
+## Lane: follow-ups (added by the controller during the run)
+- [ ] T650 | Final regression pass: all suites, lean bot, Play run to the stage 5 boss with a wave, console scan, script sizes, compile | verify: studio: evidence file with RunAll counts, bot clears, Play console errors (none new), sizes
+  lane: docs-tooling | needs: Studio | depends: none | size: M | owner-files: Overnight/evidence, Overnight/captures
+- [ ] T640 | Raise HUD, reveal, collection and results screens to 7 of 10 or better on a blind review (up to three fix rounds) | verify: studio: reviewer scores per item in evidence, every item at 7 or better or the honest scores and what blocked
+  lane: client-ui | needs: Studio | depends: T650 | size: L | owner-files: new UI modules only (not the title page, skill tree or loading files)
+- [ ] T641 | Upload the 40-icon set (images, pre-approved) and wire the ids into status, rarity and faction displays | verify: studio: icons visible on enemy status display and rarity chips in a Play capture, ids in VFX/ASSETS.md
+  lane: client-ui | needs: Studio | depends: T081 | size: M | owner-files: new modules, VFX/ASSETS.md (append)

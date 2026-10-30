@@ -282,3 +282,4 @@
 - 23:22 CHECKPOINT e5d13d9 on overnight/2026-10-27: Add the TextAnim module and apply it to captions and reveals, shared dialogs and toasts, tooltips, a strings table with a coverage test, and UI checks for text size and contrast. UI look is unverified beyond the measured numbers.
 - 23:53 CHECKPOINT fc7f179 on overnight/2026-10-27: Add the results screen, Controls settings, new reveals, collection filter, detail panel and pause menu as modules. UI look is unverified.
 - 00:03 CHECKPOINT cfcfbf0 on overnight/2026-10-27: Add the inventory, quest, battle pass and shop, leaderboard and stage-select screens with button states and keyboard focus as new modules. Shops are cosmetic only and UI look is unverified.
+- 00:13 CHECKPOINT 7f80385 on overnight/2026-10-27: Add a forty-file one-style icon set for status, currency, rarity and faction with a contact sheet and style measurements. Nothing was uploaded and the look is unverified.

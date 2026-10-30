@@ -17,7 +17,7 @@ ok = []
 for a in pairs:
     tid, desc = a.split("=", 1)
     ev = root / "Overnight" / "evidence" / f"{tid}.txt"
-    first = ev.read_text(encoding="utf-8", errors="replace").lstrip().splitlines()[0].strip().upper() if ev.exists() and ev.stat().st_size else ""
+    first = ev.read_text(encoding="utf-8-sig", errors="replace").lstrip().splitlines()[0].strip().upper() if ev.exists() and ev.stat().st_size else ""
     if len(desc.split()) != 3:
         print("skip", tid, "description must be three words")
     elif not first.startswith("PASS"):

@@ -1,4 +1,4 @@
-﻿BLOCKED
+BLOCKED
 T200 strict typing. Findings (2026-10-30):
 - All nine modules already start with --!strict in Studio_Export (NumberFormat, SettingsDefaults, StageSets, Strings, TextAnim, Bond, Achievements, Quests, LeaderboardRules); no edits made.
 - No type checker is reachable: luau/luau-analyze/selene are not on PATH; ScriptEditorService has no GetDiagnostics/RequestDiagnostics/GetAnalysis member in this Studio; script_read/execute_luau return no diagnostics; installing software is forbidden by policy.

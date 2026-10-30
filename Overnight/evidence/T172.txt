@@ -1,4 +1,4 @@
-﻿PASS
+PASS
 T172 five boss arena variants (look UNVERIFIED by a human; machine checks only)
 New: Studio_Export/BossArena.luau (StarterPlayerScripts.BossArena); hook: 2 lines in StageSetClient (require + BossArena.setStage(stage) at top of apply()). Mirrored.
 Play run, QAProfile stage jumps, client workspace.BossArena child read 9 s after each jump:
