@@ -1,8 +1,8 @@
 --!nocheck
 -- StarterPlayerScripts.UILane2 (LocalScript): starts the standalone screens of the second client-ui batch. Each module
 -- exposes init() and is loaded in its own pcall, so one failing screen cannot stop the others.
---   ResultsScreen (T074), FamiliarPanel (T095), PauseMenu (T097)
-for _, name in { "ResultsScreen", "FamiliarPanel", "PauseMenu" } do
+--   ResultsScreen (T074), FamiliarPanel (T095), PauseMenu (T097), ScreenShell + the menu screens (T090-T093), QuestTracker (T091)
+for _, name in { "ResultsScreen", "FamiliarPanel", "PauseMenu", "ScreenShell", "InventoryScreen", "QuestScreen", "QuestTracker", "PassScreen", "ShopScreen", "BoardScreen", "StageSelect" } do
 	local m = script.Parent:WaitForChild(name, 15)
 	if m then
 		local ok, mod = pcall(require, m)

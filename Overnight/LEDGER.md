@@ -70,8 +70,9 @@ T098 | commit e5d13d9 | "dialogs toasts states" | attested | client-ui | Overnig
 T085 | commit e5d13d9 | "tooltip system added" | attested | client-ui | Overnight/evidence/T085.txt
 T087 | commit e5d13d9 | "strings table coverage" | attested | client-ui | Overnight/evidence/T087.txt
 T235 | commit e5d13d9 | "UI checks added" | attested | client-ui | Overnight/evidence/T235.txt
-T075 | commit e5d13d9 | "controls settings group" | attested | client-ui | Overnight/evidence/T075.txt
-T057 | commit e5d13d9 | "mythic celestial reveals" | attested | client-ui | Overnight/evidence/T057.txt
-T058 | commit e5d13d9 | "collection faction filter" | attested | client-ui | Overnight/evidence/T058.txt
-T095 | commit e5d13d9 | "familiar detail panel" | attested | client-ui | Overnight/evidence/T095.txt
-T097 | commit e5d13d9 | "pause menu added" | attested | client-ui | Overnight/evidence/T097.txt
+T075 | commit fc7f179 | "controls settings group" | attested | client-ui | Overnight/evidence/T075.txt
+T057 | commit fc7f179 | "mythic celestial reveals" | attested | client-ui | Overnight/evidence/T057.txt
+T058 | commit fc7f179 | "collection faction filter" | attested | client-ui | Overnight/evidence/T058.txt
+T095 | commit fc7f179 | "familiar detail panel" | attested | client-ui | Overnight/evidence/T095.txt
+T097 | commit fc7f179 | "pause menu added" | attested | client-ui | Overnight/evidence/T097.txt
+T074 | commit fc7f179 | "results screen added" | attested | client-ui | Overnight/evidence/T074.txt

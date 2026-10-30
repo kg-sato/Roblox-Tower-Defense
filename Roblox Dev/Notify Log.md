@@ -43,3 +43,4 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-29 23:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
 - 2026-10-29 23:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
 - 2026-10-29 23:52 UI batch 11 done (T074 T075 T057 T058 T095 T097): results, controls settings, new reveals, collection filter, detail panel, pause menu; look unverified.
+- 2026-10-29 23:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
