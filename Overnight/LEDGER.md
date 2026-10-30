@@ -88,3 +88,4 @@ T642 | commit c1992de | "screen router added" | attested | client-ui | Overnight
 T650 | commit f07ef6f | "regression pass done" | attested | docs-tooling | Overnight/evidence/T650.txt
 T651 | commit f07ef6f | "wiring audit done" | attested | docs-tooling | Overnight/evidence/T651.txt
 T641 | commit 7762547 | "icons uploaded wired" | attested | client-ui | Overnight/evidence/T641.txt
+T652 | commit fa72a0a | "progress hooks wired" | attested | sim | Overnight/evidence/T652.txt

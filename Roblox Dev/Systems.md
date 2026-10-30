@@ -72,3 +72,22 @@ Design: [[Game Design Doc]]. Patterns: [[Merge Tower Defense Playbook]].
 | Enemy and boss models | prototype (11 concept models uploaded and load, none placed in a stage) | Client | not placed | [[Design/Enemy Models]], [[Design/Enemy Bible]], [[Design/Boss Designs]] (designs only) |
 | Bosses (per-stage designs, phases) | testing (2026-10-29: `Config.BOSSES` five bosses x three phases, effects deny, freeze, summon, slow aura, regen, speed, damage; 31 checks in `Tests/Boss.test.luau`; boss hp mults eased (Regent 1.3, Clockmaker 1.2) so the full bot clears 12 of 12 seeds; per-boss specials and client phase bar not built) | Both | Shared.Config, Shared.MatchSim | [[Design/Boss Framework]], [[Design/Boss Designs]] |
 | Stage set 5 (Above the Grey Veil) | testing (installed 2026-10-29: backdrop script `BackdropVeil`, `StageSets` entry, `veil` music state; seen in Play once) | Server | StageSets, ServerScriptService.BackdropVeil | [[Design/Stage Set 5 Plan]] |
+
+## Overnight additions 2026-10-29 to 10-30
+Status words: `built`, `flagged off`, `unverified look`. Source: `Overnight/LEDGER.md`. These rows extend the table above; the Bosses and GameClient split rows above are superseded by the rows here.
+
+| System | Status | Server / Client | Where | Notes |
+|---|---|---|---|---|
+| Difficulty modes, pause/resume, collection shards (T004, T006, T186) | built, headless-tested; client UI not built | Server | Shared.Rules, MatchService actions | Evidence T004, T006, T186; 33 of 33 suites PASS |
+| Faction combos, lantern power, elite/wave modifiers (T012, T011, T015) | built, flagged off (`Config.SYNERGIES`, `WAVES_V2` false) | Shared/Server | Shared.Config, MatchSim, MatchService Lantern | Headless-tested; no client UI |
+| Day-night/weather, hollow enemies, endless mode (T009, T417, T016) | built, flagged off (`SKY_ON`, `HOLLOW_ENEMIES`, `ENDLESS` false) | Shared/Client | StageSets.sky, Config.SKY_EFFECTS | Client has no hollow enemy models |
+| Path shapes, placement rules, path blockers, balance data modules (T167, T177, T157, T199) | built as data; `MAP_RULES` and `PATH_BLOCKERS` flagged off; `Shared.Data` holds 10 modules | Shared | StageSets, Config, Shared.Data | Per-set lane shapes not yet driving the board |
+| Achievements, Quests, Bond, LeaderboardRules (T002, T023, T007, T025, T652) | built, hooked into MatchService via `ProgressHooks`, flagged off (`ACHIEVEMENTS_ON`, `QUESTS_ON`, `BOND_ON`, `LEADERBOARD_ON`); no client UI; leaderboard has no DataStore write | Server | Shared.*, MatchService | Lean bot and suites unchanged |
+| Boss mechanics v2 (T416) and boss client (T149, T148, T172) | built; `BOSS_V2`, `BOSS_UNMERGE` flagged off; BossBar, BossFx, five BossArena variants; unverified look | Both | Shared.Config, BossBar, BossFx, BossArena | Boss fight reached stage 5 clear in Play (T650) |
+| Enemy telegraphs, float text, placement hint, status icons (T138, T194, T178, T139, T641) | built, alive in Play (T651); unverified look | Client | EnemyTelegraph, FloatText, PlacementHint, EnemyBars, StatusIcons | H key clashes with HideUI (Bug Log) |
+| FX layers: familiar shots, merge tiers, lantern light, enemy family FX, ult flourish (T133, T135, T144, T134, T601, T602) | built, alive in Play (T651); unverified look | Client | FamiliarShots, MergeTierFX, LanternFX, EnemyFamilyFX, UltFlourish, FXScale | Reduced motion scales hit-stop and shake |
+| TextAnim, Dialogs, Toasts, Tooltips, Strings, NavFocus (T188, T607, T098, T085, T087, T086, T084) | built; unverified look | Client/Shared | TextAnim, Dialogs, Toasts, Tooltips, Strings, UIMotion | UIChecks suite (T235) |
+| Screens and ScreenRouter (T090-T093, T074, T095, T097, T642, T081) | built, router and menu dock added; results screen flagged off (`RESULTS_SCREEN`); unverified look | Client | InventoryScreen, QuestScreen, PassScreen, ShopScreen, BoardScreen, StageSelect, ResultsScreen, PauseMenu, ScreenRouter | Shop/pass display only. HUD, collection and results failed blind review (T640, all items under 7) |
+| Sound cues, ambience, music per set, mix sliders (T630, T604, T603, T155, T166, T160, T605, T606) | built; ear unverified; moderation of uploaded ids not checked | Client | SoundCues, AmbienceClient, SoundFX, SettingsDefaults | Sound cap bug fixed (T606) |
+| Enemy models: rigs and texture sets (T142, T124) | built, rigs and textures made; not placed in stages | Client | Blender/, Assets | Look unverified |
+| GameClient split (T198) | built | Client | StarterPlayerScripts.GC* | About 142,000 of 200,000 chars, nine GC* modules |

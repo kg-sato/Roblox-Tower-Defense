@@ -7,15 +7,18 @@ Severity: `crash` / `major` (breaks a feature) / `minor` / `cosmetic`
 
 | # | Date | Severity | Bug | Steps to reproduce | System |
 |---|---|---|---|---|---|
-| 11 | 2026-10-29 | minor | `SoundFX.play` can stop a higher-priority sound: with all 8 voices at priority 3, a priority 2 sound stops a priority 3 one | read `Studio_Export/SoundFX.luau` lines 72 to 90; fix in [[Design/Sound Priority]] | SoundFX |
+| 12 | 2026-10-30 | minor | `Setting GuiService.SelectedObject to invalid GuiObject` x2 when the pause menu opens (PauseMenu showPanel sets SelectedObject right after build); possibly caused by a duplicate test copy, not investigated (T651) | Play, press P | PauseMenu |
+| 13 | 2026-10-30 | unverified | Look of everything built overnight is unseen by a human; HUD, collection and results failed blind review (T640, best items under 7) | Play and judge | UI, FX |
+| 14 | 2026-10-30 | minor | New screens (inventory, quests, pass, shop, leaderboard, stage select, results, pause) were absent from PlayerGui until the ScreenRouter (T642); real clicks on the dock unverified | Play, use the menu dock | ScreenRouter |
 | 1 | 2026-10-24 | unverified | Drag-to-merge input (mouse and touch) never exercised by a real pointer; tested only by firing remotes from a script | Play in Studio, drag one pet onto a matching pet with three on the grid | Client input |
 | 2 | 2026-10-24 | minor | Console shows "User is not authorized to access Asset" from `cloud_3976620715.Sprint Execute`. Not our script; source unidentified (likely Studio/plugin) | Start Play | Studio |
-| 3 | 2026-10-27 | minor | Two ModuleScripts named `MatchSim` sit in `ReplicatedStorage.Shared`: the current one (760 lines, has `loadMeta`, `pickPet`) and a stale older copy (694 lines). `require` and `WaitForChild` by name return the first child (the current one), so the game works, but the stale copy is a trap | Open `ReplicatedStorage.Shared` in Studio, or parse the saved place | Studio place. Found 2026-10-27 in the saved `Claude.rbxl` and live Studio; delete the 694-line copy and save. 2026-10-29: `Studio_Export/MatchSim.luau` was the STALE copy (693 lines, no `loadMeta`); refreshed from the 760-line module; the stale Studio copy is still there (deleting it needs a Studio edit and a save; left for the user or the next Studio holder) |
 
 ## Fixed
 
 | # | Date found | Date fixed | Bug | Fix |
 |---|---|---|---|---|
+| 11 | 2026-10-29 | 2026-10-30 | SoundFX.play could stop a higher-priority sound | Lower-priority sound now dropped; Tests/SoundCap 11 checks PASS (T606) |
+| 3 | 2026-10-27 | 2026-10-30 | Stale 694-line MatchSim in Shared | Reparented to ServerStorage._Trash_20261029, one MatchSim remains (T413) |
 | 10 | 2026-10-29 | 2026-10-29 | Stage set 5 (Above the Grey Veil) never run in Play; stages 21 to 25 reused set 1 | Played stages 16 and 21 in Studio (T153): StageSetClient switched to ClockworkFoundry and AboveTheGreyVeil, edge ring props and lamps shown, console clean (only the known Sprint Execute line). Evidence Overnight/evidence/T153.txt. Look UNVERIFIED by a human |
 | 4 | 2026-10-28 | 2026-10-29 | Ward lantern MetalnessMap used a Decal id (asset-type error) | The lantern now carries MetalnessMap rbxassetid://86584908070749; Play console shows no asset-type error (T414, Overnight/evidence/T414.txt). The Sprint Execute line (Bug 2) is separate |
 | 5 | 2026-10-29 | 2026-10-29 | Loading screen parts overlapped and were not centred (the user) | Audited in Play by Sonnet (tools/loading_audit.luau). Fixes: the clock tunnel glides to the screen centre for the finale (concentric with the eye, measured 0, 0), gears centred on their faces, key parts named, and (the user: "move it") the title, bar and status moved into a dark panel along the bottom below the tunnel (tunnel raised to 0.36). Verified by Play capture: text legible on the panel; the title still grazes the largest clock face's lower rim |

@@ -120,24 +120,38 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 - [x] (2026-10-29) Implement familiar roles and statuses (`Tests/NewRoles.test.luau`, 27 checks; [[Design/Familiar Systems]])
 - [x] (2026-10-29) Balance the economy: ROLL_COST 20, START_GEMS 60, full bot clears 25 stages in a mean 574 s over 12 seeds ([[Design/Balance Baseline 2026-10-29]])
 - [x] (2026-10-29) Boss framework, server side: `Config.BOSSES` (5 bosses x 3 phases), `BossPhase` and `BossFx` events, 31 checks ([[Design/Boss Framework]])
-- [ ] Boss client: phase bar with three ticks, banner at each phase change, flicker on denied units, freeze overlay ([[Design/Boss Framework]], [[Design/Boss Designs]])
-- [ ] Boss per-boss specials (beyond the shared phase effects) ([[Design/Boss Designs]])
-- [ ] Client Hit and Death clip hooks for the human familiars (clips are uploaded and wired, the client does not call them yet) ([[Design/Human Familiars]])
+- [x] (2026-10-30, T149 T148 unverified look) Boss client: phase bar with three ticks, banner at each phase change, flicker on denied units, freeze overlay ([[Design/Boss Framework]], [[Design/Boss Designs]])
+- [x] (2026-10-30, T416, flagged off) Boss per-boss specials (beyond the shared phase effects) ([[Design/Boss Designs]])
+- [x] (2026-10-30, T403) Client Hit and Death clip hooks for the human familiars (clips are uploaded and wired, the client does not call them yet) ([[Design/Human Familiars]])
 - [x] (2026-10-29) 20 familiars: four Epic and Legendary humans (Constable Wren, Madam Quill, Cog-Warden, Ferryman of Fog) with lore, cards, models, rigs, clips; collection art for all 20 cells installed
 - [x] (2026-10-29) GameClient split: UI helpers moved to `StarterPlayerScripts.UILib` (199,960 to 173,770 of 200,000 characters); click-test the panels still open
 - [x] (2026-10-29) Comms and notify tools (`tools/comms.py`, `tools/notify.py`)
 - [ ] Decide: rarity tier cap, the 2x Coins pass, fusion tier ([[Design/Progression Rules]], [[Design/Content Plans]])
-- [ ] Fix the sound cap rule that can stop a higher-priority sound ([[Design/Sound Priority]])
+- [x] (2026-10-30, T606) Fix the sound cap rule that can stop a higher-priority sound ([[Design/Sound Priority]])
 - [x] (2026-10-29) 12 familiars: data, lore, cards, models, textures, rigs, Walk and Attack clips, collection screen
 - [x] (2026-10-29) 11 enemy and boss concept models (Fog Wisp to the Clockmaker) built, checked against the familiar silhouettes, uploaded, loaded back in Studio
 - [x] (2026-10-29) Headless tests: Rules (37), ServerRules (45), Balance integration run; 12 of 12 suites PASS
 - [ ] Respec button on the skill tree screen: `Action:FireServer("Respec")`, reply event `Respec {refunded, cost}`; fee 50 gems, cooldown 120 s (server done 2026-10-29, T198)
 - [x] (2026-10-29) Client: `Pace` handler (`PaceClient` + `EnemyPace`), `Config.MOVEMENT_EFFECTS = true` ([[Design/Combat Systems Implemented]])
 - [x] (2026-10-29) Client models for Clockwork Crow and Lantern Thief, `Config.NEW_ENEMIES = true`; still open: Sentinel plant and telegraph FX
-- [ ] UI: odds panel and reveal for six rarities (`FXRecipes.ORDER`, `RevealFX` ORDER need Mythic and Celestial)
+- [x] (2026-10-30, T057) UI: odds panel and reveal for six rarities (`FXRecipes.ORDER`, `RevealFX` ORDER need Mythic and Celestial)
 - [ ] Content: Mythic and Celestial familiars (lore, model, rig, stats), tier 6 to 8 looks
-- [ ] Animations: idle, hit, death, new walk cycles for familiars and enemies
+- [x] (2026-10-30, T404 T405) Animations: idle, hit, death, new walk cycles for familiars and enemies
 - [ ] More cutscenes: merge morph on tier-up (needs GameClient's model table), boss phase transitions (needs boss phases), sounds for the captions and set morph ([[Design/Cutscenes and Transitions]])
 - [ ] Look at the four human familiars on the board in Play (scale, animations) and tune their stats ([[Design/Human Familiars]]). 2026-10-29: facing fixed (Yaw 180 showed backs; now 0, place unsaved). Play check done: all 4 humans place on the board at heights 4.4 to 4.8 and face +Z toward the camera; still to do: view at game zoom (units are about 25 px tall), animations
 - [ ] Idle clips and better hands and faces for the human familiars; more humans for Epic and Legendary if wanted
 - [x] (2026-10-29, loading-eye chat) Odds panel for six rarities fixed and checked in a Play capture
+
+## Overnight 2026-10-29 to 10-30 (see Overnight/LEDGER.md)
+- [x] Sim: difficulty modes, pause/resume, shards, faction combos, lantern power, elite waves, day-night/weather, hollow enemies, endless, boss mechanics, path shapes, placement rules, blockers, data modules (flagged off where they change play)
+- [x] Achievements, Quests, Bond, LeaderboardRules logic and server hooks (T652, four flags off)
+- [x] Client: boss bar/fx/arenas, telegraphs, float text, placement hint, status icons, FX layers, TextAnim, dialogs, tooltips, strings, nine screens plus ScreenRouter, 40-icon set uploaded
+- [x] Audio: UI, boss and familiar cue sounds, ambience, music per set, mix sliders (ear unverified)
+- [x] Regression pass (33 of 33 suites, lean bot 10 of 10) and wiring audit (T650, T651)
+- [ ] HUD rebuild: T640 failed blind review; HUD, collection and results still under 7
+- [ ] Per-set art (UI and stages)
+- [ ] Achievements client UI (and quest/bond/leaderboard UI); turn the four flags on after review
+- [ ] Enemy models placed in stages (rigs and textures exist; hollow enemies have no client models)
+- [ ] Human review of motion and audio (all looks and sounds UNVERIFIED)
+- [ ] Save the place (Claude.rbxl); tonight's Studio changes live in the open session and Studio_Export/ (needs the user)
+- [ ] Fix PauseMenu SelectedObject warnings; resolve the H key clash (HideUI vs PlacementHint)
