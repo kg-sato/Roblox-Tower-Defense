@@ -76,11 +76,11 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
 ## Lane: client-core (GameClient family; HELD by ui-rework per QUEUE.md: claim first, minimal hooks)
 - [x] T139 | Enemy health bars and status icons readable at the board camera | verify: studio: capture plus contrast numbers for burn, chill, stun, mark, hush
   lane: client-core | needs: Studio | depends: T198 | size: M | owner-files: GameClient enemy renderer or new EnemyBars module, Models.luau (bar only)
-- [ ] T138 | Enemy telegraphs one second before Sentinel plant, Crow perch, Thief steal | verify: studio: telegraph fires 1 s before each special in a scripted wave
+- [x] T138 | Enemy telegraphs one second before Sentinel plant, Crow perch, Thief steal | verify: studio: telegraph fires 1 s before each special in a scripted wave
   lane: client-core | needs: Studio | depends: T198 | size: M | owner-files: new EnemyTelegraph module, GameClient (one hook), Shared.MatchSim events (read only)
-- [ ] T194 | Damage float text with per-family colour, obeys damage setting | verify: studio: float text colours per family, setting off hides them
+- [x] T194 | Damage float text with per-family colour, obeys damage setting | verify: studio: float text colours per family, setting off hides them
   lane: client-core | needs: Studio | depends: T198,T188 | size: S | owner-files: FeedbackFX, GameClient (one hook)
-- [ ] T178 | Placement heat map hint toggle, good tiles per family | verify: studio: toggle shows tiles on stage 1, console clean
+- [x] T178 | Placement heat map hint toggle, good tiles per family | verify: studio: toggle shows tiles on stage 1, console clean
   lane: client-core | needs: Studio | depends: T177,T198 | size: S | owner-files: new PlacementHint module, GameClient (one hook)
 
 ## Lane: client-ui (new standalone modules only; never the OFF LIMITS files)
@@ -146,7 +146,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: world | needs: Studio | depends: T149,T167 | size: L | owner-files: StageSetClient (claim), Backdrop*.luau
 
 ## Lane: fx-audio (effects-and-audio)
-- [ ] T148 | Boss phase transition: visual change, sound and cut per phase | verify: studio: three phases of one boss captured with sound events logged
+- [x] T148 | Boss phase transition: visual change, sound and cut per phase | verify: studio: three phases of one boss captured with sound events logged
   lane: fx-audio | needs: Studio | depends: T149 | size: M | owner-files: CutsceneFX, BossFx module (new), SoundCatalog entries
 - [ ] T134 | Hit and death reactions and effects per enemy family | verify: studio: six families, each hit and death captured, emitters under the burst cap
   lane: fx-audio | needs: Studio | depends: T142 | size: L | owner-files: ImpactFX, ProjectileFX hit part, VFX/*.luau (new recipes)
@@ -170,7 +170,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: fx-audio | needs: Studio | depends: T604 | size: M | owner-files: SoundFX, Shared.SettingsDefaults (claim from client-ui)
 - [x] T160 | Music per set (5, crossfade) plus tension layer by wave | verify: studio: states for sets 1 to 5 load, crossfade logged
   lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: MusicFX, MusicCatalog, AudioIds
-- [ ] T166 | Ambient loops per set and lobby, plus sounds for captions and set morph | verify: manual: tools/check_sound_lengths.py PASS, studio: loops start per set
+- [x] T166 | Ambient loops per set and lobby, plus sounds for captions and set morph | verify: manual: tools/check_sound_lengths.py PASS, studio: loops start per set
   lane: fx-audio | needs: Studio | depends: T153 | size: M | owner-files: MusicFX ambience states, SoundCatalog
 
 ## Lane: docs-tooling (docs, vault, tooling, content)

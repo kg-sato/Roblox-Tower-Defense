@@ -9,6 +9,7 @@ function FXK.applySettings(s)
 	SETTINGS.flashes = s.flashes ~= false
 	SETTINGS.reducedMotion = s.reducedMotion == true
 	SETTINGS.shake = s.shake ~= false
+	SETTINGS.damageNumbers = s.damageNumbers ~= false -- T194: the Damage numbers setting reaches FloatText (it never reached SETTINGS before)
 	if FXK.flashToggle then
 		FXK.flashToggle.Text = SETTINGS.flashes and "Flashes: ON" or "Flashes: OFF"
 	end

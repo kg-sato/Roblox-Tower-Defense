@@ -39,6 +39,8 @@ M.catalog = {
 	reveal_legendary = { dur = 4.08, vol = 0.90, pri = 3, jit = 0 },
 	reveal_mythic = { dur = 5.00, vol = 0.95, pri = 3, jit = 0 },
 	reveal_celestial = { dur = 6.02, vol = 1.00, pri = 3, jit = 0 },
+	caption_tick = { dur = 0.35, vol = 0.30, pri = 1, jit = 0.03 }, -- T166: a caption appears
+	set_morph = { dur = 2.40, vol = 0.55, pri = 2, jit = 0 }, -- T166: the fog veil closes on a new stage set
 }
 
 -- uploaded 2026-10-29 (VFX/ASSETS.md); moderation state unchecked
@@ -51,6 +53,8 @@ M.ids = {
 	reveal_legendary = 100672209997679,
 	reveal_celestial = 114164363714017,
 	boss_intro_clockmaker = 129659992794232,
+	caption_tick = 112396969710935,
+	set_morph = 126579756259575,
 }
 
 -- old call sites that now play a new cue (only used when the new cue is uploaded)

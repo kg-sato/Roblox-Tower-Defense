@@ -51,3 +51,6 @@ T630 | commit db328f0 | "sound cues wired" | attested | fx-audio | Overnight/evi
 T602 | commit db328f0 | "fx scale settings" | attested | fx-audio | Overnight/evidence/T602.txt
 T605 | commit db328f0 | "mix sliders ducking" | attested | fx-audio | Overnight/evidence/T605.txt
 T160 | commit db328f0 | "music per set" | attested | fx-audio | Overnight/evidence/T160.txt
+T198 | commit e485b75 | "gameclient split done" | attested | client-core | Overnight/evidence/T198.txt
+T149 | commit e485b75 | "boss phase bar" | attested | client-core | Overnight/evidence/T149.txt
+T139 | commit e485b75 | "enemy status icons" | attested | client-core | Overnight/evidence/T139.txt

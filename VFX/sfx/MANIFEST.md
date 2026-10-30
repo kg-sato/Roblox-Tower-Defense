@@ -48,3 +48,11 @@ Roblox asset ids for uploaded files are in `VFX/ASSETS.md`.
 
 ## Uploaded to Roblox (2026-10-29, user 872430111; 8 of the 30 new cues)
 ui_click_soft 111673041051226, ui_error 109055487674361, ui_buy 138935227500698, ui_levelup 89524906675033, familiar_place 135206057906557, reveal_legendary 100672209997679, reveal_celestial 114164363714017, boss_intro_clockmaker 129659992794232. Other rows are local WAVs only.
+| amb_lane | 24.00 | looping ambience bed | -6.0 | -20.2 | -20.2 |
+| amb_harbour | 24.00 | looping ambience bed | -6.0 | -22.9 | -22.9 |
+| amb_cathedral | 24.00 | looping ambience bed | -6.0 | -14.6 | -14.6 |
+| amb_foundry | 24.00 | looping ambience bed | -6.0 | -17.0 | -17.0 |
+| amb_veil | 24.00 | looping ambience bed | -6.0 | -19.0 | -19.0 |
+| amb_lobby | 24.00 | looping ambience bed | -6.0 | -19.1 | -19.1 |
+| caption_tick | 0.35 | one-shot cue (caption appears) | -6.0 | -23.8 | -23.8 |
+| set_morph | 2.40 | one-shot cue (stage set morph) | -6.0 | -18.6 | -18.6 |

@@ -1780,5 +1780,53 @@
   "type": "Decal",
   "assetId": "121493074193413",
   "time": "2026-10-29 20:38"
+ },
+ {
+  "file": "VFX/sfx/out/amb_lane.wav",
+  "type": "Audio",
+  "assetId": "100719500442065",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/amb_harbour.wav",
+  "type": "Audio",
+  "assetId": "121844527608472",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/amb_cathedral.wav",
+  "type": "Audio",
+  "assetId": "83607517954240",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/amb_foundry.wav",
+  "type": "Audio",
+  "assetId": "83914826017186",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/amb_veil.wav",
+  "type": "Audio",
+  "assetId": "114017854252926",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/amb_lobby.wav",
+  "type": "Audio",
+  "assetId": "70453404199147",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/caption_tick.wav",
+  "type": "Audio",
+  "assetId": "112396969710935",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/set_morph.wav",
+  "type": "Audio",
+  "assetId": "126579756259575",
+  "time": "2026-10-29 22:16"
  }
 ]

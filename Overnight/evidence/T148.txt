@@ -1,0 +1,8 @@
+PASS
+T148 boss phase transition, studio Play, stage 5 boss The Unbound (3 phases), 2026-10-29, worker studio-client2. Module StarterPlayerScripts.BossFx (Studio_Export/BossFx.luau) next to BossBar, one-line hook in GameClient (FXK.bossFx); listens to BossPhase and Spawn itself.
+Log (script attribute Log): [Unbound,1,aa82ff,""] [Unbound,2,ffaa46,"ink"] [Unbound,3,ff3c32,"glass_crack,bell_toll"].
+Samples at each phase (PhaseGlow highlight, top cut bar position, camera FOV): phase 2 +0.1 s glow ffaa46 bar 0.09 fov 52 ; +0.5 s bar 0.11 fov 56 ; phase 3 glow ff3c32 bar 0.11 fov 56 -> bar returns to 0 and fov 60 after the cut (about 1.2 s). Phase 1 glow aa82ff, no cut.
+Sound events logged in SoundCues.log (SoundCuesClient CueLog): boss_intro_unbound(played bell_toll), then ink (phase 2), then glass_crack and bell_toll (phase 3); music duck 0.4 for 2.2 s at each later phase. All cues are existing sound files, no new audio.
+Console clean (known asset line only).
+Found: the server emits BossPhase only for phases 2 and 3; phase 1 glow comes from the Spawn event.
+UNVERIFIED: look of the glow, ring, cut and shake and the sound mix (nobody looked or listened). Could not take a clean freeze-frame of the board: the Legendary reveal queue covered the screen during the run; the numbers above are property assertions. Reduced Motion: no lens punch or shake, bars and glow stay.

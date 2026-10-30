@@ -42,3 +42,5 @@ Severity: `crash` / `major` (breaks a feature) / `minor` / `cosmetic`
 **2026-10-25:** v2 re-import checked in Play: tilt fixed (upright without correction); clips needed the same pose-rename and loop patch again (the importer repeats the same naming issue, so it is a fixed post-import step); the model faces -Z. Old duplicate models and their clip saves deleted by the user's request.
 
 - 2026-10-25 FIXED: K.bar returns a nil fill at value 0 when sprite art is on; NowPlaying uses its own track/fill boxes. Note: Studio MusicFX source uses CRLF line endings when patching.
+
+- 2026-10-29 FIXED (studio-client2, T194): the Damage numbers setting (T116) never reached the client's SETTINGS table (GCSettingsApply did not copy it), so the switch did nothing; one line added in GCSettingsApply.

@@ -39,6 +39,12 @@ Music.states = {
 	foundry = { "chill_lofi", "rising_moon" }, -- stage set 4, Clockwork Foundry (T160): reuses the "play" tracks (no new music made); its own state so set 5 never fades a track into itself
 	wish = { "iremos_forest" },
 }
+-- Ambience (T166, 2026-10-29): one looping bed under the music, per stage set plus the lobby. Music.ambient(key) crossfades to the bed for that key
+-- (stage set id or "lobby"; nil or an unknown key fades it out). Beds are WAVs from VFX/sfx/make_ambience.py (uploaded, ids below); they follow the music
+-- and master sliders and the duck, at the per-bed trim in ambVol. Ear quality is UNVERIFIED.
+Music.ambBeds = { lobby = "amb_lobby", LampwickLane = "amb_lane", HarbourOfBrass = "amb_harbour", SilentCathedral = "amb_cathedral", ClockworkFoundry = "amb_foundry", AboveTheGreyVeil = "amb_veil" }
+Music.ambIds = { amb_lobby = 70453404199147, amb_lane = 100719500442065, amb_harbour = 121844527608472, amb_cathedral = 83607517954240, amb_foundry = 83914826017186, amb_veil = 114017854252926 }
+Music.ambVol = { amb_lobby = 0.5, amb_lane = 0.55, amb_harbour = 0.55, amb_cathedral = 0.35, amb_foundry = 0.4, amb_veil = 0.5 }
 Music.volumes = { music = 1, master = 1 } -- master: the Settings master slider (T605)
 Music.fade = 3.0 -- crossfade seconds
 -- fires (name) every time a main track starts; the Now Playing popup listens to it
@@ -49,6 +55,7 @@ Music.tensionMax = 0.55 -- the bed reaches 55% of its own trim (about 10 dB unde
 local group
 local main = {} -- list of { sound, name, target, vol }
 local tension -- { sound, target, vol }
+local amb = {} -- ambience beds: list of { sound, name, cur, target, vol }
 local state, playlistIndex = nil, 0
 local tensionLevel, duckMul, duckTarget, duckRate = 0, 1, 1, 3
 local conn
@@ -137,7 +144,18 @@ local function step(dt)
 			Music._advance()
 		end
 	end
-	if #main == 0 and not tension then
+	for i = #amb, 1, -1 do
+		local rec = amb[i]
+		rec.cur += (rec.target - rec.cur) * k
+		if rec.sound.Parent then
+			rec.sound.Volume = rec.cur * rec.vol * Music.volumes.music * Music.volumes.master * (0.5 + 0.5 * duckMul)
+		end
+		if rec.target == 0 and rec.cur < 0.01 then
+			kill(rec)
+			table.remove(amb, i)
+		end
+	end
+	if #main == 0 and not tension and #amb == 0 then
 		conn:Disconnect()
 		conn = nil
 	end
@@ -177,6 +195,31 @@ function Music._advance()
 	local name, idx = Music._pick(list, last, playlistIndex)
 	playlistIndex = idx
 	startTrack(name)
+end
+
+function Music.ambient(key)
+	local bed = key and Music.ambBeds[key]
+	if bed and not Music.ambIds[bed] then
+		bed = nil
+	end
+	local cur = amb[#amb]
+	if cur and cur.target == 1 and cur.name == bed then
+		return
+	end
+	if Music.log then
+		table.insert(Music.log, { from = "amb:" .. (cur and cur.name or "-"), to = "amb:" .. tostring(bed), state = key })
+	end
+	for _, rec in ipairs(amb) do
+		rec.target = 0
+	end
+	if bed then
+		local s = Instance.new("Sound")
+		s.Name, s.SoundId, s.Looped, s.Volume, s.SoundGroup = "AMB_" .. bed, "rbxassetid://" .. Music.ambIds[bed], true, 0, getGroup()
+		s.Parent = SoundService
+		s:Play()
+		table.insert(amb, { sound = s, name = bed, cur = 0, target = 1, vol = Music.ambVol[bed] or 0.5 })
+	end
+	ensureLoop()
 end
 
 function Music.play(newState)
@@ -287,7 +330,11 @@ function Music.status()
 	for _, rec in ipairs(main) do
 		table.insert(names, string.format("%s(%.2f)", rec.name, rec.cur))
 	end
-	return { main = names, tension = tension and tension.cur or 0, duck = duckMul, state = state }
+	local ambNames = {}
+	for _, rec in ipairs(amb) do
+		table.insert(ambNames, string.format("%s(%.2f)", rec.name, rec.cur))
+	end
+	return { main = names, amb = ambNames, tension = tension and tension.cur or 0, duck = duckMul, state = state }
 end
 
 function Music.audit()

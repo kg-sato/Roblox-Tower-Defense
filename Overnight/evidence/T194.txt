@@ -1,3 +1,7 @@
-PASS WITH A GAP (Config.STATUS and MatchSim.applyStatus installed in Studio, mirrored, tested)
-Burn, chill (3 stacks freeze), stun (immunity afterwards), mark and hush, with the boss halving and freeze immunity and the planted-enemy immunity; the lantern-bright status from the design is not implemented (no player lantern power exists). Tests in Tests/Combat.test.luau: 51 of 51 PASS in Studio Edit mode.
-Gap: slows, stuns and freezes only change enemy speed when Config.MOVEMENT_EFFECTS is true, and it is false because the client moves enemies at constant speed (a Pace event handler is needed in GameClient); no status visuals.
+PASS
+T194 damage float text per family, studio Play, 2026-10-29, worker studio-client2. Module StarterPlayerScripts.FloatText (Studio_Export/FloatText.luau); GameClient shotFx now makes one call, FXK.floatFx.hit(to, data, entry.pet), instead of the old 7-line block.
+Real Shot events fired from the server at a live enemy (slot -> pet -> family -> colour logged by the module):
+slot1 Ember (Lantern Keepers) dmg 41 -> ff7846 ; slot2 BrassHound (Clockwork Guild) dmg 42 -> dcbe64 ; slot3 Frostling (Hollow Court) dmg 43 -> 82cdff ; slot4 StarDrake (Star Choir) dmg 44 -> cd96ff ; crit dmg 90 -> "90!" ffd060 (gold, larger) ; dmg 5 -> no float (under 25, as before).
+Setting: found that SETTINGS.damageNumbers never received the saved setting (GCSettingsApply did not copy it, so T116's switch was dead). Fixed: one line in Studio_Export/GCSettingsApply.luau. Then Settings {damageNumbers=false} from the server: 2 shots (60 and a crit 90) -> 0 visible float labels, log shown=false; Settings {damageNumbers=true} -> shot shows 2 labels again.
+Console: only the known asset line.
+UNVERIFIED: whether the five colours are readable against the board (look not judged). Two family colours (Lantern orange-red, Clockwork brass) sit near the crit gold; the crit is told apart by size and the "!".

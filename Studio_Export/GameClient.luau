@@ -1401,13 +1401,7 @@ local function shotFx(data)
 		FXK.lastHitSfx = os.clock()
 		task.delay(shotDur, FXK.play, "enemy_hit", { pitch = data.crit and 0.75 or 1 })
 	end
-	if SETTINGS.damageNumbers == false then
-		-- Damage numbers Off (T116): no damage float text at all
-	elseif data.crit then
-		floatText(to, fmt(data.dmg) .. "!", STYLE.gold, 26)
-	elseif data.dmg >= 25 then
-		floatText(to, fmt(data.dmg), color, 18)
-	end
+	FXK.floatFx.hit(to, data, entry.pet) -- T194: family colour; the Damage numbers setting (T116) is honoured inside
 	entry.kick = 1
 end
 
@@ -2825,6 +2819,10 @@ end
 local mergeCut = require(script.Parent:WaitForChild("GCMergeCut"))({ FXK = FXK, ReplicatedStorage = ReplicatedStorage, SETTINGS = SETTINGS, STYLE = STYLE, burst = burst, camera = camera, floatText = floatText, flying = flying, groundOf = groundOf, pending = pending, petParts = petParts, rarityColor = rarityColor, ring = ring, screenFlash = screenFlash, setPet = setPet, shake = shake, tween = tween })
 
 local BossBar = require(script.Parent:WaitForChild("BossBar"))({ hud = hud, bossBarBg = bossBarBg, STYLE = STYLE, new = new, tween = tween, showBanner = showBanner, showToast = showToast, floatText = floatText, petParts = petParts, groundOf = groundOf, FXK = FXK, SETTINGS = SETTINGS }) -- T149 boss phase bar, deny and freeze feedback
+FXK.telegraph = require(script.Parent:WaitForChild("EnemyTelegraph"))({ enemies = enemies, new = new, tween = tween, SETTINGS = SETTINGS, FXK = FXK, Path = Path }) -- T138 one second warning before plant, perch, steal
+FXK.floatFx = require(script.Parent:WaitForChild("FloatText"))({ Config = Config, SETTINGS = SETTINGS, STYLE = STYLE, floatText = floatText, fmt = fmt }) -- T194 damage numbers
+FXK.hint = require(script.Parent:WaitForChild("PlacementHint"))({ Config = Config, UI = UI, visuals = visuals, getStage = function() return lastSnap and lastSnap.stage or 1 end, selectedPet = function() return selectedSlot and petParts[selectedSlot] and petParts[selectedSlot].pet end, firstPet = function() local _, e = next(petParts) return e and e.pet end }) -- T178 good-tile heat map (H)
+FXK.bossFx = require(script.Parent:WaitForChild("BossFx"))({ hud = hud, enemies = enemies, FXK = FXK, SETTINGS = SETTINGS, new = new, tween = tween, shake = shake, ring = ring, screenFlash = screenFlash }) -- T148 boss phase look, cut and sound
 
 EventRemote.OnClientEvent:Connect(function(kind, data)
 	if kind == "Begin" then
