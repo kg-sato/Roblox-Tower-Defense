@@ -14,3 +14,11 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-29 19:29 blender-worker: T407 familiar re-bake; last: 19:27 T124,T142 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle, holding nothing; last: 19:14 finale overlap, blink li
 - 2026-10-29 19:30 T424, T027, T124 done: docs refreshed, UI research boards, 512 px enemy textures. Look-and-feel unverified.
 - 2026-10-29 19:33 Title round 2 installed: fog deity, rooftop city, bridge, lamp; Edit captures show motion; menu text changes unverified
+- 2026-10-29 19:40 Sim batch (T413 T606 T411 T005 T185 T019), enemy rigs, textures and sound sets done; RunAll 17/17; ear and look unverified.
+- 2026-10-29 19:41 Title r3: solid robe, void face, dark bg, installed; Edit frames OK, Play capture still stale (UNVERIFIED)
+- 2026-10-29 19:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 19:48 Skill tree r3 installed: new layout, gold-ink backdrop, states, plates; blue pixels 0.0%. Edit-mode harness frames; blind review pending.
+- 2026-10-29 19:49 UI rework: skill tree V3 and title scene built in Studio, both blind-graded FAIL (best items 7/10); title r4 pending; Play motion unverified. Your call to judge.
+- 2026-10-29 19:57 Title r4 installed: feathered deity figure with crown, focal sun, mist, gold button; real Play captures r4_play_a/b. Unverified: blind grade.
+- 2026-10-29 19:58 UI rework finished: title r4 and skill tree r3 built and in Studio, both still FAIL blind review (5-7/10); notes in Research/UI. Needs your eyes.
+- 2026-10-29 19:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,

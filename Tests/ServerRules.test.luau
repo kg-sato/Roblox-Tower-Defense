@@ -203,6 +203,79 @@ return function(Shared)
 		sim.ult = sim:ultNeed()
 		check("a charged ultimate casts", select(1, sim:castUlt()) == true and has("Ult"))
 		check("casting spends the charge", sim.ult < sim:ultNeed(), sim.ult)
+
+		-- pause and resume per run (T006)
+		do
+			local function near(x, y, eps)
+				return math.abs(x - y) <= (eps or 1e-6)
+			end
+			local sim = newSim(11)
+			sim:startWave()
+			for _ = 1, 40 do
+				sim:step(0.1)
+			end
+			local t0, dist0 = sim.t, sim.enemies[1] and sim.enemies[1].dist
+			check("a wave is running before the pause test", sim.state == "active" and dist0 ~= nil)
+			check("Pause refuses a non-boolean", select(1, sim:pause("yes")) == false and select(1, sim:pause(nil)) == false and sim.userPaused == false)
+			check("Pause on works", select(1, sim:pause(true)) == true and sim.userPaused == true and has("Pause"))
+			check("snapshot shows the pause", sim:snapshot().userPaused == true and sim:snapshot().pauseLeft == Config.PAUSE_MAX)
+			for _ = 1, 100 do
+				sim:step(0.1)
+			end
+			check("while paused the sim clock stands still", near(sim.t, t0, 1e-9), sim.t)
+			check("while paused enemies do not move", sim.enemies[1] and near(sim.enemies[1].dist, dist0, 1e-9))
+			check("pausing twice is harmless", select(1, sim:pause(true)) == true and sim.userPaused == true)
+			check("Resume works", select(1, sim:pause(false)) == true and sim.userPaused == false)
+			sim:step(0.5)
+			check("after Resume time moves again", sim.t > t0 + 0.4)
+			check("resuming when not paused is harmless", select(1, sim:pause(false)) == true)
+			-- the pause ends by itself
+			sim:pause(true)
+			sim:tickPause(Config.PAUSE_MAX - 1)
+			check("a pause still holds just before the cap", sim.userPaused == true)
+			events = {}
+			sim:tickPause(2)
+			check("the pause ends by itself after Config.PAUSE_MAX", sim.userPaused == false and sim.pauseLeft == 0 and has("Pause"))
+			sim:tickPause(100)
+			check("tickPause does nothing while running", sim.userPaused == false)
+			local tut = MatchSim.new(Random.new(2), function() end, true)
+			check("no user pause in the tutorial", select(1, tut:pause(true)) == false and tut.userPaused == false)
+			-- the run as a plain table
+			local a = newSim(12)
+			a.coins = 777
+			a.stage = 7
+			a.combo = 3
+			local u1 = a:addUnit("Ember", -40, -2)
+			a.grid[u1].tier = 3
+			a.upgrades.Ember.Power = 2
+			a.bestStage = 40
+			a:setDifficulty("Hard")
+			local saved = a:exportRun()
+			local b = newSim(13)
+			b.bestStage = 40
+			check("a saved run loads", b:importRun(saved) == true)
+			local only
+			for _, u in b.grid do
+				only = u
+			end
+			check("the loaded run keeps stage, coins and combo", b.stage == 7 and b.coins == 777 and b.combo == 3)
+			check("the loaded run keeps units and upgrades", b:unitCount() == 1 and only.pet == "Ember" and only.tier == 3 and b.upgrades.Ember.Power == 2)
+			check("a loaded run starts paused until the player resumes", b.userPaused == true and b.pauseLeft == Config.PAUSE_MAX)
+			check("a loaded run is ready, not mid-wave", b.state == "ready" and #b.enemies == 0)
+			local c = newSim(14)
+			check("importRun refuses junk", c:importRun(nil) == false and c:importRun("x") == false and c:importRun(5) == false)
+			check("the tutorial refuses a loaded run", tut:importRun(saved) == false)
+			local d = newSim(15)
+			d:importRun({ stage = -5, coins = -1, crystal = 1e9, combo = 1e9, difficulty = "Hard", grid = { a = { pet = "NotAPet", tier = 1, x = 0, z = 0 }, b = { pet = "Ember", tier = 99, x = -40, z = -2 }, c = { pet = "Ember", tier = 1, x = "no", z = 0 } }, upgrades = { Ember = { Power = 99, Haste = -3, Crit = 0 }, Nope = {} } })
+			local ones = {}
+			for _, u in d.grid do
+				table.insert(ones, u)
+			end
+			check("a damaged run is clamped: stage, coins, crystal and combo", d.stage == 1 and d.coins == 0 and d.crystalHp <= d:maxHp() and d.combo <= 1000)
+			check("a damaged run drops unknown pets and bad coordinates and clamps tiers", #ones == 1 and ones[1].tier == Config.TIER_MAX)
+			check("a damaged run clamps upgrades", d.upgrades.Ember.Power == Config.UPGRADE_MAX and d.upgrades.Ember.Haste == 0)
+			check("a loaded run cannot take a difficulty it has not unlocked", d.difficulty == "Normal")
+		end
 	end)
 	if not ok then
 		failed += 1

@@ -15,25 +15,25 @@ local INK, INK2 = Color3.fromRGB(12, 11, 10), Color3.fromRGB(26, 23, 20)
 local GOLD, LIGHT, CREAM = Color3.fromRGB(184, 151, 90), Color3.fromRGB(217, 184, 120), Color3.fromRGB(239, 230, 207)
 local DIM, FAINT = Color3.fromRGB(104, 88, 58), Color3.fromRGB(70, 60, 42)
 local ICONS = {
-	Armor = "rbxassetid://140485132734548",
-	Charge = "rbxassetid://137915456412547",
-	Charm = "rbxassetid://91321861751583",
-	Claws = "rbxassetid://104503848358426",
-	Clock = "rbxassetid://70371876518220",
-	Discount = "rbxassetid://132380128059909",
-	Double = "rbxassetid://79355991077094",
-	Eye = "rbxassetid://118479517178330",
-	Finder = "rbxassetid://140672373757552",
-	Guard = "rbxassetid://83091671363094",
-	Haste = "rbxassetid://99346353544120",
-	Heavy = "rbxassetid://79764788010440",
-	Learner = "rbxassetid://128027987548468",
-	Magnet = "rbxassetid://114214626329333",
-	Mega = "rbxassetid://130998936325390",
-	Merger = "rbxassetid://87654079598346",
-	Pity = "rbxassetid://139228403939798",
-	Refund = "rbxassetid://85148876319062",
-	Start = "rbxassetid://88116451873049",
+	Armor = "rbxassetid://97798687917539",
+	Charge = "rbxassetid://87255306276247",
+	Charm = "rbxassetid://134496285484911",
+	Claws = "rbxassetid://84134147080434",
+	Clock = "rbxassetid://122010917635946",
+	Discount = "rbxassetid://140718888692850",
+	Double = "rbxassetid://128913448533576",
+	Eye = "rbxassetid://70430773900363",
+	Finder = "rbxassetid://110699275206672",
+	Guard = "rbxassetid://93209073046299",
+	Haste = "rbxassetid://78219893781799",
+	Heavy = "rbxassetid://72808767830160",
+	Learner = "rbxassetid://126515305812185",
+	Magnet = "rbxassetid://105874413704464",
+	Mega = "rbxassetid://127797835791972",
+	Merger = "rbxassetid://77400237971107",
+	Pity = "rbxassetid://104471144542537",
+	Refund = "rbxassetid://114771222853824",
+	Start = "rbxassetid://128237310134386",
 }
 local AR = 9 / 16 -- height units to stage width fraction
 local ARCANA = { { "I", "The Ember" }, { "II", "The Brass" }, { "III", "The Ward" }, { "IV", "The Storm" }, { "V", "The Fortune" }, { "VI", "The Star" } }
@@ -76,7 +76,7 @@ return function(env)
 	new("ImageLabel", { Name = "WarmGlow", BackgroundTransparency = 1, Image = A.glow, ImageColor3 = Color3.fromRGB(70, 52, 26), ImageTransparency = 0.35, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1.6 * AR, 1.6), ZIndex = 13 }, BS)
 	for k = 0, 47 do -- faint engraved rays from the hub
 		local a = k / 48 * math.pi * 2
-		new("Frame", { BackgroundColor3 = GOLD, BackgroundTransparency = k % 4 == 0 and 0.88 or 0.94, BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.95 * AR, k % 4 == 0 and 0.0016 or 0.0009), Rotation = math.deg(a), ZIndex = 13 }, BS)
+		new("Frame", { BackgroundColor3 = GOLD, BackgroundTransparency = k % 4 == 0 and 0.88 or 0.94, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5 + math.cos(a) * 0.475 * AR, 0.5 + math.sin(a) * 0.475), Size = UDim2.fromScale(0.95 * AR, k % 4 == 0 and 0.0016 or 0.0009), Rotation = math.deg(a), ZIndex = 13 }, BS)
 	end
 	new("ImageLabel", { Name = "TreeSepia", BackgroundTransparency = 1, Image = A.tree, ImageColor3 = Color3.fromRGB(176, 134, 64), ImageTransparency = 0.62, ScaleType = Enum.ScaleType.Fit, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.52), Size = sq(0.9), ZIndex = 13 }, BS)
 	do
@@ -99,8 +99,8 @@ return function(env)
 	local PARENT = { Claws = "Start", Magnet = "Start", Armor = "Start", Charge = "Start", Charm = "Start", Finder = "Start", Heavy = "Claws", Eye = "Claws", Haste = "Claws",
 		Merger = "Magnet", Learner = "Magnet", Clock = "Armor", Mega = "Charge", Refund = "Charge", Pity = "Charm", Discount = "Charm", Double = "Finder", Guard = "Finder" }
 	local HAIR = { { "Eye", "Magnet" }, { "Haste", "Finder" }, { "Learner", "Armor" }, { "Refund", "Armor" }, { "Pity", "Charge" }, { "Double", "Charm" } }
-	local CARDPOS = { Vector2.new(0.80, 0), Vector2.new(0.50, -0.355), Vector2.new(-0.50, -0.355), Vector2.new(-0.80, 0), Vector2.new(-0.50, 0.33), Vector2.new(0.50, 0.33) }
-	local CARD_H = 0.15
+	local CARDPOS = { Vector2.new(0.80, 0.075), Vector2.new(0.50, -0.365), Vector2.new(-0.50, -0.365), Vector2.new(-0.80, 0.075), Vector2.new(-0.50, 0.335), Vector2.new(0.50, 0.335) }
+	local CARD_H = 0.135
 	for _, n in Config.TREE do
 		local v = POS[n.id]
 		P[n.id], ringOf[n.id] = Vector2.new(v[1], v[2]), n.id == "Start" and 0 or 1
@@ -282,7 +282,7 @@ return function(env)
 	end
 
 	-- 7) the popup: an ornate gold-ink frame, a title, a thin rule, a description, cost and status
-	local PW, PH = 0.17, 0.3 -- of the stage width and height
+	local PW, PH = 0.17, 0.245 -- of the stage width and height
 	local pop = new("Frame", { Name = "Popup", BackgroundColor3 = INK, BackgroundTransparency = 0.04, Visible = false, Size = UDim2.fromScale(PW, PH), ZIndex = 50 }, S)
 	new("UIStroke", { Color = LIGHT, Thickness = 1.6 }, pop)
 	local pin = new("Frame", { BackgroundTransparency = 1, Position = UDim2.fromScale(0.03, 0.03 * PW * 16 / 9 / PH), Size = UDim2.fromScale(0.94, 1 - 0.06 * PW * 16 / 9 / PH), ZIndex = 50 }, pop)
@@ -320,9 +320,7 @@ return function(env)
 	local bar = new("Frame", { Name = "Bar", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 0.985), Size = UDim2.fromScale(0.94, 0.07), ZIndex = 30 }, S)
 	new("Frame", { BackgroundColor3 = LIGHT, BackgroundTransparency = 0.45, BorderSizePixel = 0, Position = UDim2.fromScale(0, 0), Size = UDim2.fromScale(1, 0.02), ZIndex = 30 }, bar)
 	local respec = new("TextButton", { AutoButtonColor = false, Text = "RESPEC", TextColor3 = LIGHT, TextScaled = true, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromScale(0.005, 0.55), Size = UDim2.fromScale(0.15, 0.82), ZIndex = 31 }, bar)
-	respec.Font = Enum.Font.Bodoni
-	respec:SetAttribute("KeepFont", true)
-	new("UITextSizeConstraint", { MaxTextSize = 28 }, respec)
+	new("UITextSizeConstraint", { MaxTextSize = 22 }, respec)
 	local rStroke = plate(respec, 31)
 	local hintIcon = new("ImageLabel", { BackgroundTransparency = 1, Image = ICONS.Start, ImageColor3 = LIGHT, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.fromScale(0.39, 0.55), Size = UDim2.fromScale(0.03, 0.62), ZIndex = 31 }, bar)
 	local hint = new("TextLabel", { BackgroundTransparency = 1, Text = "", TextColor3 = LIGHT, TextScaled = true, TextXAlignment = Enum.TextXAlignment.Left, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromScale(0.4, 0.55), Size = UDim2.fromScale(0.28, 0.6), ZIndex = 31 }, bar)
@@ -413,9 +411,11 @@ return function(env)
 		local nh = (N[id].big or N[id].h) / 2 + 0.012
 		local pw, ph = PW / AR, PH -- popup size in height units
 		local best, bx, by = math.huge
-		for _, c in { { 1, 0 }, { -1, 0 }, { 1, -1 }, { -1, -1 }, { 1, 1 }, { -1, 1 }, { 0, -1 }, { 0, 1 } } do
-			local cx = p.X + c[1] * (nh + pw / 2 * (c[1] ~= 0 and 1 or 0)) + (c[1] == 0 and 0 or 0)
-			local cy = p.Y + c[2] * (nh + ph / 2 * (c[2] ~= 0 and 1 or 0)) * (c[1] == 0 and 1 or 0.55)
+		local cands = { { 0, -1 }, { 0, 1 } }
+		for _, dx in { 1, -1 } do for _, off in { -1, -0.66, -0.33, 0, 0.33, 0.66, 1 } do table.insert(cands, { dx, off }) end end
+		for _, c in cands do
+			local cx = p.X + c[1] * (nh + pw / 2)
+			local cy = c[1] == 0 and p.Y + c[2] * (nh + ph / 2) or p.Y + c[2] * ph * 0.5
 			cx = math.clamp(cx, -0.89 + pw / 2 + 0.01, 0.89 - pw / 2 - 0.01)
 			cy = math.clamp(cy, -0.5 + ph / 2 + 0.01, 0.5 - ph / 2 - 0.01)
 			local function ov(x, y, w, h) -- overlap area of (x,y,w,h) centred rects with the popup
@@ -425,10 +425,10 @@ return function(env)
 			end
 			local score = 0
 			for oid, od in N do
-				if oid ~= id then score += ov(P[oid].X, P[oid].Y, od.h * 1.3, od.h * 1.3) * 40 end
+				if oid ~= id then score += ov(P[oid].X, P[oid].Y, od.h * 1.4, od.h * 1.4) * 150 end
 			end
 			score += ov(p.X, p.Y, nh * 2, nh * 2) * 60 -- never over the hovered node itself
-			for _, cp in CARDPOS do score += ov(cp.X, cp.Y, CARD_H * 0.64, CARD_H) * 25 end
+			for _, cp in CARDPOS do score += ov(cp.X, cp.Y, CARD_H * 0.64 * 1.2, CARD_H * 1.1) * 300 end
 			score += (math.abs(cx - p.X) + math.abs(cy - p.Y)) * 0.02
 			if score < best then best, bx, by = score, cx, cy end
 		end
@@ -705,6 +705,7 @@ return function(env)
 			end
 		end)
 	end)
+	M.showPopup, M.burst = showPopup, burstAt -- (also used by the capture harness)
 	M.instances = #S:GetDescendants()
 	return M
 end

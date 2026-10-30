@@ -112,6 +112,49 @@ return function(Shared)
 			end
 		end
 		check("every default key is present after sanitize", complete)
+
+		-- collection: duplicates and shards (T186)
+		do
+			local coll = {}
+			local pet = Config.PET_ORDER[1]
+			local rarity = Config.PETS[pet].rarity
+			check("the first pull is new and holds one copy and no shards", Config.collectionAdd(coll, pet) == true and coll[pet].count == 1 and coll[pet].shards == 0)
+			check("a duplicate is not new, adds a copy and shards by rarity", Config.collectionAdd(coll, pet) == false and coll[pet].count == 2 and coll[pet].shards == Config.SHARDS_PER_DUPLICATE[rarity], coll[pet].shards)
+			Config.collectionAdd(coll, pet)
+			check("shards grow with every duplicate", coll[pet].count == 3 and coll[pet].shards == 2 * Config.SHARDS_PER_DUPLICATE[rarity])
+			check("shardsFor an unknown pet is 0", Config.shardsFor("NotAPet") == 0)
+			local ok2 = true
+			for _, r in Config.RARITY_ORDER do
+				if type(Config.SHARDS_PER_DUPLICATE[r]) ~= "number" or Config.SHARDS_PER_DUPLICATE[r] <= 0 then
+					ok2 = false
+				end
+			end
+			check("every rarity pays shards", ok2)
+			local lastR, rising = 0, true
+			for _, r in Config.RARITY_ORDER do
+				if Config.SHARDS_PER_DUPLICATE[r] < lastR then
+					rising = false
+				end
+				lastR = Config.SHARDS_PER_DUPLICATE[r]
+			end
+			check("rarer familiars pay more shards", rising)
+			coll[pet].count = Config.COLLECTION_MAX
+			coll[pet].shards = Config.COLLECTION_MAX
+			Config.collectionAdd(coll, pet)
+			check("counts and shards stop at the cap", coll[pet].count == Config.COLLECTION_MAX and coll[pet].shards == Config.COLLECTION_MAX)
+			-- migration of the older `seen` list and clamping of a damaged save
+			local second = Config.PET_ORDER[2]
+			local m = Config.sanitizeCollection(nil, { [pet] = true, [second] = true, NotAPet = true, [Config.PET_ORDER[3]] = false })
+			check("an old save with only `seen` gives one copy each of the real ones", m[pet] and m[pet].count == 1 and m[pet].shards == 0 and m[second] and m[second].count == 1 and m.NotAPet == nil and m[Config.PET_ORDER[3]] == nil)
+			local raw = { [pet] = { count = 5, shards = 12 }, [second] = { count = -4, shards = 1e99 }, NotAPet = { count = 1, shards = 1 }, [Config.PET_ORDER[3]] = "bad", [Config.PET_ORDER[4]] = { count = 0 / 0, shards = "x" } }
+			local c2 = Config.sanitizeCollection(raw, {})
+			check("a saved collection keeps good counts", c2[pet].count == 5 and c2[pet].shards == 12)
+			check("a damaged collection is clamped to whole numbers in range", c2[second].count == 1 and c2[second].shards == Config.COLLECTION_MAX and c2[Config.PET_ORDER[4]].count == 1 and c2[Config.PET_ORDER[4]].shards == 0)
+			check("a damaged collection drops unknown pets and non-table entries", c2.NotAPet == nil and c2[Config.PET_ORDER[3]] == nil)
+			check("a non-table collection gives an empty one", next(Config.sanitizeCollection("junk", nil)) == nil and next(Config.sanitizeCollection(5, 7)) == nil)
+			local both = Config.sanitizeCollection({ [pet] = { count = 4, shards = 9 } }, { [pet] = true, [second] = true })
+			check("seen never lowers a stored count and fills the missing ones", both[pet].count == 4 and both[pet].shards == 9 and both[second].count == 1)
+		end
 	end)
 	if not ok then
 		failed += 1

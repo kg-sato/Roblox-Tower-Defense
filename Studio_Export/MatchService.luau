@@ -16,7 +16,7 @@ local ProfileStore = require(ServerScriptService:WaitForChild("ProfileStore")) :
 
 -- What is saved between visits (see MatchSim.meta / loadMeta). Only account-level progress: the pets on the board
 -- and the current stage belong to a single run and are not saved.
-local TEMPLATE = { version = 1, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, bestStage = 1, lastStage = 1, tutorialDone = false, settings = SettingsDefaults.copyDefaults(), seen = {} }
+local TEMPLATE = { version = 1, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, bestStage = 1, lastStage = 1, tutorialDone = false, settings = SettingsDefaults.copyDefaults(), seen = {}, collection = {}, difficulty = "Normal" }
 local store = ProfileStore.New("PlayerData_v1", TEMPLATE)
 local profiles: { [Player]: any } = {}
 
@@ -52,7 +52,7 @@ end
 
 local TICK = 0.1
 local MIN_ACTION_GAP = 0.05
-local ACTION_KINDS = { Roll = true, Drop = true, Move = true, Recycle = true, Upgrade = true, Ult = true, StartWave = true, AutoWave = true, Skill = true, Respec = true, EndTutorial = true }
+local ACTION_KINDS = { Roll = true, Drop = true, Move = true, Recycle = true, Upgrade = true, Ult = true, StartWave = true, AutoWave = true, Skill = true, Respec = true, EndTutorial = true, Difficulty = true, Pause = true, Lantern = true }
 local lastStart: { [Player]: number } = {}
 
 local remotes = Instance.new("Folder")
@@ -85,7 +85,7 @@ local lastSkip: { [Player]: number } = {} -- survives startRun, which resets the
 -- Snapshot plus the game clock line (g at server time `at`, advancing `speed` per second) so clients can follow it.
 local function snap(session: Session): { [string]: any }
 	local s = session.sim:snapshot()
-	s.gclock, s.gat, s.gspeed = session.gclock, workspace:GetServerTimeNow(), session.speed
+	s.gclock, s.gat, s.gspeed = session.gclock, workspace:GetServerTimeNow(), session.sim.userPaused and 0 or session.speed
 	return s
 end
 
@@ -101,6 +101,10 @@ local function startRun(player: Player, tutorial: boolean)
 		end
 		if kind == "Roll" then
 			markSeen(player, payload.pet)
+			local profile = profiles[player]
+			if profile and not tutorial and type(profile.Data.collection) == "table" and type(payload.pet) == "string" and Config.PETS[payload.pet] then
+				Config.collectionAdd(profile.Data.collection, payload.pet) -- duplicates and shards (T186)
+			end
 		end
 		-- a Legendary pull is the one shared moment: other players in the server get a short banner (T20)
 		if kind == "Roll" and payload.rarity == "Legendary" and not payload.bonus then
@@ -197,6 +201,8 @@ local function loadProfile(player: Player)
 		seen[id] = true
 	end
 	d.seen = seen
+	d.collection = Config.sanitizeCollection(d.collection, seen) -- T186: counts and shards; the older `seen` list gives one copy each
+	d.difficulty = (type(d.difficulty) == "string" and Config.DIFFICULTY[d.difficulty] and d.bestStage >= Config.DIFFICULTY[d.difficulty].unlockStage) and d.difficulty or "Normal"
 	seenCache[player] = table.clone(seen)
 	publishSeen(player)
 	d.version = TEMPLATE.version -- no migration is needed yet; add one here before bumping TEMPLATE.version
@@ -333,6 +339,15 @@ toServer.OnServerEvent:Connect(function(player: Player, kind: any, a: any, b: an
 		ok, reason = sim:skill(a)
 	elseif kind == "Respec" then
 		ok, reason = sim:respec()
+	elseif kind == "Difficulty" then
+		ok, reason = sim:setDifficulty(a) -- T004: the sim checks stage, unlock and tutorial
+	elseif kind == "Pause" then
+		ok, reason = sim:pause(a) -- T006
+	elseif kind == "Lantern" then
+		if not (type(a) == "table" and isCoord(a.x) and isCoord(a.z)) then
+			return
+		end
+		ok, reason = sim:lantern(a.x, a.z) -- T011
 	elseif kind == "EndTutorial" then
 		sim:endTutorial()
 		ok = true
@@ -412,11 +427,15 @@ end)
 
 RunService.Heartbeat:Connect(function(dt: number)
 	for player, session in sessions do
-		session.gclock += dt * session.speed
-		local steps
-		steps, session.accum = SettingsDefaults.stepsFor(session.accum, dt, session.speed, TICK)
-		for _ = 1, steps do
-			session.sim:step(TICK)
+		if session.sim.userPaused then
+			session.sim:tickPause(dt) -- T006: the clock stands still while paused; the pause ends by itself after Config.PAUSE_MAX
+		else
+			session.gclock += dt * session.speed
+			local steps
+			steps, session.accum = SettingsDefaults.stepsFor(session.accum, dt, session.speed, TICK)
+			for _ = 1, steps do
+				session.sim:step(TICK)
+			end
 		end
 		session.snapTimer += dt
 		if session.snapTimer >= 0.25 then

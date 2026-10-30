@@ -20,9 +20,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: sim | needs: Studio | depends: none | size: S | owner-files: Shared.Config, ServerScriptService.MatchService (profile), Tests/SaveMigration.test.luau
 - [x] T005 | Add 3x game speed, same results per sim second | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/GameSpeed.test.luau)
   lane: sim | needs: Studio | depends: none | size: S | owner-files: Shared.SettingsDefaults, MatchService gclock, Tests/GameSpeed.test.luau
-- [ ] T004 | Difficulty modes Normal and Hard, server-decided, labelled in data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Rules.test.luau (new cases) and Balance still clears)
+- [x] T004 | Difficulty modes Normal and Hard, server-decided, labelled in data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Rules.test.luau (new cases) and Balance still clears)
   lane: sim | needs: Studio | depends: T411 | size: M | owner-files: Shared.Config, Shared.MatchSim, MatchService, Tests/Rules.test.luau
-- [ ] T006 | Pause and resume saved per run | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/ServerRules.test.luau (new cases))
+- [x] T006 | Pause and resume saved per run | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/ServerRules.test.luau (new cases))
   lane: sim | needs: Studio | depends: none | size: M | owner-files: Shared.MatchSim, MatchService, Tests/ServerRules.test.luau
 - [ ] T403 | Play Idle, Hit, Death clips of the human familiars on the board | verify: studio: Play capture frames show pose changes on hit and banish
   lane: chars | needs: Studio | depends: none | size: M | owner-files: Models.luau (playClip use), Shared.FamiliarClips
@@ -38,7 +38,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: client-core | needs: Studio | depends: T198 | size: M | owner-files: StarterPlayerScripts.BossBar (new), GameClient (one hook)
 - [x] T185 | Roster slot unlock rules (when a new slot opens) in data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Rules.test.luau)
   lane: sim | needs: Studio | depends: none | size: S | owner-files: Shared.Config, Tests/Rules.test.luau
-- [ ] T186 | Collection schema: duplicates and shards, wired to the profile | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SaveMigration.test.luau)
+- [x] T186 | Collection schema: duplicates and shards, wired to the profile | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SaveMigration.test.luau)
   lane: sim | needs: Studio | depends: T411 | size: M | owner-files: MatchService, Shared.Config, Tests/SaveMigration.test.luau
 - [ ] T002 | Achievements: server unlock logic for the 30 designed ones | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Achievements.test.luau (new))
   lane: sim | needs: Studio | depends: T411 | size: M | owner-files: Shared.Achievements (new), MatchService, Tests/Achievements.test.luau
@@ -46,13 +46,13 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: sim | needs: Studio | depends: T411 | size: M | owner-files: Shared.Quests (new), MatchService, Tests/Quests.test.luau
 - [ ] T007 | Familiar bond levels from use, plus mood state, as data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Bond.test.luau (new))
   lane: sim | needs: Studio | depends: T186 | size: M | owner-files: Shared.Bond (new), MatchService, Tests/Bond.test.luau
-- [ ] T012 | Faction adjacency combo driven by a synergy data table | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Combo.test.luau (new))
+- [x] T012 | Faction adjacency combo driven by a synergy data table | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Combo.test.luau (new))
   lane: sim | needs: Studio | depends: none | size: M | owner-files: Shared.Synergies (new), Shared.MatchSim, Tests/Combo.test.luau
-- [ ] T011 | Lantern power: player light buffs nearby familiars, cooldown | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Lantern.test.luau (new))
+- [x] T011 | Lantern power: player light buffs nearby familiars, cooldown | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Lantern.test.luau (new))
   lane: sim | needs: Studio | depends: none | size: M | owner-files: Shared.MatchSim, Shared.Config, Tests/Lantern.test.luau
-- [ ] T015 | Elite enemies and ten wave modifiers as data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Waves.test.luau (new))
+- [x] T015 | Elite enemies and ten wave modifiers as data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Waves.test.luau (new))
   lane: sim | needs: Studio | depends: none | size: M | owner-files: Shared.Config, Shared.MatchSim, Tests/Waves.test.luau
-- [ ] T009 | Per-set day/night window and weather events as data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Env.test.luau (new))
+- [x] T009 | Per-set day/night window and weather events as data | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Env.test.luau (new))
   lane: sim | needs: Studio | depends: none | size: M | owner-files: Shared.StageSets (data fields only), Shared.MatchSim, Tests/Env.test.luau
 - [ ] T016 | Endless mode after stage 25, tested to wave 100 | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Endless.test.luau (new))
   lane: sim | needs: Studio | depends: T015 | size: M | owner-files: Shared.MatchSim, Shared.Config, Tests/Endless.test.luau
@@ -62,7 +62,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: sim | needs: Studio | depends: T411 | size: M | owner-files: Shared.LeaderboardRules (new), MatchService, Tests/Leaderboard.test.luau
 - [ ] T416 | Remaining boss mechanics: Automaton lamp, Echo pushes, Regent candles, un-merge | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Boss.test.luau (new cases))
   lane: sim | needs: Studio | depends: none | size: L | owner-files: Shared.Config.BOSSES, Shared.MatchSim bossTick, Tests/Boss.test.luau
-- [ ] T417 | Hollow Parishioner enemy and Fog Wisp lamp-eating in the sim | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Combat.test.luau (new cases), Balance still clears)
+- [x] T417 | Hollow Parishioner enemy and Fog Wisp lamp-eating in the sim | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Combat.test.luau (new cases), Balance still clears)
   lane: sim | needs: Studio | depends: none | size: M | owner-files: Shared.Config enemies, Shared.MatchSim, Tests/Combat.test.luau
 - [ ] T167 | Per-set path shapes as data with a curvature test | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/StageSets.test.luau (new curvature cases), py: tools/check_stages_complete.py)
   lane: sim | needs: Studio | depends: none | size: L | owner-files: Shared.Path, Shared.Config path data, Shared.StageSets (path field), Tests/StageSets.test.luau

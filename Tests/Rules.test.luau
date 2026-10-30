@@ -255,6 +255,84 @@ return function(Shared)
 			Config.REFUND_PCT[3] = 1
 			return sim.coins - c0 == math.floor(base * 0.5)
 		end)())
+
+		-- difficulty modes (T004)
+		local function plain(seed)
+			return MatchSim.new(Random.new(seed or 1), function() end, false)
+		end
+		do
+			local sim = plain(1)
+			check("a new run is Normal", sim.difficulty == "Normal")
+			check("Normal and Hard are labelled in data", Config.DIFFICULTY.Normal.label == "Normal" and Config.DIFFICULTY.Hard.label == "Hard" and #Config.DIFFICULTY_ORDER == 2)
+			check("Normal changes nothing (all multipliers are 1)", Config.DIFFICULTY.Normal.hp == 1 and Config.DIFFICULTY.Normal.coins == 1 and Config.DIFFICULTY.Normal.gems == 1)
+			check("an unknown id reads as Normal", Config.difficulty("Nightmare") == Config.DIFFICULTY.Normal and Config.difficulty(5) == Config.DIFFICULTY.Normal)
+			local okHard, why = sim:setDifficulty("Hard")
+			check("Hard is locked until the best stage reaches its unlock stage", okHard == false and sim.difficulty == "Normal", why)
+			check("junk difficulty ids are refused", select(1, sim:setDifficulty("Nightmare")) == false and select(1, sim:setDifficulty(5)) == false and select(1, sim:setDifficulty({})) == false and select(1, sim:setDifficulty(nil)) == false)
+			sim.bestStage = Config.DIFFICULTY.Hard.unlockStage
+			check("Hard can be picked once unlocked", select(1, sim:setDifficulty("Hard")) == true and sim.difficulty == "Hard")
+			check("Normal can be picked again before the first wave", select(1, sim:setDifficulty("Normal")) == true and sim.difficulty == "Normal")
+			sim:setDifficulty("Hard")
+			sim:startWave()
+			check("the difficulty is locked once a wave has started", select(1, sim:setDifficulty("Normal")) == false and sim.difficulty == "Hard")
+			local tut = MatchSim.new(Random.new(2), function() end, true)
+			tut.bestStage = 50
+			check("no difficulty change in the tutorial", select(1, tut:setDifficulty("Hard")) == false)
+			local later = plain(3)
+			later.bestStage = 50
+			later.stage = 4
+			check("no difficulty change after stage 1", select(1, later:setDifficulty("Hard")) == false)
+			check("snapshot carries the difficulty", sim:snapshot().difficulty == "Hard")
+		end
+		do
+			-- hp and rewards scale by difficulty; Normal is exactly the old numbers
+			local function firstSpawn(diff)
+				local hp
+				local sim = MatchSim.new(Random.new(5), function(kind, p)
+					if kind == "Spawn" and not hp then
+						hp = p.maxHp
+					end
+				end, false)
+				sim.bestStage = 99
+				sim:setDifficulty(diff)
+				sim:startWave()
+				sim:step(0.1)
+				return hp
+			end
+			local hn, hh = firstSpawn("Normal"), firstSpawn("Hard")
+			check("Normal spawns Grunts at base hp", near(hn, Config.ENEMIES.Grunt.hp), hn)
+			check("Hard spawns the same enemy with the Hard hp multiplier", near(hh, Config.ENEMIES.Grunt.hp * Config.DIFFICULTY.Hard.hp, 1e-6), hh)
+			local function killTank(diff)
+				local sim = plain(6)
+				sim.bestStage = 99
+				sim:setDifficulty(diff)
+				local e = { id = 1, kind = "Tank", hp = 1, maxHp = 1, dist = 0, dead = false }
+				table.insert(sim.enemies, e)
+				local c0, g0 = sim.coins, sim.gems
+				sim:damage(e, 5, false)
+				return sim.coins - c0, sim.gems - g0
+			end
+			local cn, gn = killTank("Normal")
+			local ch, gh = killTank("Hard")
+			check("Normal kill reward is the old reward", cn == Config.ENEMIES.Tank.coins and gn == Config.ENEMIES.Tank.gems, cn .. "/" .. gn)
+			check("Hard pays more coins and gems", ch == math.floor(Config.ENEMIES.Tank.coins * Config.DIFFICULTY.Hard.coins + 0.5) and gh == math.floor(Config.ENEMIES.Tank.gems * Config.DIFFICULTY.Hard.gems + 0.5) and ch > cn and gh > gn, ch .. "/" .. gh)
+		end
+		do
+			-- the saved difficulty (T004): only a known, unlocked id loads
+			local sim = plain(7)
+			sim:loadMeta({ bestStage = 3, difficulty = "Hard" })
+			check("a saved Hard that is not unlocked loads as Normal", sim.difficulty == "Normal")
+			sim = plain(7)
+			sim:loadMeta({ bestStage = Config.DIFFICULTY.Hard.unlockStage, difficulty = "Hard" })
+			check("a saved unlocked Hard loads", sim.difficulty == "Hard")
+			check("meta() holds the difficulty for the profile", sim:meta().difficulty == "Hard")
+			sim = plain(7)
+			sim:loadMeta({ bestStage = 50, difficulty = { evil = true } })
+			check("a junk saved difficulty loads as Normal", sim.difficulty == "Normal")
+			sim = plain(7)
+			sim:loadMeta({ bestStage = 50, difficulty = "Godmode" })
+			check("an unknown saved difficulty loads as Normal", sim.difficulty == "Normal")
+		end
 	end)
 	if not ok then
 		failed += 1

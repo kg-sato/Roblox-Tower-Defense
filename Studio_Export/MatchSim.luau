@@ -52,6 +52,14 @@ export type Sim = typeof(setmetatable({} :: {
 	sp: number,
 	tree: { [string]: number },
 	leakCount: number,
+	difficulty: string, -- Config.DIFFICULTY id (T004)
+	userPaused: boolean, -- the player's pause (T006), separate from the tutorial's `paused`
+	pauseLeft: number,
+	lanternReady: number, -- sim time the Lantern can be lit again (T011)
+	lanternUntil: number,
+	lanternX: number,
+	lanternZ: number,
+	skyKey: string,
 	rng: Random,
 	emit: (string, any) -> (),
 }, MatchSim))
@@ -95,6 +103,14 @@ function MatchSim.new(rng: Random, emit: (string, any) -> (), tutorial: boolean)
 		sp = tutorial and 0 or 2,
 		tree = { Start = 1 },
 		leakCount = 0,
+		difficulty = "Normal",
+		userPaused = false,
+		pauseLeft = 0,
+		lanternReady = 0,
+		lanternUntil = 0,
+		lanternX = 0,
+		lanternZ = 0,
+		skyKey = "",
 		rng = rng,
 		emit = emit,
 	}, MatchSim)
@@ -108,7 +124,7 @@ end
 
 -- Progress that carries between visits (what the server saves with ProfileStore).
 function MatchSim.meta(self: Sim): { [string]: any }
-	return { level = self.level, xp = self.xp, sp = self.sp, gems = self.gems, tree = table.clone(self.tree), bestStage = math.max(self.bestStage, self.stage), lastStage = self.stage }
+	return { level = self.level, xp = self.xp, sp = self.sp, gems = self.gems, tree = table.clone(self.tree), bestStage = math.max(self.bestStage, self.stage), lastStage = self.stage, difficulty = self.difficulty }
 end
 
 -- Load saved progress, clamping every value so a corrupt or edited save can't give an impossible state.
@@ -139,6 +155,112 @@ function MatchSim.loadMeta(self: Sim, d: any)
 	self.tree = tree
 	-- stage progress (T411): the best stage can never be below the last one; the run itself still starts at stage 1
 	self.bestStage = math.max(num(d.bestStage, 1, 1000, 1), num(d.lastStage, 1, 1000, 1))
+	-- difficulty (T004): only a known id the saved progress has unlocked
+	local diff = type(d.difficulty) == "string" and Config.DIFFICULTY[d.difficulty] or nil
+	self.difficulty = (diff and self.bestStage >= diff.unlockStage) and d.difficulty or "Normal"
+end
+
+-- Pick the difficulty (T004). Only before the first wave of a run (stage 1, ready), never in the tutorial, and only once unlocked by bestStage.
+function MatchSim.setDifficulty(self: Sim, id: any): (boolean, string?)
+	local def = type(id) == "string" and Config.DIFFICULTY[id] or nil
+	if not def then
+		return false, "Bad difficulty"
+	end
+	if self.tutorial then
+		return false, "Not in the tutorial"
+	end
+	if self.state ~= "ready" or self.stage ~= 1 or #self.enemies > 0 or #self.queue > 0 then
+		return false, "Change it before the first wave"
+	end
+	if self.bestStage < def.unlockStage then
+		return false, def.label .. " unlocks at stage " .. def.unlockStage
+	end
+	self.difficulty = id
+	self.emit("Difficulty", { id = id, label = def.label })
+	return true, nil
+end
+
+-- Pause and resume (T006). The pause belongs to the run and is capped at Config.PAUSE_MAX real seconds (tickPause); boss clocks and cooldowns stand still while it lasts.
+function MatchSim.pause(self: Sim, on: any): (boolean, string?)
+	if type(on) ~= "boolean" then
+		return false, "Bad value"
+	end
+	if self.tutorial then
+		return false, "Not in the tutorial"
+	end
+	if on and not self.userPaused then
+		self.userPaused, self.pauseLeft = true, Config.PAUSE_MAX
+		self.emit("Pause", { on = true, left = self.pauseLeft })
+	elseif not on and self.userPaused then
+		self.userPaused, self.pauseLeft = false, 0
+		self.emit("Pause", { on = false })
+	end
+	return true, nil
+end
+
+-- Counts a pause down in real seconds (the server calls it every frame while paused); at zero the run resumes.
+function MatchSim.tickPause(self: Sim, dt: number)
+	if self.userPaused then
+		self.pauseLeft -= dt
+		if self.pauseLeft <= 0 then
+			self.userPaused, self.pauseLeft = false, 0
+			self.emit("Pause", { on = false, auto = true })
+		end
+	end
+end
+
+-- The run as a plain table (what a run save would hold) and its clamped re-load. A loaded run starts paused so the player can look first.
+function MatchSim.exportRun(self: Sim): { [string]: any }
+	local grid, ups = {}, {}
+	for id, u in self.grid do
+		grid[tostring(id)] = { pet = u.pet, tier = u.tier, x = u.x, z = u.z }
+	end
+	for pet, t in self.upgrades do
+		ups[pet] = { Power = t.Power, Haste = t.Haste, Crit = t.Crit }
+	end
+	return { stage = self.stage, coins = self.coins, crystal = self.crystalHp, combo = self.combo, difficulty = self.difficulty, userPaused = self.userPaused, pauseLeft = self.pauseLeft, grid = grid, upgrades = ups, nextUnit = self.nextUnit }
+end
+
+function MatchSim.importRun(self: Sim, d: any): boolean
+	if type(d) ~= "table" or self.tutorial then
+		return false
+	end
+	local function num(v: any, lo: number, hi: number, fallback: number): number
+		if type(v) ~= "number" or v ~= v then
+			return fallback
+		end
+		return math.clamp(math.floor(v), lo, hi)
+	end
+	self.stage = num(d.stage, 1, 1000, 1)
+	self.bestStage = math.max(self.bestStage, self.stage)
+	self.coins = num(d.coins, 0, 1e12, self.coins)
+	self.crystalHp = num(d.crystal, 1, self:maxHp(), self:maxHp())
+	self.combo = num(d.combo, 0, 1000, 0)
+	local diff = type(d.difficulty) == "string" and Config.DIFFICULTY[d.difficulty] or nil
+	self.difficulty = (diff and self.bestStage >= diff.unlockStage) and d.difficulty or "Normal"
+	self.grid, self.nextUnit = {}, 1
+	if type(d.grid) == "table" then
+		for _, u in d.grid do
+			if type(u) == "table" and type(u.pet) == "string" and Config.PETS[u.pet] and type(u.x) == "number" and type(u.z) == "number" and self:unitCount() < Config.MAX_UNITS then
+				if Config.canPlace(self.grid, u.pet, u.x, u.z) then
+					local id = self:addUnit(u.pet, u.x, u.z)
+					self.grid[id].tier = num(u.tier, 1, Config.TIER_MAX, 1)
+				end
+			end
+		end
+	end
+	if type(d.upgrades) == "table" then
+		for pet, t in d.upgrades do
+			if self.upgrades[pet] and type(t) == "table" then
+				for kind in self.upgrades[pet] do
+					self.upgrades[pet][kind] = num(t[kind], 0, Config.UPGRADE_MAX, 0)
+				end
+			end
+		end
+	end
+	self.state, self.enemies, self.queue = "ready", {}, {}
+	self.userPaused, self.pauseLeft = true, Config.PAUSE_MAX
+	return true
 end
 
 function MatchSim.maxHp(self: Sim): number
@@ -222,6 +344,79 @@ function MatchSim.respec(self: Sim): (boolean, string?)
 	self.crystalHp = math.min(self.crystalHp, self:maxHp()) -- Crystal Armor may have been refunded
 	self.emit("Respec", { refunded = spent, cost = Config.RESPEC_COST })
 	return true, nil
+end
+
+-- Lantern power (T011): the player lights a spot; familiars inside Config.LANTERN.radius fire faster and harder for Config.LANTERN.dur sim seconds, then it recharges.
+function MatchSim.lantern(self: Sim, x: any, z: any): (boolean, string?)
+	if self.tutorial then
+		return false, "Not in the tutorial"
+	end
+	if type(x) ~= "number" or type(z) ~= "number" or x ~= x or z ~= z then
+		return false, "Bad position"
+	end
+	if self.t < self.lanternReady then
+		return false, "The Lantern is recharging"
+	end
+	local L, b = Config.LANTERN, Config.PLACE_BOUNDS
+	self.lanternX, self.lanternZ = math.clamp(x, b.minX, b.maxX), math.clamp(z, b.minZ, b.maxZ)
+	self.lanternUntil = self.t + L.dur
+	self.lanternReady = self.t + L.cooldown
+	self.emit("Lantern", { x = self.lanternX, z = self.lanternZ, radius = L.radius, dur = L.dur, cooldown = L.cooldown })
+	return true, nil
+end
+
+-- (damage share, haste share) a unit gets from the lit Lantern
+function MatchSim.lanternBonus(self: Sim, u: any): (number, number)
+	if self.t >= self.lanternUntil then
+		return 0, 0
+	end
+	local L = Config.LANTERN
+	local dx, dz = u.x - self.lanternX, u.z - self.lanternZ
+	if dx * dx + dz * dz <= L.radius * L.radius then
+		return L.damage, L.haste
+	end
+	return 0, 0
+end
+
+-- A Fog Wisp reached its lamp-eating point (T417): it snuffs a lit Lantern, or darkens a ready one for a while.
+function MatchSim.eatLamp(self: Sim, e: any)
+	local L = Config.LAMP_EAT
+	if self.t < self.lanternUntil then
+		self.lanternUntil = self.t
+		self.lanternReady = math.max(self.lanternReady, self.t) + L.snuffCooldown
+		self.emit("LampEaten", { id = e.id, how = "snuffed" })
+	elseif self.t >= self.lanternReady then
+		self.lanternReady = self.t + L.darkFor
+		self.emit("LampEaten", { id = e.id, how = "darkened" })
+	end
+end
+
+-- Faction combo (T012): (damage share, haste share) from touching familiars whose factions pair up in Config.SYNERGIES; each entry counts once.
+function MatchSim.synergy(self: Sim, u: any): (number, number)
+	if not Config.SYNERGY_ON then
+		return 0, 0
+	end
+	local def = Config.PETS[u.pet]
+	local fa = def and def.faction
+	if not fa then
+		return 0, 0
+	end
+	local near = self:neighbours(u)
+	local d, h = 0, 0
+	for _, s in Config.SYNERGIES do
+		local partner = (fa == s.a and s.b) or (fa == s.b and s.a) or nil
+		if partner then
+			for _, o in near do
+				local od = Config.PETS[o.pet]
+				if od and od.faction == partner then
+					d += s.damage or 0
+					h += s.haste or 0
+					break
+				end
+			end
+		end
+	end
+	return math.min(d, Config.SYNERGY_CAP.damage), math.min(h, Config.SYNERGY_CAP.haste)
 end
 
 -- A merge needs two matching pets that touch plus a third matching pet dragged onto one of them.
@@ -523,8 +718,9 @@ function MatchSim.damage(self: Sim, e: Enemy, amount: number, chargeUlt: boolean
 		e.dead = true
 		local def = Config.ENEMIES[e.kind]
 		local rewardMult = (e :: any).boss and (e :: any).boss.def.rewardMult or 1
-		local coins = math.floor(def.coins * rewardMult * (1 + 0.1 * (self.stage - 1)) * (1 + self:sv("coins")) + 0.5)
-		local gems = math.floor(def.gems * rewardMult * Config.comboMult(self.combo) * (1 + self:sv("gems")) + 0.5)
+		local diff = Config.difficulty(self.difficulty)
+		local coins = math.floor(def.coins * rewardMult * (1 + 0.1 * (self.stage - 1)) * (1 + self:sv("coins")) * diff.coins * ((e :: any).coinMult or 1) + 0.5)
+		local gems = math.floor(def.gems * rewardMult * Config.comboMult(self.combo) * (1 + self:sv("gems")) * diff.gems * ((e :: any).gemMult or 1) + 0.5)
 		if (e :: any).carrying then
 			self.coins += 10 -- the stolen light drops as coins
 			self.emit("Drop", { id = e.id, coins = 10 })
@@ -579,10 +775,21 @@ function MatchSim.startStage(self: Sim)
 	self.leaked = false
 	self.leakCount = 0
 	local list = Config.stageSpawns(self.stage)
+	local v2 = Config.WAVES_V2
+	local elites = v2 and Config.stageElites(self.stage, list) or {}
+	local mod = v2 and Config.waveModifier(self.stage) or nil
+	local eliteCount = 0
 	for i, kind in list do
-		table.insert(self.queue, { at = self.t + (i - 1) * Config.SPAWN_GAP, kind = kind, stage = self.stage })
+		local q: any = { at = self.t + (i - 1) * Config.SPAWN_GAP, kind = kind, stage = self.stage }
+		if elites[i] then
+			q.elite, eliteCount = true, eliteCount + 1
+		end
+		if mod then
+			q.mod = mod.id
+		end
+		table.insert(self.queue, q)
 	end
-	self.emit("Stage", { stage = self.stage, boss = Config.isBossStage(self.stage), combo = self.combo })
+	self.emit("Stage", { stage = self.stage, boss = Config.isBossStage(self.stage), combo = self.combo, mod = mod and mod.id or nil, modName = mod and mod.name or nil, elites = eliteCount })
 end
 
 -- The crystal fell: pushed back, not out.
@@ -881,6 +1088,10 @@ function MatchSim.enemyTick(self: Sim, e: any, dt: number): number
 			mult = 0
 		end
 	end
+	if Config.ENEMIES[e.kind].eatsLamp and not e.ate and e.dist >= Config.LAMP_EAT.at * Path.length then
+		e.ate = true
+		self:eatLamp(e)
+	end
 	return mult
 end
 
@@ -889,8 +1100,12 @@ function MatchSim.effective(self: Sim, u: Unit): (number, number, number)
 	local dmg = Config.petDamage(u.pet, u.tier) * (1 + Config.UPGRADES.Power.per * up.Power) * (1 + self:sv("damage"))
 	local _, auraHaste, auraDamage = self:auras(u)
 	local globalDamage, globalCrit = self:globals()
-	dmg *= 1 + auraDamage + globalDamage
-	local cd = Config.PETS[u.pet].cooldown / ((1 + Config.UPGRADES.Haste.per * up.Haste) * (1 + self:sv("haste")) * (1 + auraHaste))
+	local synDamage, synHaste = self:synergy(u)
+	local lanDamage, lanHaste = self:lanternBonus(u)
+	local sky = (self :: any).skyFx
+	local skyDamage = sky and sky.damage[Config.DAMAGE_TYPE[u.pet] or ""] or 0
+	dmg *= 1 + auraDamage + globalDamage + synDamage + lanDamage + skyDamage
+	local cd = Config.PETS[u.pet].cooldown / ((1 + Config.UPGRADES.Haste.per * up.Haste) * (1 + self:sv("haste")) * (1 + auraHaste + synHaste + lanHaste))
 	local crit = math.min(Config.CRIT_CAP, Config.UPGRADES.Crit.per * up.Crit + self:sv("crit") + globalCrit)
 	return dmg, cd, crit
 end
@@ -965,10 +1180,36 @@ function MatchSim.bossSlow(self: Sim): any
 end
 
 function MatchSim.step(self: Sim, dt: number)
-	if self.paused then
+	if self.paused or self.userPaused then
 		return
 	end
 	self.t += dt
+
+	-- day, night and weather (T009): the effects of this moment, and an "Sky" event when they change
+	;(self :: any).skyFx = nil
+	if Config.SKY_ON then
+		local now = Config.skyAt(self.stage, self.t)
+		if now then
+			local key = (now.night and "night" or "day") .. ":" .. (now.weather or "")
+			if key ~= self.skyKey then
+				self.skyKey = key
+				self.emit("Sky", { night = now.night, weather = now.weather, stage = self.stage })
+			end
+			local fx = { enemySpeed = 1, range = 0, damage = {} :: { [string]: number } }
+			for _, name in { now.night and "night" or "", now.weather or "" } do
+				local eff = Config.SKY_EFFECTS[name]
+				if eff then
+					fx.enemySpeed *= eff.enemySpeed or 1
+					fx.range += eff.range or 0
+					for k, v in eff.damage or {} do
+						fx.damage[k] = (fx.damage[k] or 0) + v
+					end
+				end
+			end
+			;(self :: any).skyFx = fx
+		end
+	end
+	local skyFx = (self :: any).skyFx
 
 	if self.state == "ready" and self.autoWave then
 		self.breakClock -= dt
@@ -981,8 +1222,29 @@ function MatchSim.step(self: Sim, dt: number)
 		local q = table.remove(self.queue, 1) :: { at: number, kind: string, stage: number }
 		local def = Config.ENEMIES[q.kind]
 		local bossDef = (q.kind == "Boss" and Config.BOSS_PHASES) and Config.bossDef(q.stage) or nil
-		local hp = def.hp * Config.hpScale(q.stage) * (bossDef and bossDef.hpMult or 1)
+		local hp = def.hp * Config.hpScale(q.stage) * (bossDef and bossDef.hpMult or 1) * Config.difficulty(self.difficulty).hp
+		local qa: any = q
+		local mod = (Config.WAVES_V2 and qa.mod) and Config.waveModifier(q.stage) or nil
+		local speedMult, coinMult, gemMult = 1, 1, 1
+		if mod then
+			hp *= mod.hp or 1
+			speedMult, coinMult, gemMult = mod.speed or 1, mod.coins or 1, mod.gems or 1
+		end
+		if Config.WAVES_V2 and qa.elite then
+			local E = Config.ELITE
+			hp *= E.hp
+			speedMult, coinMult, gemMult = speedMult * E.speed, coinMult * E.coins, gemMult * E.gems
+		end
 		local e: Enemy = { id = self.nextId, kind = q.kind, hp = hp, maxHp = hp, dist = 0, dead = false }
+		if speedMult ~= 1 then
+			(e :: any).speedMult = speedMult
+		end
+		if coinMult ~= 1 or gemMult ~= 1 then
+			(e :: any).coinMult, (e :: any).gemMult = coinMult, gemMult
+		end
+		if Config.WAVES_V2 and qa.elite then
+			(e :: any).elite = true
+		end
 		if bossDef then
 			(e :: any).boss = { def = bossDef, phase = 1, stage = q.stage, timers = {} }
 		end
@@ -991,13 +1253,13 @@ function MatchSim.step(self: Sim, dt: number)
 		if q.kind == "Boss" then
 			self.bossClock = Config.BOSS_TIME + self:sv("bossTime")
 		end
-		self.emit("Spawn", { id = e.id, kind = e.kind, t = self.t, maxHp = hp, boss = bossDef and bossDef.id or nil, bossName = bossDef and bossDef.name or nil })
+		self.emit("Spawn", { id = e.id, kind = e.kind, t = self.t, maxHp = hp, boss = bossDef and bossDef.id or nil, bossName = bossDef and bossDef.name or nil, elite = (e :: any).elite })
 	end
 
 	for _, e in self.enemies do
 		local pace = self:enemyTick(e, dt)
 		-- the speed multiplier the client must follow: movement effects (when on) times the boss phase's speedMult; "Pace" tells the client when it changes
-		local mult = (Config.MOVEMENT_EFFECTS and pace or 1) * self:bossTick(e, dt)
+		local mult = (Config.MOVEMENT_EFFECTS and pace or 1) * self:bossTick(e, dt) * ((e :: any).speedMult or 1) * (skyFx and skyFx.enemySpeed or 1)
 		if ((e :: any).mult or 1) ~= mult then
 			(e :: any).mult = mult
 			self.emit("Pace", { id = e.id, dist = e.dist, speed = Config.ENEMIES[e.kind].speed * mult, t = self.t })
@@ -1033,7 +1295,7 @@ function MatchSim.step(self: Sim, dt: number)
 			local def = Config.PETS[u.pet]
 			local origin = Vector3.new(u.x, 0, u.z)
 			local rangeAura = self:auras(u)
-			local range = def.range * (1 + rangeAura)
+			local range = def.range * (1 + rangeAura + (skyFx and skyFx.range or 0))
 			local best: Enemy? = nil
 			for _, e in self.enemies do
 				if not e.dead and (not best or e.dist > best.dist) then
@@ -1130,6 +1392,11 @@ function MatchSim.snapshot(self: Sim): { [string]: any }
 		boss = self:bossSnapshot(),
 		tutorial = self.tutorial,
 		paused = self.paused,
+		userPaused = self.userPaused,
+		pauseLeft = self.pauseLeft,
+		difficulty = self.difficulty,
+		lanternCd = math.max(0, self.lanternReady - self.t),
+		lanternOn = self.t < self.lanternUntil,
 		state = self.state,
 		autoWave = self.autoWave,
 		rolls = self.rolls,

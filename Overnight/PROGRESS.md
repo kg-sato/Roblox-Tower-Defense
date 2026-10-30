@@ -258,3 +258,15 @@
 - 19:30 T027 DONE (attested): UI research boards for HUD, collection, results plus HUD wireframe
 - 19:30 T424 DONE (attested): Refresh Systems.md, Backlog and Design Doc for bosses, 20 familiars, set 5
 - 19:30 CHECKPOINT 3d1f029 on overnight/2026-10-27: Refresh the systems, backlog and design notes, add the HUD, collection and results research boards, and bake 512 px texture sets for enemies and bosses. Evidence files hold the verification output.
+- 19:40 T413 DONE (attested): Delete stale duplicate MatchSim and stray _GameSpeedTest folder
+- 19:40 T606 DONE (attested): Fix SoundFX cap so a lower priority never stops a higher
+- 19:40 T411 DONE (attested): Save bestStage and stage progress in profile with migration
+- 19:40 T005 DONE (attested): Add 3x game speed, same results per sim second
+- 19:40 T142 DONE (attested): Rig and animate six enemy models: walk, hit, death; place in a stage
+- 19:40 T185 DONE (attested): Roster slot unlock rules (when a new slot opens) in data
+- 19:40 T019 DONE (attested): Sell and recycle refund percent per tier
+- 19:40 T407 DONE (attested): Clean blotchy first-pass textures on the 12 original familiars
+- 19:40 T155 DONE (attested): Familiar cues: placement, merge tiers 1 to 8, reveal per rarity
+- 19:40 T603 DONE (attested): Enemy footsteps and hits, boss intro per boss, trainer footsteps
+- 19:40 T604 DONE (attested): UI sound set: click, hover, error, buy, quest, achievement, level-up
+- 19:40 CHECKPOINT d17a471 on overnight/2026-10-27: Add the rigged enemy models, re-baked familiar textures, and the UI, enemy, boss and familiar sound sets with their manifest. Evidence files hold each check's output.

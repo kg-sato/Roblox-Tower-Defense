@@ -237,7 +237,12 @@ Config.ENEMIES = {
 	-- new kinds (Design/Enemy Bible.md); they appear in waves only when Config.NEW_ENEMIES is true (the client has no model for them yet)
 	Crow = { hp = 12, speed = 16, coins = 3, gems = 1, leak = 1, size = 2.2, color = Color3.fromRGB(70, 74, 86), armor = "flesh" },
 	Thief = { hp = 40, speed = 11, coins = 4, gems = 2, leak = 1, size = 2.4, color = Color3.fromRGB(104, 74, 118), armor = "flesh" },
+	-- Hollow Court kinds (T417): they appear in waves only when Config.HOLLOW_ENEMIES is true (the client has no models for them yet)
+	Parishioner = { hp = 70, speed = 7, coins = 4, gems = 2, leak = 1, size = 2.6, color = Color3.fromRGB(96, 90, 108), armor = "hollow" },
+	FogWisp = { hp = 22, speed = 14, coins = 3, gems = 1, leak = 1, size = 2, color = Color3.fromRGB(170, 190, 210), armor = "fog", eatsLamp = true },
 }
+Config.HOLLOW_ENEMIES = false -- Hollow Parishioner and Fog Wisp in the wave lists; keep false until the client has models for both
+Config.LAMP_EAT = { at = 0.4, snuffCooldown = 10, darkFor = 8 } -- a Fog Wisp past `at` of the path snuffs the Lantern (+snuffCooldown s to recharge) or, if it is ready, darkens it for darkFor s
 Config.NEW_ENEMIES = true -- Clockwork Crow and Lantern Thief in the wave lists (needs client models first)
 Config.MOVEMENT_EFFECTS = true -- slows, stuns, plants and speed-ups change enemy speed; the client moves enemies at a constant speed, so keep false until GameClient handles the "Pace" event {id, dist, speed, t}
 
@@ -253,6 +258,7 @@ Config.ARMOR_MULT = {
 	fog = { stone = 0.7, light = 1.3 },
 	flesh = { fire = 1.2 },
 	stone = { spring = 0.7, cosmic = 1.3 },
+	hollow = { light = 1.3, shadow = 0.75 },
 }
 Config.STATUS = {
 	burn = { dur = 3, dps = 0.2 }, -- damage per second as a share of the hit that lit it
@@ -338,6 +344,10 @@ end
 function Config.stageSpawns(stage: number): { string }
 	local list = {}
 	local count = math.min(5 + math.floor(stage * 1.3), 28)
+	local mod = Config.WAVES_V2 and Config.waveModifier(stage) or nil
+	if mod and mod.count then
+		count = math.clamp(math.floor(count * mod.count), 3, 40)
+	end
 	for i = 1, count do
 		local kind = "Grunt"
 		if stage >= 3 and i % 3 == 0 then
@@ -353,12 +363,178 @@ function Config.stageSpawns(stage: number): { string }
 				kind = "Thief"
 			end
 		end
+		if Config.HOLLOW_ENEMIES and kind == "Grunt" then
+			if stage >= 11 and i % 6 == 1 then
+				kind = "Parishioner"
+			elseif stage >= 12 and i % 6 == 5 then
+				kind = "FogWisp"
+			end
+		end
 		table.insert(list, kind)
 	end
 	if Config.isBossStage(stage) then
 		table.insert(list, "Boss")
 	end
 	return list
+end
+
+-- ===== Wave variety (T015): elite enemies and ten wave modifiers, all data, off by default (WAVES_V2) =====
+-- An elite is a normal kind with more hp, a slower walk and a bigger reward; the sim marks it (`elite`), the kind is unchanged so the client needs no new model.
+-- Modifiers are picked from the stage number, so a stage always has the same one; boss stages and the first stages have none.
+Config.WAVES_V2 = false
+Config.ELITE = { first = 8, every = 4, max = 4, hp = 3, speed = 0.9, coins = 3, gems = 2 }
+Config.MOD_FIRST = 4
+Config.WAVE_MODIFIERS = {
+	{ id = "Swarm", name = "Swarm", desc = "Many more, but frail", count = 1.4, hp = 0.8 },
+	{ id = "Armoured", name = "Armoured", desc = "Tougher and slower", hp = 1.4, speed = 0.9 },
+	{ id = "Rush", name = "Rush", desc = "Everyone runs", speed = 1.3 },
+	{ id = "Sluggish", name = "Sluggish", desc = "Slow but sturdy", speed = 0.75, hp = 1.2 },
+	{ id = "Plentiful", name = "Plentiful", desc = "More coins", coins = 1.5, hp = 1.2 },
+	{ id = "Gemstorm", name = "Gemstorm", desc = "More gems", gems = 1.5, hp = 1.15 },
+	{ id = "Frail", name = "Frail", desc = "Low hp, low pay", hp = 0.6, coins = 0.8 },
+	{ id = "Giants", name = "Giants", desc = "Few, huge and rich", count = 0.6, hp = 1.8, speed = 0.8, coins = 1.5 },
+	{ id = "Thinned", name = "Thinned", desc = "A short wave", count = 0.7 },
+	{ id = "Mist", name = "Mist", desc = "Quicker and a little tougher", speed = 1.1, hp = 1.1 },
+}
+function Config.waveModifier(stage: number): any?
+	if stage < Config.MOD_FIRST or Config.isBossStage(stage) then
+		return nil
+	end
+	local k = math.floor(stage) - math.floor(stage / Config.BOSS_EVERY) -- counts only non-boss stages, so ten in a row use all ten modifiers
+	return Config.WAVE_MODIFIERS[(k * 3) % #Config.WAVE_MODIFIERS + 1]
+end
+-- how many elites a stage holds, and which positions of its spawn list they are (evenly spread, never the boss)
+function Config.eliteCount(stage: number): number
+	if stage < Config.ELITE.first then
+		return 0
+	end
+	return math.min(1 + math.floor((stage - Config.ELITE.first) / Config.ELITE.every), Config.ELITE.max)
+end
+function Config.stageElites(stage: number, list: { string }): { [number]: boolean }
+	local out = {}
+	local n = #list - (list[#list] == "Boss" and 1 or 0)
+	local c = math.min(Config.eliteCount(stage), n)
+	for j = 1, c do
+		out[math.max(1, math.floor(j * n / (c + 1)))] = true
+	end
+	return out
+end
+
+-- ===== Difficulty (T004): the server picks it; labels and numbers live here =====
+-- hp scales enemy health, coins and gems scale kill rewards. Hard opens once the player has reached `unlockStage`. Changeable only at stage 1, before a wave.
+Config.DIFFICULTY = {
+	Normal = { label = "Normal", desc = "The intended challenge.", unlockStage = 1, hp = 1, coins = 1, gems = 1 },
+	Hard = { label = "Hard", desc = "Tougher enemies, richer rewards.", unlockStage = 10, hp = 1.6, coins = 1.4, gems = 1.25 },
+}
+Config.DIFFICULTY_ORDER = { "Normal", "Hard" }
+function Config.difficulty(id: any): any
+	return (type(id) == "string" and Config.DIFFICULTY[id]) or Config.DIFFICULTY.Normal
+end
+
+-- ===== Pause (T006) =====
+Config.PAUSE_MAX = 300 -- real seconds one pause may last before the server resumes the run
+
+-- ===== Collection (T186): duplicates and shards per familiar =====
+-- A pull of a familiar already owned adds a duplicate and shards by rarity. Saved in the profile as collection[pet] = { count, shards }.
+Config.SHARDS_PER_DUPLICATE = { Common = 1, Rare = 2, Epic = 5, Legendary = 10, Mythic = 25, Celestial = 50 }
+Config.COLLECTION_MAX = 1000000
+function Config.shardsFor(pet: string): number
+	local def = Config.PETS[pet]
+	return def and Config.SHARDS_PER_DUPLICATE[def.rarity] or 0
+end
+-- Records one pull in `coll` (mutated). Returns true when the familiar is new to the collection.
+function Config.collectionAdd(coll: any, pet: string): boolean
+	local e = coll[pet]
+	if not e then
+		coll[pet] = { count = 1, shards = 0 }
+		return true
+	end
+	e.count = math.min(e.count + 1, Config.COLLECTION_MAX)
+	e.shards = math.min(e.shards + Config.shardsFor(pet), Config.COLLECTION_MAX)
+	return false
+end
+-- Clean a saved collection: only real familiars, whole numbers in range; every familiar in `seen` (the older save format) owns at least one.
+function Config.sanitizeCollection(raw: any, seen: any): { [string]: { count: number, shards: number } }
+	local out = {}
+	local function num(v: any, lo: number): number
+		if type(v) ~= "number" or v ~= v then
+			return lo
+		end
+		return math.clamp(math.floor(v), lo, Config.COLLECTION_MAX)
+	end
+	if type(raw) == "table" then
+		for id, e in raw do
+			if type(id) == "string" and Config.PETS[id] and type(e) == "table" then
+				out[id] = { count = num(e.count, 1), shards = num(e.shards, 0) }
+			end
+		end
+	end
+	if type(seen) == "table" then
+		for id, v in seen do
+			if v == true and type(id) == "string" and Config.PETS[id] and not out[id] then
+				out[id] = { count = 1, shards = 0 }
+			end
+		end
+	end
+	return out
+end
+
+-- ===== Lantern power (T011): the player lights an area; familiars inside fire faster and harder for a while =====
+Config.LANTERN = { radius = 22, dur = 6, cooldown = 30, haste = 0.35, damage = 0.1 }
+
+-- ===== Faction adjacency combos (T012): data table of pairs; a familiar touching a partner gets the bonus once per entry =====
+-- a and b are factions (Shared.Familiars). a == b needs two touching familiars of that faction. Bonuses are capped per familiar.
+Config.SYNERGY_ON = true
+Config.SYNERGIES = {
+	{ id = "GuildGears", name = "Guild Gears", a = "Clockwork Guild", b = "Clockwork Guild", damage = 0.06 },
+	{ id = "CourtVigil", name = "Court Vigil", a = "Hollow Court", b = "Hollow Court", haste = 0.06 },
+	{ id = "KeepersFlame", name = "Keepers' Flame", a = "Lantern Keepers", b = "Lantern Keepers", damage = 0.04, haste = 0.04 },
+	{ id = "ChoirHarmony", name = "Choir Harmony", a = "Star Choir", b = "Star Choir", damage = 0.08 },
+	{ id = "LightAndSong", name = "Light and Song", a = "Lantern Keepers", b = "Star Choir", haste = 0.08 },
+	{ id = "GearsAndLamps", name = "Gears and Lamps", a = "Clockwork Guild", b = "Lantern Keepers", damage = 0.05 },
+}
+Config.SYNERGY_CAP = { damage = 0.2, haste = 0.2 }
+
+-- ===== Day, night and weather (T009): per-set windows are data in Shared.StageSets (`sky`); the effects are here, off by default =====
+-- sky = { cycle = sim seconds per day, night = { from, to } as fractions of the cycle, weather = { { kind, at, dur } } } (at is a fraction, dur seconds).
+-- An effect may hold enemySpeed (multiplier), range (added share of every familiar's range) and damage[damageType] (added share).
+Config.SKY_ON = false
+Config.SKY_EFFECTS = {
+	night = { damage = { light = 0.2, shadow = 0.1 } },
+	Fog = { enemySpeed = 0.92, range = -0.1 },
+	Rain = { damage = { fire = -0.2 }, enemySpeed = 0.95 },
+	Storm = { enemySpeed = 1.1, damage = { cosmic = 0.15 } },
+	Embers = { damage = { fire = 0.2 }, enemySpeed = 1.05 },
+}
+local stageSetsMod: any = nil
+function Config.skyFor(stage: number): any
+	if stageSetsMod == nil then
+		local shared = game:GetService("ReplicatedStorage"):FindFirstChild("Shared")
+		local m = script.Parent:FindFirstChild("StageSets") or (shared and shared:FindFirstChild("StageSets"))
+		local ok, mod = pcall(function()
+			return require(m :: ModuleScript)
+		end)
+		stageSetsMod = ok and mod or false
+	end
+	return stageSetsMod and stageSetsMod.forStage(stage).sky or nil
+end
+-- { night: boolean, weather: string? } at sim time t in a stage, or nil without sky data
+function Config.skyAt(stage: number, t: number): any
+	local sky = Config.skyFor(stage)
+	if not sky then
+		return nil
+	end
+	local phase = (t % sky.cycle) / sky.cycle
+	local night = sky.night ~= nil and phase >= sky.night[1] and phase < sky.night[2]
+	local weather
+	for _, w in sky.weather or {} do
+		local into = (t - w.at * sky.cycle) % sky.cycle
+		if into < w.dur then
+			weather = w.kind
+			break
+		end
+	end
+	return { night = night, weather = weather }
 end
 
 -- Trainer progression: XP from kills and stage clears. Each level pays gems and adds Luck.

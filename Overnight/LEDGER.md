@@ -6,3 +6,14 @@ T422 | commit 4c30cda | "familiar cards complete" | gate-verified | docs-tooling
 T424 | commit 3d1f029 | "docs refreshed current" | attested | docs-tooling | Overnight/evidence/T424.txt
 T027 | commit 3d1f029 | "UI research boards" | attested | docs-tooling | Overnight/evidence/T027.txt (15 cited sources UNVERIFIED beyond search snippets)
 T124 | commit 3d1f029 | "enemy texture sets" | attested | chars | Overnight/evidence/T124.txt (look-and-feel UNVERIFIED)
+T142 | commit d17a471 | "enemy rigs baked" | attested | chars | Overnight/evidence/T142.txt
+T407 | commit d17a471 | "familiar textures cleaned" | attested | chars | Overnight/evidence/T407.txt (look UNVERIFIED)
+T604 | commit d17a471 | "UI sound set" | attested | fx-audio | Overnight/evidence/T604.txt (ear UNVERIFIED)
+T603 | commit d17a471 | "enemy boss sounds" | attested | fx-audio | Overnight/evidence/T603.txt (ear UNVERIFIED)
+T155 | commit d17a471 | "familiar cue sounds" | attested | fx-audio | Overnight/evidence/T155.txt (ear UNVERIFIED)
+T413 | commit 3d1f029 | "stale MatchSim trashed" | attested | docs-tooling | Overnight/evidence/T413.txt
+T606 | commit 3d1f029 | "sound cap fixed" | attested | fx-audio | Overnight/evidence/T606.txt
+T411 | commit 3d1f029 | "best stage saved" | attested | sim | Overnight/evidence/T411.txt
+T005 | commit 3d1f029 | "triple game speed" | attested | sim | Overnight/evidence/T005.txt
+T185 | commit 3d1f029 | "roster slot unlocks" | attested | sim | Overnight/evidence/T185.txt
+T019 | commit 3d1f029 | "recycle refund tiers" | attested | sim | Overnight/evidence/T019.txt

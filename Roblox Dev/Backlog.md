@@ -25,6 +25,7 @@ User reports the game was tested on mobile and works fine ([[User Inputs]]); con
 
 ## Next
 - [ ] **Needs the user:** judge loading v4, start menu v2 and skill tree v2 (captures in `Research/UI/Captures 2026-10-28/`; reviewer FAIL on all three, reasons in [[Research/UI/Captures 2026-10-28/Grading Report]])
+- [ ] **Needs the user:** judge the 2026-10-29 title page (TitleScene) and skill tree V3 (frames in `Research/UI/Captures 2026-10-29/`); blind review FAIL (best single items 7), open bugs and next fixes in [[Research/UI/UI Rework 2026-10-29 Title and Skill Tree]]
 - [ ] Skill tree: draw the nodes as small lanterns (unlit silhouette, warm flicker when kindled) and a lighter popup frame that matches the flat tree
 - [ ] Loading: continuous falling motion with blur through the clock tunnel; a true spiral swallow; photoreal eye art
 - [ ] Start menu: give the featured familiar real shading (its neon gold reads flat); fill the lower third

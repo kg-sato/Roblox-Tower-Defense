@@ -1,3 +1,57 @@
 PASS
-Note: Roblox Dev/Research/Game Design and Market/Brawl Stars brawler cards.md
-Sources: 5 linked with dates; 1 read (Wikipedia, fetched 2026-10-28), 4 snippets or listings. Backstory length and art-style rules not found; stated in note.
+T009: Per-set day/night window and weather (Env.test, new). Data in StageSets.sky, effects in Config.SKY_EFFECTS. Off by default (Config.SKY_ON = false).
+RunAll (Studio Edit, 2026-10-29 23:53 UTC):
+ActionArgs.test.luau               PASS
+Balance.test.luau                  PASS balance baseline ran (numbers are a baseline, not assertions)
+Boss.test.luau                     PASS Boss: 31/31 checks ok
+Combat.test.luau                   PASS Combat: 74 of 74 checks
+Combo.test.luau                    PASS Combo: 29 of 29 checks
+Env.test.luau                      PASS Env: 24 of 24 checks
+FamiliarMaterials.test.luau        PASS FamiliarMaterials: 69/69 checks ok
+Familiars.test.luau                PASS Familiars: 32/32 checks ok
+GameSpeed.test.luau                PASS
+Lantern.test.luau                  PASS Lantern: 17 of 17 checks
+LoreFragments.test.luau            PASS
+MatchSim.test.luau                 PASS
+NewRoles.test.luau                 PASS NewRoles: 27/27 checks ok
+NumberFormat.test.luau             PASS
+Rules.test.luau                    PASS Rules: 90 of 90 checks
+SaveMigration.test.luau            PASS SaveMigration: 40 of 40 checks
+ServerRules.test.luau              PASS ServerRules: 83 of 83 checks
+SettingsDefaults.test.luau         PASS
+SoundCap.test.luau                 PASS
+StageSets.test.luau                PASS
+Waves.test.luau                    PASS Waves: 34 of 34 checks
+SUMMARY 21 of 21 suites PASS
+lean bot (full strategy, 10 seeds, defaults): cleared 25 stages on 10 of 10 seeds (0 failed), mean 510 s
+lean bot with WAVES_V2, SKY_ON and HOLLOW_ENEMIES all on: cleared 25 stages on 10 of 10 seeds (0 failed), mean 593 s
+lean bot with SYNERGY_ON off (the old numbers): cleared 25 stages on 10 of 10 seeds (0 failed), mean 558 s
+
+New suite output:
+PASS Env: 24 of 24 checks
+ok   the sky switch is off by default
+ok   all 5 stage sets have a valid day/night window and weather list
+ok   every weather kind has an effect in Config.SKY_EFFECTS, and night does too
+ok   Config.skyFor finds the set's data for stages 1 to 25
+ok   early in the cycle it is day with no weather
+ok   the weather starts at its time
+ok   the weather ends after its duration
+ok   the weather repeats every cycle
+ok   night falls in its window
+ok   night ends at the end of the cycle
+ok   the last set is night all cycle
+ok   two sets differ
+ok   with the switch off the weather does not slow enemies (0.8)
+ok   with the switch off no Sky event is sent
+ok   a Sky event announces the weather
+ok   weather changes the enemy speed (0.7360000000000001)
+ok   the client is told the new speed with Pace
+ok   the Sky event is sent once per change, not every step
+ok   a new Sky event when the weather ends
+ok   at night a light familiar hits harder by the night effect (1.2)
+ok   a Sky event announces the night
+ok   a fire familiar is unchanged by night
+ok   the weather's range effect reaches the sim
+ok   a paused run sends no Sky event
+
+UNVERIFIED: no client lighting/weather change; the Sky event {night, weather, stage} is sent for it.

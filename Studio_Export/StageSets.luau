@@ -8,6 +8,7 @@ export type StageSet = {
 	name: string,
 	stages: number,
 	music: string, -- a MusicFX state name (Music.states); a set change crossfades to it
+	sky: { cycle: number, night: { number }?, weather: { { kind: string, at: number, dur: number } }? }?, -- day and night window and weather events (T009): fractions of the cycle, seconds; effects in Config.SKY_EFFECTS
 	lighting: { ClockTime: number, Brightness: number, Ambient: Color3, OutdoorAmbient: Color3, FogColor: Color3, AtmosphereColor: Color3, AtmosphereDecay: Color3, Density: number, Haze: number },
 }
 
@@ -16,6 +17,7 @@ local StageSets = {}
 StageSets.list = {
 	{
 		id = "LampwickLane",
+		sky = { cycle = 80, night = { 0.65, 1 }, weather = { { kind = "Fog", at = 0.2, dur = 14 } } },
 		name = "Lampwick Lane",
 			music = "play",
 		stages = 5,
@@ -23,6 +25,7 @@ StageSets.list = {
 	},
 	{
 		id = "HarbourOfBrass",
+		sky = { cycle = 90, night = { 0.7, 1 }, weather = { { kind = "Rain", at = 0.1, dur = 20 }, { kind = "Fog", at = 0.5, dur = 12 } } },
 		name = "Harbour of Brass",
 			music = "harbour",
 		stages = 5,
@@ -30,6 +33,7 @@ StageSets.list = {
 	},
 	{
 		id = "SilentCathedral",
+		sky = { cycle = 100, night = { 0.2, 1 }, weather = { { kind = "Fog", at = 0.6, dur = 15 } } },
 		name = "The Silent Cathedral",
 			music = "cathedral",
 		stages = 5,
@@ -37,6 +41,7 @@ StageSets.list = {
 	},
 	{
 		id = "ClockworkFoundry",
+		sky = { cycle = 90, night = { 0.5, 1 }, weather = { { kind = "Embers", at = 0.3, dur = 18 } } },
 		name = "Clockwork Foundry",
 		stages = 5,
 		music = "play",
@@ -44,6 +49,7 @@ StageSets.list = {
 	},
 	{
 		id = "AboveTheGreyVeil",
+		sky = { cycle = 120, night = { 0, 1 }, weather = { { kind = "Storm", at = 0.5, dur = 15 } } },
 		name = "Above the Grey Veil",
 		stages = 5,
 		music = "veil",

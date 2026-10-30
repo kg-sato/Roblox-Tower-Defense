@@ -311,6 +311,105 @@ return function(Shared)
 		end
 		check("with the flag on both new kinds appear and wave sizes are unchanged", sawCrow and sawThief and sizeOk)
 		Config.NEW_ENEMIES = false
+
+		-- Hollow Parishioner and Fog Wisp (T417)
+		do
+			check("both Hollow Court kinds are defined", Config.ENEMIES.Parishioner ~= nil and Config.ENEMIES.FogWisp ~= nil)
+			check("the Hollow flag is off by default", Config.HOLLOW_ENEMIES == false)
+			local seenNew = false
+			for s = 1, 60 do
+				for _, k in Config.stageSpawns(s) do
+					if k == "Parishioner" or k == "FogWisp" then
+						seenNew = true
+					end
+				end
+			end
+			check("with the flag off the client never meets a Parishioner or a Wisp", seenNew == false)
+			Config.HOLLOW_ENEMIES = true
+			local firstP, firstW, sizeOk, kindOk = nil, nil, true, true
+			for s = 1, 60 do
+				local list = Config.stageSpawns(s)
+				local want = math.min(5 + math.floor(s * 1.3), 28) + (Config.isBossStage(s) and 1 or 0)
+				if #list ~= want then
+					sizeOk = false
+				end
+				for _, k in list do
+					if not Config.ENEMIES[k] then
+						kindOk = false
+					end
+					if k == "Parishioner" and not firstP then
+						firstP = s
+					elseif k == "FogWisp" and not firstW then
+						firstW = s
+					end
+				end
+			end
+			check("with the flag on both appear, Parishioner from stage 11 and Wisp from stage 12", firstP == 11 and firstW == 12, tostring(firstP) .. "/" .. tostring(firstW))
+			check("with the flag on wave sizes are unchanged and every kind is defined", sizeOk and kindOk)
+			check("no Hollow kind before stage 11", (function()
+				for s = 1, 10 do
+					for _, k in Config.stageSpawns(s) do
+						if k == "Parishioner" or k == "FogWisp" then
+							return false
+						end
+					end
+				end
+				return true
+			end)())
+			Config.HOLLOW_ENEMIES = false
+			-- the Parishioner's hollow armour
+			local sim = newSim(21)
+			local par = { id = 1, kind = "Parishioner", hp = 100, maxHp = 100, dist = 0, dead = false }
+			local light = { pet = "Zap" }
+			local shadow = { pet = "Mourner" }
+			local fire = { pet = "Ember" }
+			if Config.DAMAGE_TYPE.Zap == "light" and Config.DAMAGE_TYPE.Mourner == "shadow" then
+				check("hollow armour takes more from light", near(sim:armourDamage(light, par, 100), 130, 1e-6))
+				check("hollow armour takes less from shadow", near(sim:armourDamage(shadow, par, 100), 75, 1e-6))
+				check("hollow armour takes fire normally", near(sim:armourDamage(fire, par, 100), 100, 1e-6))
+			else
+				check("damage types for the hollow armour test are in Config.DAMAGE_TYPE", false)
+			end
+			-- Fog Wisp lamp-eating
+			local function wispSim(seed)
+				local s2 = newSim(seed)
+				local w = { id = 1, kind = "FogWisp", hp = 1000, maxHp = 1000, dist = Config.LAMP_EAT.at * Path.length - 1.0, dead = false }
+				table.insert(s2.enemies, w)
+				return s2, w
+			end
+			local s2, w = wispSim(22)
+			s2:lantern(0, -10)
+			local litUntil = s2.lanternUntil
+			s2:step(0.1)
+			check("before the eating point the Lantern is left alone", s2.lanternUntil == litUntil and not w.ate)
+			events = {}
+			s2:step(0.1)
+			check("a Wisp past the eating point snuffs a lit Lantern", w.ate == true and s2.lanternUntil <= s2.t and has("LampEaten"))
+			check("a snuffed Lantern takes longer to recharge", s2.lanternReady >= s2.t + Config.LAMP_EAT.snuffCooldown - 1e-6 and select(1, s2:lantern(0, -10)) == false)
+			local ready0 = s2.lanternReady
+			for _ = 1, 20 do
+				s2:step(0.1)
+			end
+			check("a Wisp eats only once", s2.lanternReady == ready0)
+			local s3, w3 = wispSim(23)
+			s3:step(0.1)
+			s3:step(0.1)
+			check("a ready, unlit Lantern is darkened for a while", w3.ate and s3.lanternReady >= s3.t + Config.LAMP_EAT.darkFor - 0.3 and select(1, s3:lantern(0, -10)) == false)
+			local s4, w4 = wispSim(24)
+			s4:lantern(0, -10)
+			s4:step(Config.LANTERN.dur + 1)
+			local before = s4.lanternReady
+			w4.dist = Config.LAMP_EAT.at * Path.length + 1
+			s4:step(0.1)
+			check("a recharging Lantern is left alone", w4.ate == true and s4.lanternReady == before)
+			local s5 = newSim(25)
+			local g = { id = 1, kind = "Grunt", hp = 1000, maxHp = 1000, dist = 0.9 * Path.length, dead = false }
+			table.insert(s5.enemies, g)
+			s5:lantern(0, -10)
+			local u5 = s5.lanternUntil
+			s5:step(0.1)
+			check("other enemies never eat the lamp", g.ate == nil and s5.lanternUntil == u5)
+		end
 	end)
 	if not ok then
 		failed += 1

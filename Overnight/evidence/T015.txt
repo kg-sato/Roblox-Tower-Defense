@@ -1,3 +1,67 @@
 PASS
-Note: Roblox Dev/Research/Game Design and Market/Merge game progression and 30-day retention.md
-Deviation: Merge Dragons not covered (Wikipedia 404, no other source read). Merge Mansion covered with 3 read sources (2020-09-17, 2021-06-04, Wikipedia fetched 2026-10-28). Retention numbers are reported statements, labelled as such.
+T015: Elite enemies and ten wave modifiers (Waves.test, new). Off by default (Config.WAVES_V2 = false).
+RunAll (Studio Edit, 2026-10-29 23:53 UTC):
+ActionArgs.test.luau               PASS
+Balance.test.luau                  PASS balance baseline ran (numbers are a baseline, not assertions)
+Boss.test.luau                     PASS Boss: 31/31 checks ok
+Combat.test.luau                   PASS Combat: 74 of 74 checks
+Combo.test.luau                    PASS Combo: 29 of 29 checks
+Env.test.luau                      PASS Env: 24 of 24 checks
+FamiliarMaterials.test.luau        PASS FamiliarMaterials: 69/69 checks ok
+Familiars.test.luau                PASS Familiars: 32/32 checks ok
+GameSpeed.test.luau                PASS
+Lantern.test.luau                  PASS Lantern: 17 of 17 checks
+LoreFragments.test.luau            PASS
+MatchSim.test.luau                 PASS
+NewRoles.test.luau                 PASS NewRoles: 27/27 checks ok
+NumberFormat.test.luau             PASS
+Rules.test.luau                    PASS Rules: 90 of 90 checks
+SaveMigration.test.luau            PASS SaveMigration: 40 of 40 checks
+ServerRules.test.luau              PASS ServerRules: 83 of 83 checks
+SettingsDefaults.test.luau         PASS
+SoundCap.test.luau                 PASS
+StageSets.test.luau                PASS
+Waves.test.luau                    PASS Waves: 34 of 34 checks
+SUMMARY 21 of 21 suites PASS
+lean bot (full strategy, 10 seeds, defaults): cleared 25 stages on 10 of 10 seeds (0 failed), mean 510 s
+lean bot with WAVES_V2, SKY_ON and HOLLOW_ENEMIES all on: cleared 25 stages on 10 of 10 seeds (0 failed), mean 593 s
+lean bot with SYNERGY_ON off (the old numbers): cleared 25 stages on 10 of 10 seeds (0 failed), mean 558 s
+
+New suite output:
+PASS Waves: 34 of 34 checks
+ok   the wave switch is off by default
+ok   there are ten wave modifiers
+ok   modifier ids are unique
+ok   every modifier has a name, a description and positive multipliers
+ok   elite numbers are data
+ok   no modifier on the first stages
+ok   no modifier on boss stages
+ok   every other stage from the first modifier stage has one
+ok   all ten modifiers come up (10)
+ok   a stage always has the same modifier
+ok   no elites before the first elite stage
+ok   the first elite stage has one
+ok   elites rise with the stage
+ok   elites stop at the maximum
+ok   elite positions are inside the list and never the boss
+ok   the number of elite positions matches the count
+ok   with the switch off wave sizes are the old formula
+ok   with the switch off no queue entry is elite or modified
+ok   with the switch off the Stage event carries no modifier
+ok   Swarm makes the wave bigger
+ok   Thinned makes the wave shorter
+ok   Giants makes it much shorter
+ok   wave sizes always stay between 3 and 41
+ok   the Stage event names the modifier and elite count (Frail/2)
+ok   the right number of elites spawn (2)
+ok   the Spawn event tells the client which are elites
+ok   an elite has the elite hp multiplier on top of the modifier (482.949947928968 vs 482.949947928968)
+ok   a normal enemy of the wave only has the modifier
+ok   an elite is slower by the elite and modifier speed (0.9)
+ok   an elite pays the elite reward multiplier
+ok   killing an elite pays the scaled coins (17 vs 17)
+ok   scaled enemies announce their speed with Pace
+ok   the boss is never an elite and has no modifier
+ok   a Gemstorm wave multiplies gem rewards
+
+UNVERIFIED: the client does not yet show elite or modifier labels; Spawn.elite and Stage.mod/modName/elites are sent for it.
