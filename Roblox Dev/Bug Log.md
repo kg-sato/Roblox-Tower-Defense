@@ -44,3 +44,6 @@ Severity: `crash` / `major` (breaks a feature) / `minor` / `cosmetic`
 - 2026-10-25 FIXED: K.bar returns a nil fill at value 0 when sprite art is on; NowPlaying uses its own track/fill boxes. Note: Studio MusicFX source uses CRLF line endings when patching.
 
 - 2026-10-29 FIXED (studio-client2, T194): the Damage numbers setting (T116) never reached the client's SETTINGS table (GCSettingsApply did not copy it), so the switch did nothing; one line added in GCSettingsApply.
+
+- 2026-10-29 FIXED (studio-ui2, T057): RevealSection indexed its size, hold-time and burst-cue tables by rarity order 1 to 4 only, so a Mythic or Celestial roll (order 5 and 6) would have hit nil (TextSize and arithmetic); entries added for 5 and 6.
+- 2026-10-29 OPEN minor (studio-ui2, T075): `PlacementHint.luau` and `HideUI.luau` both bind the H key, so H hides the HUD and toggles the placement hint together.

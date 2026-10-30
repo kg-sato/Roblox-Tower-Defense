@@ -64,3 +64,14 @@ T144 | commit e5814d5 | "lantern light language" | attested | fx-audio | Overnig
 T133 | commit e5814d5 | "familiar attack effects" | attested | fx-audio | Overnight/evidence/T133.txt
 T134 | commit e5814d5 | "enemy family reactions" | attested | fx-audio | Overnight/evidence/T134.txt
 T601 | commit e5814d5 | "ultimate camera flourishes" | attested | fx-audio | Overnight/evidence/T601.txt
+T188 | commit e5d13d9 | "text animation module" | attested | client-ui | Overnight/evidence/T188.txt
+T607 | commit e5d13d9 | "text animation applied" | attested | client-ui | Overnight/evidence/T607.txt
+T098 | commit e5d13d9 | "dialogs toasts states" | attested | client-ui | Overnight/evidence/T098.txt
+T085 | commit e5d13d9 | "tooltip system added" | attested | client-ui | Overnight/evidence/T085.txt
+T087 | commit e5d13d9 | "strings table coverage" | attested | client-ui | Overnight/evidence/T087.txt
+T235 | commit e5d13d9 | "UI checks added" | attested | client-ui | Overnight/evidence/T235.txt
+T075 | commit e5d13d9 | "controls settings group" | attested | client-ui | Overnight/evidence/T075.txt
+T057 | commit e5d13d9 | "mythic celestial reveals" | attested | client-ui | Overnight/evidence/T057.txt
+T058 | commit e5d13d9 | "collection faction filter" | attested | client-ui | Overnight/evidence/T058.txt
+T095 | commit e5d13d9 | "familiar detail panel" | attested | client-ui | Overnight/evidence/T095.txt
+T097 | commit e5d13d9 | "pause menu added" | attested | client-ui | Overnight/evidence/T097.txt

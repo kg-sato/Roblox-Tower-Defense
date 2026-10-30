@@ -1796,6 +1796,7 @@ do -- settings panel: shell here, content in the SettingsPanel module
 		end
 	end)
 	close.Activated:Connect(function() hidePanel(panel, scale) end)
+	do local ev = Instance.new("BindableEvent"); ev.Name = "OpenSettings"; ev.Parent = ReplicatedStorage; ev.Event:Connect(function() if not panel.Visible then UI.intro(gui, STYLE.blue, function() panel.Visible = true; popIn(scale, 0.85) end, SETTINGS.reducedMotion) end end) end -- T097: opened by the pause menu
 end
 
 do -- skill tree scope

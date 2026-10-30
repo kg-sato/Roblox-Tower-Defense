@@ -100,17 +100,17 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: Shared.Strings (new), Tests/Strings.test.luau
 - [x] T235 | UI checks: text at least 14 px at 844x390, contrast 4.5:1, labelled buttons | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/UIChecks.test.luau (new, run in Play))
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: Tests/UIChecks.test.luau (read-only on UI)
-- [ ] T074 | Results screen: wave, gold, lore line, next-step button | verify: studio: shown after a stage clear in Play, validator 0 problems
+- [x] T074 | Results screen: wave, gold, lore line, next-step button | verify: studio: shown after a stage clear in Play, validator 0 problems
   lane: client-ui | needs: Studio | depends: T098 | size: M | owner-files: StarterPlayerScripts.ResultsScreen (new)
-- [ ] T075 | Settings: add Controls group (keys, hide-UI) | verify: studio: group visible, values persist after rejoin
+- [x] T075 | Settings: add Controls group (keys, hide-UI) | verify: studio: group visible, values persist after rejoin
   lane: client-ui | needs: Studio | depends: none | size: S | owner-files: SettingsPanel, Shared.SettingsDefaults
-- [ ] T057 | Reveal for Mythic and Celestial: own sigil and lore line | verify: studio: RevealFX.play for both, no TIER_ALIAS fallback, console clean
+- [x] T057 | Reveal for Mythic and Celestial: own sigil and lore line | verify: studio: RevealFX.play for both, no TIER_ALIAS fallback, console clean
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: RevealSection, RevealFX (TIER_ALIAS), FXRecipes (ORDER/RAMP)
-- [ ] T058 | Collection: faction filter, 20 cards reviewed, silhouettes for unowned | verify: studio: 20 cells, filter works in Play
+- [x] T058 | Collection: faction filter, 20 cards reviewed, silhouettes for unowned | verify: studio: 20 cells, filter works in Play
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: CollectionScreen, FamiliarArt (claim from Sonnet)
-- [ ] T095 | Familiar detail panel with lore, stats, bond, mood, evolve preview | verify: studio: panel opens for 3 familiars
+- [x] T095 | Familiar detail panel with lore, stats, bond, mood, evolve preview | verify: studio: panel opens for 3 familiars
   lane: client-ui | needs: Studio | depends: T007 | size: M | owner-files: StarterPlayerScripts.FamiliarPanel (new)
-- [ ] T097 | Pause menu: resume, speed, settings, quit with confirm | verify: studio: pause then resume keeps run state
+- [x] T097 | Pause menu: resume, speed, settings, quit with confirm | verify: studio: pause then resume keeps run state
   lane: client-ui | needs: Studio | depends: T006,T098 | size: M | owner-files: StarterPlayerScripts.PauseMenu (new)
 - [ ] T090 | Inventory screen: silhouette grid, tier stars, empty-slot lore | verify: studio: validator 0 problems, capture
   lane: client-ui | needs: Studio | depends: T185,T098 | size: M | owner-files: StarterPlayerScripts.InventoryScreen (new)

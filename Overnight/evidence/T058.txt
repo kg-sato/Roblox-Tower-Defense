@@ -1,3 +1,9 @@
 PASS
-Page: Roblox Dev/Lore/Glossary.md (places, currencies, factions, familiars, rarities, status effects; each entry marked In game / Task list / Proposal).
-Check: rarities (Common 60/Rare 28/Epic 10/Legendary 2; mult 1/2.2/5/12) and currencies (coins, gems) read from Studio_Export/Config.luau this session; status effects confirmed absent from Config (grep). Other terms are proposals. Not wired into code.
+T058 Collection: edited StarterPlayerScripts.CollectionScreen (Studio_Export/CollectionScreen.luau). Added a faction filter row (chips All, Lantern, Clockwork, Hollow, Star, Unaligned, built from Shared.Familiars so a new faction gets a chip); grid and detail moved down to make room; the count label always shows all familiars. Test hook: setting the gui attribute SetFilter applies a filter; the gui attributes Filter and VisibleCells report the state. FamiliarArt not edited (nothing missing).
+Play (Studio, SeenPets set by the server to Ember,Zap,CogWarden):
+- 20 cells in Panel.Grid, gui attribute Cells=20, count label "3/20".
+- 20 cards reviewed (data): every familiar id has a cutout and a lore image in FamiliarArt (0 missing); ContentProvider.PreloadAsync of all 40 image ids: Success=40.
+- Silhouettes: 17 unowned cells have the cutout tinted black and the name "???" (all 17); the 3 owned show their name (Ember, Moth-Lantern, The Cog-Warden) and colour.
+- Filter: All=20/20, Lantern Keepers=5/5, Clockwork Guild=5/5, Hollow Court=4/4, Star Choir=4/4, Unaligned=2/2 (visible cells equal the faction counts in Shared.Familiars; the VisibleCells attribute agrees each time).
+Capture Overnight/captures/T058_collection_filter.jpg (Clockwork filter: 5 cells, 4 silhouettes, the owned Cog-Warden, the Ember lore card on the right).
+Not verified: the look of each card by eye (UNVERIFIED; only data presence, load status and one lore card seen in the capture); chip label size at 844x390 (the box is about 99 x 19 px there, floor set to 14 px, not measured); the existing cell labels in this old screen are small and not Scale-validated (not mine, not changed); clicking a chip with a real mouse was not exercised (the attribute hook calls the same function the click does).

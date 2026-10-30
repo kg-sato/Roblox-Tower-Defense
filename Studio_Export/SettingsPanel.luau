@@ -232,8 +232,23 @@ return function(ctx)
 	toggle("reducedMotion", "Reduced motion")
 	toggle("shake", "Screen shake")
 	toggle("damageNumbers", "Damage numbers")
-	toggle("hideUi", "Hide UI (H key also toggles)")
 	choice("uiSize", "UI size", { { label = "Small", value = "small" }, { label = "Normal", value = "normal" }, { label = "Large", value = "large" } })
+	-- T075: Controls group. Key rows are a read-only reference; Hide UI is the saved setting (applied by HideUI, kept after rejoin).
+	header("Controls")
+	toggle("hideUi", "Hide UI")
+	local function keyRow(str, keys)
+		local area = labeled(str)
+		local l = text(area, keys, 16, GOLD, SERIF, Enum.TextXAlignment.Right)
+		l.Size = UDim2.fromScale(0.95, 0.8)
+		l.Position = UDim2.fromScale(0.5, 0.5)
+	end
+	keyRow("Hide or show the HUD", "H key")
+	keyRow("Move between buttons", "Arrow keys / D-pad")
+	keyRow("Close a panel", "Esc")
+	local okC, Cfg = pcall(function() return require(game:GetService("ReplicatedStorage").Shared.Config) end)
+	if okC and Cfg.PAUSE_MENU then
+		keyRow("Pause menu", "P key")
+	end
 
 	order += 1
 	local resetRow = gui("Frame", { BackgroundTransparency = 1, Size = UDim2.fromScale(0.9, 0.08), LayoutOrder = order, ZIndex = 8, AnchorPoint = Vector2.new(0, 0) }, body)

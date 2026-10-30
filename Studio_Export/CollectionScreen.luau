@@ -3,6 +3,7 @@
 -- A familiar the player has pulled (server attribute Players.LocalPlayer:GetAttribute("SeenPets"), a comma list set by MatchService) shows its
 -- picture, name and rarity; one not yet pulled shows only its silhouette (the same cutout tinted black), "???" and its rarity colour.
 -- Selecting a familiar shows its lore card (full bio, uploaded art in ReplicatedStorage.FamiliarArt) or, for an unseen one, the big silhouette.
+-- T058: a faction filter row (All + each faction, from Shared.Familiars) hides the cells of other factions; the count always shows all familiars.
 -- The server decides what counts as seen; this script only displays it. All sizes are Scale (the cards keep their aspect ratio with a constraint).
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -72,18 +73,62 @@ new("UICorner", { CornerRadius = UDim.new(0.2, 0) }, closeBtn)
 new("UIAspectRatioConstraint", { AspectRatio = 1 }, closeBtn)
 
 local grid = new("ScrollingFrame", {
-	Name = "Grid", Size = UDim2.fromScale(0.56, 0.84), Position = UDim2.fromScale(0.03, 0.12), BackgroundTransparency = 1, BorderSizePixel = 0,
+	Name = "Grid", Size = UDim2.fromScale(0.56, 0.76), Position = UDim2.fromScale(0.03, 0.2), BackgroundTransparency = 1, BorderSizePixel = 0,
 	ScrollBarThickness = 6, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 11,
 }, panel)
 new("UIGridLayout", { CellSize = UDim2.fromScale(0.3, 0.3), CellPadding = UDim2.fromScale(0.03, 0.02), SortOrder = Enum.SortOrder.LayoutOrder, FillDirection = Enum.FillDirection.Horizontal }, grid)
 
-local detail = new("Frame", { Name = "Detail", Size = UDim2.fromScale(0.34, 0.84), Position = UDim2.fromScale(0.63, 0.12), BackgroundTransparency = 1, ZIndex = 11 }, panel)
+local detail = new("Frame", { Name = "Detail", Size = UDim2.fromScale(0.34, 0.76), Position = UDim2.fromScale(0.63, 0.2), BackgroundTransparency = 1, ZIndex = 11 }, panel)
 local cardImg = new("ImageLabel", { Name = "Card", AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0), Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ScaleType = Enum.ScaleType.Fit, ZIndex = 12 }, detail)
 new("UIAspectRatioConstraint", { AspectRatio = 630 / 880 }, cardImg)
 local lockedNote = label(detail, { name = "Locked", text = "", size = UDim2.fromScale(1, 0.2), pos = UDim2.fromScale(0, 0.8), color = PARCH, max = 22, z = 13 })
 
 local cells = {}
 local selected = nil
+
+-- faction filter row: chips across the panel, labels are the first word of the faction name (at 14 px or more)
+local factions, seenFaction = { "All" }, {}
+for _, id in Familiars.order do
+	local fa = Familiars.byId[id].faction
+	if not seenFaction[fa] then
+		seenFaction[fa] = true
+		table.insert(factions, fa)
+	end
+end
+local filter = "All"
+local chips = {}
+local filterRow = new("Frame", { Name = "FilterRow", Position = UDim2.fromScale(0.03, 0.115), Size = UDim2.fromScale(0.94, 0.07), BackgroundTransparency = 1, ZIndex = 11 }, panel)
+local function applyFilter()
+	local shown = 0
+	for id, c in cells do
+		local vis = filter == "All" or Familiars.byId[id].faction == filter
+		c.cell.Visible = vis
+		if vis then
+			shown += 1
+		end
+	end
+	for fa, chip in chips do
+		local on = fa == filter
+		chip.BackgroundColor3 = on and BRASS or Color3.fromRGB(38, 34, 48)
+		chip.Label.TextColor3 = on and INK or PARCH
+	end
+	gui:SetAttribute("Filter", filter)
+	gui:SetAttribute("VisibleCells", shown)
+end
+for i, fa in factions do
+	local chip = new("TextButton", { Name = "Chip_" .. fa, Position = UDim2.fromScale((i - 1) / #factions, 0), Size = UDim2.fromScale(1 / #factions - 0.012, 1), BackgroundColor3 = Color3.fromRGB(38, 34, 48), Text = "", AutoButtonColor = true, ZIndex = 12 }, filterRow)
+	new("UICorner", { CornerRadius = UDim.new(0.3, 0) }, chip)
+	new("UIStroke", { Color = BRASS, Thickness = 1 }, chip)
+	local lbl = label(chip, { name = "Label", text = fa == "All" and "All" or (fa:match("^%S+")), size = UDim2.fromScale(0.94, 0.8), pos = UDim2.fromScale(0.03, 0.1), max = 18, z = 13 })
+	lbl.TextTransparency = 0
+	lbl:FindFirstChildOfClass("UITextSizeConstraint").MinTextSize = 14
+	chip:SetAttribute("Label", fa)
+	chip.Activated:Connect(function()
+		filter = fa
+		applyFilter()
+	end)
+	chips[fa] = chip
+end
 
 local function seenSet()
 	local set = {}
@@ -135,6 +180,7 @@ end
 
 local function select(id)
 	selected = id
+	gui:SetAttribute("Selected", id) -- read by FamiliarPanel's Details button
 	refresh()
 end
 
@@ -152,6 +198,15 @@ for i, id in Familiars.order do
 		select(id)
 	end)
 end
+
+applyFilter()
+gui:GetAttributeChangedSignal("SetFilter"):Connect(function() -- test hook: a Studio check sets the attribute instead of clicking
+	local want = gui:GetAttribute("SetFilter")
+	if type(want) == "string" and table.find(factions, want) then
+		filter = want
+		applyFilter()
+	end
+end)
 
 -- the open button is hidden while the panel is open and while GameClient's start menu frame (HUD > StartMenu) is showing
 local startMenu = nil

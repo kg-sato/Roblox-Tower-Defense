@@ -37,7 +37,10 @@ return function(ctx)
 	revealOdds.ZIndex = 20
 	local revealHint = label(revealGui, "Tap to continue", 18, STYLE.muted, Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.865), UDim2.fromOffset(400, 26), STYLE.fontB)
 	revealHint.ZIndex = 20
-	for _, l in { revealTitle, revealName, revealOdds, revealHint } do
+	-- T057: Mythic and Celestial get a lore line and their own sigil (a rune circle turning against a second one) behind the card
+	local revealLore = label(revealGui, "", 20, STYLE.muted, Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.91), UDim2.fromOffset(900, 30), STYLE.fontB)
+	revealLore.ZIndex = 20
+	for _, l in { revealTitle, revealName, revealOdds, revealHint, revealLore } do
 		setLabelVisible(l, false)
 	end
 	if UI.fa then
@@ -93,6 +96,13 @@ return function(ctx)
 	local clockRing = new("ImageLabel", { Name = "ClockRing", BackgroundTransparency = 1, Image = ART.ring or "", ImageColor3 = Color3.fromRGB(220, 180, 120), ImageTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.46), Size = UDim2.fromScale(0.62, 0.62), SizeConstraint = Enum.SizeConstraint.RelativeYY, ZIndex = 16 }, revealGui)
 	local ringSpin = TweenService:Create(clockRing, TweenInfo.new(24, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), { Rotation = 360 })
 	ringSpin:Play()
+	local TOP_LORE = { Mythic = "A name the lamps keep for themselves.", Celestial = "Light that learned to walk." }
+	local sigilA = new("ImageLabel", { Name = "SigilA", BackgroundTransparency = 1, Image = "rbxasset://textures/vfx/vfx_sigil.png", ImageTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.46), Size = UDim2.fromScale(0.8, 0.8), SizeConstraint = Enum.SizeConstraint.RelativeYY, ZIndex = 16 }, revealGui)
+	local sigilB = new("ImageLabel", { Name = "SigilB", BackgroundTransparency = 1, Image = "rbxasset://textures/vfx/vfx_rune.png", ImageTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.46), Size = UDim2.fromScale(0.56, 0.56), SizeConstraint = Enum.SizeConstraint.RelativeYY, ZIndex = 16 }, revealGui)
+	local sigilSpinA = TweenService:Create(sigilA, TweenInfo.new(30, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), { Rotation = 360 })
+	local sigilSpinB = TweenService:Create(sigilB, TweenInfo.new(18, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), { Rotation = -360 })
+	sigilSpinA:Play()
+	sigilSpinB:Play()
 	local revealState = { phase = "idle", skip = false, dismiss = false }
 	local revealQueue = {}
 	local revealRunning = false
@@ -224,9 +234,10 @@ return function(ctx)
 		revealGlow.BackgroundColor3 = Color3.fromRGB(60, 64, 96)
 		revealGlow.BackgroundTransparency = 0.8
 		rays.Visible = false
-		for _, l in { revealTitle, revealName, revealOdds, revealHint } do
+		for _, l in { revealTitle, revealName, revealOdds, revealHint, revealLore } do
 			setLabelVisible(l, false)
 		end
+		sigilA.ImageTransparency, sigilB.ImageTransparency = 1, 1
 
 		-- ===== THE READING (2026-10-28, replaces the orrery; user: "rolling animation still too generic") =====
 		-- From the summon study (Roblox Dev/Research/VFX and Animation/Summon References): a seated first-person view of a
@@ -351,7 +362,7 @@ return function(ctx)
 		end
 
 		-- burst: flash, sparks, the familiar pops in
-		FXK.play(({ "common", "rare", "epic", "legendary_burst" })[order])
+		FXK.play(({ "common", "rare", "epic", "legendary_burst", "legendary_burst", "ultimate_summon" })[order])
 		-- softer flash; the shockwave ring carries the impact now
 		screenFlash(Color3.new(1, 1, 1), order >= 4 and 0.55 or (order >= 3 and 0.4 or 0.2))
 		if FXK.shock then
@@ -543,7 +554,7 @@ return function(ctx)
 			vcam.CFrame = WIDE
 		end
 
-		local sizes = { 38, 46, 58, 72 }
+		local sizes = { 38, 46, 58, 72, 80, 88 }
 		revealTitle.Text = rarity:upper()
 		revealTitle.TextColor3 = rcolor
 		revealTitle.TextSize = sizes[order]
@@ -553,11 +564,18 @@ return function(ctx)
 		for _, l in { revealTitle, revealName, revealOdds } do
 			setLabelVisible(l, true)
 		end
+		if order >= 5 then
+			revealLore.Text = TOP_LORE[rarity] or ""
+			setLabelVisible(revealLore, true)
+			sigilA.ImageColor3, sigilB.ImageColor3 = rcolor, rcolor:Lerp(Color3.new(1, 1, 1), 0.5)
+			tween(sigilA, 0.5, { ImageTransparency = 0.45 })
+			tween(sigilB, 0.5, { ImageTransparency = 0.3 })
+		end
 		task.spawn(TextAnim.run, revealTitle, revealTitle.Text, "drop") -- T607: heading drops in, name types out (static if reduced motion)
 		task.spawn(TextAnim.run, revealName, revealName.Text, "typewrite")
 		setLabelVisible(revealHint, order >= 3)
 		revealState.phase = "hold"
-		local holdUntil = os.clock() + ({ 0.7, 1.0, 1.6, 2.4 })[order] * timeScale
+		local holdUntil = os.clock() + ({ 0.7, 1.0, 1.6, 2.4, 2.8, 3.2 })[order] * timeScale
 		local t0 = os.clock()
 		while not revealState.dismiss and (os.clock() < holdUntil or order >= 4 and os.clock() - t0 < 1.0) do
 			placePetVp(1.5, math.sin((os.clock() - t0) * 2) * 0.35)
@@ -566,9 +584,11 @@ return function(ctx)
 
 		-- close: the familiar becomes a streak of light that flies down to its pad, while the summon scene fades away
 		revealState.phase = "idle"
-		for _, l in { revealTitle, revealName, revealOdds, revealHint } do
+		for _, l in { revealTitle, revealName, revealOdds, revealHint, revealLore } do
 			fadeLabel(l, 0.2)
 		end
+		tween(sigilA, 0.25, { ImageTransparency = 1 })
+		tween(sigilB, 0.25, { ImageTransparency = 1 })
 		local okP, pad = pcall(function() local v, on = camera:WorldToViewportPoint(groundOf(slot)) return on and Vector2.new(v.X, v.Y) or nil end)
 		local vs = camera.ViewportSize
 		local comet = new("ImageLabel", { BackgroundTransparency = 1, Image = ART.glow or "", ImageColor3 = rcolor:Lerp(Color3.new(1, 1, 1), 0.5), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(160, 160), ZIndex = 22 }, revealGui.Parent)

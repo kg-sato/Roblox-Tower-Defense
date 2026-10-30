@@ -345,6 +345,9 @@ end
 -- An elite is a normal kind with more hp, a slower walk and a bigger reward; the sim marks it (`elite`), the kind is unchanged so the client needs no new model.
 -- Modifiers are picked from the stage number, so a stage always has the same one; boss stages and the first stages have none.
 Config.WAVES_V2 = false
+-- Client UI screens (T074, T097), off by default: the result panel after a stage clear and the pause menu button
+Config.RESULTS_SCREEN = false
+Config.PAUSE_MENU = false
 Config.ELITE = Waves.ELITE
 Config.MOD_FIRST = Waves.MOD_FIRST
 Config.WAVE_MODIFIERS = Waves.WAVE_MODIFIERS
