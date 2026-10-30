@@ -707,7 +707,10 @@ end
 
 function MatchSim.damage(self: Sim, e: Enemy, amount: number, chargeUlt: boolean)
 	local bossFxNow = bossFx(e)
-	if bossFxNow and bossFxNow.damageTaken then
+	if bossFxNow and bossFxNow.candles and Config.BOSS_V2 then
+		-- candles (T416): each lit candle takes off a share, a slain mourner snuffs one
+		amount *= math.max(bossFxNow.candles.min, 1 - (e :: any).boss.lit * bossFxNow.candles.per)
+	elseif bossFxNow and bossFxNow.damageTaken then
 		amount *= bossFxNow.damageTaken
 	end
 	e.hp -= amount
@@ -724,6 +727,16 @@ function MatchSim.damage(self: Sim, e: Enemy, amount: number, chargeUlt: boolean
 		if (e :: any).carrying then
 			self.coins += 10 -- the stolen light drops as coins
 			self.emit("Drop", { id = e.id, coins = 10 })
+		end
+		if (e :: any).mourner then
+			for _, o in self.enemies do
+				local ob = (o :: any).boss
+				if ob and not o.dead and ob.lit and ob.lit > 0 then
+					ob.lit -= 1
+					self.emit("BossFx", { id = o.id, kind = "snuff", lit = ob.lit })
+					break
+				end
+			end
 		end
 		local perched = (e :: any).perched
 		if perched and self.grid[perched] then
@@ -1116,6 +1129,7 @@ function MatchSim.checkPhase(self: Sim, e: any)
 	while b.phase < #b.def.phases and e.hp / e.maxHp <= b.def.phases[b.phase + 1].at do
 		b.phase += 1
 		b.timers = {}
+		b.lit = 0
 		self.emit("BossPhase", { id = e.id, boss = b.def.id, name = b.def.name, phase = b.phase, phases = #b.def.phases, banner = b.def.phases[b.phase].banner, hpFrac = e.hp / e.maxHp })
 	end
 end
@@ -1160,11 +1174,84 @@ function MatchSim.bossTick(self: Sim, e: any, dt: number): number
 	end
 	if fx.summon and due("summon", fx.summon.every) then
 		for i = 1, fx.summon.count do
-			table.insert(self.queue, { at = self.t + (i - 1) * Config.SPAWN_GAP, kind = fx.summon.kind, stage = b.stage })
+			table.insert(self.queue, { at = self.t + (i - 1) * Config.SPAWN_GAP, kind = fx.summon.kind, stage = b.stage, mourner = (Config.BOSS_V2 and fx.candles ~= nil) or nil })
 		end
 		self.emit("BossFx", { id = e.id, kind = "summon", enemy = fx.summon.kind, count = fx.summon.count })
 	end
+	if Config.BOSS_V2 then
+		if fx.lamp and due("lamp", fx.lamp.every) and not self.tutorial then
+			self.crystalHp = math.min(self:maxHp(), self.crystalHp + fx.lamp.heal)
+			self.emit("BossFx", { id = e.id, kind = "lamp", heal = fx.lamp.heal })
+		end
+		if fx.candles and (b.lit or 0) < fx.candles.count and due("candle", fx.candles.every) then
+			b.lit = (b.lit or 0) + 1
+			self.emit("BossFx", { id = e.id, kind = "candle", lit = b.lit })
+		end
+		if fx.push and due("push", fx.push.every) then
+			self:bossPush(e, fx.push)
+		end
+	end
+	if Config.BOSS_UNMERGE and fx.unmerge and due("unmerge", fx.unmerge.every) then
+		self:unmerge(e)
+	end
 	return fx.speedMult or 1
+end
+
+-- Echo push (T416): the unit nearest the boss slides `dist` studs straight away from it, or is stunned for a second when the spot is not legal.
+function MatchSim.bossPush(self: Sim, e: any, push: any)
+	local bp = Path.positionAt(e.dist)
+	local done: { [number]: boolean } = {}
+	for _ = 1, push.count do
+		local near, nd
+		for id, u in self.grid do
+			local d = (u.x - bp.X) ^ 2 + (u.z - bp.Z) ^ 2
+			if not done[id] and (not nd or d < nd) then
+				near, nd = id, d
+			end
+		end
+		if not near then
+			return
+		end
+		done[near] = true
+		local u = self.grid[near] :: any
+		local len = math.max(math.sqrt(nd), 1e-6)
+		local x, z = u.x + (u.x - bp.X) / len * push.dist, u.z + (u.z - bp.Z) / len * push.dist
+		local ok = Config.canPlace(self.grid, u.pet, x, z, near)
+		if ok then
+			u.x, u.z = x, z
+			self.emit("Move", { id = near, x = x, z = z })
+		else
+			u.disabledUntil = math.max(u.disabledUntil or 0, self.t + 1)
+		end
+		self.emit("BossFx", { id = e.id, kind = "push", slot = near, moved = ok })
+	end
+end
+
+-- Clockmaker (T416, BOSS_UNMERGE): the highest merged unit falls back one tier into its three parts; skipped when the street has no room for the two new parts.
+function MatchSim.unmerge(self: Sim, e: any): boolean
+	local best, bt
+	for id, u in self.grid do
+		if u.tier >= 2 and (not bt or u.tier > bt) then
+			best, bt = id, u.tier
+		end
+	end
+	if not best or self:unitCount() + 2 > Config.MAX_UNITS then
+		return false
+	end
+	local u = self.grid[best]
+	local spots = {}
+	for _ = 1, 2 do
+		local x, z = self:findSpot(u.pet)
+		if not x or not z then
+			return false
+		end
+		local id = self:addUnit(u.pet, x, z)
+		self.grid[id].tier = u.tier - 1
+		table.insert(spots, id)
+	end
+	u.tier -= 1
+	self.emit("BossFx", { id = e.id, kind = "unmerge", slot = best, tier = u.tier, parts = spots })
+	return true
 end
 
 -- The slow aura of a live boss: { x, z, r2, factor } or nil. Units inside it cool down more slowly.
@@ -1245,8 +1332,11 @@ function MatchSim.step(self: Sim, dt: number)
 		if Config.WAVES_V2 and qa.elite then
 			(e :: any).elite = true
 		end
+		if (q :: any).mourner then
+			(e :: any).mourner = true
+		end
 		if bossDef then
-			(e :: any).boss = { def = bossDef, phase = 1, stage = q.stage, timers = {} }
+			(e :: any).boss = { def = bossDef, phase = 1, stage = q.stage, timers = {}, lit = 0 }
 		end
 		self.nextId += 1
 		table.insert(self.enemies, e)

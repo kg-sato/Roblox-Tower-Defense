@@ -17,3 +17,12 @@ T411 | commit 3d1f029 | "best stage saved" | attested | sim | Overnight/evidence
 T005 | commit 3d1f029 | "triple game speed" | attested | sim | Overnight/evidence/T005.txt
 T185 | commit 3d1f029 | "roster slot unlocks" | attested | sim | Overnight/evidence/T185.txt
 T019 | commit 3d1f029 | "recycle refund tiers" | attested | sim | Overnight/evidence/T019.txt
+T004 | commit 6c2a79d | "sim lane batch" | attested | sim | Overnight/evidence/T004.txt
+T004 | commit 6c2a79d | "difficulty modes added" | attested | sim | Overnight/evidence/T004.txt (new features default OFF where flagged; client UI not built)
+T006 | commit 6c2a79d | "pause resume saved" | attested | sim | Overnight/evidence/T006.txt (new features default OFF where flagged; client UI not built)
+T186 | commit 6c2a79d | "collection shards schema" | attested | sim | Overnight/evidence/T186.txt (new features default OFF where flagged; client UI not built)
+T012 | commit 6c2a79d | "faction combo table" | attested | sim | Overnight/evidence/T012.txt (new features default OFF where flagged; client UI not built)
+T011 | commit 6c2a79d | "lantern power added" | attested | sim | Overnight/evidence/T011.txt (new features default OFF where flagged; client UI not built)
+T015 | commit 6c2a79d | "elite wave modifiers" | attested | sim | Overnight/evidence/T015.txt (new features default OFF where flagged; client UI not built)
+T009 | commit 6c2a79d | "day night weather" | attested | sim | Overnight/evidence/T009.txt (new features default OFF where flagged; client UI not built)
+T417 | commit 6c2a79d | "hollow enemies flagged" | attested | sim | Overnight/evidence/T417.txt (new features default OFF where flagged; client UI not built)

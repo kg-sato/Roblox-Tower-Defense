@@ -167,6 +167,176 @@ return function(Shared)
 		local e9 = runUntilBoss(sim9)
 		check("BOSS_PHASES off: plain boss, no phases, base hp", e9.boss == nil and math.abs(e9.maxHp - Config.ENEMIES.Boss.hp * Config.hpScale(10)) < 1e-6)
 		Config.BOSS_PHASES = true
+
+		-- T416: lamp, pushes, candles (Config.BOSS_V2) and un-merge (Config.BOSS_UNMERGE), both off by default
+		check("BOSS_V2 and BOSS_UNMERGE are off by default", Config.BOSS_V2 == false and Config.BOSS_UNMERGE == false)
+		local pet1 = next(Config.PETS)
+		local function toPhase2(sim, e)
+			sim.crystalHp = 1e9
+			sim:damage(e, e.maxHp * 0.40, false)
+		end
+
+		-- flags off: nothing new happens
+		local s1 = newSim(10)
+		local a1 = runUntilBoss(s1)
+		toPhase2(s1, a1)
+		s1.crystalHp = 10
+		s1:bossTick(a1, 14)
+		check("flag off: the Automaton's lamp does not heal", s1.crystalHp == 10 and (function()
+			for _, ev in events do
+				if ev.kind == "BossFx" and ev.p.kind == "lamp" then
+					return false
+				end
+			end
+			return true
+		end)())
+
+		-- Automaton lamp
+		Config.BOSS_V2 = true
+		local s2 = newSim(10)
+		local a2 = runUntilBoss(s2)
+		s2.crystalHp = 10
+		s2:bossTick(a2, 14)
+		check("Automaton phase 1 has no lamp", s2.crystalHp == 10)
+		toPhase2(s2, a2)
+		s2.crystalHp = 10
+		s2:bossTick(a2, 14)
+		check("Automaton phase 2 lamp heals one life", s2.crystalHp == 11, s2.crystalHp)
+		s2.crystalHp = s2:maxHp()
+		s2:bossTick(a2, 14)
+		check("the lamp never heals above the maximum", s2.crystalHp == s2:maxHp(), s2.crystalHp)
+
+		-- Echo pushes
+		local s3 = newSim(15)
+		s3.coins, s3.gems = 1e6, 1e6
+		s3:roll()
+		s3:roll()
+		local a3 = runUntilBoss(s3)
+		s3.crystalHp = 1e9
+		local snapPos = {}
+		for id, u in s3.grid do
+			snapPos[id] = { u.x, u.z }
+		end
+		events = {}
+		s3:bossTick(a3, 9)
+		local pushes, movedOrStunned = 0, false
+		for _, ev in events do
+			if ev.kind == "BossFx" and ev.p.kind == "push" then
+				pushes += 1
+				local u, was = s3.grid[ev.p.slot], snapPos[ev.p.slot]
+				local d = math.sqrt((u.x - was[1]) ^ 2 + (u.z - was[2]) ^ 2)
+				movedOrStunned = (ev.p.moved and math.abs(d - 6) < 1e-3) or (not ev.p.moved and (u.disabledUntil or 0) > s3.t)
+			end
+		end
+		check("Echo phase 1 pushes one unit, six studs away or stunned", pushes == 1 and movedOrStunned, pushes)
+		toPhase2(s3, a3)
+		events = {}
+		s3:bossTick(a3, 9)
+		check("Echo phase 2 pushes in pairs", (function()
+			local n = 0
+			for _, ev in events do
+				if ev.kind == "BossFx" and ev.p.kind == "push" then
+					n += 1
+				end
+			end
+			return n == 2
+		end)())
+		Config.BOSS_V2 = false
+		local s3b = newSim(15)
+		s3b.coins, s3b.gems = 1e6, 1e6
+		s3b:roll()
+		local a3b = runUntilBoss(s3b)
+		s3b.crystalHp = 1e9
+		events = {}
+		s3b:bossTick(a3b, 9)
+		check("flag off: no pushes", (function()
+			for _, ev in events do
+				if ev.kind == "BossFx" and ev.p.kind == "push" then
+					return false
+				end
+			end
+			return true
+		end)())
+
+		-- Regent candles
+		Config.BOSS_V2 = true
+		local s4 = newSim(20)
+		local a4 = runUntilBoss(s4)
+		toPhase2(s4, a4)
+		local function hit(sim, e)
+			local h = e.hp
+			sim:damage(e, 100, false)
+			return h - e.hp
+		end
+		check("no candle lit at the start of phase 2: full damage", math.abs(hit(s4, a4) - 100) < 1e-6)
+		local function ticks(sim, e, dt, n)
+			for _ = 1, n do
+				sim:bossTick(e, dt)
+			end
+		end
+		ticks(s4, a4, 2, 3) -- one candle per call that is due: three candles
+		check("three candles take 24%, not a flat 85%", math.abs(hit(s4, a4) - 76) < 1e-6)
+		ticks(s4, a4, 2, 12)
+		check("candles stop at seven (44% damage taken)", a4.boss.lit == 7 and math.abs(hit(s4, a4) - 44) < 1e-6, a4.boss.lit)
+		-- killing a mourner snuffs one
+		s4.queue = {}
+		table.insert(s4.queue, { at = s4.t, kind = "Grunt", stage = 20, mourner = true })
+		s4:step(0.1)
+		local mourner
+		for _, en in s4.enemies do
+			if en.mourner then
+				mourner = en
+			end
+		end
+		check("a summoned Grunt is marked as a mourner", mourner ~= nil)
+		if mourner then
+			local lit0 = a4.boss.lit
+			s4:damage(mourner, mourner.maxHp * 10, false)
+			check("killing a mourner snuffs one candle", a4.boss.lit == lit0 - 1, a4.boss.lit)
+		end
+		Config.BOSS_V2 = false
+		local s5 = newSim(20)
+		local a5 = runUntilBoss(s5)
+		toPhase2(s5, a5)
+		ticks(s5, a5, 2, 12)
+		check("flag off: the Regent still takes a flat 85%", math.abs(hit(s5, a5) - 85) < 1e-6)
+
+		-- Clockmaker un-merge
+		local function mergedSim()
+			local sim = newSim(25)
+			for i = 1, 3 do
+				local x, z = sim:findSpot(pet1)
+				local id = sim:addUnit(pet1, x, z)
+				if i == 1 then
+					sim.grid[id].tier = 2
+				end
+			end
+			local e = runUntilBoss(sim)
+			sim.crystalHp = 1e9
+			return sim, e
+		end
+		local s6, a6 = mergedSim()
+		s6:bossTick(a6, 20)
+		check("BOSS_UNMERGE off: nothing is un-merged", s6:unitCount() == 3)
+		Config.BOSS_UNMERGE = true
+		local s7, a7 = mergedSim()
+		s7:bossTick(a7, 20)
+		local tiers = 0
+		for _, u in s7.grid do
+			tiers += u.tier
+		end
+		check("the Clockmaker un-merges a tier 2 unit into three tier 1 units", s7:unitCount() == 5 and tiers == 5, s7:unitCount() .. "/" .. tiers)
+		local s8, a8 = mergedSim()
+		while s8:unitCount() < Config.MAX_UNITS - 1 do
+			local x, z = s8:findSpot(pet1)
+			if not x then
+				break
+			end
+			s8:addUnit(pet1, x, z)
+		end
+		local n8 = s8:unitCount()
+		check("no room: the un-merge is skipped and nothing is lost", n8 >= Config.MAX_UNITS - 1 and s8:unmerge(a8) == false and s8:unitCount() == n8)
+		Config.BOSS_UNMERGE = false
 	end)
 	tmp:Destroy()
 	if not ok then

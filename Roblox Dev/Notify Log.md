@@ -22,3 +22,5 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-29 19:57 Title r4 installed: feathered deity figure with crown, focal sun, mist, gold button; real Play captures r4_play_a/b. Unverified: blind grade.
 - 2026-10-29 19:58 UI rework finished: title r4 and skill tree r3 built and in Studio, both still FAIL blind review (5-7/10); notes in Research/UI. Needs your eyes.
 - 2026-10-29 19:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 20:01 Sim batch 2 done (T004 T006 T186 T012 T011 T015 T009 T417), tests added and passing in Studio; new enemy and wave features default OFF.
+- 2026-10-29 20:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
