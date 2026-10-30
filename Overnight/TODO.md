@@ -84,21 +84,21 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: client-core | needs: Studio | depends: T177,T198 | size: S | owner-files: new PlacementHint module, GameClient (one hook)
 
 ## Lane: client-ui (new standalone modules only; never the OFF LIMITS files)
-- [ ] T188 | TextAnim module: typewriter, drop, wave, shake, reduced motion, off/subtle/full | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/TextAnim.test.luau (new))
+- [x] T188 | TextAnim module: typewriter, drop, wave, shake, reduced motion, off/subtle/full | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/TextAnim.test.luau (new))
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: Shared.TextAnim (new), Shared.SettingsDefaults (new key), Tests/TextAnim.test.luau
-- [ ] T607 | Apply TextAnim to captions, lore reveals, headings and boss name | verify: studio: captions typewrite in a Play cutscene, static when reduced motion is on
+- [x] T607 | Apply TextAnim to captions, lore reveals, headings and boss name | verify: studio: captions typewrite in a Play cutscene, static when reduced motion is on
   lane: client-ui | needs: Studio | depends: T188 | size: M | owner-files: StageCaptions, CutsceneDirector (claim from cutscene owner), RevealSection
-- [ ] T098 | Shared confirm dialog, toast queue, error and empty states | verify: studio: each state shown in Edit/Play with UIKit validator 0 problems
+- [x] T098 | Shared confirm dialog, toast queue, error and empty states | verify: studio: each state shown in Edit/Play with UIKit validator 0 problems
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: StarterPlayerScripts.Dialogs (new), Toasts (new)
-- [ ] T085 | Tooltip system on every icon and stat, hover and long press | verify: studio: tooltip appears on hover and long press for 5 icons
+- [x] T085 | Tooltip system on every icon and stat, hover and long press | verify: studio: tooltip appears on hover and long press for 5 icons
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: StarterPlayerScripts.Tooltips (new)
 - [ ] T084 | Button states idle, hover, pressed, disabled with motion | verify: studio: state screenshots from one button kit
   lane: client-ui | needs: Studio | depends: T604 | size: M | owner-files: UIMotion, UIKit button component (not the off-limits skins)
 - [ ] T086 | Keyboard and gamepad focus for HUD and main screens | verify: studio: NextSelection path reaches every button in HUD and settings
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: NavFocus
-- [ ] T087 | Strings table for items, enemies, familiars with coverage test | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Strings.test.luau (new, every id has a key))
+- [x] T087 | Strings table for items, enemies, familiars with coverage test | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Strings.test.luau (new, every id has a key))
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: Shared.Strings (new), Tests/Strings.test.luau
-- [ ] T235 | UI checks: text at least 14 px at 844x390, contrast 4.5:1, labelled buttons | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/UIChecks.test.luau (new, run in Play))
+- [x] T235 | UI checks: text at least 14 px at 844x390, contrast 4.5:1, labelled buttons | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/UIChecks.test.luau (new, run in Play))
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: Tests/UIChecks.test.luau (read-only on UI)
 - [ ] T074 | Results screen: wave, gold, lore line, next-step button | verify: studio: shown after a stage clear in Play, validator 0 problems
   lane: client-ui | needs: Studio | depends: T098 | size: M | owner-files: StarterPlayerScripts.ResultsScreen (new)

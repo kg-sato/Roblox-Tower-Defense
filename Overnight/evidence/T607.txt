@@ -1,0 +1,10 @@
+PASS
+T607 TextAnim applied (one call each): CutsceneDirector captions (typewrite), RevealSection heading (drop) and familiar name (typewrite), GCBossPlate boss title (typewrite). Observed in a Studio Play session (Client datamodel), via ReplicatedStorage.DirectorDebug and DebugReveal.
+Captions, textAnim full: MaxVisibleGraphemes sampled every 0.12 s while "[ THE SEVENTH LAMP ]" played: -1,3,7,12,16,-1,-1,-1  (letters appear one after another, then whole text)
+Captions, reducedMotion true: "[ ASTRID'S STALL ]" samples: -1,-1,-1,-1,-1,-1,-1,-1  (static, whole text at once, no fade tween)
+Reveal (DebugReveal Common): heading COMMON label Y offset -20,-9,-2,0,0... (drops and settles); familiar name "Sentinel" MaxVisibleGraphemes 0,2,4,6,7,-1 (types out); odds line unchanged.
+Console: only the earlier "User is not authorized to access Asset" lines, no script errors.
+Settings path: server "Settings" event -> CutsceneDirector.settings.textAnim -> TextAnim.setSettings (shared table), so RevealSection and GCBossPlate follow the same setting (off/subtle/full, reducedMotion forces static).
+Files: Studio_Export/CutsceneDirector.luau, RevealSection.luau, GCBossPlate.luau (one hook each), TextAnim.luau (setSettings), Tests/TextAnim.test.luau (+1 check).
+Not verified: the boss-title typewrite was not watched in a live boss fight (module loads without error); look and timing UNVERIFIED by a human; StageCaptions.luau was not changed (generated file, no change needed); reduced motion for Reveal tested through unit test and the caption path only.
+Heads-up: CutsceneDirector (cutscene owner) and GCBossPlate/RevealSection (client-core) were each touched by one small hook as T607 directs.

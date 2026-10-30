@@ -1,0 +1,12 @@
+PASS
+T235 Tests/UIChecks.test.luau. Pure part runs in Tests/RunAll (Studio Edit): "UIChecks.test.luau PASS (pure part only...)", SUMMARY 31 of 31 suites PASS. UI part run in a Play client (Client datamodel, module required from a temporary ReplicatedStorage copy, since removed). Output:
+ok contrast maths (4 checks)
+ok harness built 14 panels with text and buttons (32 texts, 7 buttons) at an exact 844 x 390 px frame
+ok UIKit validator: 0 problems in Dialogs, Toasts, Tooltips and empty state
+ok every text >= 14 px at 844x390 (smallest 16)   [TextScaled labels measured with TextService at the real box size; negative control: a 9 px box reports under 14]
+ok text contrast >= 4.5:1 (lowest 4.95)   [composited over panel, gradient mid colour, near-black world assumed]
+ok every button is labelled
+ok live toast shows / queue drains / live dialog opens / dismiss closes
+Violations found in my modules and fixed: button labels first measured 3.8:1 (gradient lightened the gold fill) -> flat fill; error toast title 3.6:1 -> lighter red (now >= 4.95 everywhere).
+REPORT live PlayerGui, other owners, NOT fixed: 341 visible text objects, 63 fixed TextSize < 14 px (HUD TextLabels at 12 and 13), 44 unlabelled buttons (HUD TextButton, icon-only). Scan is at the Studio viewport (1617x777); TextScaled labels there were not judged.
+Limits: contrast ignores images behind text; look UNVERIFIED by a human; first-line PASS covers my modules only.

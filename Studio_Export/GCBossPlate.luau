@@ -1,5 +1,6 @@
 -- GCBossPlate (T198, 2026-10-29): block moved out of GameClient to stay under the 200,000-character script limit. Called once by GameClient with the outside locals it needs.
 return function(env)
+local TextAnim = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("TextAnim"))
 local Config, FXK, RunService, TweenService, UI, bossBar, bossBarBg, bossBarLabel, enemies, fmt, new, round, tween = env.Config, env.FXK, env.RunService, env.TweenService, env.UI, env.bossBar, env.bossBarBg, env.bossBarLabel, env.enemies, env.fmt, env.new, env.round, env.tween
 -- ===== Boss plate "The Wick" (2026-10-28; user: "a more unique boss bar"). An iron-framed plate swings down on its
 -- chains when a boss walks in: the boss's name, its life as a blood-red ribbon with a pale trail that catches up after
@@ -53,6 +54,7 @@ do
 		if not B.shown then -- entrance: the plate swings down on its chains with an iron clank
 			B.shown, B.ghost, B.hp, B.t, B.last = true, 1, 1, 1, -1
 			B.title.Text = B.titles[math.clamp(math.ceil(((env.getSnap() and env.getSnap().stage) or 5) / 5), 1, #B.titles)]
+			task.spawn(TextAnim.run, B.title, B.title.Text, "typewrite") -- T607: boss name types out (static if reduced motion)
 			B.plate.Position, B.plate.Rotation = UDim2.new(0.5, 0, 0, -110), -9
 			tween(B.plate, 0.6, { Position = UDim2.fromScale(0.5, 0), Rotation = 0 }, Enum.EasingStyle.Back)
 			FXK.play("iron_clank")

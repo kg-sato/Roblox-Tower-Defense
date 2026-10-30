@@ -37,3 +37,5 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-29 22:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
 - 2026-10-29 22:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
 - 2026-10-29 22:32 Client batch 8b done (T138 T194 T178 T148 T166): telegraphs, float text, placement hint, boss transitions, ambience; look and audio unverified.
+- 2026-10-29 23:02 FX batch 9 done (T135 T144 T133 T134 T601): merge, lantern, attack, enemy reaction and ultimate effects; look unverified.
+- 2026-10-29 23:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,

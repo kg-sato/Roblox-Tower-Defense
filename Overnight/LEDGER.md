@@ -59,3 +59,8 @@ T194 | commit 509f979 | "damage float text" | attested | client-core | Overnight
 T178 | commit 509f979 | "placement hint toggle" | attested | client-core | Overnight/evidence/T178.txt
 T148 | commit 509f979 | "boss phase transitions" | attested | client-core | Overnight/evidence/T148.txt
 T166 | commit 509f979 | "ambient loops added" | attested | client-core | Overnight/evidence/T166.txt
+T135 | commit e5814d5 | "merge tier effects" | attested | fx-audio | Overnight/evidence/T135.txt
+T144 | commit e5814d5 | "lantern light language" | attested | fx-audio | Overnight/evidence/T144.txt
+T133 | commit e5814d5 | "familiar attack effects" | attested | fx-audio | Overnight/evidence/T133.txt
+T134 | commit e5814d5 | "enemy family reactions" | attested | fx-audio | Overnight/evidence/T134.txt
+T601 | commit e5814d5 | "ultimate camera flourishes" | attested | fx-audio | Overnight/evidence/T601.txt

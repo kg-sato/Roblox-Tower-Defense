@@ -12,6 +12,7 @@ return function(ctx)
 	local shake, pending, setPet, camera, gui = ctx.shake, ctx.pending, ctx.setPet, ctx.camera, ctx.gui
 	local TweenService, RunService, Debris = game:GetService("TweenService"), game:GetService("RunService"), game:GetService("Debris")
 	local ReplicatedStorage = game:GetService("ReplicatedStorage")
+	local TextAnim = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("TextAnim"))
 
 	local revealGui = new("Frame", { Name = "Reveal", BackgroundColor3 = Color3.fromRGB(6, 7, 18), BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), Visible = false, ZIndex = 15, Active = true }, gui)
 	local revealGlow = new("Frame", { BackgroundColor3 = Color3.new(1, 1, 1), BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1.5, 1.5), SizeConstraint = Enum.SizeConstraint.RelativeYY, ZIndex = 15 }, revealGui)
@@ -552,6 +553,8 @@ return function(ctx)
 		for _, l in { revealTitle, revealName, revealOdds } do
 			setLabelVisible(l, true)
 		end
+		task.spawn(TextAnim.run, revealTitle, revealTitle.Text, "drop") -- T607: heading drops in, name types out (static if reduced motion)
+		task.spawn(TextAnim.run, revealName, revealName.Text, "typewrite")
 		setLabelVisible(revealHint, order >= 3)
 		revealState.phase = "hold"
 		local holdUntil = os.clock() + ({ 0.7, 1.0, 1.6, 2.4 })[order] * timeScale

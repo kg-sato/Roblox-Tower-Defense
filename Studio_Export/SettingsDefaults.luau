@@ -22,6 +22,7 @@ local RULES: { [string]: Rule } = {
 	numberFormat = { kind = "enum", values = { "short", "grouped", "scientific" } },
 	gameSpeed = { kind = "choice", values = { 1, 2, 3 } },
 	cinematics = { kind = "enum", values = { "full", "short", "off" } },
+	textAnim = { kind = "enum", values = { "off", "subtle", "full" } }, -- T188: typewriter/drop/wave/shake text (reducedMotion forces off)
 }
 
 SettingsDefaults.defaults = {
@@ -40,6 +41,7 @@ SettingsDefaults.defaults = {
 	numberFormat = "short",
 	gameSpeed = 1,
 	cinematics = "full",
+	textAnim = "full",
 }
 
 SettingsDefaults.MIN_SAVE_GAP = 1 -- seconds between accepted settings saves per player
