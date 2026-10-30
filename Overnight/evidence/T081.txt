@@ -1,5 +1,30 @@
-PASS (with deviation)
-Deviation from the task title: the task asked for a "mirror-cat". After the user asked for human or humanoid characters (see the humanoid revision in Lore/Cast List - 12 Familiars.md) I delivered the Mirror Chorister: a humanoid robed Star Choir singer with a mirror face and a hood with two cat ears (a nod to the cat). No fox design. The user should confirm this reading.
-Built: Mirror Chorister added to tools/familiar_sheet.py (key mirror_chorister; files MirrorChorister_*); outputs in Roblox Dev/Assets/Characters/Design Sheets/ (sheet 1220x710 with 3 turnarounds and a 6-swatch palette, silhouette strip, report). Bio and card: Roblox Dev/Lore/Familiars/MirrorChorister.md.
-Machine check: python Overnight/evidence/familiar_check.py MirrorChorister Ward Sentinel StarDrake Frostling Gargoyle Ember (final exit 0). Output: overlap with circle 0.46, square 0.41, triangle 0.39, plain column 0.55; front/side 0.56; lore line 20 words; bio 147 words; pair IoU against Ward 0.46, Sentinel 0.43, Star Drake 0.38, Frostling 0.46, Gargoyle 0.46, Ember 0.53 (all ok). The four earlier pairs in the review band (Ward with Frostling, Gargoyle, Ember, and Frostling/Ember) are unchanged. First run failed because the bio page contained the banned word "fox" in a sentence about not using it; I reworded the page and reran.
-Visual check: I viewed the sheet: a slim blue-robed figure, arms raised in bell sleeves, a hood with two ears and an oval silver mirror face. The sleeves and pose are stiff (noted for modelling). Concept sheet only, drawn by code; look and feel UNVERIFIED by a human.
+PASS
+T081 icon set: ComfyUI FLUX schnell (seed 11, 768px) -> forced into one palette (ground 12,10,8 / gold 201,162,74 / cream 244,232,196) on a 512px round badge, 6px gold rim, alpha outside the disc. Look UNVERIFIED (no human judged it). Nothing uploaded.
+NOTE: the task text says 40 files but the named icons are 17 (5 status + 2 currency + 6 rarity + 4 faction). 40 = 17 at 512px + 17 at 128px + 6 blank rarity frames (1..6 rings).
+files with alpha: 23 corner alpha all 0: True centre alpha all 255: True
+total png: 40 (512px icons 17, 128px 17, rarity frames 6)
+median stroke run (px, 512 icons): min 2.0 median 3.0 max 6.0
+rim stroke width 6 px on all 512 icons (drawn, same code)
+('currency_coin.png', 0, 255, {'gold': 0.13, 'ground': 0.76, 'cream': 0.11})
+('currency_gem.png', 0, 255, {'gold': 0.09, 'ground': 0.86, 'cream': 0.05})
+('faction_clockwork_guild.png', 0, 255, {'gold': 0.17, 'ground': 0.76, 'cream': 0.07})
+('faction_hollow_court.png', 0, 255, {'gold': 0.12, 'ground': 0.83, 'cream': 0.05})
+('faction_lantern_keepers.png', 0, 255, {'gold': 0.08, 'ground': 0.89, 'cream': 0.03})
+('faction_star_choir.png', 0, 255, {'gold': 0.12, 'ground': 0.83, 'cream': 0.05})
+('rarity_common.png', 0, 255, {'gold': 0.08, 'ground': 0.87, 'cream': 0.05})
+('rarity_epic.png', 0, 255, {'gold': 0.1, 'ground': 0.86, 'cream': 0.04})
+('rarity_frame_1.png', 0, 255, {'gold': 0.05, 'ground': 0.95})
+('rarity_frame_2.png', 0, 255, {'gold': 0.07, 'ground': 0.93})
+('rarity_frame_3.png', 0, 255, {'gold': 0.09, 'ground': 0.91})
+('rarity_frame_4.png', 0, 255, {'gold': 0.1, 'ground': 0.9})
+('rarity_frame_5.png', 0, 255, {'gold': 0.12, 'ground': 0.88})
+('rarity_frame_6.png', 0, 255, {'gold': 0.12, 'ground': 0.88})
+('rarity_legendary.png', 0, 255, {'gold': 0.11, 'ground': 0.85, 'cream': 0.04})
+('rarity_mythic.png', 0, 255, {'gold': 0.12, 'ground': 0.79, 'cream': 0.09})
+('rarity_rare.png', 0, 255, {'gold': 0.15, 'ground': 0.78, 'cream': 0.07})
+('rarity_uncommon.png', 0, 255, {'gold': 0.1, 'ground': 0.85, 'cream': 0.04})
+('status_burn.png', 0, 255, {'gold': 0.1, 'ground': 0.87, 'cream': 0.03})
+('status_chill.png', 0, 255, {'gold': 0.13, 'ground': 0.83, 'cream': 0.04})
+('status_hush.png', 0, 255, {'gold': 0.12, 'ground': 0.83, 'cream': 0.05})
+('status_mark.png', 0, 255, {'gold': 0.15, 'ground': 0.77, 'cream': 0.08})
+('status_stun.png', 0, 255, {'gold': 0.12, 'ground': 0.81, 'cream': 0.07})

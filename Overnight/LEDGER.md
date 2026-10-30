@@ -76,3 +76,9 @@ T058 | commit fc7f179 | "collection faction filter" | attested | client-ui | Ove
 T095 | commit fc7f179 | "familiar detail panel" | attested | client-ui | Overnight/evidence/T095.txt
 T097 | commit fc7f179 | "pause menu added" | attested | client-ui | Overnight/evidence/T097.txt
 T074 | commit fc7f179 | "results screen added" | attested | client-ui | Overnight/evidence/T074.txt
+T090 | commit cfcfbf0 | "inventory screen added" | attested | client-ui | Overnight/evidence/T090.txt
+T091 | commit cfcfbf0 | "quest screen tracker" | attested | client-ui | Overnight/evidence/T091.txt
+T092 | commit cfcfbf0 | "pass shop screens" | attested | client-ui | Overnight/evidence/T092.txt
+T093 | commit cfcfbf0 | "leaderboard stage select" | attested | client-ui | Overnight/evidence/T093.txt
+T084 | commit cfcfbf0 | "button states motion" | attested | client-ui | Overnight/evidence/T084.txt
+T086 | commit cfcfbf0 | "keyboard gamepad focus" | attested | client-ui | Overnight/evidence/T086.txt

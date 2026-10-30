@@ -92,9 +92,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: StarterPlayerScripts.Dialogs (new), Toasts (new)
 - [x] T085 | Tooltip system on every icon and stat, hover and long press | verify: studio: tooltip appears on hover and long press for 5 icons
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: StarterPlayerScripts.Tooltips (new)
-- [ ] T084 | Button states idle, hover, pressed, disabled with motion | verify: studio: state screenshots from one button kit
+- [x] T084 | Button states idle, hover, pressed, disabled with motion | verify: studio: state screenshots from one button kit
   lane: client-ui | needs: Studio | depends: T604 | size: M | owner-files: UIMotion, UIKit button component (not the off-limits skins)
-- [ ] T086 | Keyboard and gamepad focus for HUD and main screens | verify: studio: NextSelection path reaches every button in HUD and settings
+- [x] T086 | Keyboard and gamepad focus for HUD and main screens | verify: studio: NextSelection path reaches every button in HUD and settings
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: NavFocus
 - [x] T087 | Strings table for items, enemies, familiars with coverage test | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/Strings.test.luau (new, every id has a key))
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: Shared.Strings (new), Tests/Strings.test.luau
@@ -112,13 +112,13 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: client-ui | needs: Studio | depends: T007 | size: M | owner-files: StarterPlayerScripts.FamiliarPanel (new)
 - [x] T097 | Pause menu: resume, speed, settings, quit with confirm | verify: studio: pause then resume keeps run state
   lane: client-ui | needs: Studio | depends: T006,T098 | size: M | owner-files: StarterPlayerScripts.PauseMenu (new)
-- [ ] T090 | Inventory screen: silhouette grid, tier stars, empty-slot lore | verify: studio: validator 0 problems, capture
+- [x] T090 | Inventory screen: silhouette grid, tier stars, empty-slot lore | verify: studio: validator 0 problems, capture
   lane: client-ui | needs: Studio | depends: T185,T098 | size: M | owner-files: StarterPlayerScripts.InventoryScreen (new)
-- [ ] T091 | Quest screen with one pinned tracker line in the HUD | verify: studio: tracker shows, collapses
+- [x] T091 | Quest screen with one pinned tracker line in the HUD | verify: studio: tracker shows, collapses
   lane: client-ui | needs: Studio | depends: T023,T098 | size: M | owner-files: StarterPlayerScripts.QuestScreen (new)
-- [ ] T092 | Battle pass and shop screens, cosmetic only, no live purchases | verify: studio: screens validate; no ProcessReceipt code path added
+- [x] T092 | Battle pass and shop screens, cosmetic only, no live purchases | verify: studio: screens validate; no ProcessReceipt code path added
   lane: client-ui | needs: Studio | depends: T098 | size: M | owner-files: StarterPlayerScripts.PassScreen, ShopScreen (new)
-- [ ] T093 | Leaderboard and stage-select screens | verify: studio: both open in Play with fake rows
+- [x] T093 | Leaderboard and stage-select screens | verify: studio: both open in Play with fake rows
   lane: client-ui | needs: Studio | depends: T025,T098 | size: M | owner-files: StarterPlayerScripts.BoardScreen, StageSelect (new)
 - [ ] T081 | One-style icon set for status, currency, rarity, faction | verify: manual: contact sheet in UI Kit/art/icons_set/, 40 files with alpha
   lane: client-ui | needs: ComfyUI | depends: none | size: M | owner-files: UI Kit/art/icons_set/ (new), VFX/ASSETS.md (append)
