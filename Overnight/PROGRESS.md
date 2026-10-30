@@ -272,3 +272,4 @@
 - 19:40 CHECKPOINT d17a471 on overnight/2026-10-27: Add the rigged enemy models, re-baked familiar textures, and the UI, enemy, boss and familiar sound sets with their manifest. Evidence files hold each check's output.
 - 20:01 CHECKPOINT 6c2a79d on overnight/2026-10-27: Add difficulty modes, pause and resume, collection shards, faction combos, lantern power, elite waves, day and night weather data, and the Hollow enemies behind flags. New and extended suites pass in Studio.
 - 20:18 CHECKPOINT 4961f6b on overnight/2026-10-27: Add remaining boss mechanics, achievements, quests, bond levels, leaderboard validation and endless mode as server data with tests. New features stay behind flags and the client screens are not built.
+- 20:29 CHECKPOINT f33f2cc on overnight/2026-10-27: Add per-set path shapes, per-map placement rules and path blockers as data behind flags, and split the balance numbers into data modules. All suites and the bot still pass.

@@ -24,9 +24,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: sim | needs: Studio | depends: T411 | size: M | owner-files: Shared.Config, Shared.MatchSim, MatchService, Tests/Rules.test.luau
 - [x] T006 | Pause and resume saved per run | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/ServerRules.test.luau (new cases))
   lane: sim | needs: Studio | depends: none | size: M | owner-files: Shared.MatchSim, MatchService, Tests/ServerRules.test.luau
-- [ ] T403 | Play Idle, Hit, Death clips of the human familiars on the board | verify: studio: Play capture frames show pose changes on hit and banish
+- [x] T403 | Play Idle, Hit, Death clips of the human familiars on the board | verify: studio: Play capture frames show pose changes on hit and banish
   lane: chars | needs: Studio | depends: none | size: M | owner-files: Models.luau (playClip use), Shared.FamiliarClips
-- [ ] T404 | Idle, Hit, Death clips for the 12 original familiars | verify: studio: tracks load with correct lengths, Tests/Familiars.test.luau PASS
+- [x] T404 | Idle, Hit, Death clips for the 12 original familiars | verify: studio: tracks load with correct lengths, Tests/Familiars.test.luau PASS
   lane: chars | needs: Studio | depends: none | size: M | owner-files: Shared.FamiliarClips, Characters/<id>/Animations
 - [x] T142 | Rig and animate six enemy models: walk, hit, death; place in a stage | verify: manual: tools/verify_enemy_model.py, studio: walk loop plays in Play
   lane: chars | needs: Blender | depends: none | size: L | owner-files: Blender/* enemy scripts, Blender/out/, Roblox Dev/Assets/3D/Enemies, Models.luau (enemy clips)
@@ -126,13 +126,13 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: client-ui | needs: Studio | depends: T057,T058,T074 | size: M | owner-files: Roblox Dev/Research/UI/Captures (notes only)
 
 ## Lane: chars (characters-and-models)
-- [ ] T409 | Wire 512 px maps into SurfaceAppearance, check in Play | verify: studio: maps load, capture of 3 familiars
+- [x] T409 | Wire 512 px maps into SurfaceAppearance, check in Play | verify: studio: maps load, capture of 3 familiars
   lane: chars | needs: Studio | depends: T124 | size: M | owner-files: ReplicatedStorage.Characters, FamiliarMaterials
 - [x] T407 | Clean blotchy first-pass textures on the 12 original familiars | verify: manual: tools/verify_textured_models.py PASS plus contact sheet
   lane: chars | needs: Blender | depends: none | size: M | owner-files: Blender/tex_in, Blender/out, tools/prep_texture_inputs.py
-- [ ] T405 | Upload original familiars' clips as Animation assets and wire ids | verify: manual: tools/uploads.json lists ids, studio: tracks load from ids
+- [x] T405 | Upload original familiars' clips as Animation assets and wire ids | verify: manual: tools/uploads.json lists ids, studio: tracks load from ids
   lane: chars | needs: Studio | depends: T404 | size: M | owner-files: tools/upload_asset.py, tools/uploads.json, VFX/ASSETS.md (append), Characters/<id>/Animations
-- [ ] T406 | Verify rig deformation visually in Roblox for all 20 familiars | verify: studio: screen_capture per archetype, bone data and capture saved
+- [x] T406 | Verify rig deformation visually in Roblox for all 20 familiars | verify: studio: screen_capture per archetype, bone data and capture saved
   lane: chars | needs: Studio | depends: none | size: M | owner-files: Overnight/captures only
 
 ## Lane: world (world-and-stages)

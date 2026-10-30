@@ -32,3 +32,7 @@ T023 | commit 4961f6b | "quests logic added" | attested | sim | Overnight/eviden
 T007 | commit 4961f6b | "bond levels added" | attested | sim | Overnight/evidence/T007.txt
 T025 | commit 4961f6b | "leaderboard rules added" | attested | sim | Overnight/evidence/T025.txt
 T016 | commit 4961f6b | "endless mode tested" | attested | sim | Overnight/evidence/T016.txt
+T167 | commit f33f2cc | "path shapes data" | attested | sim | Overnight/evidence/T167.txt
+T177 | commit f33f2cc | "placement rules data" | attested | sim | Overnight/evidence/T177.txt
+T157 | commit f33f2cc | "path blockers data" | attested | sim | Overnight/evidence/T157.txt
+T199 | commit f33f2cc | "balance data modules" | attested | sim | Overnight/evidence/T199.txt

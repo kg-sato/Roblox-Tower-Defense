@@ -260,3 +260,41 @@ Title page round 3 layers (2026-10-29, UI Kit/art/title_bg/build.py): sky 928179
 
 Skill tree r3 thick-stroke icons (white, 256 px, UI Kit/art/skilltree_icons_r3, dilated from r1 line art; uploaded 2026-10-29 via Studio upload_image): Claws rbxassetid://84134147080434, Armor rbxassetid://97798687917539, Finder rbxassetid://110699275206672, Discount rbxassetid://140718888692850, Double rbxassetid://128913448533576, Eye rbxassetid://70430773900363, Charm rbxassetid://134496285484911, Guard rbxassetid://93209073046299, Charge rbxassetid://87255306276247, Clock rbxassetid://122010917635946, Magnet rbxassetid://105874413704464, Start rbxassetid://128237310134386, Learner rbxassetid://126515305812185, Merger rbxassetid://77400237971107, Heavy rbxassetid://72808767830160, Haste rbxassetid://78219893781799, Mega rbxassetid://127797835791972, Pity rbxassetid://104471144542537, Refund rbxassetid://114771222853824
 Title page round 4 layers (2026-10-29, UI Kit/art/title_bg/build.py; r3 ids superseded): sky 89445041512809, rays 129345850046102, figure 86765244026415, ground 107607269954906, foreground 98894961632403 (mist_far/near unchanged from r3).
+
+- 2026-10-29 Animation Ember_Hit (original familiar clip, T405, studio-chars): rbxassetid://91002846706067
+- 2026-10-29 Animation Ember_Idle (original familiar clip, T405, studio-chars): rbxassetid://75304203835974
+- 2026-10-29 Animation Ember_Death (original familiar clip, T405, studio-chars): rbxassetid://73189270229744
+- 2026-10-29 Animation Zap_Idle (original familiar clip, T405, studio-chars): rbxassetid://100173029329809
+- 2026-10-29 Animation Zap_Hit (original familiar clip, T405, studio-chars): rbxassetid://96377553007403
+- 2026-10-29 Animation Zap_Death (original familiar clip, T405, studio-chars): rbxassetid://116491558387508
+- 2026-10-29 Animation Frostling_Idle (original familiar clip, T405, studio-chars): rbxassetid://106280935189804
+- 2026-10-29 Animation Frostling_Hit (original familiar clip, T405, studio-chars): rbxassetid://81661219380430
+- 2026-10-29 Animation Frostling_Death (original familiar clip, T405, studio-chars): rbxassetid://96739918079923
+- 2026-10-29 Animation Boulder_Idle (original familiar clip, T405, studio-chars): rbxassetid://83258853584487
+- 2026-10-29 Animation Boulder_Hit (original familiar clip, T405, studio-chars): rbxassetid://114197638460618
+- 2026-10-29 Animation Boulder_Death (original familiar clip, T405, studio-chars): rbxassetid://109001004667590
+- 2026-10-29 Animation VoltFox_Idle (original familiar clip, T405, studio-chars): rbxassetid://96099682191668
+- 2026-10-29 Animation VoltFox_Hit (original familiar clip, T405, studio-chars): rbxassetid://72478502101154
+- 2026-10-29 Animation VoltFox_Death (original familiar clip, T405, studio-chars): rbxassetid://134860278003775
+- 2026-10-29 Animation StarDrake_Idle (original familiar clip, T405, studio-chars): rbxassetid://96375141022120
+- 2026-10-29 Animation StarDrake_Hit (original familiar clip, T405, studio-chars): rbxassetid://73705955364906
+- 2026-10-29 Animation StarDrake_Death (original familiar clip, T405, studio-chars): rbxassetid://110586006933366
+- 2026-10-29 Animation BrassHound_Idle (original familiar clip, T405, studio-chars): rbxassetid://100492543730481
+- 2026-10-29 Animation BrassHound_Hit (original familiar clip, T405, studio-chars): rbxassetid://101616266207560
+- 2026-10-29 Animation BrassHound_Death (original familiar clip, T405, studio-chars): rbxassetid://121321111300347
+- 2026-10-29 Animation Sentinel_Idle (original familiar clip, T405, studio-chars): rbxassetid://80630693430576
+- 2026-10-29 Animation Sentinel_Hit (original familiar clip, T405, studio-chars): rbxassetid://82705966026729
+- 2026-10-29 Animation Sentinel_Death (original familiar clip, T405, studio-chars): rbxassetid://99038348328288
+- 2026-10-29 Animation Ward_Idle (original familiar clip, T405, studio-chars): rbxassetid://122149443076888
+- 2026-10-29 Animation Ward_Hit (original familiar clip, T405, studio-chars): rbxassetid://92711036989591
+- 2026-10-29 Animation Ward_Death (original familiar clip, T405, studio-chars): rbxassetid://96067150599444
+- 2026-10-29 Animation Archivist_Idle (original familiar clip, T405, studio-chars): rbxassetid://125484912291275
+- 2026-10-29 Animation Archivist_Hit (original familiar clip, T405, studio-chars): rbxassetid://102513709239949
+- 2026-10-29 Animation Archivist_Death (original familiar clip, T405, studio-chars): rbxassetid://79024676851141
+- 2026-10-29 Animation Mourner_Idle (original familiar clip, T405, studio-chars): rbxassetid://121015101084539
+- 2026-10-29 Animation Mourner_Hit (original familiar clip, T405, studio-chars): rbxassetid://95482758104339
+- 2026-10-29 Animation Mourner_Death (original familiar clip, T405, studio-chars): rbxassetid://132393887668811
+- 2026-10-29 Animation GreyVeilWraith_Idle (original familiar clip, T405, studio-chars): rbxassetid://101383034172711
+- 2026-10-29 Animation GreyVeilWraith_Hit (original familiar clip, T405, studio-chars): rbxassetid://120859950809993
+- 2026-10-29 Animation GreyVeilWraith_Death (original familiar clip, T405, studio-chars): rbxassetid://73679213001879
+- 2026-10-29 T409 (studio-chars) 512 px Normal maps for 9 original familiars, decal id -> image id used in SurfaceAppearance.NormalMap: Ember 134285583863419 -> 82708336634644; StarDrake 138186208470640 -> 111031075135049; Archivist 116668490036584 -> 125104151757593; GreyVeilWraith 94873610654703 -> 100414985520475; Sentinel 95944811776627 -> 94580982559898; Mourner 84388915274636 -> 94638011789625; Frostling 115740402157858 -> 86160350554977; BrassHound 92053094306926 -> 88326204535670; Ward 121493074193413 -> 96049744239958
