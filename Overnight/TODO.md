@@ -14,7 +14,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: docs-tooling | needs: none | depends: none | size: S | owner-files: Studio_Export/StageCaptions.luau, tools/gen_stage_captions.py
 - [x] T422 | Lore, cards, voice lines complete for all 20 familiars | verify: python tools/check_familiars_complete.py
   lane: docs-tooling | needs: none | depends: none | size: S | owner-files: Roblox Dev/Lore/*, tools/voice_lines.py
-- [ ] T153 | Play-verify stage sets 4 and 5: stages 16 and 21, edge rings, console clean | verify: studio: evidence with captures at stages 16 and 21, Bug Log #10 closed
+- [x] T153 | Play-verify stage sets 4 and 5: stages 16 and 21, edge rings, console clean | verify: studio: evidence with captures at stages 16 and 21, Bug Log #10 closed
   lane: world | needs: Studio | depends: none | size: M | owner-files: Backdrop*.luau, Shared.StageSets entries 4 and 5, BackdropFoundry, BackdropVeil
 - [x] T411 | Save bestStage and stage progress in profile with migration | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SaveMigration.test.luau (new cases))
   lane: sim | needs: Studio | depends: none | size: S | owner-files: Shared.Config, ServerScriptService.MatchService (profile), Tests/SaveMigration.test.luau
@@ -136,11 +136,11 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: chars | needs: Studio | depends: none | size: M | owner-files: Overnight/captures only
 
 ## Lane: world (world-and-stages)
-- [ ] T162 | Three distinct landmarks per set visible from the board camera | verify: studio: five captures, one per set, landmarks listed
+- [x] T162 | Three distinct landmarks per set visible from the board camera | verify: studio: five captures, one per set, landmarks listed
   lane: world | needs: Studio | depends: T153 | size: M | owner-files: Backdrop*.luau, MapBuilder
-- [ ] T164 | Weather and fog per set, tested for frame cost on Low | verify: studio: frame-time numbers Low vs Default per set
+- [x] T164 | Weather and fog per set, tested for frame cost on Low | verify: studio: frame-time numbers Low vs Default per set
   lane: world | needs: Studio | depends: T153 | size: M | owner-files: Backdrop*.luau, Shared.StageSets lighting fields
-- [ ] T152 | Spawn and exit gate per set with opening animation and enemy shadow | verify: studio: gate opens before spawn, capture per set
+- [x] T152 | Spawn and exit gate per set with opening animation and enemy shadow | verify: studio: gate opens before spawn, capture per set
   lane: world | needs: Studio | depends: T153 | size: M | owner-files: MapBuilder gate parts, Backdrop*.luau
 - [ ] T172 | Five boss arena variants of the board | verify: studio: each arena loads at its boss stage, path unchanged
   lane: world | needs: Studio | depends: T149,T167 | size: L | owner-files: StageSetClient (claim), Backdrop*.luau
@@ -174,11 +174,11 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: fx-audio | needs: Studio | depends: T153 | size: M | owner-files: MusicFX ambience states, SoundCatalog
 
 ## Lane: docs-tooling (docs, vault, tooling, content)
-- [ ] T414 | Confirm Bug #4 Ward MetalnessMap is fixed and fix the Bug Log row | verify: studio: Play console has no asset-type error; Bug Log updated
+- [x] T414 | Confirm Bug #4 Ward MetalnessMap is fixed and fix the Bug Log row | verify: studio: Play console has no asset-type error; Bug Log updated
   lane: docs-tooling | needs: Studio | depends: none | size: S | owner-files: Roblox Dev/Bug Log.md
 - [ ] T200 | Strict typing on pure modules and zero type errors on all modules | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (type-check output saved, RunAll PASS (checker availability UNVERIFIED))
   lane: docs-tooling | needs: Studio | depends: T199 | size: L | owner-files: Shared.NumberFormat, SettingsDefaults, StageSets, MatchSim helpers
-- [ ] T205 | Memory after 10 waves per set and frame-time probe Low/Default/High | verify: studio: numbers table in evidence
+- [x] T205 | Memory after 10 waves per set and frame-time probe Low/Default/High | verify: studio: numbers table in evidence
   lane: docs-tooling | needs: Studio | depends: T153 | size: M | owner-files: tools/perf_probe.luau (new)
 - [x] T027 | UI research boards for HUD, collection, results plus HUD wireframe | verify: manual: note in Research/UI with 5 cited sources per board
   lane: docs-tooling | needs: none | depends: none | size: M | owner-files: Roblox Dev/Research/UI/ (new notes)

@@ -1,0 +1,11 @@
+PASS
+T162: three landmarks per set, built in Studio_Export/Backdrop.luau, BackdropHarbour, BackdropCathedral, BackdropFoundry, BackdropVeil (block "T162", helper landmark(name,x,z,h,build): Models named Landmark_*, scaled to height h, each with a PointLight). The board camera looks steeply down, so anything taller than about 12 studs behind the board is off the top of the screen; landmarks are therefore small (7 to 12 studs) at x -24 z -35 (h 7), x 22 z -39 (h 11), x 60 z -10 (h 12).
+Machine check (Client, WorldToViewportPoint of the 8 bounding-box corners, fraction of the 1617x777 viewport), final run:
+LampwickLane: ClockTower x.36-.38 y.08-.16 FULL; Gasometer x.58-.66 y-.02-.18 PARTIAL (top clipped); Footbridge x.84-.96 y.18-.40 FULL
+HarbourOfBrass: Lighthouse x.33-.41 y-.05-.26 PARTIAL; CargoCrane x.59-.65 y.01-.14 FULL; SteamerFunnel x.84-.95 y.20-.36 FULL
+SilentCathedral: RoseWindow x.36-.39 y.08-.16 FULL; BellTower x.60-.63 y.01-.14 FULL; Candelabra x.84-.96 y.21-.35 FULL
+ClockworkFoundry: ChimneyStack x.32-.41 y-.13-.30 PARTIAL (flame above the frame); GreatCog x.59-.64 y.01-.14 FULL; Crucible x.81-.99 y.17-.39 FULL
+AboveTheGreyVeil: BrokenArch x.36-.39 y.08-.16 FULL; StarObelisk x.60-.63 y.01-.14 FULL; Orrery x.81-1.00 y.12-.45 FULL
+Captures (one per set, stage 1/6/11/16/21): Overnight/captures/T162_set1.jpg ... T162_set5.jpg (the _before jpgs show the sets without landmarks: set 4 had almost nothing visible).
+Seen in the captures (my own reading): set 1 gasometer drum with glowing ring; set 2 lighthouse lamp, crane arm, red funnel; set 3 rose window disc, candelabra, bell tower (pale shape); set 4 brick chimney, gear with glowing hub, crucible with molten top; set 5 obelisk with white orb, orrery stem and rings, broken arch columns.
+Limits: in set 1 the clock tower and footbridge sit behind the existing houses and are hard to see; PARTIAL landmarks are cut by the top of the frame. UNVERIFIED: whether a human finds them distinct and good looking. Studio script Sources were replaced from the mirror files (BackdropFoundry in Studio was 4302 bytes against 4633 in the mirror before this task, so the Studio copy had differed).

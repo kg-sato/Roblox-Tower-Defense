@@ -1,0 +1,7 @@
+PASS
+T205: tools/perf_probe.luau (new): probe(opts) returns per quality level "label | level | avg ms | p95 | fps | total memory MB | instance count". The Studio client cannot loadstring or use HttpService, so the Server datamodel copies the file into ReplicatedStorage._PerfProbe (ModuleScript) and the client requires it.
+Frame time Low/Default/High: see T164.txt; every set shows 21.50 ms / 47 fps at L01, L05 and L10 (Studio window capped; not discriminating). Instance count 68,165 in all sets (with the weather and landmarks added).
+Memory (Stats:GetTotalMemoryUsageMb) before and after 10 waves in each set (10 stage resets with a wave started each time, game speed 3, StartWave every 3 s):
+LampwickLane 2646 -> 2647 MB; HarbourOfBrass 2643 -> 2646; SilentCathedral 2647 -> 2645; ClockworkFoundry 2608 -> 2608; AboveTheGreyVeil 2609 -> 2610. No growth beyond +3 MB.
+Note: "10 waves" here are 10 runs of wave 1 of the set's first stage (the set changes every 5 stages, so a 10-wave run inside one set needs resets). Idle memory per set read in the T164 probe: 2621 to 2670 MB (Studio total, includes the editor).
+UNVERIFIED: numbers are Studio editor totals, not a published phone client; the set 3 run may have overlapped the tail of the set 1 loop (the set stayed Cathedral and the door data are valid).

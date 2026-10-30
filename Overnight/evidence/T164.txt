@@ -1,0 +1,10 @@
+PASS
+T164: fog per set already existed in Shared.StageSets lighting (Atmosphere density/haze/colour: Lampwick 0.36/2.2, Harbour 0.46/2.8, Cathedral 0.42/1.8, Foundry 0.50/2.4, Veil 0.18/0.6). Added one weather emitter per set (block "T164" in each Backdrop script, a 120x80 Part named Weather with ParticleEmitter WeatherEmitter): Lampwick drifting mist (rate 5), Harbour drizzle (60), Cathedral moon dust (14), Foundry rising embers (24), Veil star flakes (22). Only the shown set is parented to workspace on the client, so one emitter runs at a time.
+Frame-time probe tools/perf_probe.luau, Studio Play client, stage jumped to each set, weather ON at quality Low (L01) / Default (L05) / High (L10), plus weather OFF at L05 (ms avg / p95):
+LampwickLane     L01 21.50/21.74  L05 21.50/21.79  L10 21.50/21.74  OFF L05 21.50/21.72
+HarbourOfBrass   L01 21.51/21.71  L05 21.50/21.76  L10 21.50/21.70  OFF L05 21.50/21.75
+SilentCathedral  L01 21.51/21.78  L05 21.50/21.77  L10 21.50/21.70  OFF L05 21.50/21.70
+ClockworkFoundry L01 21.50/21.72  L05 21.50/21.73  L10 21.51/21.76  OFF L05 21.50/21.70
+AboveTheGreyVeil L01 21.51/21.76  L05 21.50/21.75  L10 21.50/21.72  OFF L05 21.50/21.70
+Reading: every number is the same 21.5 ms (47 fps), so the Studio window is frame-capped and the probe cannot separate Low from Default or weather on from off. The weather adds no measurable frame cost in this environment; a GPU-bound cost on a phone is UNVERIFIED. QualityLevel did change (read back Level01 after setting).
+UNVERIFIED: look of each weather; real device cost. Weather rates are low (5 to 60 per second) as the guard.

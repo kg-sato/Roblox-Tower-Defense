@@ -36,3 +36,8 @@ T167 | commit f33f2cc | "path shapes data" | attested | sim | Overnight/evidence
 T177 | commit f33f2cc | "placement rules data" | attested | sim | Overnight/evidence/T177.txt
 T157 | commit f33f2cc | "path blockers data" | attested | sim | Overnight/evidence/T157.txt
 T199 | commit f33f2cc | "balance data modules" | attested | sim | Overnight/evidence/T199.txt
+T403 | commit e9ab3ba | "human reactions hooked" | attested | chars | Overnight/evidence/T403.txt
+T404 | commit e9ab3ba | "original familiar clips" | attested | chars | Overnight/evidence/T404.txt
+T405 | commit e9ab3ba | "clips uploaded wired" | attested | chars | Overnight/evidence/T405.txt
+T409 | commit e9ab3ba | "normal maps wired" | attested | chars | Overnight/evidence/T409.txt
+T406 | commit e9ab3ba | "rig deformation checked" | attested | chars | Overnight/evidence/T406.txt

@@ -1,0 +1,8 @@
+PASS
+T153: Studio Play 2026-10-29 night (studio-world worker). Start + SkipTutorial from the client, ServerStorage.QAProfile:Invoke("stage:N") jumps the run; StageSetClient switched the set by itself (attribute CurrentSet read after 5 s).
+stage 16 -> CurrentSet=ClockworkFoundry (server workspace.StageSets lists all 5 sets; the client shows only the active one under workspace.StageSets, the rest sit in ReplicatedStorage.HiddenStageSets).
+stage 21 -> CurrentSet=AboveTheGreyVeil. Stages 1, 6, 11 -> LampwickLane, HarbourOfBrass, SilentCathedral.
+Captures: Overnight/captures/T153_stage16_before.jpg (before landmark work), T153_stage21.jpg; later final captures T162_set4.jpg (stage 16) and T162_set5.jpg (stage 21). Edge ring: lamps and kerb along the board sides are visible in both; the HUD stage badge read 16 and 21.
+Console (get_console_output) after all runs: only "[ProfileStore] ... data will be saved" and the known "User is not authorized to access Asset" from cloud_3976620715.Sprint Execute (Bug Log #2, not ours). No script errors.
+Bug Log #10 closed (moved to the fixed table).
+UNVERIFIED: how it looks to a human; set 4 in the first capture was dark (the furnaces sit beyond the camera view), improved by the T162 landmarks. Place file not saved.

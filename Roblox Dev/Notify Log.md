@@ -28,3 +28,5 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-29 20:29 Sim batch 4 done (T167 T177 T157 T199): RunAll 26/26, bot 10/10 clear; new map features default OFF.
 - 2026-10-29 20:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
 - 2026-10-29 20:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 20:49 Chars batch done (T403 T404 T405 T409 T406): 36 clips uploaded, maps wired, rigs checked for 20; motion on screen unverified.
+- 2026-10-29 21:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,

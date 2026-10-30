@@ -280,4 +280,103 @@ fogBank(-66, 0, 10, 70)
 fogBank(62, 0, 10, 70)
 fogBank(-4, 42, 140, 8)
 
+-- T162: three landmarks the board camera can see (named Landmark_*, each a Model with its own light), placed at the back-left,
+-- back-right and right edge of the camera view (the board camera looks steeply down, so they are small: 11 to 15 studs tall). Visual only.
+local function LP(m, size, cf, color, mat, shape)
+	local p = Instance.new("Part")
+	if shape then
+		p.Shape = shape
+	end
+	p.Size, p.CFrame, p.Color = size, cf, color
+	p.Material = mat or Enum.Material.Metal
+	p.Anchored, p.CanCollide, p.CanQuery, p.CanTouch = true, false, false, false
+	p.TopSurface, p.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
+	p.Parent = m
+	return p
+end
+local function LGLOW(p, color, range, brightness)
+	local l = Instance.new("PointLight")
+	l.Name, l.Color, l.Range, l.Brightness = "LandmarkLight", color, range, brightness or 2
+	l.Parent = p
+end
+local UP = CFrame.Angles(0, 0, math.rad(90)) -- stands a cylinder upright (its axis is X)
+local FACE = CFrame.Angles(0, math.rad(90), 0) -- turns a cylinder's axis to Z so its flat face looks at the camera
+local function landmark(name, x, z, h, build) -- built at its own size, then scaled to height h and stood on the floor at x, z
+	local m = Instance.new("Model")
+	m.Name = "Landmark_" .. name
+	build(m, x, z)
+	local _, sz = m:GetBoundingBox()
+	m:ScaleTo(m:GetScale() * h / sz.Y)
+	local cf2, sz2 = m:GetBoundingBox()
+	m:PivotTo(m:GetPivot() + Vector3.new(x - cf2.Position.X, -(cf2.Position.Y - sz2.Y / 2), z - cf2.Position.Z))
+	m.Parent = root
+end
+local CYL, BALL = Enum.PartType.Cylinder, Enum.PartType.Ball
+local WARMN = Color3.fromRGB(255, 190, 110)
+local BR = Color3.fromRGB(92, 66, 58)
+local DK = Color3.fromRGB(34, 34, 44)
+landmark("ClockTower", -24, -35, 7, function(m, x, z)
+	LP(m, Vector3.new(9, 34, 9), CFrame.new(x, 17, z), BR, Enum.Material.Brick)
+	LP(m, Vector3.new(11, 2, 11), CFrame.new(x, 35, z), DK)
+	LP(m, Vector3.new(7, 6, 7), CFrame.new(x, 39, z), DK)
+	local f = LP(m, Vector3.new(0.6, 8, 8), CFrame.new(x, 27, z + 4.6) * FACE, WARMN, Enum.Material.Neon, CYL)
+	LGLOW(f, WARMN, 40, 2.5)
+end)
+landmark("Gasometer", 22, -39, 11, function(m, x, z)
+	LP(m, Vector3.new(22, 22, 22), CFrame.new(x, 11, z) * UP, Color3.fromRGB(44, 42, 50), Enum.Material.Metal, CYL)
+	local r = LP(m, Vector3.new(0.8, 22.8, 22.8), CFrame.new(x, 16, z) * UP, WARMN, Enum.Material.Neon, CYL)
+	r.Transparency = 0.35
+	LGLOW(r, WARMN, 36, 1.8)
+	LP(m, Vector3.new(4, 5, 4), CFrame.new(x, 24.5, z), DK)
+end)
+landmark("Footbridge", 60, -10, 12, function(m, x, z)
+	for _, s in { -1, 1 } do
+		LP(m, Vector3.new(3, 20, 3), CFrame.new(x, 10, z + s * 11), DK)
+	end
+	for i = 0, 6 do
+		local a = math.rad(i * 30)
+		LP(m, Vector3.new(2, 2, 5), CFrame.new(x, 20 + math.sin(a) * 6, z - 11 + i * 22 / 6) * CFrame.Angles(math.cos(a) * 0.4, 0, 0), DK)
+	end
+	local g = LP(m, Vector3.new(1.6, 1.6, 1.6), CFrame.new(x, 24, z), WARMN, Enum.Material.Neon, BALL)
+	LGLOW(g, WARMN, 30, 2)
+end)
+-- T164: this set's weather, one wide emitter over the board (only the shown set is parented to workspace on the client, so only one runs).
+do
+	local w = Instance.new("Part")
+	w.Name = "Weather"
+	w.Size, w.CFrame, w.Transparency = Vector3.new(120, 1, 80), CFrame.new(0, 4, -4), 1
+	w.Anchored, w.CanCollide, w.CanQuery, w.CanTouch = true, false, false, false
+	local e = Instance.new("ParticleEmitter")
+	e.Name = "WeatherEmitter"
+	e.Shape, e.EmissionDirection = Enum.ParticleEmitterShape.Box, Enum.NormalId.Top
+	e.Texture = "rbxasset://textures/particles/smoke_main.dds"
+	e.Color = ColorSequence.new(Color3.fromRGB(150, 140, 170))
+	e.Rate, e.Lifetime, e.Speed = 5, NumberRange.new(9, 13), NumberRange.new(0.4, 0.9)
+	e.Size = NumberSequence.new({ NumberSequenceKeypoint.new(0, 10), NumberSequenceKeypoint.new(1, 16) })
+	e.Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.3, 0.9), NumberSequenceKeypoint.new(1, 1) })
+	e.LightEmission, e.Acceleration, e.LockedToPart = 0.1, Vector3.new(0.8, 0, 0.3), false
+	
+	e.Parent = w
+	w.Parent = root
+end
+
+-- T152: the spawn gate's two doors (hinged at the arch pillars of the fog gate that MapBuilder builds at the lane start). Closed at rest;
+-- the client script GateFX swings them open when a wave spawns and shows an enemy shadow in the gateway. Visual only.
+do
+	local gp = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Config")).PATH[1]
+	local gx, gz = gp.X - 4.4, gp.Z
+	local doors = Instance.new("Model")
+	doors.Name = "GateDoors"
+	for _, s in { 1, -1 } do
+		local d = Instance.new("Part")
+		d.Name = s == 1 and "DoorL" or "DoorR"
+		d.Size, d.Color, d.Material, d.Transparency = Vector3.new(0.5, 9, 5.2), Color3.fromRGB(40, 38, 48), Enum.Material.Metal, 0.2
+		d.CFrame = CFrame.new(gx, 5, gz - s * 5.4) * CFrame.new(0, 0, s * 2.7)
+		d.Anchored, d.CanCollide, d.CanQuery, d.CanTouch = true, false, false, false
+		d:SetAttribute("Hinge", Vector3.new(gx, 5, gz - s * 5.4))
+		d:SetAttribute("Side", s)
+		d.Parent = doors
+	end
+	doors.Parent = root
+end
 root.Parent = sets
