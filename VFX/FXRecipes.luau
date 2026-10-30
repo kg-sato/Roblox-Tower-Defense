@@ -12,6 +12,7 @@
 -- Recipes: placement, merge, enemyDefeat, familiarHit, summonBurst, ultimateImpact.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local FXScale = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("FXScale"))
 local TweenService = game:GetService("TweenService")
 
 local FXRecipes = {}
@@ -22,8 +23,10 @@ FXRecipes.RAMP = {
 	Rare = Color3.fromRGB(190, 120, 255),
 	Epic = Color3.fromRGB(255, 196, 90),
 	Legendary = Color3.fromRGB(255, 248, 230),
+	Mythic = Color3.fromRGB(255, 130, 195), -- added 2026-10-29 with the Mythic and Celestial rarities
+	Celestial = Color3.fromRGB(185, 250, 255),
 }
-FXRecipes.ORDER = { Common = 1, Rare = 2, Epic = 3, Legendary = 4 }
+FXRecipes.ORDER = { Common = 1, Rare = 2, Epic = 3, Legendary = 4, Mythic = 5, Celestial = 6 }
 
 -- importance: hit-stop frames (at 60 fps) and shake amount, one of each per impact
 FXRecipes.WEIGHT = {
@@ -115,18 +118,20 @@ function FXRecipes.new(deps)
 
 	local function impact(name, extraStop, extraShake)
 		local w = FXRecipes.WEIGHT[name]
-		local frames = math.clamp(w.stop + (extraStop or 0), 2, 5)
-		local shake = w.shake + (extraShake or 0)
-		if settings.reducedMotion or settings.shake == false then
-			shake = 0
-		end
-		if deps.hitStop then
+		local raw = w.shake + (extraShake or 0)
+		local frames = FXScale.hitStop(math.clamp(w.stop + (extraStop or 0), 2, 5), settings) -- 0 with reduced motion
+		local shake = FXScale.shake(raw, settings)
+		local nudge = FXScale.nudge(raw, settings)
+		if deps.hitStop and frames > 0 then
 			deps.hitStop(frames)
 		end
 		if deps.shake and shake > 0 then
 			deps.shake(shake)
 		end
-		table.insert(R.log, { recipe = name, hitStop = frames, shake = shake })
+		if deps.nudge and nudge > 0 then
+			deps.nudge(nudge)
+		end
+		table.insert(R.log, { recipe = name, hitStop = frames, shake = shake, nudge = nudge })
 		return frames
 	end
 
@@ -176,6 +181,10 @@ function FXRecipes.new(deps)
 			end
 			task.wait(0.18)
 		end, function()
+			if opts.tier then -- T135: tier 1 to 8 ladder layers on top of the base flare
+				local okT, MT = pcall(function() return require(ReplicatedStorage:WaitForChild("MergeTierFX", 2)) end)
+				if okT then MT.play(cf.Position, color, opts.tier) end
+			end
 			flare(cf * CFrame.new(0, 1, 0), "glow", color, 2 * k, 9 * k, 0.3, 3)
 			flare(cf * CFrame.new(0, 0.2, 0), "ring", color, 2 * k, 12 * k, 0.45)
 			F.play("Ember", cf * CFrame.new(0, 1, 0), { scale = k, color = color })

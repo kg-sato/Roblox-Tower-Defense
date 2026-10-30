@@ -1,3 +1,6 @@
-PASS (documented: Roblox Dev/Design/Progression Rules.md, section "Pity"; tested in Tests/Rules.test.luau, Studio Edit mode)
-Rule: after 19 rolls without Epic or better the 20th is forced Epic or Legendary; the skill tree can shorten the interval, never below 8. Test: 6 seeds x 300 rolls on a MatchSim with the grid cleared after each roll: 1,800 rolls, longest dry streak 19, never 20; part of "PASS Rules: 31 of 31 checks".
-Limits: tests the default interval only (no skill-tree pity value); not a statistical test of the odds themselves (the odds sum and luck direction are checked separately).
+BLOCKED
+T200 strict typing. Findings (2026-10-30):
+- All nine modules already start with --!strict in Studio_Export (NumberFormat, SettingsDefaults, StageSets, Strings, TextAnim, Bond, Achievements, Quests, LeaderboardRules); no edits made.
+- No type checker is reachable: luau/luau-analyze/selene are not on PATH; ScriptEditorService has no GetDiagnostics/RequestDiagnostics/GetAnalysis member in this Studio; script_read/execute_luau return no diagnostics; installing software is forbidden by policy.
+- So "zero type errors" is UNVERIFIED. Possible issue seen by reading only: NumberFormat.luau line 20 passes string.gsub's two results to string.reverse (strict mode may warn); not changed without a checker.
+- RunAll in Studio Edit on a fresh clone of Shared: SUMMARY 33 of 33 suites PASS (run 2026-10-30).

@@ -1,0 +1,9 @@
+PASS
+T138 enemy telegraph, studio Play, stage 9 wave (Tank, Crow, Thief), 2026-10-29, worker studio-client2. Module: StarterPlayerScripts.EnemyTelegraph (Studio_Export/EnemyTelegraph.luau); GameClient one-line hook (FXK.telegraph = require(...)).
+Plant comes from the server event Telegraph (delay 1). Steal (30% of lane) and Perch (50%) have no server warning, so the client predicts them from (simNow - spawnTime) * speed and warns when 1 s away.
+Lead between the warning and the real server event (Plant / Steal / Perch), sim seconds, 15 specials in one wave:
+1.09 1.05 1.10 1.05 1.11 1.09 1.09 1.07 1.11 1.11 1.09 1.07 1.10 1.11 1.11  (plant x9, steal x3 [1.05 1.05 1.07], perch x2 [1.11 1.11]); min 1.05 s, max 1.11 s.
+Raw log (script attribute Log): warn plant id5 t=20.66 -> actual Plant t=21.75; warn steal id4 t=21.71 -> actual Steal t=22.76; warn perch id7 t=23.94 -> actual Perch t=25.06 ...
+Console: only the known "User is not authorized to access Asset" line (Known Issues).
+Limits: the prediction ignores a stun/slow in the last second (the warning can come early or late then); look (ring + "!" tag) and cue (anticipation, soft) are UNVERIFIED, no human judged them. Reduced motion drops the ring and tag motion.
+Note for the sim owner: a server Telegraph for Steal and Perch would be exact; not added (MatchSim is read-only for this lane).

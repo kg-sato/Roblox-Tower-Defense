@@ -41,8 +41,8 @@ RevealFX.textures = {
 
 RevealFX.settings = { flashes = true, particles = "Default", reducedMotion = false, skipTier = nil }
 
-local ORDER = { Common = 1, Rare = 2, Epic = 3, Legendary = 4, Ultimate = 5 }
-RevealFX.order = { "Common", "Rare", "Epic", "Legendary", "Ultimate" }
+local ORDER = { Common = 1, Rare = 2, Epic = 3, Legendary = 4, Mythic = 5, Celestial = 6, Ultimate = 7 }
+RevealFX.order = { "Common", "Rare", "Epic", "Legendary", "Mythic", "Celestial", "Ultimate" }
 
 -- palette per tier: one hero colour, one near-white highlight, one dark base (playbook pattern 1)
 RevealFX.tiers = {
@@ -52,6 +52,10 @@ RevealFX.tiers = {
 	Legendary = { color = Color3.fromRGB(255, 190, 40), accent = Color3.fromRGB(255, 244, 205), length = 5.6, odds = "1 in 20,000" },
 	-- medieval-magic ultimate: royal gold on a night-blue world, holy white-blue steel
 	Ultimate = { color = Color3.fromRGB(255, 196, 60), accent = Color3.fromRGB(205, 228, 255), length = 7.6, odds = "ULTIMATE" },
+	-- T057: the two top rarities have their own reveal (colours match FXRecipes.RAMP and Config.RARITIES) and a lore line under the title.
+	-- Odds are the luck-0 rarity odds from the design (Mythic 0.40%, Celestial 0.08%); RevealSection passes the exact figure in opts.odds.
+	Mythic = { color = Color3.fromRGB(255, 130, 195), accent = Color3.fromRGB(255, 226, 240), length = 6.6, odds = "1 in 250", lore = "A name the lamps keep for themselves." },
+	Celestial = { color = Color3.fromRGB(150, 245, 255), accent = Color3.fromRGB(235, 252, 255), length = 8.4, odds = "1 in 1,250", lore = "Light that learned to walk." },
 }
 
 local MULT = { Low = 0.25, Default = 1, High = 1.5 }
@@ -110,12 +114,8 @@ end
 ---------------------------------------------------------------------------------------------------
 -- opts: position (ground point), name, odds, modifier, settings (overrides), timeScale (slow motion, for stills),
 --       forceTouch (test the 100/s cap), headless (no GUI/world: used by audit), sfx = function(name), onDone
--- Mythic and Celestial (added 2026-10-29) reuse the two biggest reveals until they get their own: Mythic plays the Legendary reveal, Celestial the Ultimate one
-local TIER_ALIAS = { Mythic = "Legendary", Celestial = "Ultimate" }
-
 function RevealFX.play(tier, opts)
 	opts = opts or {}
-	tier = TIER_ALIAS[tier] or tier
 	local def = RevealFX.tiers[tier]
 	assert(def, "unknown tier " .. tostring(tier))
 	local S = mergedSettings(opts.settings)
@@ -576,6 +576,10 @@ function RevealFX.play(tier, opts)
 			if opts.modifier then
 				label(opts.modifier, 0.88, 0.22, big and 42 or 26, accent, Enum.Font.Antique, 3)
 			end
+			local lore = opts.lore or def.lore
+			if lore then
+				label(lore, 1.2, 0.3, big and 30 or 22, accent, Enum.Font.Antique, 4) -- T057: lore line under the title (box is 28 px tall at 844x390)
+			end
 			if S.reducedMotion then
 				-- fade only
 			else
@@ -760,6 +764,91 @@ function RevealFX.play(tier, opts)
 			trail.Enabled = false
 		end)
 		titleCard(2.2, length - 2.2, true)
+	elseif tier == "Mythic" then
+		-- ROSE SIGIL (T057): a rose sigil opens with a counter-turning rune ring and a petal swirl; one rose column and a crown halo.
+		sfx("legendary_burst")
+		bloomRamp(0.9, 0.6, 0.5, 1.4)
+		darken(0.45, 0.9, length - 2.2, 1.0)
+		disc("sigil", 5, 34, 1.6, { height = 0.16, spin = 14, from = 1, to = 0.15, fadeOutAt = 5.6, fadeOutDur = 0.9, style = Enum.EasingStyle.Sine })
+		disc("rune", 3, 22, 1.4, { height = 0.24, spin = -26, from = 1, to = 0.2, color = accent, fadeOutAt = 5.2, fadeOutDur = 0.9, style = Enum.EasingStyle.Sine })
+		disc("swirl", 3, 28, 1.6, { height = 0.3, spin = 55, from = 1, to = 0.4, fadeOutAt = 4.8, fadeOutDur = 1.0, style = Enum.EasingStyle.Quint })
+		local petals = sparkles(34, { size = 1.3, speed = 6, life = 2.2, spread = 25, accel = Vector3.new(0, 2.2, 0) })
+		petals.Parent = new("Part", { Name = "PetalDisc", Anchored = true, CanCollide = false, CanQuery = false, CanTouch = false, Transparency = 1, Size = Vector3.new(24, 0.5, 24), CFrame = CFrame.new(pos + Vector3.new(0, 0.5, 0)) }, folder)
+		petals.Shape = Enum.ParticleEmitterShape.Disc
+		petals.ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface
+		at(4.8, function()
+			petals.Enabled = false
+		end)
+		at(1.4, function()
+			flash(0.75, 0.1, 0.06, 0.9)
+			cameraPush(8, 0.3, 1.4)
+			pillar(40, 1.5, 1.0, 2.8, color)
+			pillar(40, 0.5, 0.9, 2.9, accent)
+			disc("ring", 2, 30, 1.1, { fadeOutAt = 1.6, fadeOutDur = 1.0, color = accent })
+			disc("ring", 1, 8, 0.9, { height = 5.2, from = 0.4, to = 0.05, spin = 50, fadeOutAt = 3.4, fadeOutDur = 1.0 }) -- crown halo
+			for i = 1, 6 do
+				local a = i * math.tau / 6
+				beam(Vector3.new(math.cos(a) * 5, 0, math.sin(a) * 5), 34, 1.2, 0.7, 2.2)
+			end
+			local burst = sparkles(0, { burstOnly = true, size = 2.0, speed = 22, life = 1.8, spread = 65 })
+			emit(burst, 80)
+			orbitProps(7, 6, 4.5, 3.6, 0.7)
+			tint(0.2, 0.4, 2.4, 1.2)
+		end)
+		titleCard(1.8, length - 1.8, true)
+	elseif tier == "Celestial" then
+		-- ARMILLARY (T057): a pale star gathers high above, three rings at different heights turn like an armillary sphere,
+		-- then the star flares and a ring of light beams rains down. Cool cyan-white on a dark blue world.
+		sfx("ultimate_summon")
+		bars(0.7, length - 1.6, 0.8)
+		bloomRamp(1.0, 0.8, 0.6, 1.6)
+		darken(0.5, 1.0, length - 2.6, 1.2)
+		if cc then
+			tw(cc, 1.0, { Saturation = -0.2, Contrast = 0.08, TintColor = Color3.fromRGB(190, 225, 255) }, Enum.EasingStyle.Sine)
+			at(length - 1.4, function()
+				tw(cc, 1.2, { Saturation = 0, Contrast = 0, TintColor = WHITE }, Enum.EasingStyle.Sine)
+			end)
+		end
+		disc("sigil", 6, 40, 1.8, { height = 0.16, spin = 6, from = 1, to = 0.18, fadeOutAt = 7.0, fadeOutDur = 1.0, style = Enum.EasingStyle.Sine })
+		disc("ring", 2, 26, 1.8, { height = 3, spin = 40, from = 1, to = 0.1, color = accent, fadeOutAt = 6.8, fadeOutDur = 1.0, style = Enum.EasingStyle.Sine })
+		disc("ring", 2, 20, 2.0, { height = 7, spin = -55, from = 1, to = 0.1, fadeOutAt = 6.8, fadeOutDur = 1.0, style = Enum.EasingStyle.Sine })
+		disc("ring", 2, 14, 2.2, { height = 11, spin = 80, from = 1, to = 0.1, color = accent, fadeOutAt = 6.8, fadeOutDur = 1.0, style = Enum.EasingStyle.Sine })
+		local gather = sparkles(30, { size = 1.1, speed = 5, life = 1.5, shape = Enum.ParticleEmitterShape.Sphere, inout = Enum.ParticleEmitterShapeInOut.Inward, accel = Vector3.zero })
+		local gp = new("Part", { Name = "GatherShape", Anchored = true, CanCollide = false, CanQuery = false, CanTouch = false, Transparency = 1, Size = Vector3.new(12, 12, 12), CFrame = CFrame.new(pos + Vector3.new(0, 11, 0)) }, folder)
+		gather.Parent = gp
+		at(2.2, function()
+			gather.Enabled = false
+		end)
+		if not opts.headless then
+			local star = new("Part", { Name = "Star", Anchored = true, CanCollide = false, CanQuery = false, CanTouch = false, Transparency = 1, Size = Vector3.one, CFrame = CFrame.new(pos + Vector3.new(0, 11, 0)) }, folder)
+			local bb = new("BillboardGui", { Adornee = star, Size = UDim2.fromScale(2, 2), LightInfluence = 0, AlwaysOnTop = false, MaxDistance = 1000000 }, star)
+			local img = new("ImageLabel", { BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), Image = tex.flare, ImageColor3 = accent, ImageTransparency = 0.4 }, bb)
+			tw(bb, 2.2, { Size = UDim2.fromScale(12, 12) }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+			tw(img, 2.2, { ImageTransparency = 0 }, Enum.EasingStyle.Sine)
+			at(2.2, function()
+				tw(bb, 1.3, { Size = UDim2.fromScale(26, 26) }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+				tw(img, 1.3, { ImageTransparency = 1 }, Enum.EasingStyle.Sine)
+			end)
+		end
+		at(2.2, function()
+			flash(0.8, 0.1, 0.06, 0.9)
+			cameraPush(10, 0.3, 1.5)
+			pillar(46, 1.6, 1.0, 3.2, color)
+			pillar(46, 0.5, 0.9, 3.3, accent)
+			for i = 1, 8 do
+				local a = i * math.tau / 8
+				beam(Vector3.new(math.cos(a) * 7, 0, math.sin(a) * 7), 40, 1.3, 0.8, 2.6)
+			end
+			local burst = sparkles(0, { burstOnly = true, size = 2.2, speed = 24, life = 2.0, spread = 70 })
+			emit(burst, 100)
+			local rain = sparkles(36, { size = 1.4, speed = 8, life = 1.8, spread = 75 })
+			at(4.6, function()
+				rain.Enabled = false
+			end)
+			orbitProps(9, 7, 5, 4.2, 0.7)
+			tint(0.22, 0.4, 2.8, 1.3)
+		end)
+		titleCard(2.6, length - 2.6, true)
 	elseif tier == "Common" then
 		sfx("common")
 		local e = sparkles(0, { burstOnly = true, size = 1.0, speed = 5, life = 0.6, spread = 70 })
@@ -976,7 +1065,7 @@ end
 ---------------------------------------------------------------------------------------------------
 function RevealFX.preview(tier, opts)
 	opts = opts or {}
-	opts.name = opts.name or ({ Common = "Pebble Pup", Rare = "Tide Fox", Epic = "Storm Drake", Legendary = "Crowned" })[tier]
+	opts.name = opts.name or ({ Common = "Pebble Pup", Rare = "Tide Fox", Epic = "Storm Drake", Legendary = "Crowned", Mythic = "Dame Orrery", Celestial = "The Lamplighter" })[tier]
 	opts.modifier = opts.modifier or (tier == "Legendary" and "Gilded" or nil)
 	return RevealFX.play(tier, opts)
 end

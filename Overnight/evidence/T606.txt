@@ -1,0 +1,4 @@
+PASS
+SoundFX: new sound of lower priority than every playing voice is dropped (returns nil) instead of stopping a higher one. Tests/SoundCap.test.luau PASS 11 checks; negative control with the ORIGINAL SoundFX gives FAIL (2): 'priority 2 at a full cap is dropped' and 'priority 2 stops none of the priority-3 voices (1)'.
+
+RunAll: ActionArgs PASS; Balance PASS (baseline); Boss 31/31; Combat 58/58; FamiliarMaterials 69/69; Familiars 32/32; GameSpeed PASS; LoreFragments PASS; MatchSim PASS; NewRoles 27/27; NumberFormat PASS; Rules 69 of 69; SaveMigration 27 of 27; ServerRules 58/58; SettingsDefaults PASS; SoundCap PASS; StageSets PASS. SUMMARY 17 of 17 suites PASS (2026-10-29, Studio Edit mode)

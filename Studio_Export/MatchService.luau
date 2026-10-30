@@ -11,12 +11,17 @@ local Config = require(Shared:WaitForChild("Config"))
 local ActionArgs = require(Shared:WaitForChild("ActionArgs"))
 local MatchSim = require(Shared:WaitForChild("MatchSim"))
 local SettingsDefaults = require(Shared:WaitForChild("SettingsDefaults"))
+local Gacha = require(Shared:WaitForChild("Gacha")) -- P3 roll floor and P2 Lantern Oil state (saved as profile.gacha; each feature behind its own Config flag)
+local ProgressHooks = require(Shared:WaitForChild("ProgressHooks")) -- T652: achievements, quests, bond, leaderboard (each behind a Config flag, default OFF)
 
 local ProfileStore = require(ServerScriptService:WaitForChild("ProfileStore")) :: any -- vendor/ProfileStore.luau (MadStudioRoblox, session-locked saving)
 
 -- What is saved between visits (see MatchSim.meta / loadMeta). Only account-level progress: the pets on the board
 -- and the current stage belong to a single run and are not saved.
-local TEMPLATE = { version = 1, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, tutorialDone = false, settings = SettingsDefaults.copyDefaults(), seen = {} }
+local TEMPLATE = { version = 2, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, bestStage = 1, lastStage = 1, tutorialDone = false, settings = SettingsDefaults.copyDefaults(), seen = {}, collection = {}, difficulty = "Normal", gacha = Gacha.new() }
+for k, v in ProgressHooks.fields() do
+	TEMPLATE[k] = v -- achievements, quests, bond (T652)
+end
 local store = ProfileStore.New("PlayerData_v1", TEMPLATE)
 local profiles: { [Player]: any } = {}
 
@@ -52,7 +57,7 @@ end
 
 local TICK = 0.1
 local MIN_ACTION_GAP = 0.05
-local ACTION_KINDS = { Roll = true, Drop = true, Move = true, Recycle = true, Upgrade = true, Ult = true, StartWave = true, AutoWave = true, Skill = true, Respec = true, EndTutorial = true }
+local ACTION_KINDS = { Roll = true, Drop = true, Move = true, Recycle = true, Upgrade = true, Ult = true, StartWave = true, AutoWave = true, Skill = true, Respec = true, EndTutorial = true, Difficulty = true, Pause = true, Lantern = true, Guarantee = true }
 local lastStart: { [Player]: number } = {}
 
 local remotes = Instance.new("Folder")
@@ -71,10 +76,11 @@ local toClient = makeRemote("Event") -- server -> client: (kind: string, payload
 
 type Session = {
 	sim: MatchSim.Sim,
+	hooks: any, -- ProgressHooks run state (nil in the tutorial)
 	accum: number,
 	lastAction: number,
 	snapTimer: number,
-	speed: number, -- game speed 1 or 2 (setting)
+	speed: number, -- game speed 1, 2 or 3 (setting)
 	gclock: number, -- game clock: real seconds times speed; enemy spawn times use it so clients can place enemies at any speed
 }
 
@@ -85,39 +91,22 @@ local lastSkip: { [Player]: number } = {} -- survives startRun, which resets the
 -- Snapshot plus the game clock line (g at server time `at`, advancing `speed` per second) so clients can follow it.
 local function snap(session: Session): { [string]: any }
 	local s = session.sim:snapshot()
-	s.gclock, s.gat, s.gspeed = session.gclock, workspace:GetServerTimeNow(), session.speed
+	s.gclock, s.gat, s.gspeed = session.gclock, workspace:GetServerTimeNow(), session.sim.userPaused and 0 or session.speed
 	return s
 end
 
-local function startRun(player: Player, tutorial: boolean)
-	local sim = MatchSim.new(Random.new(), function(kind: string, payload: any)
-		if kind == "Spawn" then
-			local s = sessions[player]
-			payload.spawnTime = s and s.gclock or 0
-		end
-		if kind == "Roll" then
-			markSeen(player, payload.pet)
-		end
-		-- a Legendary pull is the one shared moment: other players in the server get a short banner (T20)
-		if kind == "Roll" and payload.rarity == "Legendary" and not payload.bonus then
-			for _, other in Players:GetPlayers() do
-				if other ~= player then
-					toClient:FireClient(other, "SharedSummon", { name = player.DisplayName, pet = payload.pet })
-				end
-			end
-		end
-		toClient:FireClient(player, kind, payload)
-	end, tutorial)
-	-- returning players continue their saved progress; the tutorial run always starts fresh
-	local profile = profiles[player]
-	if profile and not tutorial then
-		sim:loadMeta(profile.Data)
+local hookFlags = ProgressHooks.flagsFrom(Config)
+
+-- Pays what a hook earned into the run and tells the client (T652).
+local function deliver(player: Player, sim: any, out: any)
+	if out.gems > 0 then
+		sim.gems += out.gems
 	end
-	local speed = profile and profile.Data.settings and profile.Data.settings.gameSpeed or 1
-	sessions[player] = { sim = sim, accum = 0, lastAction = 0, snapTimer = 0, speed = speed, gclock = 0 }
-	toClient:FireClient(player, "Begin", { snapshot = snap(sessions[player]) })
-	if profile then
-		toClient:FireClient(player, "Settings", profile.Data.settings)
+	if out.sp > 0 then
+		sim.sp += out.sp
+	end
+	for _, e in out.events do
+		toClient:FireClient(player, e.kind, e.payload)
 	end
 end
 
@@ -133,6 +122,63 @@ local function syncProfile(player: Player)
 		profile.Data[k] = v
 	end
 	profile.Data.tutorialDone = true
+end
+
+local function startRun(player: Player, tutorial: boolean)
+	local old = sessions[player]
+	if old and old.hooks then
+		deliver(player, old.sim, ProgressHooks.flush(old.hooks, os.time())) -- bond xp of the run being replaced
+		syncProfile(player)
+	end
+	local simRef: any = nil
+	local hooks: any = nil
+	local sim = MatchSim.new(Random.new(), function(kind: string, payload: any)
+		if kind == "Pace" then
+			local s = sessions[player]
+			payload.t = s and s.gclock or payload.t -- the client follows the game clock, not the sim clock
+		end
+		if kind == "Spawn" then
+			local s = sessions[player]
+			payload.spawnTime = s and s.gclock or 0
+		end
+		if kind == "Roll" then
+			markSeen(player, payload.pet)
+			local profile = profiles[player]
+			if profile and not tutorial and type(profile.Data.collection) == "table" and type(payload.pet) == "string" and Config.PETS[payload.pet] then
+				Config.collectionAdd(profile.Data.collection, payload.pet) -- duplicates and shards (T186)
+			end
+		end
+		-- a Legendary pull is the one shared moment: other players in the server get a short banner (T20)
+		if kind == "Roll" and payload.rarity == "Legendary" and not payload.bonus then
+			for _, other in Players:GetPlayers() do
+				if other ~= player then
+					toClient:FireClient(other, "SharedSummon", { name = player.DisplayName, pet = payload.pet })
+				end
+			end
+		end
+		toClient:FireClient(player, kind, payload)
+		if hooks and simRef then
+			deliver(player, simRef, ProgressHooks.event(hooks, kind, payload, os.time(), tutorial))
+		end
+	end, tutorial)
+	simRef = sim
+	-- returning players continue their saved progress; the tutorial run always starts fresh
+	local profile = profiles[player]
+	if profile and not tutorial then
+		sim:loadMeta(profile.Data)
+	end
+	if profile and not tutorial and (hookFlags.achievements or hookFlags.quests or hookFlags.bond or hookFlags.leaderboard) then
+		hooks = ProgressHooks.start(profile.Data, hookFlags, os.time(), { userId = player.UserId, petFaction = function(pet: string): string?
+			local def = Config.PETS[pet]
+			return def and def.faction
+		end })
+	end
+	local speed = profile and profile.Data.settings and profile.Data.settings.gameSpeed or 1
+	sessions[player] = { sim = sim, hooks = hooks, accum = 0, lastAction = 0, snapTimer = 0, speed = speed, gclock = 0 }
+	toClient:FireClient(player, "Begin", { snapshot = snap(sessions[player]) })
+	if profile then
+		toClient:FireClient(player, "Settings", profile.Data.settings)
+	end
 end
 
 local function loadProfile(player: Player)
@@ -166,6 +212,9 @@ local function loadProfile(player: Player)
 	d.xp = count(d.xp, 0, 1e12)
 	d.sp = count(d.sp, 0, 9999)
 	d.gems = count(d.gems, 0, 1e12)
+	d.bestStage = math.max(1, count(d.bestStage, 1, 1000))
+	d.lastStage = math.max(1, count(d.lastStage, 1, 1000))
+	d.bestStage = math.max(d.bestStage, d.lastStage)
 	d.tutorialDone = d.tutorialDone == true
 	local tree = {}
 	if type(d.tree) == "table" then
@@ -190,9 +239,13 @@ local function loadProfile(player: Player)
 		seen[id] = true
 	end
 	d.seen = seen
+	d.collection = Config.sanitizeCollection(d.collection, seen) -- T186: counts and shards; the older `seen` list gives one copy each
+	d.difficulty = (type(d.difficulty) == "string" and Config.DIFFICULTY[d.difficulty] and d.bestStage >= Config.DIFFICULTY[d.difficulty].unlockStage) and d.difficulty or "Normal"
+	ProgressHooks.sanitize(d) -- T652: achievements, quests and bond are clamped even with the flags off
 	seenCache[player] = table.clone(seen)
 	publishSeen(player)
-	d.version = TEMPLATE.version -- no migration is needed yet; add one here before bumping TEMPLATE.version
+	d.gacha = Gacha.load(d.gacha) -- version 2 added `gacha`: older profiles get a fresh state, a damaged one is clamped
+	d.version = TEMPLATE.version -- the only migration so far is the gacha field above; add the next one here before bumping TEMPLATE.version
 	profile.OnSessionEnd:Connect(function()
 		profiles[player] = nil
 		player:Kick("Your data was loaded in another server. Please rejoin.")
@@ -288,6 +341,21 @@ toServer.OnServerEvent:Connect(function(player: Player, kind: any, a: any, b: an
 		end
 		return
 	end
+	-- T652: claim a finished quest (only with Config.QUESTS_ON); the server checks everything
+	if kind == "Quest" then
+		if not (session and session.hooks and Config.QUESTS_ON) or os.clock() - session.lastAction < MIN_ACTION_GAP then
+			return
+		end
+		session.lastAction = os.clock()
+		local ok, reason, out = ProgressHooks.claimQuest(session.hooks, a)
+		if ok then
+			deliver(player, session.sim, out)
+		else
+			toClient:FireClient(player, "Denied", { reason = reason })
+		end
+		toClient:FireClient(player, "State", snap(session))
+		return
+	end
 	local now = os.clock()
 	-- security audit (T123): unknown kinds no longer use up the gap, so spam cannot block a real action
 		if not ACTION_KINDS[kind] or not session or now - session.lastAction < MIN_ACTION_GAP then
@@ -326,6 +394,17 @@ toServer.OnServerEvent:Connect(function(player: Player, kind: any, a: any, b: an
 		ok, reason = sim:skill(a)
 	elseif kind == "Respec" then
 		ok, reason = sim:respec()
+	elseif kind == "Difficulty" then
+		ok, reason = sim:setDifficulty(a) -- T004: the sim checks stage, unlock and tutorial
+	elseif kind == "Pause" then
+		ok, reason = sim:pause(a) -- T006
+	elseif kind == "Lantern" then
+		if not (type(a) == "table" and isCoord(a.x) and isCoord(a.z)) then
+			return
+		end
+		ok, reason = sim:lantern(a.x, a.z) -- T011
+	elseif kind == "Guarantee" then
+		ok, reason = sim:claimGuarantee(a) -- P2: the sim checks the flag, the oil, the rarity and the room
 	elseif kind == "EndTutorial" then
 		sim:endTutorial()
 		ok = true
@@ -364,6 +443,7 @@ if RunService:IsStudio() then
 				for k, v in TEMPLATE do
 					profile.Data[k] = type(v) == "table" and table.clone(v) or v
 				end
+				ProgressHooks.sanitize(profile.Data) -- fresh nested tables, not the ones inside TEMPLATE
 				if sessions[player] then
 					sessions[player].sim.tutorial = true
 				end
@@ -393,6 +473,11 @@ end
 Players.PlayerRemoving:Connect(function(player)
 	syncProfile(player)
 	local profile = profiles[player]
+	local ending = sessions[player]
+	if profile and ending and ending.hooks then
+		local out = ProgressHooks.flush(ending.hooks, os.time()) -- bond xp; the sim is over, so the gems go straight into the profile
+		profile.Data.gems = math.min(profile.Data.gems + out.gems, 1e12)
+	end
 	if profile then
 		profiles[player] = nil
 		profile:EndSession()
@@ -405,11 +490,15 @@ end)
 
 RunService.Heartbeat:Connect(function(dt: number)
 	for player, session in sessions do
-		session.gclock += dt * session.speed
-		local steps
-		steps, session.accum = SettingsDefaults.stepsFor(session.accum, dt, session.speed, TICK)
-		for _ = 1, steps do
-			session.sim:step(TICK)
+		if session.sim.userPaused then
+			session.sim:tickPause(dt) -- T006: the clock stands still while paused; the pause ends by itself after Config.PAUSE_MAX
+		else
+			session.gclock += dt * session.speed
+			local steps
+			steps, session.accum = SettingsDefaults.stepsFor(session.accum, dt, session.speed, TICK)
+			for _ = 1, steps do
+				session.sim:step(TICK)
+			end
 		end
 		session.snapTimer += dt
 		if session.snapTimer >= 0.25 then

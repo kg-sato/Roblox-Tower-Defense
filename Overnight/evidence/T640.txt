@@ -1,0 +1,159 @@
+FAIL (partial: reveal reached c7 d7 only; results d5->6; HUD d3->4; collection no gain. Every screen still has items under 7 after three rounds)
+T640 (studio-polish, 2026-10-30). Three fix rounds, each scored by a fresh blind Sonnet reviewer that saw only the five stills (round<N>_hud_idle/hud_wave/reveal/collection/results.jpg in Overnight/captures). Look-and-feel is reviewer-model opinion only: UNVERIFIED by a human. Reviewer text recorded verbatim below (the reviewer wrote it to Overnight/review_tmp/round<N>.md).
+Scores a shape, b texture, c colour, d readability, e polish.
+Baseline (T076): HUD idle a5 b5 c6 d4 e4; HUD wave a5 b5 c6 d3 e4; Reveal a4 b4 c5 d5 e3; Collection a6 b6 c6 d5 e5; Results not scored.
+Round 1: HUD idle 4/5/5/3/3; wave 4/5/5/3/3; reveal 6/6/6/6/4; collection 6/5/5/5/5; results 4/3/4/5/3
+Round 2: HUD idle 4/5/5/3/3; wave 4/5/5/3/3; reveal 6/6/6/6/5; collection 5/4/5/4/4; results 4/2/4/5/3
+Round 3: HUD idle 4/5/5/4/3; wave 4/5/5/4/3; reveal 6/6/7/7/5; collection 5/4/5/4/4; results 5/3/4/6/4
+Notes: reveal frames are the same capture in all rounds (RevealFX is outside this lane, untouched; its movement is reviewer variance). HUD frames in round 3 are the round 2 frames (HUD code unchanged in round 3). Reviewer scores are noisy by +-1; the reviewer was stricter than the T076 one, so the baseline is not directly comparable.
+Changes (Studio_Export mirrored; GameClient untouched):
+- NEW HudPolish.luau (hooked in UILane2 list): dark brass-edged plates behind left rail, ROLL/AUTO/QUICK bar and BEGIN button (ScreenGui DisplayOrder -5); bold 17-18 px cream captions with outline on dock and currency labels.
+- CollectionScreen: opaque dim behind modal, gradient panel, locked cells lighter silhouette + "?" + dimmed stroke, filled rarity pills, bigger names, empty-filter note, removed the empty-ring rarity chip.
+- ResultsScreen: coin/gem icons, hero numbers 46, bracket text stripped from lore, lore card, gold primary button with dark text, panel gradient, inner frame, three rating diamonds (all lit in the test frame; unlit state not shown).
+Checks: python tools/script_sizes.py ok (largest GameClient 142,167); RunAll SUMMARY 33 of 33 suites PASS. Lean bot not run (no waves/economy touched).
+Three biggest remaining problems: (1) HUD weakest: GameClient-drawn, small labels, no wave/enemy progress, hollow stage ring, orphaned MENU/FAMILIARS; needs a rebuild in GameClient/AbstractHUD (out of lane). (2) UI chrome has no material/lighting: flat fills with hairline gold; needs a textured panel/button art kit (icons_set frames are round, unusable as panels). (3) Inconsistent art: AI backdrop vs flat grey 3D wraith in reveal; 8-9 px lore text baked into the card image in the collection (art asset, not code).
+Not tried: reveal effects, wave counter (needs an enemy-count source), fresh HUD capture after round 2.
+Harness notes: results/collection opened via module calls in Play with fake data (gold 1240, SeenPets set client-side); gamepad ring and cursor dot appear in some frames.
+
+---- ROUND 1 REVIEW (verbatim) ----
+ROUND 1 UI/ART REVIEW (harsh, stills only)
+
+HUD idle  a4 b5 c5 d3 e3
+- a: Left rail is a cramped stack of unequal icons with a stray vertical line; top-left "8" coin, stage ring and "20 HP" orb float with no shared frame; FAMILIARS is a lone floating text box; ULT is a faint dotted ring. No consistent grid.
+- b: Cobblestone path and brick walls have decent texture, but the UI itself is flat dark rectangles and thin line icons with no material (no brass, glass, wear).
+- c: Moody blue/amber world lighting is fine; UI is murky brown/black against a dark scene. The orange BEGIN triangle and purple roll orb clash with the brass palette.
+- d: Labels (COINS, GEMS, SKILL TREE, PROGRESSION, SETTINGS, ODDS, ULT, "STAGE") are tiny, thin serif, low contrast. Stage number "1" is nearly invisible in its ring. "BEGIN THE WAVE" is small for the main action. Centre path is a huge empty black void.
+- e: Clipped red "15" badge, misaligned dots and bars, mixed icon styles (hamburger, line art, triangle), seam-like rail lines. Reads as unfinished.
+Looks template-like / AI-assembled: generic thin-line icon set, default serif labels, Victorian theme only in the font. World geometry is the strongest part but is also blocky and sparse.
+
+HUD wave  a4 b5 c5 d3 e3
+- Same HUD as idle, so the same scores. Enemies are tiny dark blobs, hard to read against the dark path, with no health bars or feedback visible.
+- "RUNNING" is dim grey and the button looks disabled; the caret icon is a poor state cue. No wave counter, no enemy count, no progress. Nothing tells the player what is happening.
+
+Familiar reveal  a6 b6 c6 d6 e4
+- a: Centred composition is clear: rarity title, clock, creature, name, odds, prompt. The creature is small, off-centre and overlaps the clock edge.
+- b: The brass pocket-watch and London skyline are rich, but the skyline is clearly a generated painting. The creature is a flat grey blob model with no material or rim light, pasted over the clock.
+- c: Gold on night blue is a good palette, and the glow behind the clock works. The wraith is muddy grey and gets lost in the clock face.
+- d: LEGENDARY and the name are strong. "1 in 138" and "Tap to continue" are tiny, pale and low contrast.
+- e: A legendary reveal should be a showpiece. This has no rarity framing, rays or particles in the still, and the creature looks much cheaper than the backdrop. The clock cuts off and a faint ghost of the HUD shows through.
+Looks AI-generated in the background (painterly skyline, clock) over a low-fidelity model; the mismatch of the two is the giveaway.
+
+Collection  a6 b5 c5 d5 e5
+- a: Clean grid plus detail card is a sound pattern. Cards have uneven fills, a large dead gap between the grid and the detail card, and the grid is cropped at the bottom.
+- b: Familiar icons are decent small renders. Panels are flat fills with a thin gold border; no texture. The tab pills and the "Details" button are plain rectangles.
+- c: Purple/black/gold is coherent but muddy; locked "???" cards are almost invisible. Rarity colours (blue, purple) are small and low in saturation.
+- d: The lore body text is tiny (about 9px) and dense, unreadable at game scale. Rarity labels are tiny. Header "10/20" is fine. The close button is OK.
+- e: Odd round black rings in each card's corner (faction badges) are empty or unreadable. The card in the detail panel has an ornate border while the rest is plain. The HUD ghost behind the modal is distracting. Looks like a web page rather than a game menu.
+Template-like: standard filter tabs + grid + side card, generic web UI, default serif font.
+
+Results  a4 b3 c4 d5 e3
+- a: Plain modal with three stat boxes, a big empty box holding "[ THE UNBOUND UNRAVELS ]", and two buttons. Huge dead space, and the stat boxes are mostly empty. No hierarchy or celebration.
+- b: Flat black and brown fills with a thin gold outline; no material at all. The two tiny coin/gem icons are the only art.
+- c: Brown on black, with a muddy gold button. The cyan focus ring on "Start stage 6" clashes with everything else.
+- d: Title is readable; subtitle and labels are small. WAVE "5" is fine but the label is tiny. The text on the gold button has low contrast (cream on dark gold). The bracketed placeholder-like "[ THE UNBOUND UNRAVELS ]" looks like debug text.
+- e: A stage clear should feel rewarding: no rewards shown (no items, stars or familiars), no animation cues in the still, and the empty panel makes it look like a placeholder. GOLD shows 1.24K, which is the same as the gem total on the HUD (a likely data mix-up).
+Looks like a template: a default dialog with minimal skinning. Clear fail against shipped top-tier games.
+
+3 BIGGEST REMAINING PROBLEMS
+1. UI has no material identity. Gameplay panels and buttons are flat dark fills with hairline gold borders and tiny thin serif text. The Victorian-steampunk theme exists only in the backdrop art of the reveal. Nothing has brass, glass or leather detail like shipped games (e.g. Bloons, Kingdom Rush, Genshin menus).
+2. Readability and hierarchy. Most secondary text (HUD labels, odds, rarity, lore, stat labels) is far too small and low contrast; primary actions (BEGIN, ROLL, Start stage) are not prominent; the wave screen gives no combat feedback.
+3. Inconsistent, unfinished feel. Mixed icon styles, mismatched colours (orange and purple versus brass), clipped or empty elements (empty results panel, bracket placeholder text, empty badge rings, cropped grid), HUD ghosting through modals, plus a creature model far cheaper than the generated backdrop.
+
+
+---- ROUND 2 REVIEW (verbatim) ----
+HUD idle  a4 b5 c5 d3 e3
+- a: Left rail is a cramped stack of icon+label with a 2-px dotted spine; "FAMILIARS" floats as a stray unframed button; stage/HP at top is a bare circle and a blue dot; ULT is a tiny dotted ring cut off at screen edge.
+- b: World cobblestone and brick are decent; the UI itself is flat text on flat dark panels, no material (no brass, no leather, no glass) despite the steampunk theme. Lantern tower on right is the best asset.
+- c: Whole frame murky; big black void in path interior; UI palette is mixed (orange triangle, purple orb, cyan gems, gold) with no unifying scheme.
+- d: Tiny labels (TRAINER, STAGE, ODDS, COINS, THE WAVE) are ~8-10 px and low contrast; "20 HP" and "STAGE 1" are near invisible; no strong hierarchy, ROLL and BEGIN compete; coin amount "30" is small.
+- e: Icons inconsistent in style (flat purple Y, orange line chart, concentric rings for Settings = odd metaphor), the hamburger MENU icon is a generic web glyph, left panel clips "COINS" and "PROGRESSION" against its border, bar bottom has stray dots. Unfinished.
+- AI/template look: Yes, template-like. Generic dark-fantasy mobile-gacha layout, default serif font on every label, icon set looks auto-made and unrelated to the world art.
+
+HUD wave  a4 b5 c5 d3 e3
+- a: Identical to idle; enemies are a small queue at the path corner, no wave counter, enemy count, boss/health bars, or wave progress shown. RUNNING button state is just a text swap.
+- b: Enemies are tiny dark blobs with white rim glints; no readable silhouette at this distance. Path texture fine.
+- c: Same murk; enemies blend into dark path edge; no combat lighting or feedback visible.
+- d: "RUNNING" is dim grey on dark, reads as disabled; no wave info at all, which is a genuine readability fail for a tower defense HUD.
+- e: Button chevron outline is a weak state design; nothing indicates progress. Nothing new versus idle, so no sense of game state.
+- AI/template look: Same as idle; functional skeleton, no top-tier feel (compare Bloons TD 6, Kingdom Rush, Anime Vanguards: clear wave counters, big readable numbers).
+
+Reveal  a6 b6 c6 d6 e5
+- a: Centered composition (rarity, medallion, name, odds, prompt) is clear and conventional. The pocket-watch frame is the strongest shape in the set. But the wraith sits on top of the clock overlapping the bottom edge, and the 3D model is small and not framed.
+- b: Pocket-watch has nice brass and roman numerals; background city art (Big Ben, rooftops) is painterly but obviously a generated still. The wraith model is flat grey low-detail, mismatching the rich clock.
+- c: Gold glow versus night blue works and the moon is a good accent; but the creature is dull grey with no rim light or rarity glow, so a "Legendary" pull looks unspectacular.
+- d: "LEGENDARY" is large and clear. "1 in 138" and "Tap to continue" are tiny, low contrast purple-grey on a busy background; the name is OK.
+- e: Cursor aside, the creature clips over the watch rim and a pale brass crown at left looks broken/cut. No particles, rays, or card/plinth for the creature. Reads as a prototype of a reveal.
+- AI/template look: Background and clock look AI-generated (generic Victorian-London night plate); typography is stock serif. Layout is template.
+
+Collection  a5 b4 c5 d4 e4
+- a: Standard grid + detail pane works, but the grid is a 3-column block with a big dead gap before the scrollbar, the grid is not centered with the card, bottom row cut off mid-card, and the detail card has a big empty space under lore.
+- b: Tiles are flat purple/dark fills; the gold frame is a plain stroke; only creature renders carry detail. Detail card has a gold double border, which is the best texture here.
+- c: Reasonable dark purple/gold, rarity pills are saturated and clear (blue/purple/grey), but orange EMBER header bar clashes with the rest.
+- d: Lore paragraph is about 8-9 px, unreadable at game scale; "COMMON" pills tiny; locked tiles "???" are legible but the three-dark-on-dark is weak; tab labels fine.
+- e: Rarity pill is overlapped by creature names on some tiles (Ember, Hound); "10/20" count floats without context; HUD ghosts through the modal; "Details" button is a muddy olive that matches nothing. Close X is generic.
+- AI/template look: Yes. Standard AI modal: tabs + grid + card, uniform rounded rectangles, serif everywhere, lore wall of text.
+
+Results  a4 b2 c4 d5 e3
+- a: Plain modal with three stat boxes and an empty wide box containing only "THE UNBOUND UNRAVELS"; the huge empty banner area is wasted, no reward icons or item display, no rating/stars.
+- b: Almost zero texture: flat near-black fills with thin gold strokes. Gold and Gems icons are tiny and low-contrast; WAVE box has no icon.
+- c: Brown-black on brown-black; only the yellow button pops; no lighting, glow, or celebration at all for a stage clear.
+- d: Title is readable, buttons clear (Start stage 6 primary vs Close secondary is good); but stat labels are small, and the numbers, which should be the heroes, are modest. Contradiction: gems shows +25 while the HUD behind says 1.14K and results shows 1.24K gold with no delta.
+- e: Large dead area, no victory feeling, no animation cues in a still, "Close" button is dull brown. Looks like a debug dialog.
+- AI/template look: Very template-like: generic "Stage cleared" card with three stat tiles; no theme or personality.
+
+Three biggest remaining problems overall
+1. UI has no material identity: flat dark fills with thin gold lines and stock serif text everywhere. Nothing is brass, leather, glass, paper, or lit, so it does not match the rich Victorian-steampunk art in the reveal background and lantern tower. Fix with a shared textured frame/button/panel kit and per-element lighting.
+2. Readability failure: lots of 8-10 px grey-on-black text (HUD labels, odds, lore, pills, stat labels) and no hierarchy in the HUD; a tower-defense wave screen shows no wave number, enemy count or progress. Raise sizes and contrast, make key numbers the heroes.
+3. Wasted space and missing payoff: results has a huge empty banner, the collection has dead gaps and a lore wall, the reveal has a dull flat-grey creature with no rarity glow or particles, and the HUD world is a dark void. Top-tier games reward each moment with art, icons, and effects; these frames feel like unfinished wireframes with a good background.
+
+
+---- ROUND 3 REVIEW (verbatim) ----
+ROUND 3 REVIEW (harsh, stills only)
+
+HUD idle  a4 b5 c5 d4 e3
+- a: Left rail is a cramped column of mismatched widgets (currency, skill tree, progression, settings, FAMILIARS floating as a lone text box, MENU hamburger orphaned beside it). No grid, no anchoring logic. Top-center STAGE circle is an empty ring with a tiny "1". HP is a plain blue dot.
+- b: Board cobblestone and brick are decent; HUD has almost no material: flat dark panels, thin line icons, orange triangle BEGIN is a flat vector. Lantern turret on right is the only rich object.
+- c: Everything murky dark purple/brown. Large black void in the path interior. Cyan/orange accents are random, no cohesive light story. Board is too dark to read lanes.
+- d: Labels tiny (COINS, GEMS, STAGE, TRAINER, ODDS ~10-12px) with low contrast on dark; "20 HP" and "STAGE" nearly lost. Hierarchy weak: BEGIN and ROLL compete, TRAINER bar is illegible dots.
+- e: Misaligned labels (COINS/GEMS clip the panel edge), red "15" badge floats off the skill tree icon, bottom bar text baselines uneven, ULT ring faint. Looks unfinished.
+Looks template-like and half-AI: mixed icon styles (line vs filled gem vs glyph), stock serif font on everything, generic gradients. Not shippable quality.
+
+HUD wave  a4 b5 c5 d4 e3
+- a: Same layout as idle; enemies are a tiny clump in a corner of the path, so the board looks empty. RUNNING button is just ghosted text with a chevron.
+- b: Enemies are small dark blobs with cyan glints, no readable silhouette at this scale; no towers visible, no VFX, no health bars.
+- c: Same dim palette; enemy glow is the only highlight. Nothing communicates danger.
+- d: RUNNING is low-contrast grey on near-black. No wave counter, no enemy count, no progress. Player cannot tell what is happening.
+- e: No feedback elements (damage numbers, wave progress). Static-feeling frame for a combat state.
+Template-like: the combat HUD is identical to idle with a text swap. Fails against any top-tier TD (Bloons, Kingdom Rush) that show wave progress, lives, and clear unit art.
+
+Reveal  a6 b6 c7 d7 e5
+- a: Centered composition is strong: title, pocket-watch frame, name, odds, prompt. But the character sits low and clips out the bottom of the watch, and it is tiny relative to the frame.
+- b: Pocket watch has good brass detail and rim; London backdrop is a clear AI-generated painting (Big Ben, smeared rooftops). The wraith is a flat grey low-detail blob: no texture, no rim light, looks pasted.
+- c: Golden glow against night blue works and is the best colour in the set. Character is dull grey and unlit by the glow, so it does not belong in the scene.
+- d: LEGENDARY and name are large and clear. Odds and "Tap to continue" are small and low contrast.
+- e: Character not integrated (no shadow, no light, no particles, covers watch face awkwardly). Faint ghost UI visible behind. Reveal for a Legendary feels underwhelming: no burst, no rarity effects in the still.
+Clearly AI-generated backdrop plus a mismatched 3D asset. Closest to acceptable, still below Genshin/Pokemon-style gacha reveals.
+
+Collection  a5 b4 c5 d4 e4
+- a: Reasonable master/detail split with tabs, grid and card. But the grid leaves a dead gap between it and the card, scrollbar floats mid-space, rows cut off at the bottom, "Details" button overlaps the card's bottom border.
+- b: Tiles are flat purple/black rectangles. Character renders are small and inconsistent in scale and style (flame, dog, snowman, wizard). Locked "???" tiles are muddy silhouettes. Card frame gold is fine; the card interior is plain text.
+- c: Dull purple vs black vs orange header on the card; the orange EMBER banner clashes with the gold frame. Rarity pills (grey/blue/purple) are flat and saturated differently.
+- d: Lore paragraph is ~8-9px dense text, unreadable at normal viewing. Rarity pills tiny. Count "10/20" floats mid-header. Faction tabs fine.
+- e: Overlay shows the HUD ghosted behind; clipped tile row at bottom; no hover or selection state on grid; X close button style differs from everything else.
+Template-like: generic modal with tiles, a wall of lore text. A top-tier collection screen would have large character art, rarity borders, and a clear selected state.
+
+Results  a5 b3 c4 d6 e4
+- a: Clean centered modal, but sparse: three stat boxes, one wide empty-looking bar, two buttons. Large dead space; the wide box with "THE UNBOUND UNRAVELS" has no purpose in the frame.
+- b: Almost no material: pure black fill, thin gold lines. Three diamonds are flat yellow polygons (no filled/empty distinction visible, all lit). Stat icons tiny and low contrast.
+- c: Black plus gold only; flat. Does not match the Victorian-mystic look of the reveal; no lighting, no glow, no reward highlight.
+- d: Title and Start stage 6 are legible; headings like WAVE/GOLD/GEMS tiny, icons barely visible. Numbers clear. Hierarchy decent, rewards not emphasised.
+- e: Wide box likely a text overflow or placeholder look; left-aligned vs centered mismatches; heavy double-border frame looks default. No reward reveal, no celebration.
+Template-like. A victory screen in any shipped game has celebration art, star animation states, and reward icons with weight.
+
+3 BIGGEST REMAINING PROBLEMS
+1. HUD is the weakest and most-seen screen: dark, tiny labels, no combat feedback (wave progress, unit readability, damage), scattered left rail with orphaned MENU/FAMILIARS, hollow stage ring. Needs a rebuilt layout, larger type, and unit/tower silhouettes.
+2. No material or lighting on UI chrome: flat dark panels and thin gold lines across collection and results; zero texture, bevel, glow. Reads as a template, not a crafted Victorian-brass theme. Only the reveal's watch has real craft.
+3. Inconsistent asset style: AI-painted backdrop, flat grey 3D wraith, mixed icon sets (line vs filled), differing character renders in the collection, plus tiny lore and label text. Needs one art direction, unified rarity colours, and minimum readable text size.
+
+Overall verdict: FAIL for top-tier standard; reveal is closest (about 6/10 average), HUD and results are weakest.
+

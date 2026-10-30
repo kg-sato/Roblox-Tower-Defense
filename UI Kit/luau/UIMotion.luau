@@ -47,18 +47,21 @@ return function(K)
 	local INOUT = Enum.EasingDirection.InOut
 
 	---------------------------------------------------------------------------------------------
-	-- buttons: hover grows, press squashes, release springs back
+	-- buttons: four states. idle, hover (mouse) or focus (keyboard / gamepad selection) grows, pressed squashes,
+	-- disabled dims and ignores input. K.setDisabled(btn, on) flips it; K.setState(btn, name) forces a state (tests).
 	---------------------------------------------------------------------------------------------
+	local DISABLED_ALPHA = 0.55
 	function K.pressFx(btn)
 		local base = btn.Size
-		local hovered, pressed = false, false
+		local hovered, pressed, focused, disabled = false, false, false, false
 		local current
+		local baseAlpha = btn.BackgroundTransparency
 		local function apply()
-			local f = pressed and M.press or (hovered and M.hoverScale or 1)
+			local f = disabled and 1 or (pressed and M.press or ((hovered or focused) and M.hoverScale or 1))
 			local info
 			if pressed then
 				info = TweenInfo.new(0.06, QUAD_OUT, OUT)
-			elseif hovered then
+			elseif hovered or focused then
 				info = TweenInfo.new(0.12, QUAD_OUT, OUT)
 			else
 				info = TweenInfo.new(0.2, BACK, OUT)
@@ -66,10 +69,30 @@ return function(K)
 			if current then
 				current:Cancel()
 			end
-			current = go(btn, info, { Size = mul(base, f) })
+			btn:SetAttribute("State", disabled and "disabled" or (pressed and "pressed" or ((hovered or focused) and "hover" or "idle")))
+			current = go(btn, info, { Size = mul(base, f), BackgroundTransparency = disabled and DISABLED_ALPHA or baseAlpha })
+		end
+		local function dimLabel()
+			local lbl = btn:FindFirstChild("Label")
+			if lbl then
+				go(lbl, TweenInfo.new(0.15, SINE, OUT), { TextTransparency = disabled and 0.45 or 0 })
+			end
+		end
+		local function setDisabled()
+			disabled = btn:GetAttribute("Disabled") == true
+			btn.Interactable = not disabled
+			if disabled then
+				hovered, pressed = false, false
+			end
+			apply()
+			dimLabel()
+		end
+		btn:GetAttributeChangedSignal("Disabled"):Connect(setDisabled)
+		if btn:GetAttribute("Disabled") then
+			setDisabled()
 		end
 		btn.MouseEnter:Connect(function()
-			if M.hover and UserInputService.MouseEnabled then
+			if M.hover and UserInputService.MouseEnabled and not disabled then
 				hovered = true
 				apply()
 			end
@@ -79,6 +102,9 @@ return function(K)
 			apply()
 		end)
 		btn.MouseButton1Down:Connect(function()
+			if disabled then
+				return
+			end
 			pressed = true
 			apply()
 			if K.sfx then
@@ -89,7 +115,39 @@ return function(K)
 			pressed = false
 			apply()
 		end)
+		btn.SelectionGained:Connect(function()
+			focused = true
+			apply()
+		end)
+		btn.SelectionLost:Connect(function()
+			focused, pressed = false, false
+			apply()
+		end)
+		M.force = M.force or setmetatable({}, { __mode = "k" })
+		M.force[btn] = function(name) -- tests: put the button in a state without a mouse
+			hovered, pressed = name == "hover", name == "pressed"
+			if name == "disabled" then
+				btn:SetAttribute("Disabled", true)
+			else
+				btn:SetAttribute("Disabled", nil)
+				disabled = false
+				btn.Interactable = true
+				apply()
+				dimLabel()
+			end
+		end
 		return btn
+	end
+
+	function K.setDisabled(btn, on)
+		btn:SetAttribute("Disabled", on and true or nil)
+	end
+
+	function K.setState(btn, name)
+		local f = M.force and M.force[btn]
+		if f then
+			f(name)
+		end
 	end
 
 	---------------------------------------------------------------------------------------------

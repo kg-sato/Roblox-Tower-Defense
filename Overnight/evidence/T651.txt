@@ -1,0 +1,43 @@
+PASS
+T651 wiring audit (audit-worker). Method: Studio Play (Client/Server datamodels), stage 5 jumped with QAProfile, 4 familiars placed, waves started, a merge, an ultimate, a boss on the board. "required by" = grep of Studio Sources for require( of the name (UILane2 loads by a name list through script.Parent:WaitForChild + pcall(require)). Note: execute_luau require() gives a separate module copy, so proof uses instances/attributes made by the LIVE scripts, never the isOpen() of my copy.
+module | required by | proof of life | verdict
+BossBar | GameClient | PhaseStrip + BossFreeze instances in HUD at boss stage 5, PhaseStrip Visible=true | ALIVE
+BossFx | GameClient | script attr Log: Unbound phases 1,2,3 with colours/cues | ALIVE
+EnemyTelegraph | GameClient | server fired Telegraph; script attr Log warn rows ["plant",26..] | ALIVE
+FloatText | GameClient | attr Log n=29, last ["61","82cdff",true] | ALIVE
+PlacementHint | GameClient | pressed H: folder PlacementHint (Pet=Ember), attr Last {"tiles":19,"best":45} | ALIVE
+GCPanelKit/GCHudDressing/GCUpgradeRows/GCTutSeal/GCFeatured/GCBossPlate/GCOddsRows/GCSettingsApply/GCMergeCut | GameClient | PlayerGui: TextStroke 309, Stagger 8, NoStagger 63, Bezel/Cap/Glint/Shine, Flame 16, Tint 29, Featured 1, Plate 1; GameClient attr AppliedSettings; merge ran (CV orb Part). GCTutSeal: created by GameClient hook, tutorial skipped so no visible instance (hook line present) | ALIVE (GCTutSeal: hook only, no instance observed)
+FxLayer (LocalScript) | runs itself | FxCommon attr fxlayer_ready=1 | ALIVE
+MergeTierFX | FxLayer, FXRecipes | FxCommon merge_tier2=1, morph=1 after a real Drop merge | ALIVE
+LanternFX | FxLayer | FxCommon spawn=4, ash=1, vignette_off=791 | ALIVE
+EnemyFamilyFX | FxLayer | FxCommon hit_clockwork 54, hit_hollow 38, hit_fog 6, death_fog 3, death_hollow 8 | ALIVE
+FamiliarShots | ProjectileFX (pcall install) | FxCommon shot_Zap 59, shot_Ember 21, shot_Frostling 21, shot_Boulder 14 | ALIVE
+UltFlourish | CutsceneFX (pcall) | FxCommon ult_Ember=1; UltFlourish attr cam_Ember="crane pos(15,16,8)" after Action Ult | ALIVE
+SoundCues / SoundCuesClient (LocalScript) | SettingsPanel, BossFx, AmbienceClient | SoundCuesClient attr CueLog plays enemy_hit, coin_clink, summon... | ALIVE
+AmbienceClient | itself | attr Log amb_lobby, amb_lane | ALIVE
+BossArena | StageSetClient | workspace BossArena folder present at stage 5; StageSetClient attr CurrentSet=LampwickLane | ALIVE
+PaceClient (LocalScript) + EnemyPace | GameClient (sets enemies), PaceClient | server-fired Pace speed 0 (ids 1-400): moving enemy models 1 -> 0 (weak: model tracking is crude) | ALIVE (weak proof)
+NavFocus (LocalScript) | runs itself | HUD buttons Selectable 84/84 | ALIVE
+UIOverlays (LocalScript) -> Dialogs, Toasts, Tooltips | UILane2-era script | Tooltip button tagged with attribute got TooltipBound=true from the live autoAttach; Dialogs/Toasts ScreenGuis exist | ALIVE
+Dialogs | Toasts,Tooltips,UIOverlays,Results,Pause,Router,screens | DialogDim shown by confirm; PauseMenu uses it | ALIVE
+Toasts | UIOverlays | ScreenGui Toasts created, show() ok | ALIVE
+Tooltips | UIOverlays | TooltipBound proof above | ALIVE
+TextAnim | Toasts, Dialogs, Results, Pause, Router, ScreenShell and more | used by every live screen; module loads | ALIVE
+UILane2 (LocalScript) | runs itself | its list modules all initialised: PauseButton, Menu dock, Screens, QuestTracker gui | ALIVE
+PauseMenu | UILane2, ScreenRouter | Action Pause true: ScreenGui PauseMenu + PauseDim, then removed on false; flag Config.PAUSE_MENU false (QAPause attr used) | ALIVE (flag OFF by default)
+ResultsScreen | UILane2, ScreenRouter | server fired Clear: ResultsDim shown (QAResults attr; flag RESULTS_SCREEN off) | ALIVE (flag OFF)
+QuestTracker | UILane2 | QuestTracker ScreenGui built after QATracker attr set (flag QUEST_TRACKER off) | ALIVE (flag OFF)
+ScreenRouter + ScreenShell | UILane2 | OpenRouter event live: Inventory 399 descendants, Quests 75, Pass 120, Shop 129, Board 107, Stages 159; dock button Menu present | ALIVE
+InventoryScreen/QuestScreen/PassScreen/ShopScreen/BoardScreen/StageSelect | UILane2 list + ScreenShell.register | titles FAMILIARS, QUESTS, LANTERN PASS, COSMETIC SHOP, WEEKLY BEST WAVE, STAGES rendered by the router | ALIVE (Shop/Pass display only)
+FamiliarPanel | UILane2 | bondFor callable; module loaded | ALIVE (panel not opened by me)
+PanelCard (LocalScript) | runs itself | Card 6, Crest 4 instances | ALIVE
+Strings | Tooltips | 7 keys, get() | ALIVE (data, read by Tooltips)
+Bond | FamiliarPanel | module API callable (new, level, xpFor) | CLIENT-READ ONLY: no server code awards bond XP (needs design: profile field)
+Quests | QuestScreen, QuestTracker | API callable | CLIENT-READ ONLY: no server code records progress or claims (needs design)
+LeaderboardRules | BoardScreen | pack/validate callable; board uses FAKE rows | DATA-ONLY (no DataStore reads wired; needs design + the user)
+Achievements | NOTHING (only Tests) | no require anywhere in Sources | ORPHAN, left: needs server hook in MatchService plus a profile field and save migration (design)
+Data_* (10) | Shared.Config | Shared.Data has 10 modules; Config ROLL_COST 20, ELITE.first 8 read through them | SERVER-DATA (used by Config, required at runtime)
+Counts: ALIVE 38 rows covering ~60 modules; ORPHAN 1 (Achievements, left); CLIENT-READ-ONLY/DATA-ONLY 3 (Bond, Quests, LeaderboardRules; left, need design). Wired by me: 0 (nothing trivially wirable; no Studio script changed, nothing to mirror).
+RunAll headless: SUMMARY 33 of 33 suites PASS.
+Play to stage 5 with waves, merge, ult, boss, pause, results, router: console shows only the pre-existing "User is not authorized to access Asset" lines plus 2x "Setting GuiService.SelectedObject to invalid GuiObject" during PauseMenu open (T097 showPanel sets SelectedObject = h.resume right after build; likely my forced Pause while a duplicate test copy also ran; not investigated, treat as possible minor NEW warning).
+UNVERIFIED: look and feel of everything; PaceClient effect strength; GCTutSeal instance; FamiliarPanel opening.

@@ -191,3 +191,113 @@ Image ids are what the game uses (`ReplicatedStorage.ArtIds`, `LoadingScreen.ART
 | 95646501629562 | 121057959639956 | etched_eye_lashes: make_eye_lashes.py, etched lash fringe and crease lines around the great eye's rim (the user: "the eyelashes are why the original model was so defined", 2026-10-29) |
 | 88935995065985 | 131230619338082 | etched_eye_lashes_black: make_eye_lashes.py v2, BLACK lashes over a cream lid band (the user: "the screenshots eyelashes are pure black"; measured lid band 74 % dark, reference 62-78 %), replaces 95646501629562 |
 | 117521992225366 / 131055110018506 | 115537900971155 / 72357432024114 | etched_iris_inner / etched_iris_outer: make_etched_iris_rings.py, the etched clock iris split at r 141 so its rings counter-rotate in the 2D great eye (2026-10-29) |
+
+## Human familiar animation clips (uploaded 2026-10-29, Animation, creator 872430111)
+Source: Animation Kit/out/familiar_clips/*.rbxmx built by Shared.FamiliarClips; not yet wired into the game.
+
+- CantorVesper_Idle: rbxassetid://111755183195492
+- CantorVesper_Attack: rbxassetid://92564774580885
+- CantorVesper_Death: rbxassetid://115167173392830
+- CantorVesper_Hit: rbxassetid://120823661265971
+- CantorVesper_Walk: rbxassetid://84105644943359
+- DameOrrery_Attack: rbxassetid://126626877895658
+- DameOrrery_Death: rbxassetid://90108742894285
+- DameOrrery_Hit: rbxassetid://71424311990602
+- DameOrrery_Idle: rbxassetid://129124905942506
+- DameOrrery_Walk: rbxassetid://120536152700476
+- TheLamplighter_Attack: rbxassetid://103840120478519
+- TheLamplighter_Death: rbxassetid://97484836783702
+- TheLamplighter_Hit: rbxassetid://74108757367639
+- TheLamplighter_Idle: rbxassetid://127637182554164
+- TheLamplighter_Walk: rbxassetid://89121859012387
+- VeilWalker_Attack: rbxassetid://112947395281798
+- VeilWalker_Death: rbxassetid://106412719609902
+- VeilWalker_Hit: rbxassetid://108261744215622
+- VeilWalker_Idle: rbxassetid://110409424576530
+- VeilWalker_Walk: rbxassetid://103223214507393
+
+## Epic and Legendary human familiars (uploaded 2026-10-29, creator 872430111)
+Rigged models (Model) and gold-ink textures (Decal ids; image ids are read in Studio):
+- ConstableWren: model rbxassetid://99720337419253, gold decal 132991960018565
+- MadamQuill: model rbxassetid://124637000398787, gold decal 75486492195389
+- CogWarden: model rbxassetid://128047234263813, gold decal 84091719510381
+- FerrymanOfFog: model rbxassetid://126312687773119, gold decal 95991038779586
+
+Clips for the four Epic and Legendary humans (Animation, 2026-10-29):
+- CogWarden_Attack: rbxassetid://70885088625664
+- CogWarden_Death: rbxassetid://122336116732262
+- CogWarden_Hit: rbxassetid://112119258612806
+- CogWarden_Idle: rbxassetid://79102047505162
+- CogWarden_Walk: rbxassetid://133069679617807
+- ConstableWren_Attack: rbxassetid://91717559458415
+- ConstableWren_Death: rbxassetid://124678587901553
+- ConstableWren_Hit: rbxassetid://83522939395326
+- ConstableWren_Idle: rbxassetid://92718111276555
+- ConstableWren_Walk: rbxassetid://80833612328996
+- FerrymanOfFog_Attack: rbxassetid://120185630494797
+- FerrymanOfFog_Death: rbxassetid://108556216544150
+- FerrymanOfFog_Hit: rbxassetid://96020261101074
+- FerrymanOfFog_Idle: rbxassetid://84709484237976
+- FerrymanOfFog_Walk: rbxassetid://91366107093592
+- MadamQuill_Attack: rbxassetid://100837798287130
+- MadamQuill_Death: rbxassetid://85431449650614
+- MadamQuill_Hit: rbxassetid://124207566291276
+- MadamQuill_Idle: rbxassetid://110675701836198
+- MadamQuill_Walk: rbxassetid://89847662610535
+
+Collection art for the four Epic and Legendary humans (Decal ids, 2026-10-29; image ids are in Shared FamiliarArt): ConstableWren cutout 130529500306008, lore 73237313923491; MadamQuill cutout 90455337557183, lore 82342736143900; CogWarden cutout 76464098140186, lore 133110636742859; FerrymanOfFog cutout 113556706665399, lore 110766383718160.
+
+Skill tree engraved icons (white line art, 256 px, UI Kit/art/make_skilltree_icons.py; uploaded 2026-10-29 via Studio upload_image, image ids): Armor rbxassetid://140485132734548, Charge rbxassetid://137915456412547, Charm rbxassetid://91321861751583, Claws rbxassetid://104503848358426, Clock rbxassetid://70371876518220, Discount rbxassetid://132380128059909, Double rbxassetid://79355991077094, Eye rbxassetid://118479517178330, Finder rbxassetid://140672373757552, Guard rbxassetid://83091671363094, Haste rbxassetid://99346353544120, Heavy rbxassetid://79764788010440, Learner rbxassetid://128027987548468, Magnet rbxassetid://114214626329333, Mega rbxassetid://130998936325390, Merger rbxassetid://87654079598346, Pity rbxassetid://139228403939798, Refund rbxassetid://85148876319062, Start rbxassetid://88116451873049
+
+Title page layers (uploaded 2026-10-29 via upload_image, from UI Kit/art/title_bg/layers): sky 135189074641926, rays 96973107269185, figure 118678537152629, mist_far 82813632895739, mist_near 108963568266256, foreground 127018063062309.
+Title foreground v2 (character moved right): 97923729896441 (127018063062309 superseded)
+
+Title page round 2 layers (2026-10-29): sky 82308350034807, rays 104036777344439, figure 128197158529429, ground 89551418679476, foreground 85966992159723, mist_far 82252188238475, mist_near 108210761536387 (round 1 ids superseded).
+
+Overnight cue set audio (2026-10-29, WAV synthesised by VFX/sfx/make_cues.py, uploaded as Audio; 8 of the 30 new cues, rest not uploaded yet; see VFX/sfx/MANIFEST.md): ui_click_soft rbxassetid://111673041051226, ui_error rbxassetid://109055487674361, ui_buy rbxassetid://138935227500698, ui_levelup rbxassetid://89524906675033, familiar_place rbxassetid://135206057906557, reveal_legendary rbxassetid://100672209997679, reveal_celestial rbxassetid://114164363714017, boss_intro_clockmaker rbxassetid://129659992794232. Moderation state not checked; ear quality UNVERIFIED.
+
+Title page round 3 layers (2026-10-29, UI Kit/art/title_bg/build.py): sky 92817932891073, rays 104036777344439 (unchanged), figure 90065295875133, ground 93486746494519, foreground 94128836200313, mist_far 86165216780461, mist_near 110511940628499 (round 2 ids superseded).
+
+Skill tree r3 thick-stroke icons (white, 256 px, UI Kit/art/skilltree_icons_r3, dilated from r1 line art; uploaded 2026-10-29 via Studio upload_image): Claws rbxassetid://84134147080434, Armor rbxassetid://97798687917539, Finder rbxassetid://110699275206672, Discount rbxassetid://140718888692850, Double rbxassetid://128913448533576, Eye rbxassetid://70430773900363, Charm rbxassetid://134496285484911, Guard rbxassetid://93209073046299, Charge rbxassetid://87255306276247, Clock rbxassetid://122010917635946, Magnet rbxassetid://105874413704464, Start rbxassetid://128237310134386, Learner rbxassetid://126515305812185, Merger rbxassetid://77400237971107, Heavy rbxassetid://72808767830160, Haste rbxassetid://78219893781799, Mega rbxassetid://127797835791972, Pity rbxassetid://104471144542537, Refund rbxassetid://114771222853824
+Title page round 4 layers (2026-10-29, UI Kit/art/title_bg/build.py; r3 ids superseded): sky 89445041512809, rays 129345850046102, figure 86765244026415, ground 107607269954906, foreground 98894961632403 (mist_far/near unchanged from r3).
+
+- 2026-10-29 Animation Ember_Hit (original familiar clip, T405, studio-chars): rbxassetid://91002846706067
+- 2026-10-29 Animation Ember_Idle (original familiar clip, T405, studio-chars): rbxassetid://75304203835974
+- 2026-10-29 Animation Ember_Death (original familiar clip, T405, studio-chars): rbxassetid://73189270229744
+- 2026-10-29 Animation Zap_Idle (original familiar clip, T405, studio-chars): rbxassetid://100173029329809
+- 2026-10-29 Animation Zap_Hit (original familiar clip, T405, studio-chars): rbxassetid://96377553007403
+- 2026-10-29 Animation Zap_Death (original familiar clip, T405, studio-chars): rbxassetid://116491558387508
+- 2026-10-29 Animation Frostling_Idle (original familiar clip, T405, studio-chars): rbxassetid://106280935189804
+- 2026-10-29 Animation Frostling_Hit (original familiar clip, T405, studio-chars): rbxassetid://81661219380430
+- 2026-10-29 Animation Frostling_Death (original familiar clip, T405, studio-chars): rbxassetid://96739918079923
+- 2026-10-29 Animation Boulder_Idle (original familiar clip, T405, studio-chars): rbxassetid://83258853584487
+- 2026-10-29 Animation Boulder_Hit (original familiar clip, T405, studio-chars): rbxassetid://114197638460618
+- 2026-10-29 Animation Boulder_Death (original familiar clip, T405, studio-chars): rbxassetid://109001004667590
+- 2026-10-29 Animation VoltFox_Idle (original familiar clip, T405, studio-chars): rbxassetid://96099682191668
+- 2026-10-29 Animation VoltFox_Hit (original familiar clip, T405, studio-chars): rbxassetid://72478502101154
+- 2026-10-29 Animation VoltFox_Death (original familiar clip, T405, studio-chars): rbxassetid://134860278003775
+- 2026-10-29 Animation StarDrake_Idle (original familiar clip, T405, studio-chars): rbxassetid://96375141022120
+- 2026-10-29 Animation StarDrake_Hit (original familiar clip, T405, studio-chars): rbxassetid://73705955364906
+- 2026-10-29 Animation StarDrake_Death (original familiar clip, T405, studio-chars): rbxassetid://110586006933366
+- 2026-10-29 Animation BrassHound_Idle (original familiar clip, T405, studio-chars): rbxassetid://100492543730481
+- 2026-10-29 Animation BrassHound_Hit (original familiar clip, T405, studio-chars): rbxassetid://101616266207560
+- 2026-10-29 Animation BrassHound_Death (original familiar clip, T405, studio-chars): rbxassetid://121321111300347
+- 2026-10-29 Animation Sentinel_Idle (original familiar clip, T405, studio-chars): rbxassetid://80630693430576
+- 2026-10-29 Animation Sentinel_Hit (original familiar clip, T405, studio-chars): rbxassetid://82705966026729
+- 2026-10-29 Animation Sentinel_Death (original familiar clip, T405, studio-chars): rbxassetid://99038348328288
+- 2026-10-29 Animation Ward_Idle (original familiar clip, T405, studio-chars): rbxassetid://122149443076888
+- 2026-10-29 Animation Ward_Hit (original familiar clip, T405, studio-chars): rbxassetid://92711036989591
+- 2026-10-29 Animation Ward_Death (original familiar clip, T405, studio-chars): rbxassetid://96067150599444
+- 2026-10-29 Animation Archivist_Idle (original familiar clip, T405, studio-chars): rbxassetid://125484912291275
+- 2026-10-29 Animation Archivist_Hit (original familiar clip, T405, studio-chars): rbxassetid://102513709239949
+- 2026-10-29 Animation Archivist_Death (original familiar clip, T405, studio-chars): rbxassetid://79024676851141
+- 2026-10-29 Animation Mourner_Idle (original familiar clip, T405, studio-chars): rbxassetid://121015101084539
+- 2026-10-29 Animation Mourner_Hit (original familiar clip, T405, studio-chars): rbxassetid://95482758104339
+- 2026-10-29 Animation Mourner_Death (original familiar clip, T405, studio-chars): rbxassetid://132393887668811
+- 2026-10-29 Animation GreyVeilWraith_Idle (original familiar clip, T405, studio-chars): rbxassetid://101383034172711
+- 2026-10-29 Animation GreyVeilWraith_Hit (original familiar clip, T405, studio-chars): rbxassetid://120859950809993
+- 2026-10-29 Animation GreyVeilWraith_Death (original familiar clip, T405, studio-chars): rbxassetid://73679213001879
+- 2026-10-29 T409 (studio-chars) 512 px Normal maps for 9 original familiars, decal id -> image id used in SurfaceAppearance.NormalMap: Ember 134285583863419 -> 82708336634644; StarDrake 138186208470640 -> 111031075135049; Archivist 116668490036584 -> 125104151757593; GreyVeilWraith 94873610654703 -> 100414985520475; Sentinel 95944811776627 -> 94580982559898; Mourner 84388915274636 -> 94638011789625; Frostling 115740402157858 -> 86160350554977; BrassHound 92053094306926 -> 88326204535670; Ward 121493074193413 -> 96049744239958
+- 2026-10-29 Audio (T166, studio-client2, VFX/sfx/make_ambience.py, ear quality UNVERIFIED, moderation unchecked): amb_lane rbxassetid://100719500442065, amb_harbour rbxassetid://121844527608472, amb_cathedral rbxassetid://83607517954240, amb_foundry rbxassetid://83914826017186, amb_veil rbxassetid://114017854252926, amb_lobby rbxassetid://70453404199147, caption_tick rbxassetid://112396969710935, set_morph rbxassetid://126579756259575
+- 2026-10-30 T641 (studio-icons) 40 UI icons from UI Kit/art/icons_set (look UNVERIFIED), decal -> image id: currency_coin 125639028193781 -> 104188249489207; currency_coin_128 95048444734141 -> 89013935218228; currency_gem 123300215475792 -> 140127171706557; currency_gem_128 91472041004341 -> 88932316257839; faction_clockwork_guild 112625432404437 -> 71186133771477; faction_clockwork_guild_128 99192698908979 -> 116898824662849; faction_hollow_court 119092260413866 -> 85840322223650; faction_hollow_court_128 94443000089251 -> 82153877503662; faction_lantern_keepers 122526193368127 -> 93214273840008; faction_lantern_keepers_128 116961039955716 -> 137588560007605; faction_star_choir 76561180595159 -> 119217793950473; faction_star_choir_128 99690597459471 -> 131419654901778; rarity_common 104183261186226 -> 129642813536363; rarity_common_128 90136314497755 -> 80975321404816; rarity_epic 116809777893530 -> 73229389468255; rarity_epic_128 112910257819559 -> 106229139435139; rarity_frame_1 135563845481619 -> 138170664090489; rarity_frame_2 92762313136368 -> 105706560066249; rarity_frame_3 74250484876444 -> 75864067836379; rarity_frame_4 114714240868164 -> 127388004118831; rarity_frame_5 79547292801679 -> 126460826056125; rarity_frame_6 106963806645989 -> 96685116360654; rarity_legendary 91345415352281 -> 117860435706758; rarity_legendary_128 112444341301372 -> 86276646138853; rarity_mythic 110249221506561 -> 83870797958479; rarity_mythic_128 126052380860845 -> 127254787757093; rarity_rare 132368321060365 -> 137650389083822; rarity_rare_128 120548124608295 -> 114138177982231; rarity_uncommon 103063883421222 -> 102702469248494; rarity_uncommon_128 133645350983692 -> 81971249784010; status_burn 83889539159649 -> 120898468750149; status_burn_128 121684752465979 -> 130600374270007; status_chill 97034705805471 -> 86139516725084; status_chill_128 105999729035724 -> 112399922875818; status_hush 123817188976929 -> 109387750690223; status_hush_128 133696622099130 -> 101071874097965; status_mark 130554691300874 -> 79509284376248; status_mark_128 116086765531748 -> 127577573617964; status_stun 116431235193679 -> 133050216173083; status_stun_128 73416715793376 -> 116068335264381
+- 2026-10-30 hud-design: baked brass HUD plates (UI Kit/art/make_brass_bake.py): b_plate 130359814673024, b_panel 124009865755629, b_roll 124234160388572, b_disc 121116210826331 (decal -> image: 107915370915613, 129023355926061, 123188401890303, 135420478773352)

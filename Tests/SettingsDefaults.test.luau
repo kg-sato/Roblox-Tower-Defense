@@ -78,6 +78,17 @@ return function(Shared)
 	check("sanitize(nil) gives the defaults", same)
 	check("sanitize of a non-table gives the defaults", S.sanitize("hack").flashes == S.defaults.flashes)
 
+	-- sound mix sliders (T605): master, interface; music and effects already existed
+	check("masterVolume and uiVolume default to full", S.defaults.masterVolume == 1 and S.defaults.uiVolume == 1)
+	check("mix volumes accepted", ok("masterVolume", 0.5) and ok("uiVolume", 0))
+	local _, mHi = S.validate("masterVolume", 4)
+	local _, uLo = S.validate("uiVolume", -1)
+	check("mix volumes clamped to 0..1", mHi == 1 and uLo == 0, tostring(mHi) .. "," .. tostring(uLo))
+	check("mix volume string, NaN and inf rejected", not ok("masterVolume", "max") and not ok("uiVolume", 0 / 0) and not ok("masterVolume", math.huge))
+	check("mix volume boolean rejected", not ok("uiVolume", true))
+	local sane = S.sanitize({ masterVolume = 9, uiVolume = "loud", musicVolume = 0.3 })
+	check("sanitize clamps master, defaults a bad uiVolume, keeps music", sane.masterVolume == 1 and sane.uiVolume == 1 and sane.musicVolume == 0.3)
+
 	-- rate limit
 	local last = {}
 	local p, q = {}, {}

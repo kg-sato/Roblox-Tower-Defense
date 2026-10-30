@@ -4,6 +4,15 @@
 
 local Config = require(script.Parent.Config)
 local Path = require(script.Parent.Path)
+-- pure rule modules (Gacha, Bond); a test that clones MatchSim alone finds them through ReplicatedStorage.Shared
+local function sibling(name: string): any
+	local shared = game:GetService("ReplicatedStorage"):FindFirstChild("Shared")
+	local mod = script.Parent:FindFirstChild(name) or (shared and shared:FindFirstChild(name))
+	assert(mod, "Shared." .. name .. " is missing")
+	return require(mod :: ModuleScript)
+end
+local Gacha = sibling("Gacha")
+local Bond = sibling("Bond")
 
 -- Units are keyed by id (the client still calls it "slot") and stand anywhere legal: see Config.canPlace.
 export type Unit = { pet: string, tier: number, cd: number, x: number, z: number }
@@ -11,6 +20,12 @@ export type Enemy = { id: number, kind: string, hp: number, maxHp: number, dist:
 
 local MatchSim = {}
 MatchSim.__index = MatchSim
+
+-- the current phase's effects of a boss enemy (see Config.BOSSES), nil for other enemies
+local function bossFx(e: any): any
+	local b = e.boss
+	return b and b.def.phases[b.phase].fx or nil
+end
 
 export type Sim = typeof(setmetatable({} :: {
 	t: number,
@@ -22,6 +37,7 @@ export type Sim = typeof(setmetatable({} :: {
 	nextId: number,
 	crystalHp: number,
 	stage: number,
+	bestStage: number, -- highest stage reached, saved in the profile
 	state: string, -- "ready" (waiting for Start Wave or Auto) | "active"
 	autoWave: boolean,
 	breakClock: number,
@@ -32,6 +48,8 @@ export type Sim = typeof(setmetatable({} :: {
 	upgrades: { [string]: { [string]: number } },
 	rolls: number,
 	sincePity: number,
+	gacha: any, -- Shared.Gacha state (floor counter, Lantern Oil), saved in the profile
+	owned: { [string]: number }, -- copies pulled per familiar (profile collection counts plus this run), for the P7 bond bonus
 	tutorial: boolean,
 	paused: boolean,
 	forced: { string },
@@ -45,6 +63,14 @@ export type Sim = typeof(setmetatable({} :: {
 	sp: number,
 	tree: { [string]: number },
 	leakCount: number,
+	difficulty: string, -- Config.DIFFICULTY id (T004)
+	userPaused: boolean, -- the player's pause (T006), separate from the tutorial's `paused`
+	pauseLeft: number,
+	lanternReady: number, -- sim time the Lantern can be lit again (T011)
+	lanternUntil: number,
+	lanternX: number,
+	lanternZ: number,
+	skyKey: string,
 	rng: Random,
 	emit: (string, any) -> (),
 }, MatchSim))
@@ -64,6 +90,7 @@ function MatchSim.new(rng: Random, emit: (string, any) -> (), tutorial: boolean)
 		nextId = 1,
 		crystalHp = Config.CRYSTAL_HP,
 		stage = 1,
+		bestStage = 1,
 		state = "ready",
 		autoWave = false,
 		breakClock = 1.5,
@@ -74,6 +101,8 @@ function MatchSim.new(rng: Random, emit: (string, any) -> (), tutorial: boolean)
 		upgrades = upgrades,
 		rolls = 0,
 		sincePity = 0,
+		gacha = Gacha.new(),
+		owned = {},
 		tutorial = tutorial,
 		paused = tutorial,
 		forced = tutorial and { "Ember", "Ember", "Ember" } or {},
@@ -87,6 +116,14 @@ function MatchSim.new(rng: Random, emit: (string, any) -> (), tutorial: boolean)
 		sp = tutorial and 0 or 2,
 		tree = { Start = 1 },
 		leakCount = 0,
+		difficulty = "Normal",
+		userPaused = false,
+		pauseLeft = 0,
+		lanternReady = 0,
+		lanternUntil = 0,
+		lanternX = 0,
+		lanternZ = 0,
+		skyKey = "",
 		rng = rng,
 		emit = emit,
 	}, MatchSim)
@@ -100,7 +137,7 @@ end
 
 -- Progress that carries between visits (what the server saves with ProfileStore).
 function MatchSim.meta(self: Sim): { [string]: any }
-	return { level = self.level, xp = self.xp, sp = self.sp, gems = self.gems, tree = table.clone(self.tree) }
+	return { level = self.level, xp = self.xp, sp = self.sp, gems = self.gems, tree = table.clone(self.tree), bestStage = math.max(self.bestStage, self.stage), lastStage = self.stage, difficulty = self.difficulty, gacha = table.clone(self.gacha) }
 end
 
 -- Load saved progress, clamping every value so a corrupt or edited save can't give an impossible state.
@@ -129,6 +166,123 @@ function MatchSim.loadMeta(self: Sim, d: any)
 		end
 	end
 	self.tree = tree
+	-- stage progress (T411): the best stage can never be below the last one; the run itself still starts at stage 1
+	self.bestStage = math.max(num(d.bestStage, 1, 1000, 1), num(d.lastStage, 1, 1000, 1))
+	-- difficulty (T004): only a known id the saved progress has unlocked
+	local diff = type(d.difficulty) == "string" and Config.DIFFICULTY[d.difficulty] or nil
+	self.difficulty = (diff and self.bestStage >= diff.unlockStage) and d.difficulty or "Normal"
+	self.gacha = Gacha.load(d.gacha)
+	self.owned = {}
+	if type(d.collection) == "table" then
+		for id, e in d.collection do
+			if type(id) == "string" and Config.PETS[id] and type(e) == "table" and type(e.count) == "number" and e.count == e.count then
+				self.owned[id] = math.clamp(math.floor(e.count), 0, Config.COLLECTION_MAX)
+			end
+		end
+	end
+end
+
+-- Pick the difficulty (T004). Only before the first wave of a run (stage 1, ready), never in the tutorial, and only once unlocked by bestStage.
+function MatchSim.setDifficulty(self: Sim, id: any): (boolean, string?)
+	local def = type(id) == "string" and Config.DIFFICULTY[id] or nil
+	if not def then
+		return false, "Bad difficulty"
+	end
+	if self.tutorial then
+		return false, "Not in the tutorial"
+	end
+	if self.state ~= "ready" or self.stage ~= 1 or #self.enemies > 0 or #self.queue > 0 then
+		return false, "Change it before the first wave"
+	end
+	if self.bestStage < def.unlockStage then
+		return false, def.label .. " unlocks at stage " .. def.unlockStage
+	end
+	self.difficulty = id
+	self.emit("Difficulty", { id = id, label = def.label })
+	return true, nil
+end
+
+-- Pause and resume (T006). The pause belongs to the run and is capped at Config.PAUSE_MAX real seconds (tickPause); boss clocks and cooldowns stand still while it lasts.
+function MatchSim.pause(self: Sim, on: any): (boolean, string?)
+	if type(on) ~= "boolean" then
+		return false, "Bad value"
+	end
+	if self.tutorial then
+		return false, "Not in the tutorial"
+	end
+	if on and not self.userPaused then
+		self.userPaused, self.pauseLeft = true, Config.PAUSE_MAX
+		self.emit("Pause", { on = true, left = self.pauseLeft })
+	elseif not on and self.userPaused then
+		self.userPaused, self.pauseLeft = false, 0
+		self.emit("Pause", { on = false })
+	end
+	return true, nil
+end
+
+-- Counts a pause down in real seconds (the server calls it every frame while paused); at zero the run resumes.
+function MatchSim.tickPause(self: Sim, dt: number)
+	if self.userPaused then
+		self.pauseLeft -= dt
+		if self.pauseLeft <= 0 then
+			self.userPaused, self.pauseLeft = false, 0
+			self.emit("Pause", { on = false, auto = true })
+		end
+	end
+end
+
+-- The run as a plain table (what a run save would hold) and its clamped re-load. A loaded run starts paused so the player can look first.
+function MatchSim.exportRun(self: Sim): { [string]: any }
+	local grid, ups = {}, {}
+	for id, u in self.grid do
+		grid[tostring(id)] = { pet = u.pet, tier = u.tier, x = u.x, z = u.z }
+	end
+	for pet, t in self.upgrades do
+		ups[pet] = { Power = t.Power, Haste = t.Haste, Crit = t.Crit }
+	end
+	return { stage = self.stage, coins = self.coins, crystal = self.crystalHp, combo = self.combo, difficulty = self.difficulty, userPaused = self.userPaused, pauseLeft = self.pauseLeft, grid = grid, upgrades = ups, nextUnit = self.nextUnit }
+end
+
+function MatchSim.importRun(self: Sim, d: any): boolean
+	if type(d) ~= "table" or self.tutorial then
+		return false
+	end
+	local function num(v: any, lo: number, hi: number, fallback: number): number
+		if type(v) ~= "number" or v ~= v then
+			return fallback
+		end
+		return math.clamp(math.floor(v), lo, hi)
+	end
+	self.stage = num(d.stage, 1, 1000, 1)
+	self.bestStage = math.max(self.bestStage, self.stage)
+	self.coins = num(d.coins, 0, 1e12, self.coins)
+	self.crystalHp = num(d.crystal, 1, self:maxHp(), self:maxHp())
+	self.combo = num(d.combo, 0, 1000, 0)
+	local diff = type(d.difficulty) == "string" and Config.DIFFICULTY[d.difficulty] or nil
+	self.difficulty = (diff and self.bestStage >= diff.unlockStage) and d.difficulty or "Normal"
+	self.grid, self.nextUnit = {}, 1
+	if type(d.grid) == "table" then
+		for _, u in d.grid do
+			if type(u) == "table" and type(u.pet) == "string" and Config.PETS[u.pet] and type(u.x) == "number" and type(u.z) == "number" and self:unitCount() < Config.MAX_UNITS then
+				if Config.canPlace(self.grid, u.pet, u.x, u.z, nil, Config.mapRules(self.stage)) then
+					local id = self:addUnit(u.pet, u.x, u.z)
+					self.grid[id].tier = num(u.tier, 1, Config.TIER_MAX, 1)
+				end
+			end
+		end
+	end
+	if type(d.upgrades) == "table" then
+		for pet, t in d.upgrades do
+			if self.upgrades[pet] and type(t) == "table" then
+				for kind in self.upgrades[pet] do
+					self.upgrades[pet][kind] = num(t[kind], 0, Config.UPGRADE_MAX, 0)
+				end
+			end
+		end
+	end
+	self.state, self.enemies, self.queue = "ready", {}, {}
+	self.userPaused, self.pauseLeft = true, Config.PAUSE_MAX
+	return true
 end
 
 function MatchSim.maxHp(self: Sim): number
@@ -214,6 +368,79 @@ function MatchSim.respec(self: Sim): (boolean, string?)
 	return true, nil
 end
 
+-- Lantern power (T011): the player lights a spot; familiars inside Config.LANTERN.radius fire faster and harder for Config.LANTERN.dur sim seconds, then it recharges.
+function MatchSim.lantern(self: Sim, x: any, z: any): (boolean, string?)
+	if self.tutorial then
+		return false, "Not in the tutorial"
+	end
+	if type(x) ~= "number" or type(z) ~= "number" or x ~= x or z ~= z then
+		return false, "Bad position"
+	end
+	if self.t < self.lanternReady then
+		return false, "The Lantern is recharging"
+	end
+	local L, b = Config.LANTERN, Config.PLACE_BOUNDS
+	self.lanternX, self.lanternZ = math.clamp(x, b.minX, b.maxX), math.clamp(z, b.minZ, b.maxZ)
+	self.lanternUntil = self.t + L.dur
+	self.lanternReady = self.t + L.cooldown
+	self.emit("Lantern", { x = self.lanternX, z = self.lanternZ, radius = L.radius, dur = L.dur, cooldown = L.cooldown })
+	return true, nil
+end
+
+-- (damage share, haste share) a unit gets from the lit Lantern
+function MatchSim.lanternBonus(self: Sim, u: any): (number, number)
+	if self.t >= self.lanternUntil then
+		return 0, 0
+	end
+	local L = Config.LANTERN
+	local dx, dz = u.x - self.lanternX, u.z - self.lanternZ
+	if dx * dx + dz * dz <= L.radius * L.radius then
+		return L.damage, L.haste
+	end
+	return 0, 0
+end
+
+-- A Fog Wisp reached its lamp-eating point (T417): it snuffs a lit Lantern, or darkens a ready one for a while.
+function MatchSim.eatLamp(self: Sim, e: any)
+	local L = Config.LAMP_EAT
+	if self.t < self.lanternUntil then
+		self.lanternUntil = self.t
+		self.lanternReady = math.max(self.lanternReady, self.t) + L.snuffCooldown
+		self.emit("LampEaten", { id = e.id, how = "snuffed" })
+	elseif self.t >= self.lanternReady then
+		self.lanternReady = self.t + L.darkFor
+		self.emit("LampEaten", { id = e.id, how = "darkened" })
+	end
+end
+
+-- Faction combo (T012): (damage share, haste share) from touching familiars whose factions pair up in Config.SYNERGIES; each entry counts once.
+function MatchSim.synergy(self: Sim, u: any): (number, number)
+	if not Config.SYNERGY_ON then
+		return 0, 0
+	end
+	local def = Config.PETS[u.pet]
+	local fa = def and def.faction
+	if not fa then
+		return 0, 0
+	end
+	local near = self:neighbours(u)
+	local d, h = 0, 0
+	for _, s in Config.SYNERGIES do
+		local partner = (fa == s.a and s.b) or (fa == s.b and s.a) or nil
+		if partner then
+			for _, o in near do
+				local od = Config.PETS[o.pet]
+				if od and od.faction == partner then
+					d += s.damage or 0
+					h += s.haste or 0
+					break
+				end
+			end
+		end
+	end
+	return math.min(d, Config.SYNERGY_CAP.damage), math.min(h, Config.SYNERGY_CAP.haste)
+end
+
 -- A merge needs two matching pets that touch plus a third matching pet dragged onto one of them.
 -- Dragging a onto b is valid if a third pet touches b, or a touches b and the third touches a.
 -- "Touching" = footprints within Config.TOUCH_GAP of each other (Config.touching).
@@ -250,17 +477,18 @@ function MatchSim.findSpot(self: Sim, pet: string): (number?, number?)
 		local j = self.rng:NextInteger(1, i)
 		order[i], order[j] = order[j], order[i]
 	end
+	local rules = Config.mapRules(self.stage)
 	for _, i in order do
 		local p = Config.SLOTS[i]
-		if Config.canPlace(self.grid, pet, p.X, p.Z) then
+		if Config.canPlace(self.grid, pet, p.X, p.Z, nil, rules) then
 			return p.X, p.Z
 		end
 	end
-	local b = Config.PLACE_BOUNDS
+	local b = rules and rules.bounds or Config.PLACE_BOUNDS
 	local bestX, bestZ, bestD = nil, nil, math.huge
 	for x = b.minX + 2, b.maxX - 2, 3 do
 		for z = b.minZ + 2, b.maxZ - 2, 3 do
-			if Config.canPlace(self.grid, pet, x, z) then
+			if Config.canPlace(self.grid, pet, x, z, nil, rules) then
 				local d = x * x + (z + 8) * (z + 8) -- prefer spots near the middle of the board
 				if d < bestD then
 					bestX, bestZ, bestD = x, z, d
@@ -319,17 +547,29 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 		return false, "Not enough gems"
 	end
 	local pet, rarity, x, z
+	local floored = false
 	if self.tutorial and #self.forced > 0 then
 		pet = self.forced[1]
 		rarity = Config.PETS[pet].rarity
 		local p = Config.SLOTS[self.forcedSlots[1]]
-		if p and Config.canPlace(self.grid, pet, p.X, p.Z) then
+		if p and Config.canPlace(self.grid, pet, p.X, p.Z, nil, Config.mapRules(self.stage)) then
 			x, z = p.X, p.Z
 		else
 			x, z = self:findSpot(pet)
 		end
 	else
 		rarity = self:pickRarity()
+		if Config.P3_ROLL_FLOOR and not self.tutorial and Gacha.floorDue(self.gacha) and Config.RARITIES[rarity].order < 2 then
+			-- P3: the 10th roll without a Rare or better is a Rare or better (picked by the same luck-weighted odds)
+			local names = {}
+			for _, r in Config.RARITY_ORDER do
+				if Config.RARITIES[r].order >= 2 then
+					table.insert(names, r)
+				end
+			end
+			rarity = Gacha.weightedPick(Config.rarityWeights(self:luck()), names, self.rng:NextNumber())
+			floored = true
+		end
 		pet, rarity = self:pickPet(rarity)
 		if not pet then
 			return false, "No characters configured"
@@ -346,9 +586,13 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 	self.gems -= self:rollCost()
 	self.rolls += 1
 	self.sincePity = Config.RARITIES[rarity].order >= 3 and 0 or self.sincePity + 1
-	local id = self:addUnit(pet, x, z)
+	local id = self:addUnit(pet :: string, x, z)
 	self.maxTier = math.max(self.maxTier, 1)
-	self.emit("Roll", { slot = id, pet = pet, rarity = rarity, x = x, z = z })
+	local dupeGems = self:countCopy(pet :: string)
+	if not self.tutorial then
+		Gacha.afterRoll(self.gacha, Config.RARITIES[rarity].order, Config.P3_ROLL_FLOOR, Config.P2_CHOSEN_GUARANTEE)
+	end
+	self.emit("Roll", { slot = id, pet = pet, rarity = rarity, x = x, z = z, floored = floored or nil, dupeGems = dupeGems > 0 and dupeGems or nil })
 	-- Double Hatch: a free bonus pet
 	local chance = self:sv("doubleHatch")
 	if chance > 0 and not self.tutorial and self.rng:NextNumber() < chance and self:unitCount() < Config.MAX_UNITS then
@@ -358,11 +602,80 @@ function MatchSim.roll(self: Sim): (boolean, string?)
 			bx, bz = self:findSpot(bonusPet)
 		end
 		if bx and bz then
-			local bid = self:addUnit(bonusPet, bx, bz)
-			self.emit("Roll", { slot = bid, pet = bonusPet, rarity = bonusRarity, bonus = true, x = bx, z = bz })
+			local bid = self:addUnit(bonusPet :: string, bx, bz)
+			local bonusGems = self:countCopy(bonusPet :: string)
+			self.emit("Roll", { slot = bid, pet = bonusPet, rarity = bonusRarity, bonus = true, x = bx, z = bz, dupeGems = bonusGems > 0 and bonusGems or nil })
 		end
 	end
 	return true, nil
+end
+
+-- Counts one pulled copy of a familiar (not in the tutorial, which never touches the collection). With P7 on, a copy past the last bond step pays gems; returns the gems paid.
+function MatchSim.countCopy(self: Sim, pet: string): number
+	if self.tutorial then
+		return 0
+	end
+	local before = self.owned[pet] or 0
+	self.owned[pet] = math.min(before + 1, Config.COLLECTION_MAX)
+	if Config.P7_DUPE_BOND and before >= 1 and Bond.dupeSurplus(before - 1) then
+		self.gems += Bond.DUPE_SURPLUS_GEMS
+		return Bond.DUPE_SURPLUS_GEMS
+	end
+	return 0
+end
+
+-- Permanent damage fraction from extra copies of this familiar (P7_DUPE_BOND; 0 when off).
+function MatchSim.dupePower(self: Sim, pet: string): number
+	if not Config.P7_DUPE_BOND then
+		return 0
+	end
+	return Bond.dupePower(math.max(0, (self.owned[pet] or 0) - 1))
+end
+
+-- P2: spend 100 Lantern Oil on one chosen familiar of Rare or better. Nothing is spent unless the familiar can be placed.
+function MatchSim.claimGuarantee(self: Sim, pet: any): (boolean, string?)
+	if not Config.P2_CHOSEN_GUARANTEE then
+		return false, "Not available"
+	end
+	if self.tutorial then
+		return false, "Not in the tutorial"
+	end
+	local def = type(pet) == "string" and Config.PETS[pet] or nil
+	if not def or Config.RARITIES[def.rarity].order < Gacha.MIN_CLAIM_ORDER then
+		return false, "Pick a Rare or better familiar"
+	end
+	if not Gacha.canClaim(self.gacha) then
+		return false, "Not enough Lantern Oil"
+	end
+	if self:unitCount() >= Config.MAX_UNITS then
+		return false, "Too many pets (max " .. Config.MAX_UNITS .. ")"
+	end
+	local x, z = self:findSpot(pet :: string)
+	if not x or not z then
+		return false, "No room left on the street"
+	end
+	Gacha.spend(self.gacha)
+	local id = self:addUnit(pet :: string, x, z)
+	self.maxTier = math.max(self.maxTier, 1)
+	local gems = self:countCopy(pet :: string)
+	-- bonus = true keeps it out of the roll counters and the shared Legendary banner; chosen = true lets the client stage it
+	self.emit("Roll", { slot = id, pet = pet, rarity = def.rarity, x = x, z = z, bonus = true, chosen = true, dupeGems = gems > 0 and gems or nil })
+	return true, nil
+end
+
+-- Gacha data for the client: floor counter, Lantern Oil, and (P7) the bond bonus of every familiar owned.
+function MatchSim.gachaSnapshot(self: Sim): { [string]: any }
+	local g = Gacha.snapshot(self.gacha, Config.P3_ROLL_FLOOR, Config.P2_CHOSEN_GUARANTEE)
+	g.dupeOn = Config.P7_DUPE_BOND
+	if Config.P7_DUPE_BOND then
+		local dupes = {}
+		for pet, n in self.owned do
+			local extra = math.max(0, n - 1)
+			dupes[pet] = { copies = n, step = Bond.dupeStep(extra), power = Bond.dupePower(extra), nextAt = Bond.dupeNext(extra) }
+		end
+		g.dupes = dupes
+	end
+	return g
 end
 
 -- Move a pet to any legal spot on the street.
@@ -371,7 +684,7 @@ function MatchSim.move(self: Sim, id: number, x: number, z: number): (boolean, s
 	if not u then
 		return false, "Pick a pet"
 	end
-	local ok, reason = Config.canPlace(self.grid, u.pet, x, z, id)
+	local ok, reason = Config.canPlace(self.grid, u.pet, x, z, id, Config.mapRules(self.stage))
 	if not ok then
 		return false, reason
 	end
@@ -501,15 +814,37 @@ function MatchSim.castUlt(self: Sim): (boolean, string?)
 end
 
 function MatchSim.damage(self: Sim, e: Enemy, amount: number, chargeUlt: boolean)
+	local bossFxNow = bossFx(e)
+	if bossFxNow and bossFxNow.candles and Config.BOSS_V2 then
+		-- candles (T416): each lit candle takes off a share, a slain mourner snuffs one
+		amount *= math.max(bossFxNow.candles.min, 1 - (e :: any).boss.lit * bossFxNow.candles.per)
+	elseif bossFxNow and bossFxNow.damageTaken then
+		amount *= bossFxNow.damageTaken
+	end
 	e.hp -= amount
+	if (e :: any).boss and e.hp > 0 then
+		self:checkPhase(e)
+	end
 	if e.hp <= 0 and not e.dead then
 		e.dead = true
 		local def = Config.ENEMIES[e.kind]
-		local coins = math.floor(def.coins * (1 + 0.1 * (self.stage - 1)) * (1 + self:sv("coins")) + 0.5)
-		local gems = math.floor(def.gems * Config.comboMult(self.combo) * (1 + self:sv("gems")) + 0.5)
+		local rewardMult = (e :: any).boss and (e :: any).boss.def.rewardMult or 1
+		local diff = Config.difficulty(self.difficulty)
+		local coins = math.floor(def.coins * rewardMult * (1 + 0.1 * (self.stage - 1)) * (1 + self:sv("coins")) * diff.coins * ((e :: any).coinMult or 1) + 0.5)
+		local gems = math.floor(def.gems * rewardMult * Config.comboMult(self.combo) * (1 + self:sv("gems")) * diff.gems * ((e :: any).gemMult or 1) + 0.5)
 		if (e :: any).carrying then
 			self.coins += 10 -- the stolen light drops as coins
 			self.emit("Drop", { id = e.id, coins = 10 })
+		end
+		if (e :: any).mourner then
+			for _, o in self.enemies do
+				local ob = (o :: any).boss
+				if ob and not o.dead and ob.lit and ob.lit > 0 then
+					ob.lit -= 1
+					self.emit("BossFx", { id = o.id, kind = "snuff", lit = ob.lit })
+					break
+				end
+			end
 		end
 		local perched = (e :: any).perched
 		if perched and self.grid[perched] then
@@ -561,10 +896,37 @@ function MatchSim.startStage(self: Sim)
 	self.leaked = false
 	self.leakCount = 0
 	local list = Config.stageSpawns(self.stage)
+	local v2 = Config.WAVES_V2
+	local elites = v2 and Config.stageElites(self.stage, list) or {}
+	local mod = v2 and Config.waveModifier(self.stage) or nil
+	local eliteCount = 0
 	for i, kind in list do
-		table.insert(self.queue, { at = self.t + (i - 1) * Config.SPAWN_GAP, kind = kind, stage = self.stage })
+		local q: any = { at = self.t + (i - 1) * Config.SPAWN_GAP, kind = kind, stage = self.stage }
+		if elites[i] then
+			q.elite, eliteCount = true, eliteCount + 1
+		end
+		if mod then
+			q.mod = mod.id
+		end
+		table.insert(self.queue, q)
 	end
-	self.emit("Stage", { stage = self.stage, boss = Config.isBossStage(self.stage), combo = self.combo })
+	-- fences and gates (T157): a fresh copy per stage; the lane position is a fraction of Path.length
+	local blockers = Config.blockersFor(self.stage)
+	for _, b in blockers do
+		b.D, b.t0, b.closedNow = b.at * Path.length, self.t, false
+		if b.kind == "fence" then
+			b.hp = b.hp or 50
+		end
+	end
+	;(self :: any).blockers = blockers
+	if #blockers > 0 then
+		local info = {}
+		for _, b in blockers do
+			table.insert(info, { id = b.id, kind = b.kind, at = b.at })
+		end
+		self.emit("Blockers", { stage = self.stage, list = info })
+	end
+	self.emit("Stage", { stage = self.stage, boss = Config.isBossStage(self.stage), combo = self.combo, mod = mod and mod.id or nil, modName = mod and mod.name or nil, elites = eliteCount })
 end
 
 -- The crystal fell: pushed back, not out.
@@ -604,6 +966,7 @@ function MatchSim.clearStage(self: Sim)
 	self.emit("Clear", { stage = self.stage, perfect = perfect, bonus = bonus, combo = self.combo })
 	self:addXp(8 + 2 * self.stage)
 	self.stage += 1
+	self.bestStage = math.max(self.bestStage, self.stage)
 	self.state = "ready"
 	self.breakClock = Config.STAGE_BREAK
 	self.bossClock = nil
@@ -797,6 +1160,26 @@ function MatchSim.roleHit(self: Sim, slot: number, u: any, e: any, dmg: number, 
 end
 
 -- per-enemy ticks: burn damage, the Brass Sentinel's plant, the Lantern Thief's steal, the Clockwork Crow's perch; returns the speed multiplier
+-- Is this fence standing or this gate closed right now (T157)? A gate opens first: open seconds, then closed, repeating.
+function MatchSim.blockerActive(self: Sim, b: any): boolean
+	if b.kind == "fence" then
+		return b.hp > 0
+	end
+	local cycle = (b.open or 0) + (b.closed or 0)
+	return cycle > 0 and (self.t - b.t0) % cycle >= (b.open or 0)
+end
+
+-- The nearest active blocker at or ahead of an enemy, or nil.
+function MatchSim.blockerAhead(self: Sim, e: any): any
+	local best: any = nil
+	for _, b in (self :: any).blockers do
+		if b.D >= e.dist and (not best or b.D < best.D) and self:blockerActive(b) then
+			best = b
+		end
+	end
+	return best
+end
+
 function MatchSim.enemyTick(self: Sim, e: any, dt: number): number
 	local mult = 1
 	if e.status then
@@ -862,25 +1245,202 @@ function MatchSim.enemyTick(self: Sim, e: any, dt: number): number
 			mult = 0
 		end
 	end
+	if Config.ENEMIES[e.kind].eatsLamp and not e.ate and e.dist >= Config.LAMP_EAT.at * Path.length then
+		e.ate = true
+		self:eatLamp(e)
+	end
 	return mult
 end
 
 function MatchSim.effective(self: Sim, u: Unit): (number, number, number)
 	local up = self.upgrades[u.pet]
-	local dmg = Config.petDamage(u.pet, u.tier) * (1 + Config.UPGRADES.Power.per * up.Power) * (1 + self:sv("damage"))
+	local dmg = Config.petDamage(u.pet, u.tier) * (1 + Config.UPGRADES.Power.per * up.Power) * (1 + self:sv("damage")) * (1 + self:dupePower(u.pet))
 	local _, auraHaste, auraDamage = self:auras(u)
 	local globalDamage, globalCrit = self:globals()
-	dmg *= 1 + auraDamage + globalDamage
-	local cd = Config.PETS[u.pet].cooldown / ((1 + Config.UPGRADES.Haste.per * up.Haste) * (1 + self:sv("haste")) * (1 + auraHaste))
+	local synDamage, synHaste = self:synergy(u)
+	local lanDamage, lanHaste = self:lanternBonus(u)
+	local sky = (self :: any).skyFx
+	local skyDamage = sky and sky.damage[Config.DAMAGE_TYPE[u.pet] or ""] or 0
+	dmg *= 1 + auraDamage + globalDamage + synDamage + lanDamage + skyDamage
+	local cd = Config.PETS[u.pet].cooldown / ((1 + Config.UPGRADES.Haste.per * up.Haste) * (1 + self:sv("haste")) * (1 + auraHaste + synHaste + lanHaste))
 	local crit = math.min(Config.CRIT_CAP, Config.UPGRADES.Crit.per * up.Crit + self:sv("crit") + globalCrit)
 	return dmg, cd, crit
 end
 
+-- Boss framework (see Config.BOSSES). The boss state lives on the enemy as e.boss = { def, phase, stage, timers }.
+function MatchSim.checkPhase(self: Sim, e: any)
+	local b = e.boss
+	while b.phase < #b.def.phases and e.hp / e.maxHp <= b.def.phases[b.phase + 1].at do
+		b.phase += 1
+		b.timers = {}
+		b.lit = 0
+		self.emit("BossPhase", { id = e.id, boss = b.def.id, name = b.def.name, phase = b.phase, phases = #b.def.phases, banner = b.def.phases[b.phase].banner, hpFrac = e.hp / e.maxHp })
+	end
+end
+
+-- Runs the current phase's timed effects; returns the boss's speed multiplier.
+function MatchSim.bossTick(self: Sim, e: any, dt: number): number
+	local b = e.boss
+	if not b or e.dead then
+		return 1
+	end
+	local fx = bossFx(e)
+	local T = b.timers
+	local function due(key: string, every: number): boolean
+		T[key] = (T[key] or 0) + dt
+		if T[key] >= every then
+			T[key] -= every
+			return true
+		end
+		return false
+	end
+	if fx.regen and due("regen", fx.regen.every) then
+		e.hp = math.min(e.maxHp, e.hp + e.maxHp * fx.regen.pct)
+		self.emit("BossFx", { id = e.id, kind = "regen" })
+	end
+	if fx.deny and due("deny", fx.deny.every) then
+		local newest
+		for id in self.grid do
+			if not newest or id > newest then
+				newest = id
+			end
+		end
+		if newest then
+			(self.grid[newest] :: any).disabledUntil = self.t + fx.deny.dur
+			self.emit("BossFx", { id = e.id, kind = "deny", slot = newest, dur = fx.deny.dur })
+		end
+	end
+	if fx.freeze and due("freeze", fx.freeze.every) then
+		for _, u in self.grid do
+			(u :: any).disabledUntil = math.max((u :: any).disabledUntil or 0, self.t + fx.freeze.dur)
+		end
+		self.emit("BossFx", { id = e.id, kind = "freeze", dur = fx.freeze.dur })
+	end
+	if fx.summon and due("summon", fx.summon.every) then
+		for i = 1, fx.summon.count do
+			table.insert(self.queue, { at = self.t + (i - 1) * Config.SPAWN_GAP, kind = fx.summon.kind, stage = b.stage, mourner = (Config.BOSS_V2 and fx.candles ~= nil) or nil })
+		end
+		self.emit("BossFx", { id = e.id, kind = "summon", enemy = fx.summon.kind, count = fx.summon.count })
+	end
+	if Config.BOSS_V2 then
+		if fx.lamp and due("lamp", fx.lamp.every) and not self.tutorial then
+			self.crystalHp = math.min(self:maxHp(), self.crystalHp + fx.lamp.heal)
+			self.emit("BossFx", { id = e.id, kind = "lamp", heal = fx.lamp.heal })
+		end
+		if fx.candles and (b.lit or 0) < fx.candles.count and due("candle", fx.candles.every) then
+			b.lit = (b.lit or 0) + 1
+			self.emit("BossFx", { id = e.id, kind = "candle", lit = b.lit })
+		end
+		if fx.push and due("push", fx.push.every) then
+			self:bossPush(e, fx.push)
+		end
+	end
+	if Config.BOSS_UNMERGE and fx.unmerge and due("unmerge", fx.unmerge.every) then
+		self:unmerge(e)
+	end
+	return fx.speedMult or 1
+end
+
+-- Echo push (T416): the unit nearest the boss slides `dist` studs straight away from it, or is stunned for a second when the spot is not legal.
+function MatchSim.bossPush(self: Sim, e: any, push: any)
+	local bp = Path.positionAt(e.dist)
+	local done: { [number]: boolean } = {}
+	for _ = 1, push.count do
+		local near, nd
+		for id, u in self.grid do
+			local d = (u.x - bp.X) ^ 2 + (u.z - bp.Z) ^ 2
+			if not done[id] and (not nd or d < nd) then
+				near, nd = id, d
+			end
+		end
+		if not near then
+			return
+		end
+		done[near] = true
+		local u = self.grid[near] :: any
+		local len = math.max(math.sqrt(nd), 1e-6)
+		local x, z = u.x + (u.x - bp.X) / len * push.dist, u.z + (u.z - bp.Z) / len * push.dist
+		local ok = Config.canPlace(self.grid, u.pet, x, z, near, Config.mapRules(self.stage))
+		if ok then
+			u.x, u.z = x, z
+			self.emit("Move", { id = near, x = x, z = z })
+		else
+			u.disabledUntil = math.max(u.disabledUntil or 0, self.t + 1)
+		end
+		self.emit("BossFx", { id = e.id, kind = "push", slot = near, moved = ok })
+	end
+end
+
+-- Clockmaker (T416, BOSS_UNMERGE): the highest merged unit falls back one tier into its three parts; skipped when the street has no room for the two new parts.
+function MatchSim.unmerge(self: Sim, e: any): boolean
+	local best, bt
+	for id, u in self.grid do
+		if u.tier >= 2 and (not bt or u.tier > bt) then
+			best, bt = id, u.tier
+		end
+	end
+	if not best or self:unitCount() + 2 > Config.MAX_UNITS then
+		return false
+	end
+	local u = self.grid[best]
+	local spots = {}
+	for _ = 1, 2 do
+		local x, z = self:findSpot(u.pet)
+		if not x or not z then
+			return false
+		end
+		local id = self:addUnit(u.pet, x, z)
+		self.grid[id].tier = u.tier - 1
+		table.insert(spots, id)
+	end
+	u.tier -= 1
+	self.emit("BossFx", { id = e.id, kind = "unmerge", slot = best, tier = u.tier, parts = spots })
+	return true
+end
+
+-- The slow aura of a live boss: { x, z, r2, factor } or nil. Units inside it cool down more slowly.
+function MatchSim.bossSlow(self: Sim): any
+	for _, e in self.enemies do
+		local fx = not e.dead and bossFx(e)
+		if fx and fx.slowAura then
+			local p = Path.positionAt(e.dist)
+			return { x = p.X, z = p.Z, r2 = fx.slowAura.radius * fx.slowAura.radius, factor = 1 / (1 + fx.slowAura.slow) }
+		end
+	end
+	return nil
+end
+
 function MatchSim.step(self: Sim, dt: number)
-	if self.paused then
+	if self.paused or self.userPaused then
 		return
 	end
 	self.t += dt
+
+	-- day, night and weather (T009): the effects of this moment, and an "Sky" event when they change
+	;(self :: any).skyFx = nil
+	if Config.SKY_ON then
+		local now = Config.skyAt(self.stage, self.t)
+		if now then
+			local key = (now.night and "night" or "day") .. ":" .. (now.weather or "")
+			if key ~= self.skyKey then
+				self.skyKey = key
+				self.emit("Sky", { night = now.night, weather = now.weather, stage = self.stage })
+			end
+			local fx = { enemySpeed = 1, range = 0, damage = {} :: { [string]: number } }
+			for _, name in { now.night and "night" or "", now.weather or "" } do
+				local eff = Config.SKY_EFFECTS[name]
+				if eff then
+					fx.enemySpeed *= eff.enemySpeed or 1
+					fx.range += eff.range or 0
+					for k, v in eff.damage or {} do
+						fx.damage[k] = (fx.damage[k] or 0) + v
+					end
+				end
+			end
+			;(self :: any).skyFx = fx
+		end
+	end
+	local skyFx = (self :: any).skyFx
 
 	if self.state == "ready" and self.autoWave then
 		self.breakClock -= dt
@@ -892,25 +1452,80 @@ function MatchSim.step(self: Sim, dt: number)
 	while self.queue[1] and self.queue[1].at <= self.t do
 		local q = table.remove(self.queue, 1) :: { at: number, kind: string, stage: number }
 		local def = Config.ENEMIES[q.kind]
-		local hp = def.hp * Config.hpScale(q.stage)
+		local bossDef = (q.kind == "Boss" and Config.BOSS_PHASES) and Config.bossDef(q.stage) or nil
+		local hp = def.hp * Config.hpScale(q.stage) * (bossDef and bossDef.hpMult or 1) * Config.difficulty(self.difficulty).hp
+		local qa: any = q
+		local mod = (Config.WAVES_V2 and qa.mod) and Config.waveModifier(q.stage) or nil
+		local speedMult, coinMult, gemMult = 1, 1, 1
+		if mod then
+			hp *= mod.hp or 1
+			speedMult, coinMult, gemMult = mod.speed or 1, mod.coins or 1, mod.gems or 1
+		end
+		if Config.WAVES_V2 and qa.elite then
+			local E = Config.ELITE
+			hp *= E.hp
+			speedMult, coinMult, gemMult = speedMult * E.speed, coinMult * E.coins, gemMult * E.gems
+		end
 		local e: Enemy = { id = self.nextId, kind = q.kind, hp = hp, maxHp = hp, dist = 0, dead = false }
+		if speedMult ~= 1 then
+			(e :: any).speedMult = speedMult
+		end
+		if coinMult ~= 1 or gemMult ~= 1 then
+			(e :: any).coinMult, (e :: any).gemMult = coinMult, gemMult
+		end
+		if Config.WAVES_V2 and qa.elite then
+			(e :: any).elite = true
+		end
+		if (q :: any).mourner then
+			(e :: any).mourner = true
+		end
+		if bossDef then
+			(e :: any).boss = { def = bossDef, phase = 1, stage = q.stage, timers = {}, lit = 0 }
+		end
 		self.nextId += 1
 		table.insert(self.enemies, e)
 		if q.kind == "Boss" then
 			self.bossClock = Config.BOSS_TIME + self:sv("bossTime")
 		end
-		self.emit("Spawn", { id = e.id, kind = e.kind, t = self.t, maxHp = hp })
+		self.emit("Spawn", { id = e.id, kind = e.kind, t = self.t, maxHp = hp, boss = bossDef and bossDef.id or nil, bossName = bossDef and bossDef.name or nil, elite = (e :: any).elite })
 	end
 
-	for _, e in self.enemies do
-		local pace = self:enemyTick(e, dt)
-		if (e :: any).pace ~= pace then
-			(e :: any).pace = pace
-			if Config.MOVEMENT_EFFECTS then
-				self.emit("Pace", { id = e.id, dist = e.dist, speed = Config.ENEMIES[e.kind].speed * pace, t = self.t })
+	local blockers = (self :: any).blockers
+	if blockers and #blockers > 0 then
+		for _, b in blockers do
+			if b.kind == "gate" then
+				local closed = self:blockerActive(b)
+				if closed ~= b.closedNow then
+					b.closedNow = closed
+					self.emit("Gate", { id = b.id, closed = closed })
+				end
 			end
 		end
-		e.dist += Config.ENEMIES[e.kind].speed * (Config.MOVEMENT_EFFECTS and pace or 1) * dt
+	else
+		blockers = nil
+	end
+	for _, e in self.enemies do
+		local pace = self:enemyTick(e, dt)
+		-- the speed multiplier the client must follow: movement effects (when on) times the boss phase's speedMult; "Pace" tells the client when it changes
+		local mult = (Config.MOVEMENT_EFFECTS and pace or 1) * self:bossTick(e, dt) * ((e :: any).speedMult or 1) * (skyFx and skyFx.enemySpeed or 1)
+		local blk = blockers and self:blockerAhead(e) or nil
+		if blk and blk.D - e.dist < 1e-6 then
+			mult = 0 -- waiting at the fence or gate; a fence takes damage from each enemy at it
+			if blk.kind == "fence" and not e.dead then
+				blk.hp -= (blk.breakDps or 8) * dt
+				if blk.hp <= 0 then
+					self.emit("BlockerBroken", { id = blk.id })
+				end
+			end
+		end
+		if ((e :: any).mult or 1) ~= mult then
+			(e :: any).mult = mult
+			self.emit("Pace", { id = e.id, dist = e.dist, speed = Config.ENEMIES[e.kind].speed * mult, t = self.t })
+		end
+		e.dist += Config.ENEMIES[e.kind].speed * mult * dt
+		if blk and e.dist > blk.D then
+			e.dist = blk.D
+		end
 		if e.dist >= Path.length and not e.dead then
 			e.dead = true
 			if not self.tutorial then
@@ -925,15 +1540,23 @@ function MatchSim.step(self: Sim, dt: number)
 		end
 	end
 
+	local slowAura = self:bossSlow()
 	for slot, u in self.grid do
-		u.cd -= dt
+		local slow = 1
+		if slowAura then
+			local dx, dz = u.x - slowAura.x, u.z - slowAura.z
+			if dx * dx + dz * dz <= slowAura.r2 then
+				slow = slowAura.factor
+			end
+		end
+		u.cd -= dt * slow
 		if ((u :: any).disabledUntil or 0) > self.t then
 			u.cd = math.max(u.cd, 0.1) -- a perched crow keeps this familiar from firing
 		elseif u.cd <= 0 then
 			local def = Config.PETS[u.pet]
 			local origin = Vector3.new(u.x, 0, u.z)
 			local rangeAura = self:auras(u)
-			local range = def.range * (1 + rangeAura)
+			local range = def.range * (1 + rangeAura + (skyFx and skyFx.range or 0))
 			local best: Enemy? = nil
 			for _, e in self.enemies do
 				if not e.dead and (not best or e.dist > best.dist) then
@@ -994,6 +1617,16 @@ function MatchSim.step(self: Sim, dt: number)
 	end
 end
 
+function MatchSim.bossSnapshot(self: Sim): any
+	for _, e in self.enemies do
+		local b = (e :: any).boss
+		if b and not e.dead then
+			return { id = e.id, name = b.def.name, phase = b.phase, phases = #b.def.phases, hp = e.hp, maxHp = e.maxHp }
+		end
+	end
+	return nil
+end
+
 function MatchSim.snapshot(self: Sim): { [string]: any }
 	local grid = {}
 	for i, u in self.grid do
@@ -1017,8 +1650,14 @@ function MatchSim.snapshot(self: Sim): { [string]: any }
 		combo = self.combo,
 		ult = self.ult,
 		bossClock = self.bossClock,
+		boss = self:bossSnapshot(),
 		tutorial = self.tutorial,
 		paused = self.paused,
+		userPaused = self.userPaused,
+		pauseLeft = self.pauseLeft,
+		difficulty = self.difficulty,
+		lanternCd = math.max(0, self.lanternReady - self.t),
+		lanternOn = self.t < self.lanternUntil,
 		state = self.state,
 		autoWave = self.autoWave,
 		rolls = self.rolls,
@@ -1030,6 +1669,7 @@ function MatchSim.snapshot(self: Sim): { [string]: any }
 		xpNeed = Config.xpNeed(self.level),
 		luck = self:luck(),
 		sincePity = self.sincePity,
+		gacha = self:gachaSnapshot(),
 		upgrades = ups,
 		grid = grid,
 	}

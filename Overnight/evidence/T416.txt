@@ -1,0 +1,9 @@
+PASS
+T416: Automaton lamp (heals a life), Echo pushes, Regent candles (replace the flat 85%), Clockmaker un-merge. Flags Config.BOSS_V2 and Config.BOSS_UNMERGE, both OFF by default. Changed: Shared.Config, Shared.MatchSim (mirrored to Studio_Export), Tests/Boss.test.luau (31 old checks kept, 17 new).
+RunAll (Studio Edit, 2026-10-29 night):
+ActionArgs PASS; Balance PASS; Boss PASS Boss: 48/48 checks ok; Combat 74/74; Combo 29/29; Env 24/24; FamiliarMaterials 69/69; Familiars 32/32; GameSpeed PASS; Lantern 17/17; LoreFragments PASS; MatchSim PASS; NewRoles 27/27; NumberFormat PASS; Rules 90/90; SaveMigration 40/40; ServerRules 83/83; SettingsDefaults PASS; SoundCap PASS; StageSets PASS; Waves 34/34
+SUMMARY 21 of 21 suites PASS
+lean bot (full strategy, 10 seeds, defaults): cleared 25 stages on 10 of 10 seeds (0 failed)
+lean bot with BOSS_V2 and BOSS_UNMERGE on: cleared 25 stages on 10 of 10 seeds (0 failed); stage 25 boss avg 190 s vs 144 s
+New cases (all ok): flags off by default; flag off: no lamp, no pushes, Regent flat 85%, no un-merge; Automaton phase 2 lamp +1 life and capped at max; Echo phase 1 pushes one unit 6 studs (or stuns), phase 2 pushes two; Regent candles: 0 lit = 100% taken, 3 lit = 76%, 7 lit = 44% (capped), killing a mourner snuffs a candle; Clockmaker un-merges a tier 2 unit into 3 tier 1 (5 units/5 tiers), skipped with no room.
+UNVERIFIED: client has no visuals for the BossFx kinds lamp, candle, snuff, push, unmerge; numbers are placeholders; Hollow mourners are Grunts.

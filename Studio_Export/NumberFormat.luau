@@ -17,7 +17,7 @@ end
 
 local function grouped(n: number): string
 	local s = string.format("%.0f", n)
-	local out = string.reverse(string.gsub(string.reverse(s), "(%d%d%d)", "%1,"))
+	local out = string.reverse((string.gsub(string.reverse(s), "(%d%d%d)", "%1,")))
 	return (string.gsub(out, "^,", ""))
 end
 

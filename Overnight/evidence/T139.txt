@@ -1,0 +1,12 @@
+PASS
+New module StarterPlayerScripts.EnemyBars (Studio_Export/EnemyBars.luau, 3,389 chars). GameClient hooks: one require before spawnEnemy, `EnemyBars.decorate(...)` at the end of spawnEnemy, one branch `kind == "Status"` -> EnemyBars.status (server event Status {id, kind, dur, stacks}). No Models.luau change.
+Bar: 62x8 px -> 80x11 px (boss 130x14 -> 150x16), 2 px opaque near-black outline, light top-edge gradient on the fill. Measured in Play (viewport 1617x777): bar AbsoluteSize 80x11, status row 80x18, icon 18x18 (24 px pop for 0.18 s unless reducedMotion).
+Icons: dark disc (14,14,24), ring and letter in the status colour: burn B orange, chill C(n stacks) cyan, stun S yellow, mark M pink, hush H violet; removed after the event dur; killEnemy destroys the billboard with them.
+Play: real Statuses from QAGrant Ember, Zap, Frostling: client received burn and mark events; rows=3, icon "B" present with size 18.
+Contrast (WCAG, tool-computed; backdrop RGBs are my estimates of the street: light cobble (150,125,105), dark cobble (35,35,50), lit pavement (235,215,170)):
+glyph vs disc: burn 8.3, chill 10.8, stun 15.2, mark 6.9, hush 7.7 (all >= 4.5)
+ring vs light cobble: burn 1.7 chill 2.2 stun 3.1 mark 1.4 hush 1.5; vs dark cobble: 6.7 8.7 12.3 5.6 6.2; the dark disc carries it on light ground (disc vs light cobble 5.0, vs dark cobble 1.2, where the ring carries it).
+hp fill red (255,76,90) vs plate 5.7; plate vs light cobble 4.8; 2 px black outline vs light cobble 5.2; fill vs dark cobble 4.7.
+Each status is also distinguished by its letter, not colour alone.
+RunAll 28 of 28 PASS. Console clean (only the pre-existing asset-authorization lines).
+UNVERIFIED: how it looks on screen (the wave dies in seconds, my captures caught enemies before the bars were large and later none; numbers above come from properties), chill/stun/hush icons in a live run (burn and mark events observed; chill/stun/hush use the same code path), the cobble RGB estimates, readability on the boss billboard beyond the 150x16 size.

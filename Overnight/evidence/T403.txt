@@ -1,0 +1,8 @@
+PASS (function and static pose proof; live playback UNVERIFIED, see below)
+Change: Models.react(model, "Hit"|"Death") added to StarterPlayerScripts.Models (wrapper over Models.playClip, asserts the clip name), mirrored to Studio_Export/Models.luau. No safe existing leak/banish event is reachable without editing GameClient (173,770 of 200,000 chars, held by UI chats), so no caller was added; the function and a doc comment are the documented hook.
+Play run: Cantor Vesper and Constable Wren placed on the board (ClientVisuals, MeshPet set).
+Models.react(Vesper,"Hit") and ("Death") returned tracks: Death Length 1.2 s, Hit Length 0.5 s, IsPlaying true, no error. Idle/Hit/Death/Attack/Walk ids load from Characters/CantorVesper/Animations.
+Static pose proof: FamiliarClips.build(model,"biped","Death") applied to the board unit's 14 bones at t=1.2: Spine Transform rx = 50.0 deg (rest 0); screen_capture t403_a (before) vs t403_death (after) show the unit's silhouette change at about (700,245) (unit is about 25 px tall).
+UNVERIFIED: live Animator playback. In this Studio session AnimationTrack TimePosition stays 0.000 and WeightCurrent 0.00 for every track, including a KeyframeSequence registered locally (Ember Walk) and a server-side test rig, and bone Transforms stay identity: the Animator is not stepping in this session (same note as in Roblox Dev/Design/Human Familiars.md). Look and feel of Hit/Death on the board UNVERIFIED.
+Console during run: reveal errors from RevealSection (pre-existing, not touched) and "User is not authorized to access Asset" (cloud script, pre-existing).
+Files: Studio_Export/Models.luau; Studio: StarterPlayer.StarterPlayerScripts.Models.

@@ -1,0 +1,10 @@
+PASS
+T167: lane shape per stage set as data. Studio_Export/StageSets.luau: each of the 5 sets has path = waypoints { x, z } (set 1 Lampwick Lane is exactly today's Config.PATH; the other four are new shapes). Config.PATH_PER_SET (OFF) + Config.pathFor(stage) in Studio_Export/Config.luau (flag off returns the single Config.PATH for every stage); Config.setFor(stage) factored out of skyFor.
+Tests/StageSets.test.luau, new cases per set: >= 4 waypoints, inside build bounds (lane half width margin), every segment >= 8, every bend 20 to 135 degrees, >= 4 bends, no two non-adjacent segments within 2 lane widths, length 0.6 to 1.8 x today's, shapes pairwise different; set 1 equals Config.PATH; pathFor flag off/on/wrap. StageSets suite: PASS (81 checks, 31 before). (The first run of the new cases failed on 3 sets whose points left the bounds or were too short; shapes were fixed, not the checks.)
+python tools/check_stages_complete.py: "25 stages, 0 with gaps; StageSets defines 5 sets" (exit 0).
+RunAll (Studio Edit, 2026-10-29 night, after T167+T177+T157): Achievements 26/26; ActionArgs PASS; Balance PASS; Bond 28/28; Boss 48/48; Combat 74/74; Combo 29/29; Endless 18/18; Env 24/24; FamiliarMaterials 69/69; Familiars 32/32; GameSpeed PASS; Lantern 17/17; Leaderboard 25/25; LoreFragments PASS; MatchSim PASS; NewRoles 27/27; NumberFormat PASS; Quests 30/30; Rules 139/139 (was 90); SaveMigration 40/40; ServerRules 83/83; SettingsDefaults PASS; SoundCap PASS; StageSets PASS; Waves 34/34
+SUMMARY 26 of 26 suites PASS
+lean bot (full strategy, 10 seeds, defaults): cleared 25 stages on 10 of 10 seeds (0 failed)
+lean bot with PATH_PER_SET, MAP_RULES, PATH_BLOCKERS all on: cleared 25 stages on 10 of 10 seeds (0 failed)
+Not wired: Shared.Path and MapBuilder still build the one Config.PATH at load, so turning PATH_PER_SET on changes only Config.pathFor/mapRules answers, not the 3D lane or enemy movement. Map and Path switching per set is a later task (world lane).
+Files: Studio_Export/StageSets.luau, Studio_Export/Config.luau, Tests/StageSets.test.luau (Studio scripts ReplicatedStorage.Shared.StageSets and .Config updated from these files).

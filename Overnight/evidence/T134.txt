@@ -1,4 +1,9 @@
-PASS (design written, not implemented): Fog Wisp redesign: lantern-eating wisp, readable silhouette, sound cue
-Where: Roblox Dev/Design/Enemy Bible.md, the section for this enemy: behaviour, numbers (PROPOSAL), telegraph, counter, silhouette; model status in Roblox Dev/Design/Enemy Models.md.
-Checked: uses only facts from Config.ENEMIES, the research roster and the lore; the numbers are targets for balance tests, not tested.
-Limits: no code, no sound (the sound cue is described, not made), no Studio test; the silhouette is judged only by the model checks (tools/verify_enemy_model.py).
+PASS
+T134 hit and death effects per enemy family, studio-fx2, 2026-10-29. (Replaces an older evidence file with the same id from the archived design list; still in git history.)
+New ReplicatedStorage.EnemyFamilyFX driven by FxLayer (no GameClient edit): hit = the enemy Highlight fill jumping from >= 0.9 to <= 0.35 (a shot); death = the health bar BillboardGui removed while the model stays (a kill). Families: hollow (Grunt, Parishioner), fog (Swift, FogWisp), brass (Tank), crow, thief, clockwork (Boss). Hits use parts only (<= 5), deaths 1 emitter + <= 10 parts, 0.12 s hit gap per model.
+Play counters (script attributes on FxCommon): hit and death for hollow, fog, brass and crow from real waves (stages 4 to 8); clockwork hit=12, death=1 from the stage 5 boss; thief hit=1, death=1 and extra hollow/fog counts from stand-in models named Thief, Parishioner and FogWisp injected into ClientVisuals (no thief spawned in the waves). Every one of the six families has a hit and a death counted.
+Capture: Overnight/captures/fx2/T134_edit_dummies_hit_back_death_front.jpg (stand-in boxes, Edit mode, slowed; back row hits, front row deaths). No in-wave screenshot: waves clear in seconds and the reveal queue covers the screen.
+Burst cap: emitter peak in real waves Default 16, Low 7 (cap 10), High + Reduced Motion 2. No Highlights added.
+Reduced motion: only a short static glow where the effect would be.
+UNVERIFIED: how any hit or death looks against the real enemy meshes (nobody looked). The per-familiar hit accent on the enemy is the small ring in FamiliarShots (T133).
+Files: Studio_Export/EnemyFamilyFX.luau, FxLayer.luau.

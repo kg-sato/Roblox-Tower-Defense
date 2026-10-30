@@ -1,0 +1,15 @@
+PASS (hud-rework, 2026-10-30, Studio Edit mode on the reopened 15:06 save)
+Install: Play stopped first. From Studio_Export (working tree, newer than the save): HudRework (new ModuleScript, StarterPlayerScripts), Gacha (new ModuleScript, ReplicatedStorage.Shared), GCHudDressing, HudPolish, Config, Bond, MatchSim, MatchService. A source diff of every Studio_Export file against Studio then showed the save matched HEAD, so the uncommitted working-tree edits were also reinstalled: GameClient, GCPanelKit, SettingsPanel, SkillGrove, TrainerRoad, ResultsScreen, Quests, LeaderboardRules, NumberFormat, Backdrop, Familiars, EnemyPace. Data_* files live in Shared.Data (not missing).
+Bug fixed: MatchService.startRun called syncProfile before the local was defined (nil call when a run replaces a run with hooks). syncProfile now sits above startRun (Studio_Export/MatchService.luau lines 113 to 126).
+RunAll: SUMMARY 36 of 36 suites PASS (P2Guarantee 19/19, P3Floor 20/20, P7DupeBond 16/16, Bond 35/35, SaveMigration 49/49, ServerRules 91/91, Rules 139/139).
+Lean bot, 10 seeds, default flags: PASS, all 10 seeds clear 25 stages (375 to 834 s); gems/min 228; first Legendary 77 s, Mythic 368 s (10/10), Celestial 495 s (1/10).
+Lean bot, P2_CHOSEN_GUARANTEE + P3_ROLL_FLOOR + P7_DUPE_BOND on: PASS, all 10 seeds clear (348 to 902 s); gems/min 236; first Legendary 104 s, Mythic 259 s (7/10), Celestial 348 s (3/10).
+Config flags in Studio stay default off. Place not saved.
+UNVERIFIED: a Play run of MatchService with the fix (checked by load order only); balance judgement of the flag-on numbers.
+
+--- earlier note (blocked attempt) ---
+BLOCKED: Studio row in QUEUE.md was held by hud-rework round 10 for 50+ minutes (14:00 to 15:20); no Studio access, so nothing was installed or run.
+Done (files only): Studio_Export/Gacha.luau (new), Bond.luau (dupe steps), MatchSim.luau, MatchService.luau (profile.gacha, version 2, Guarantee action), Config.luau (3 flags, off); Tests/P3Floor, P2Guarantee, P7DupeBond .test.luau; Roblox Dev/Design/Summon Server API.md.
+Checked: luau-analyze clean on Gacha and Bond; MatchSim 13 type errors vs 11 baseline (both are Roblox-global noise); MatchService/Config only Roblox-global noise.
+UNVERIFIED: all suites, RunAll, lean bot 10 seeds, balance impact with flags on.
+Next: claim Studio; copy the 5 changed scripts and new Gacha module into Studio (Shared.Gacha new ModuleScript); serve Tests; RunAll; lean_bot with flags {P3_ROLL_FLOOR=true} etc.

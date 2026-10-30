@@ -9,8 +9,9 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 LORE = ROOT / "Roblox Dev" / "Lore"
 CHAR = {"Ember": "Ember", "Frostling": "Frostling", "StarDrake": "StarDrake", "Gargoyle": "Boulder", "MirrorChorister": "VoltFox", "MothLantern": "Zap",
         "BrassHound": "BrassHound", "Sentinel": "Sentinel", "Ward": "Ward", "Archivist": "Archivist", "Mourner": "Mourner", "GreyVeilWraith": "GreyVeilWraith",
-        "CantorVesper": "CantorVesper", "DameOrrery": "DameOrrery", "TheLamplighter": "TheLamplighter", "VeilWalker": "VeilWalker"}
-ORDER = ["Ember", "MothLantern", "BrassHound", "Sentinel", "Frostling", "Gargoyle", "Ward", "Archivist", "Mourner", "MirrorChorister", "StarDrake", "GreyVeilWraith", "CantorVesper", "DameOrrery", "TheLamplighter", "VeilWalker"]
+        "CantorVesper": "CantorVesper", "DameOrrery": "DameOrrery", "TheLamplighter": "TheLamplighter", "VeilWalker": "VeilWalker",
+        "ConstableWren": "ConstableWren", "MadamQuill": "MadamQuill", "CogWarden": "CogWarden", "FerrymanOfFog": "FerrymanOfFog"}
+ORDER = ["Ember", "MothLantern", "BrassHound", "Sentinel", "Frostling", "Gargoyle", "Ward", "Archivist", "Mourner", "MirrorChorister", "StarDrake", "GreyVeilWraith", "CantorVesper", "DameOrrery", "TheLamplighter", "VeilWalker", "ConstableWren", "MadamQuill", "CogWarden", "FerrymanOfFog"]
 
 
 def q(s):

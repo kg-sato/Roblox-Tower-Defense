@@ -1,0 +1,15 @@
+PASS
+T=T604; generator VFX/sfx/make_cues.py; machine checks only, ear quality UNVERIFIED
+name                     dur    peak     rms  st400ms  clip  result
+ui_click_soft           0.10   -8.0d  -23.2d   -23.2d     0  PASS
+ui_hover                0.07  -12.0d  -26.1d   -26.1d     0  PASS
+ui_error                0.30   -6.9d  -20.0d   -20.0d     0  PASS
+ui_buy                  0.80   -6.9d  -23.1d   -20.1d     0  PASS
+ui_quest                1.35   -6.9d  -22.0d   -17.2d     0  PASS
+ui_achievement          2.40   -6.0d  -21.8d   -15.7d     0  PASS
+ui_levelup              2.80   -5.2d  -20.6d   -14.7d     0  PASS
+Overnight/captures/audio_cues_T604_spectrogram.png (0-5 kHz): 7 spectrograms stacked top to bottom in this order: ui_click_soft, ui_hover, ui_error, ui_buy, ui_quest, ui_achievement, ui_levelup
+check_sound_lengths.py:
+39 MANIFEST.md sounds checked
+all sounds within their declared length
+exit 0

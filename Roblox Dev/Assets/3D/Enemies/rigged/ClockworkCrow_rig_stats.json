@@ -1,0 +1,59 @@
+{
+ "name": "ClockworkCrow",
+ "archetype": "flyer",
+ "triangles": 416,
+ "vertices": 804,
+ "height": 2.685,
+ "bones": [
+  "Root",
+  "Pelvis",
+  "Spine",
+  "Chest",
+  "Neck",
+  "Head",
+  "Tail1",
+  "Tail2",
+  "WingInner.L",
+  "WingInner.R",
+  "WingOuter.L",
+  "WingOuter.R"
+ ],
+ "max_influences": 4,
+ "weight_sum_min": 1.0,
+ "weight_sum_max": 1.0,
+ "owned_vertices_by_bone": {
+  "Root": 120,
+  "Pelvis": 294,
+  "Spine": 240,
+  "Chest": 42,
+  "Neck": 18,
+  "Head": 0,
+  "Tail1": 48,
+  "Tail2": 36,
+  "WingInner.L": 45,
+  "WingInner.R": 45,
+  "WingOuter.L": 60,
+  "WingOuter.R": 60
+ },
+ "pose_tests": {
+  "Walk": {
+   "t": 0.25,
+   "vertices_moved": 699,
+   "max_move_height_fraction": 0.5596,
+   "finite": true
+  },
+  "Hit": {
+   "t": 0.1,
+   "vertices_moved": 732,
+   "max_move_height_fraction": 0.3809,
+   "finite": true
+  },
+  "Death": {
+   "t": 1.2,
+   "vertices_moved": 786,
+   "max_move_height_fraction": 1.5578,
+   "finite": true
+  }
+ },
+ "overrides": []
+}

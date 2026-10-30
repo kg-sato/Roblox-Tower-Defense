@@ -1,4 +1,11 @@
-PASS WITH A GAP (server side installed in Studio and mirrored; tested; no UI)
-Built: Config.RESPEC_COST = 50 gems and Config.RESPEC_COOLDOWN = 120 sim seconds; MatchSim.respec (refunds every point spent as Skill Points, resets the tree to Start, clamps the crystal hp to the new maximum, emits "Respec" {refunded, cost}); a Respec action in MatchService (ACTION_KINDS and the dispatch). Mirrored in Studio_Export (Config, MatchSim, MatchService).
-Tests (Studio Edit mode): ServerRules 55 of 55 (10 new respec checks: nothing to refund refused, exact refund, fee, tree reset, event, hp clamp, cooldown refusal, works after the cooldown, too few gems refused and tree kept); MatchSim, Rules, ActionArgs and SaveMigration still PASS.
-Gap: no Respec button (the skill tree screen belongs to the loading-eye chat, who was told the action name and event); the cooldown counts sim seconds inside one run and is not saved between runs.
+PASS
+GameClient 173,824 -> 140,235 characters (limit 200,000; target 150,000). Backup: ServerStorage.GameClient_backup_T198.
+Moved verbatim into 9 ModuleScripts in StarterPlayerScripts (each `return function(env)`): GCPanelKit (makePanel), GCHudDressing, GCUpgradeRows,
+GCTutSeal, GCFeatured, GCSettingsApply (FXK.applySettings), GCBossPlate (The Wick boss plate; lastSnap via getSnap()), GCOddsRows, GCMergeCut (Merge cutscene branch of OnClientEvent).
+Checks (all done by script): no block assigns an outside scalar; lastSnap is the only reassigned outside name used (passed as a getter).
+Play (Client): Start + SkipTutorial, 45 s: PlayerGui descendant counts BEFORE (backup source) vs AFTER identical: HUD 4310, Collection 182, NowPlaying 29.
+Play: QAProfile stage:5, 4 QAGrant, StartWave ran; server-fired Event "Merge" short (tier 2) and full cutscene (tier 4) paths ran; console: no script errors
+(only the pre-existing "User is not authorized to access Asset" lines, same in the before run).
+RunAll: SUMMARY 28 of 28 suites PASS. tools/script_sizes.py: largest GameClient 140,227.
+Mirrored: Studio_Export/GameClient.luau + the 9 GC*.luau.
+UNVERIFIED: pixel look of the HUD (counts equal, screenshot not compared; the capture taken showed the Collection screen), boss plate visuals while a boss is live, ult/other branches untouched.

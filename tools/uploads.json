@@ -1126,5 +1126,971 @@
   "type": "Decal",
   "assetId": "103918551040206",
   "time": "2026-10-29 14:03"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CantorVesper_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "111755183195492",
+  "time": "2026-10-29 15:06"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CantorVesper_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "92564774580885",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CantorVesper_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "115167173392830",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CantorVesper_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "120823661265971",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CantorVesper_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "84105644943359",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/DameOrrery_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "126626877895658",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/DameOrrery_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "90108742894285",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/DameOrrery_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "71424311990602",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/DameOrrery_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "129124905942506",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/DameOrrery_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "120536152700476",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/TheLamplighter_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "103840120478519",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/TheLamplighter_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "97484836783702",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/TheLamplighter_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "74108757367639",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/TheLamplighter_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "127637182554164",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/TheLamplighter_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "89121859012387",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VeilWalker_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "112947395281798",
+  "time": "2026-10-29 15:07"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VeilWalker_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "106412719609902",
+  "time": "2026-10-29 15:08"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VeilWalker_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "108261744215622",
+  "time": "2026-10-29 15:08"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VeilWalker_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "110409424576530",
+  "time": "2026-10-29 15:08"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VeilWalker_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "103223214507393",
+  "time": "2026-10-29 15:08"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/ConstableWren_rigged.glb",
+  "type": "Model",
+  "assetId": "99720337419253",
+  "time": "2026-10-29 16:34"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/ConstableWren_BaseColor.png",
+  "type": "Decal",
+  "assetId": "132991960018565",
+  "time": "2026-10-29 16:34"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/MadamQuill_rigged.glb",
+  "type": "Model",
+  "assetId": "124637000398787",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/MadamQuill_BaseColor.png",
+  "type": "Decal",
+  "assetId": "75486492195389",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/CogWarden_rigged.glb",
+  "type": "Model",
+  "assetId": "128047234263813",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/CogWarden_BaseColor.png",
+  "type": "Decal",
+  "assetId": "84091719510381",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/rigged/FerrymanOfFog_rigged.glb",
+  "type": "Model",
+  "assetId": "126312687773119",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/gold/FerrymanOfFog_BaseColor.png",
+  "type": "Decal",
+  "assetId": "95991038779586",
+  "time": "2026-10-29 16:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/ConstableWren_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "92718111276555",
+  "time": "2026-10-29 16:36"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/ConstableWren_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "80833612328996",
+  "time": "2026-10-29 16:36"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/ConstableWren_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "91717559458415",
+  "time": "2026-10-29 16:36"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/ConstableWren_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "83522939395326",
+  "time": "2026-10-29 16:36"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/ConstableWren_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "124678587901553",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/MadamQuill_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "110675701836198",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/MadamQuill_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "89847662610535",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/MadamQuill_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "100837798287130",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/MadamQuill_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "124207566291276",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/MadamQuill_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "85431449650614",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CogWarden_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "79102047505162",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CogWarden_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "133069679617807",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CogWarden_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "70885088625664",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CogWarden_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "112119258612806",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/CogWarden_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "122336116732262",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/FerrymanOfFog_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "84709484237976",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/FerrymanOfFog_Walk.rbxmx",
+  "type": "Animation",
+  "assetId": "91366107093592",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/FerrymanOfFog_Attack.rbxmx",
+  "type": "Animation",
+  "assetId": "120185630494797",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/FerrymanOfFog_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "96020261101074",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/FerrymanOfFog_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "108556216544150",
+  "time": "2026-10-29 16:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/ConstableWren_cutout.png",
+  "type": "Decal",
+  "assetId": "130529500306008",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/ConstableWren_lore.png",
+  "type": "Decal",
+  "assetId": "73237313923491",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/MadamQuill_cutout.png",
+  "type": "Decal",
+  "assetId": "90455337557183",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/MadamQuill_lore.png",
+  "type": "Decal",
+  "assetId": "82342736143900",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/CogWarden_cutout.png",
+  "type": "Decal",
+  "assetId": "76464098140186",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/CogWarden_lore.png",
+  "type": "Decal",
+  "assetId": "133110636742859",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Collection/FerrymanOfFog_cutout.png",
+  "type": "Decal",
+  "assetId": "113556706665399",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "Roblox Dev/Assets/Characters/Cards/FerrymanOfFog_lore.png",
+  "type": "Decal",
+  "assetId": "110766383718160",
+  "time": "2026-10-29 18:12"
+ },
+ {
+  "file": "VFX/sfx/out/ui_buy.wav",
+  "type": "Audio",
+  "assetId": "138935227500698",
+  "time": "2026-10-29 19:33"
+ },
+ {
+  "file": "VFX/sfx/out/ui_click_soft.wav",
+  "type": "Audio",
+  "assetId": "111673041051226",
+  "time": "2026-10-29 19:33"
+ },
+ {
+  "file": "VFX/sfx/out/ui_error.wav",
+  "type": "Audio",
+  "assetId": "109055487674361",
+  "time": "2026-10-29 19:34"
+ },
+ {
+  "file": "VFX/sfx/out/ui_levelup.wav",
+  "type": "Audio",
+  "assetId": "89524906675033",
+  "time": "2026-10-29 19:34"
+ },
+ {
+  "file": "VFX/sfx/out/familiar_place.wav",
+  "type": "Audio",
+  "assetId": "135206057906557",
+  "time": "2026-10-29 19:34"
+ },
+ {
+  "file": "VFX/sfx/out/reveal_legendary.wav",
+  "type": "Audio",
+  "assetId": "100672209997679",
+  "time": "2026-10-29 19:34"
+ },
+ {
+  "file": "VFX/sfx/out/reveal_celestial.wav",
+  "type": "Audio",
+  "assetId": "114164363714017",
+  "time": "2026-10-29 19:34"
+ },
+ {
+  "file": "VFX/sfx/out/boss_intro_clockmaker.wav",
+  "type": "Audio",
+  "assetId": "129659992794232",
+  "time": "2026-10-29 19:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Ember_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "91002846706067",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Ember_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "75304203835974",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Ember_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "73189270229744",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Zap_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "100173029329809",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Zap_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "96377553007403",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Zap_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "116491558387508",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Frostling_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "106280935189804",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Frostling_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "81661219380430",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Frostling_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "96739918079923",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Boulder_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "83258853584487",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Boulder_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "114197638460618",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Boulder_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "109001004667590",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VoltFox_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "96099682191668",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VoltFox_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "72478502101154",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/VoltFox_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "134860278003775",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/StarDrake_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "96375141022120",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/StarDrake_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "73705955364906",
+  "time": "2026-10-29 20:34"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/StarDrake_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "110586006933366",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/BrassHound_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "100492543730481",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/BrassHound_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "101616266207560",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/BrassHound_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "121321111300347",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Sentinel_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "80630693430576",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Sentinel_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "82705966026729",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Sentinel_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "99038348328288",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Ward_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "122149443076888",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Ward_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "92711036989591",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Ward_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "96067150599444",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Archivist_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "125484912291275",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Archivist_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "102513709239949",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Archivist_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "79024676851141",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Mourner_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "121015101084539",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Mourner_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "95482758104339",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/Mourner_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "132393887668811",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/GreyVeilWraith_Idle.rbxmx",
+  "type": "Animation",
+  "assetId": "101383034172711",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/GreyVeilWraith_Hit.rbxmx",
+  "type": "Animation",
+  "assetId": "120859950809993",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Animation Kit/out/familiar_clips/GreyVeilWraith_Death.rbxmx",
+  "type": "Animation",
+  "assetId": "73679213001879",
+  "time": "2026-10-29 20:35"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/maps/Archivist_Normal_512.png",
+  "type": "Decal",
+  "assetId": "116668490036584",
+  "time": "2026-10-29 20:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/maps/BrassHound_Normal_512.png",
+  "type": "Decal",
+  "assetId": "92053094306926",
+  "time": "2026-10-29 20:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/maps/Ember_Normal_512.png",
+  "type": "Decal",
+  "assetId": "134285583863419",
+  "time": "2026-10-29 20:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/maps/Frostling_Normal_512.png",
+  "type": "Decal",
+  "assetId": "115740402157858",
+  "time": "2026-10-29 20:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/maps/GreyVeilWraith_Normal_512.png",
+  "type": "Decal",
+  "assetId": "94873610654703",
+  "time": "2026-10-29 20:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/maps/Mourner_Normal_512.png",
+  "type": "Decal",
+  "assetId": "84388915274636",
+  "time": "2026-10-29 20:37"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/maps/Sentinel_Normal_512.png",
+  "type": "Decal",
+  "assetId": "95944811776627",
+  "time": "2026-10-29 20:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/maps/StarDrake_Normal_512.png",
+  "type": "Decal",
+  "assetId": "138186208470640",
+  "time": "2026-10-29 20:38"
+ },
+ {
+  "file": "Roblox Dev/Assets/3D/Familiars/maps/Ward_Normal_512.png",
+  "type": "Decal",
+  "assetId": "121493074193413",
+  "time": "2026-10-29 20:38"
+ },
+ {
+  "file": "VFX/sfx/out/amb_lane.wav",
+  "type": "Audio",
+  "assetId": "100719500442065",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/amb_harbour.wav",
+  "type": "Audio",
+  "assetId": "121844527608472",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/amb_cathedral.wav",
+  "type": "Audio",
+  "assetId": "83607517954240",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/amb_foundry.wav",
+  "type": "Audio",
+  "assetId": "83914826017186",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/amb_veil.wav",
+  "type": "Audio",
+  "assetId": "114017854252926",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/amb_lobby.wav",
+  "type": "Audio",
+  "assetId": "70453404199147",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/caption_tick.wav",
+  "type": "Audio",
+  "assetId": "112396969710935",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "VFX/sfx/out/set_morph.wav",
+  "type": "Audio",
+  "assetId": "126579756259575",
+  "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\currency_coin.png",
+  "type": "Decal",
+  "assetId": "125639028193781",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\currency_coin_128.png",
+  "type": "Decal",
+  "assetId": "95048444734141",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\currency_gem.png",
+  "type": "Decal",
+  "assetId": "123300215475792",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\currency_gem_128.png",
+  "type": "Decal",
+  "assetId": "91472041004341",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_clockwork_guild.png",
+  "type": "Decal",
+  "assetId": "112625432404437",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_clockwork_guild_128.png",
+  "type": "Decal",
+  "assetId": "99192698908979",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_hollow_court.png",
+  "type": "Decal",
+  "assetId": "119092260413866",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_hollow_court_128.png",
+  "type": "Decal",
+  "assetId": "94443000089251",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_lantern_keepers.png",
+  "type": "Decal",
+  "assetId": "122526193368127",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_lantern_keepers_128.png",
+  "type": "Decal",
+  "assetId": "116961039955716",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_star_choir.png",
+  "type": "Decal",
+  "assetId": "76561180595159",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_star_choir_128.png",
+  "type": "Decal",
+  "assetId": "99690597459471",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_common.png",
+  "type": "Decal",
+  "assetId": "104183261186226",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_common_128.png",
+  "type": "Decal",
+  "assetId": "90136314497755",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_epic.png",
+  "type": "Decal",
+  "assetId": "116809777893530",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_epic_128.png",
+  "type": "Decal",
+  "assetId": "112910257819559",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_1.png",
+  "type": "Decal",
+  "assetId": "135563845481619",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_2.png",
+  "type": "Decal",
+  "assetId": "92762313136368",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_3.png",
+  "type": "Decal",
+  "assetId": "74250484876444",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_4.png",
+  "type": "Decal",
+  "assetId": "114714240868164",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_5.png",
+  "type": "Decal",
+  "assetId": "79547292801679",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_6.png",
+  "type": "Decal",
+  "assetId": "106963806645989",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_legendary.png",
+  "type": "Decal",
+  "assetId": "91345415352281",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_legendary_128.png",
+  "type": "Decal",
+  "assetId": "112444341301372",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_mythic.png",
+  "type": "Decal",
+  "assetId": "110249221506561",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_mythic_128.png",
+  "type": "Decal",
+  "assetId": "126052380860845",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_rare.png",
+  "type": "Decal",
+  "assetId": "132368321060365",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_rare_128.png",
+  "type": "Decal",
+  "assetId": "120548124608295",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_uncommon.png",
+  "type": "Decal",
+  "assetId": "103063883421222",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_uncommon_128.png",
+  "type": "Decal",
+  "assetId": "133645350983692",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_burn.png",
+  "type": "Decal",
+  "assetId": "83889539159649",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_burn_128.png",
+  "type": "Decal",
+  "assetId": "121684752465979",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_chill.png",
+  "type": "Decal",
+  "assetId": "97034705805471",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_chill_128.png",
+  "type": "Decal",
+  "assetId": "105999729035724",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_hush.png",
+  "type": "Decal",
+  "assetId": "123817188976929",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_hush_128.png",
+  "type": "Decal",
+  "assetId": "133696622099130",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_mark.png",
+  "type": "Decal",
+  "assetId": "130554691300874",
+  "time": "2026-10-30 01:04"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_mark_128.png",
+  "type": "Decal",
+  "assetId": "116086765531748",
+  "time": "2026-10-30 01:04"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_stun.png",
+  "type": "Decal",
+  "assetId": "116431235193679",
+  "time": "2026-10-30 01:04"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_stun_128.png",
+  "type": "Decal",
+  "assetId": "73416715793376",
+  "time": "2026-10-30 01:04"
+ },
+ {
+  "file": "UI Kit/art/hud_art/final/b_plate.png",
+  "type": "Decal",
+  "assetId": "130359814673024",
+  "time": "2026-10-30 15:26"
+ },
+ {
+  "file": "UI Kit/art/hud_art/final/b_panel.png",
+  "type": "Decal",
+  "assetId": "124009865755629",
+  "time": "2026-10-30 15:26"
+ },
+ {
+  "file": "UI Kit/art/hud_art/final/b_roll.png",
+  "type": "Decal",
+  "assetId": "124234160388572",
+  "time": "2026-10-30 15:26"
+ },
+ {
+  "file": "UI Kit/art/hud_art/final/b_disc.png",
+  "type": "Decal",
+  "assetId": "121116210826331",
+  "time": "2026-10-30 15:26"
  }
 ]

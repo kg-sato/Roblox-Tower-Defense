@@ -1,0 +1,58 @@
+{
+ "name": "FogWisp",
+ "archetype": "floater",
+ "triangles": 1405,
+ "vertices": 3683,
+ "height": 1.576,
+ "bones": [
+  "Root",
+  "Pelvis",
+  "Spine",
+  "Chest",
+  "Neck",
+  "Head",
+  "Trail1",
+  "Trail2",
+  "UpperArm.L",
+  "UpperArm.R"
+ ],
+ "max_influences": 4,
+ "weight_sum_min": 1.0,
+ "weight_sum_max": 1.0,
+ "owned_vertices_by_bone": {
+  "Root": 0,
+  "Pelvis": 232,
+  "Spine": 126,
+  "Chest": 51,
+  "Neck": 10,
+  "Head": 9,
+  "Trail1": 1099,
+  "Trail2": 553,
+  "UpperArm.L": 408,
+  "UpperArm.R": 363
+ },
+ "pose_tests": {
+  "Walk": {
+   "t": 0.25,
+   "vertices_moved": 3623,
+   "max_move_height_fraction": 0.2426,
+   "finite": true
+  },
+  "Hit": {
+   "t": 0.1,
+   "vertices_moved": 3671,
+   "max_move_height_fraction": 0.4872,
+   "finite": true
+  },
+  "Death": {
+   "t": 1.2,
+   "vertices_moved": 3683,
+   "max_move_height_fraction": 1.9128,
+   "finite": true
+  }
+ },
+ "overrides": [
+  "Trail1",
+  "Trail2"
+ ]
+}

@@ -1,0 +1,26 @@
+PASS (deformation proven for every archetype; limits below)
+Method: Play session, Client datamodel. All 20 Characters/<id>/Model clones scaled to 5 studs, placed in two rows of ten at y=300 and 291 under a scripted camera, anchored. For each, FamiliarClips.build(model, archetype, clip) gave the clip; the keyframe nearest t was written to every Bone.Transform (14/14/16/15/12/10 bones applied). Bone world positions read from Bone.TransformedWorldCFrame before and after.
+Captures: Overnight/captures/T406_rest_20.jpg, T406_walk_pose_20.jpg (Walk t=0.25), T406_death_pose_20.jpg (Death t=1.2). Silhouettes change in all 20: legs split in Walk, bodies fold and drop in Death, wings fold on flyers, arms on floaters.
+Bone data (studs, 5-stud models) id arch bones | Head moved in Walk 0.25 | limb tip moved in Walk 0.25 | Head moved in Death 1.2 | Pelvis dropped in Death
+Frostling biped 14 | 0.101 | 0.526 | 3.254 | 1.400
+VoltFox biped 14 | 0.101 | 0.524 | 3.254 | 1.400
+Sentinel biped 14 | 0.101 | 0.526 | 3.254 | 1.400
+Ward biped 14 | 0.101 | 0.527 | 3.254 | 1.400
+Archivist biped 14 | 0.101 | 0.527 | 3.254 | 1.400
+Mourner biped 14 | 0.101 | 0.529 | 3.254 | 1.400
+TheLamplighter biped 14 | 0.101 | 0.530 | 3.254 | 1.400
+CantorVesper biped 14 | 0.101 | 0.530 | 3.254 | 1.400
+VeilWalker biped 14 | 0.101 | 0.530 | 3.254 | 1.400
+DameOrrery biped 14 | 0.101 | 0.529 | 3.254 | 1.400
+CogWarden biped 14 | 0.101 | 0.528 | 3.254 | 1.400
+ConstableWren biped 14 | 0.101 | 0.531 | 3.254 | 1.400
+MadamQuill biped 14 | 0.101 | 0.531 | 3.254 | 1.400
+FerrymanOfFog biped 14 | 0.101 | 0.529 | 3.254 | 1.400
+Boulder quadruped 16 | 0.111 | 0.314 | 3.254 | 1.400
+BrassHound quadruped 15 | 0.111 | 0.341 | 3.254 | 1.400
+Zap flyer 12 | 0.181 | 0.469 | 3.254 | 1.400
+StarDrake flyer 12 | 0.181 | 0.415 | 3.254 | 1.400
+Ember floater 10 | 0.257 | 0.152 | 3.254 | 1.400
+GreyVeilWraith floater 10 | 0.257 | 0.154 | 3.254 | 1.400
+Archetypes: bone sets of each model (rig_spec.ARCHETYPE lacks Zap, Boulder, VoltFox; their bones are flyer, quadruped, biped).
+UNVERIFIED / limits: silhouettes against the sky only (models dark, no colour judgement); mesh tearing or candy-wrapper artefacts at joints are not judged at this size (about 130 px per model); poses applied statically because the Animator does not step in this Studio session (see T403), so the Animator path itself is not shown. Death translation (Pelvis -1.4 studs) is in unscaled mesh studs, identical for all at 5 studs tall.

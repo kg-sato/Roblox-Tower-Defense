@@ -1,0 +1,80 @@
+# Notify log
+One line per milestone sent to the phone with `python tools/notify.py --done` (newest last). Details are in [[Session Log]].
+
+- 2026-10-29 19:03 Milestone mode on: ntfy now carries major finishes; chat stays short.
+- 2026-10-29 19:05 Notifications now go through overnight and at night; morning digest tool ready (tools/morning_digest.py).
+- 2026-10-29 19:07 Skill tree rework (SkillTreeV3) installed in Studio, Play recorded: curved web, unlock+opening animation seen. Unverified: touch, other resolutions.
+- 2026-10-29 19:08 Silent mode on in all chats: no chat output, only phone pushes for finished tasks.
+- 2026-10-29 19:08 Loading finale overlap, blink lid and loading clock installed in Studio and Studio_Export (place not saved). Evidence: Play recordings plus zoom frames in Captures/overlap. Unverified: ring speeds, bl
+- 2026-10-29 19:09 Title art layers built and viewed (art only); Studio build, uploads and Play checks pending
+- 2026-10-29 19:14 main: coordinating; overnight board drafted; last: 19:14 silent mode + comms files
+- 2026-10-29 19:16 Title page live: faceless fog figure, drifting layers; motion verified by property sampling, window capture stale
+- 2026-10-29 19:18 Overnight armed until 04:18: 84 tasks in 7 lanes, one commit per task, ledger and morning digest on.
+- 2026-10-29 19:28 Skill tree round 2 done: new engraved icons, tarot cards, bold node states, Respec and real-open verified in Play. Unverified: touch, video of motion (recorder grabbed wrong window).
+- 2026-10-29 19:29 blender-worker: T407 familiar re-bake; last: 19:27 T124,T142 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle, holding nothing; last: 19:14 finale overlap, blink li
+- 2026-10-29 19:30 T424, T027, T124 done: docs refreshed, UI research boards, 512 px enemy textures. Look-and-feel unverified.
+- 2026-10-29 19:33 Title round 2 installed: fog deity, rooftop city, bridge, lamp; Edit captures show motion; menu text changes unverified
+- 2026-10-29 19:40 Sim batch (T413 T606 T411 T005 T185 T019), enemy rigs, textures and sound sets done; RunAll 17/17; ear and look unverified.
+- 2026-10-29 19:41 Title r3: solid robe, void face, dark bg, installed; Edit frames OK, Play capture still stale (UNVERIFIED)
+- 2026-10-29 19:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 19:48 Skill tree r3 installed: new layout, gold-ink backdrop, states, plates; blue pixels 0.0%. Edit-mode harness frames; blind review pending.
+- 2026-10-29 19:49 UI rework: skill tree V3 and title scene built in Studio, both blind-graded FAIL (best items 7/10); title r4 pending; Play motion unverified. Your call to judge.
+- 2026-10-29 19:57 Title r4 installed: feathered deity figure with crown, focal sun, mist, gold button; real Play captures r4_play_a/b. Unverified: blind grade.
+- 2026-10-29 19:58 UI rework finished: title r4 and skill tree r3 built and in Studio, both still FAIL blind review (5-7/10); notes in Research/UI. Needs your eyes.
+- 2026-10-29 19:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 20:01 Sim batch 2 done (T004 T006 T186 T012 T011 T015 T009 T417), tests added and passing in Studio; new enemy and wave features default OFF.
+- 2026-10-29 20:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 20:18 Sim batch 3 done (T416 T002 T023 T007 T025 T016); suites added, all behind flags; client screens not built.
+- 2026-10-29 20:29 Sim batch 4 done (T167 T177 T157 T199): RunAll 26/26, bot 10/10 clear; new map features default OFF.
+- 2026-10-29 20:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 20:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 20:49 Chars batch done (T403 T404 T405 T409 T406): 36 clips uploaded, maps wired, rigs checked for 20; motion on screen unverified.
+- 2026-10-29 21:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 21:30 World batch done (T153 T414 T162 T164 T152 T205): sets 4 and 5 Play-verified, landmarks and gates added, perf probe; RunAll 26/26; visuals unverified.
+- 2026-10-29 21:51 FX-audio batch done (T630 T602 T605 T160): cues wired, mix sliders, music per set; RunAll 28/28; ear unverified.
+- 2026-10-29 21:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 22:11 Client-core batch done (T198 T149 T139): GameClient now 140K of 200K, boss phase bar, enemy status icons; RunAll 28/28; pixel look unverified.
+- 2026-10-29 22:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 22:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 22:32 Client batch 8b done (T138 T194 T178 T148 T166): telegraphs, float text, placement hint, boss transitions, ambience; look and audio unverified.
+- 2026-10-29 23:02 FX batch 9 done (T135 T144 T133 T134 T601): merge, lantern, attack, enemy reaction and ultimate effects; look unverified.
+- 2026-10-29 23:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 23:22 UI batch 10 done (T188 T607 T098 T085 T087 T235): TextAnim, dialogs, tooltips, strings, UI checks; look unverified.
+- 2026-10-29 23:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 23:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 23:52 UI batch 11 done (T074 T075 T057 T058 T095 T097): results, controls settings, new reveals, collection filter, detail panel, pause menu; look unverified.
+- 2026-10-29 23:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-30 00:03 UI batch 12 done (T090 T091 T092 T093 T084 T086): inventory, quests, pass and shop (cosmetic), leaderboard, button states, focus; look unverified.
+- 2026-10-30 00:13 T081 done: 40-icon gold-ink set with contact sheet (not uploaded, look unverified).
+- 2026-10-30 00:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | icon-worker: idle;
+- 2026-10-30 00:21 T172 done (boss arenas). T200 blocked (no type checker; modules already strict). T076 blind review FAILED all 4 screens; fix task T640 queued, plus final regression T650.
+- 2026-10-30 00:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | icon-worker: idle;
+- 2026-10-30 00:31 Regression pass: 33/33 suites, bot 10/10, Play boss run clean. Finding: the new screens exist as modules but nothing opens them yet; T642 (screen router) queued.
+- 2026-10-30 00:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | icon-worker: idle;
+- 2026-10-30 00:50 T642 done: screen router and menu button; the new screens are now reachable in Play. Wiring audit T651 running.
+- 2026-10-30 00:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 01:01 T650 and T651 done: regression and wiring audit; 33/33 suites, bot 10/10; Achievements module not hooked to the server yet (needs design).
+- 2026-10-30 01:11 T641 done: 40 icons uploaded and wired to status, rarity and faction displays; look unverified. Blind-review fix rounds (T640) starting.
+- 2026-10-30 01:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 01:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 01:31 T640 failed honestly after 3 blind-review rounds (HUD, collection, results still under 7; needs a human-directed HUD rebuild). Next: T652 server hooks for achievements, quests, bond.
+- 2026-10-30 01:42 T652 done: achievements, quests, bond hooked server-side behind OFF flags; RunAll 33/33, bot 10/10. Writing the final report and vault updates.
+- 2026-10-30 01:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 01:55 Morning digest ready: 89 tasks, 22 commits, 3 blocked. Read Overnight/MORNING.md.
+- 2026-10-30 06:04 Morning digest ready: 89 tasks, 30 commits, 3 blocked. Read Overnight/MORNING.md.
+- 2026-10-30 07:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 07:54 HUD rework built behind Config.HUD_REWORK (off): blind HUD 5.5/10, not 7. 33 suites + bot pass. Phone size unverified.
+- 2026-10-30 07:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 08:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 08:42 HUD brass art built (flag off): blind HUD 5/10, not 7. Look: Overnight/captures/hud_c.png. ComfyUI stopped.
+- 2026-10-30 09:46 HUD brass rounds 4-6: blind 5.5/10, not 7. Flag off. Look: Overnight/captures/hud_e.png
+- 2026-10-30 11:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 11:21 HUD whimsical restyle: blind 5/10, flag off. hud_g.png/hud_h.png saved.
+- 2026-10-30 11:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 12:10 HUD steampunk round: blind 5/10, flag off. hud_i.png/hud_j.png saved.
+- 2026-10-30 12:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 12:15 HUD vines subtler: blind 5.5/10, flag off. hud_k/hud_l saved.
+- 2026-10-30 12:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 14:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | buil
+- 2026-10-30 15:18 P237: RunAll 36/36, lean bot pass
+- 2026-10-30 15:29 Summon menu built (flag off), RunAll 37/37

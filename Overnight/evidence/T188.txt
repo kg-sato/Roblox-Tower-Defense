@@ -1,3 +1,12 @@
-PASS (documented: Roblox Dev/Design/Progression Rules.md, section "Daily reward ladder")
-Seven days of free-currency rewards, repeating with +10% gems per full cycle (cap 50%), missed day pauses the streak, no fake countdowns; the 7-day total is about 140 gems plus 3 rolls (about 17 rolls a week at 10 gems per roll). PROPOSAL, numbers not tested against the economy; the economy simulator (T190) is open.
-Limits: no code; nothing in the game gives daily rewards yet.
+PASS
+T188 Shared.TextAnim + SettingsDefaults.textAnim (off/subtle/full, default full). Run in Studio Edit via Tests/RunAll: SUMMARY 30 of 30 suites PASS (TextAnim.test.luau PASS).
+Files: Studio_Export/TextAnim.luau (new), Studio_Export/SettingsDefaults.luau (key textAnim), Tests/TextAnim.test.luau (new). Installed as ReplicatedStorage.Shared.TextAnim and patched Shared.SettingsDefaults.
+TextAnim suite output (25 checks, all ok):
+ok textAnim default is full | textAnim off, subtle, full accepted | bogus and non-string rejected | sanitize replaces bad value
+ok mode full by default | mode follows setting | reducedMotion forces off | cinematics off forces off | strength 0, 0.4, 1
+ok duration off is 0 | typewrite duration clamped | subtle faster than full | visibleAt start, middle, end | zero duration shows all | grapheme count unicode
+ok drop starts above and ends at 0 | wave and shake fade to 0 | wave within amplitude
+ok reduced motion: text static, shown whole, instant | textAnim off: position untouched
+ok typewrite takes about its duration and ends fully visible (0.407 s) | typewrite partial mid-way (8 of 20 letters at 0.25 s)
+ok drop / wave / shake settle back to the home position
+Not verified: how the effects look (UNVERIFIED, no human judged them). The effects act on the whole label, not per letter. The setting has no control in SettingsPanel yet (another task owns that panel).

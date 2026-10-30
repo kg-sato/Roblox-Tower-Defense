@@ -1,0 +1,24 @@
+PASS
+T=T603; generator VFX/sfx/make_cues.py; machine checks only, ear quality UNVERIFIED
+name                     dur    peak     rms  st400ms  clip  result
+step_trainer            0.16   -8.0d  -22.2d   -22.2d     0  PASS
+step_parishioner        0.22   -9.1d  -20.5d   -20.5d     0  PASS
+step_wisp               0.30  -10.5d  -25.1d   -25.1d     0  PASS
+step_sentinel           0.60   -5.2d  -19.9d   -18.2d     0  PASS
+step_crow               0.25   -9.1d  -22.6d   -22.6d     0  PASS
+step_thief              0.12  -10.5d  -25.5d   -25.5d     0  PASS
+hit_parishioner         0.20   -6.9d  -19.8d   -19.8d     0  PASS
+hit_wisp                0.50   -8.0d  -25.9d   -25.0d     0  PASS
+hit_sentinel            0.72   -5.2d  -24.2d   -21.7d     0  PASS
+hit_crow                0.25   -8.0d  -23.3d   -23.3d     0  PASS
+hit_thief               0.20   -8.0d  -24.3d   -24.3d     0  PASS
+boss_intro_unbound      4.00  -11.2d  -24.0d   -18.2d     0  PASS
+boss_intro_automaton    3.80   -4.3d  -22.5d   -15.9d     0  PASS
+boss_intro_echo         4.60   -6.6d  -22.0d   -16.2d     0  PASS
+boss_intro_regent       5.10   -5.7d  -21.5d   -14.7d     0  PASS
+boss_intro_clockmaker   5.20   -1.6d  -20.6d   -10.6d     0  PASS
+Overnight/captures/audio_cues_T603_spectrogram.png (0-5 kHz): 16 spectrograms stacked top to bottom in this order: step_trainer, step_parishioner, step_wisp, step_sentinel, step_crow, step_thief, hit_parishioner, hit_wisp, hit_sentinel, hit_crow, hit_thief, boss_intro_unbound, boss_intro_automaton, boss_intro_echo, boss_intro_regent, boss_intro_clockmaker
+check_sound_lengths.py:
+39 MANIFEST.md sounds checked
+all sounds within their declared length
+exit 0

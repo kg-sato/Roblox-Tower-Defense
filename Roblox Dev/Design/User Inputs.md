@@ -106,3 +106,11 @@ Also said: "I want absolute immersion when doing anything in the game."
 ### Font, loading, start menu, skill tree refine (2026-10-28)
 **Said:** use Beyond Wonderland (smeared, inky) across the game; a higher-quality loading screen (detailed eyes, steampunk clocks, a real tree); rework the start menu so nothing overlaps and it fits Roblox's top bar; refine the skill tree like the grader (small icons, animated outside, good hover popup, no question marks). Mid-way: "chains and SP don't make sense with our game; make it original and match our themes; review Obsidian."
 **Done:** see the 2026-10-28 UI refine line in [[Session Log]] and [[Research/UI/Captures 2026-10-28/Grading Report]]. Chains became a ticking brass watch-track, the gargoyle frame a pocket-watch frame, "SP" became a gas flame with "skill points to kindle".
+
+### Batch 3 links (2026-10-29)
+**Said:** 13 more TikToks; aotishe (7685820907197058335) is important because it has many of the motion design ideas the user wants to implement. **Done:** see [[Research/VFX and Animation/Reference Batch 3 - 13 TikToks (2026-10-29)]]. Open: copy the indigo glitch look or only the pacing in our palette?
+**Decision:** aotishe = pacing only, in our gold-ink palette (user, 2026-10-29).
+
+### Pinterest batch 1 (2026-10-29)
+**Said:** 94 pins: tarot rolling model (main pin 583779170488405377), tarot designs and animations, weapons, overall UI, VFX, transitions, topography and deity themes, skill tree (more whimsical), title page (large background entity that faces the character), loading clock with multiple moving parts. **Done:** see [[Research/UI/Pinterest Batch 1 - Tarot, UI, VFX, Themes (2026-10-29)]]. Open: title entity, weapons now or later, pastel/chrome only for Celestial, and what 'wait for low to finish' meant.
+**Decision:** title-page entity = faceless Unbound / deity (user, 2026-10-29).

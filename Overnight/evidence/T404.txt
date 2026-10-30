@@ -1,0 +1,6 @@
+PASS
+Built with Shared.FamiliarClips.build (fresh module clone: the Edit-session require cache held an older build() that ignored Idle/Hit/Death and made Attack-shaped clips; first attempt was discarded to ServerStorage._Trash_20261029) for the 12 original familiars, stored as KeyframeSequences in ReplicatedStorage.Characters/<id>/Animations.
+Archetypes (from bone sets and Blender/rig_spec.ARCHETYPE; Zap, Boulder, VoltFox are not in rig_spec, taken from their bones): Ember floater, Zap flyer, Frostling biped, Boulder quadruped, VoltFox biped, StarDrake flyer, BrassHound quadruped, Sentinel biped, Ward biped, Archivist biped, Mourner biped, GreyVeilWraith floater.
+Readback for all 12: Idle 17 keyframes, last at 2.00 s, Loop true; Hit 11 keyframes, last 0.50 s; Death 25 keyframes, last 1.20 s. Walk and Attack kept.
+Tests/Familiars.test.luau: covered by the final RunAll (see Overnight/evidence/RunAll_chars5.txt).
+UNVERIFIED: look of the poses on the original models (core-chain motion only; floaters and flyers use arms/wings where present).

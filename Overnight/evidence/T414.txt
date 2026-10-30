@@ -1,0 +1,5 @@
+PASS
+T414: Studio Play 2026-10-29 night. Workspace.Map.WardLantern.Body... SurfaceAppearance: MetalnessMap = rbxassetid://86584908070749 (the old failing Decal id was 84849520457882), ColorMap rbxassetid://127616005396122.
+Play console read after the Start and stage-jump runs (5 sets visited, ward visible in every capture): no "Asset type does not match requested type" line; only the Sprint Execute authorisation line (Bug Log #2) and ProfileStore info.
+Bug Log: row 4 moved to the fixed table with the new id.
+UNVERIFIED: metalness look on screen.

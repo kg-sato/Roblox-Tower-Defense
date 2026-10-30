@@ -21,6 +21,7 @@ ALLOWED_ROOTS = [
     home / "AppData" / "Local" / "Temp",
     home / ".claude" / "projects" / "C--Users-kgsat-Documents-Roblox",
     home / ".claude" / "guides",
+    home / "Downloads" / "blender-5.3.0-beta+v53.32f5c9c48bca-windows.amd64-release",  # Blender exe (user, 2026-10-29: tools outside the folder may run)
 ]
 PROTECTED = [
     root / ".claude" / "settings.json",
@@ -84,7 +85,7 @@ SHELL_DENY = [
     (r"\b(pip3?|uv|cargo|npm|yarn|pnpm|winget|choco|scoop)\b.*\b(install|add|i|upgrade|update)\b|\bnpx\b|\buvx\b|python\S*\s+-m\s+pip", "no new dependencies"),
     (r"\b(gh|glab|az|aws|gcloud|supabase|wrangler|vercel|netlify|firebase|ssh|scp|ftp|telnet|nc|ncat)\b", "external service CLI"),
     # upload_asset.py is allowed: the user pre-approved uploads on 2026-10-28.
-    (r"install-for-codex|publish|deploy", "publish and deploy need the user"),
+    (r"install-for-codex|(?:^|[;&|]\s*)(?:publish|deploy)\b|\b(?:npm|yarn|pnpm|vercel|netlify|firebase|wrangler)\s+(?:run\s+)?(?:publish|deploy)\b", "publish and deploy need the user"),
     (r"\b(shutdown|Restart-Computer|Stop-Computer|logoff|schtasks|netsh|setx|icacls|takeown|Set-ExecutionPolicy|Set-MpPreference|Add-MpPreference|reg\s+(add|delete|import))\b", "system or security setting"),
     (r"\b(Stop-Process|taskkill|kill|pkill)\b.*(Studio|Roblox|claude|explorer|node|MsMpEng|Defender)", "must not stop Studio, Claude or system processes"),
     (r"\.env\b|id_rsa|[\\/]\.ssh\b|[\\/]\.aws\b|\.npmrc|\.netrc|credentials\.json|api[_-]?key\s*=|Login Data|OPEN_?CLOUD|ROBLOX_API", "secret access"),
@@ -94,6 +95,15 @@ NET = re.compile(r"\b(curl|wget|Invoke-WebRequest|iwr|Invoke-RestMethod|irm|Star
 URL = re.compile(r"https?://[^\s\"')]+", re.I)
 # Hosts the user approved for downloads (2026-10-27): public CC0 or free asset sources only, https only.
 HOSTS = ("unity3d.com", "unity.com", "particlefx.studio", "annomotion.studio", "opengameart.org", "creativecommons.org")
+
+
+DATA_EXT = (".png", ".jpg", ".jpeg", ".webp", ".glb", ".gltf", ".fbx", ".obj", ".wav", ".ogg", ".mp3", ".flac", ".json", ".md", ".txt", ".lua", ".luau", ".zip", ".csv")
+
+
+def data_ok(u):
+    """User, 2026-10-29: https downloads of plain data files from public hosts are allowed (never executables or installers); the file lands in the project like any other write."""
+    m = re.match(r"https://[^/:?#]+/([^?#]*)", u, re.I)
+    return bool(m) and m.group(1).lower().endswith(DATA_EXT)
 
 
 def host_ok(u):
@@ -114,7 +124,7 @@ def check_shell(cmd):
             return False, why
     if NET.search(cmd):
         urls = URL.findall(cmd)
-        if not urls or not all(LOOPBACK.match(u) or host_ok(u) for u in urls):
+        if not urls or not all(LOOPBACK.match(u) or host_ok(u) or data_ok(u) for u in urls):
             return False, "network access beyond localhost and the approved download hosts"
     for m in ABS.findall(cmd):
         if not any(under(m.rstrip("\\/."), r) for r in ALLOWED_ROOTS):
@@ -151,7 +161,7 @@ if tool == "mcp__roblox-studio__http_get":
     decide(bool(LOOPBACK.match(inp.get("url", ""))), "localhost only")
 # Uploads, Creator Store inserts and Studio AI generation are pre-approved by the user (2026-10-28) and fall through to "Studio MCP".
 if tool in ("mcp__roblox-studio__subagent", "mcp__roblox-studio__skill"):
-    decide(False, "Studio subagent and skill calls stay with the user")
+    decide(True, "Studio subagent and skill calls allowed since 2026-10-29")
 if tool.startswith("mcp__roblox-studio__"):
     decide(True, "Studio MCP")
 if tool.startswith("mcp__terminal__"):

@@ -22,6 +22,20 @@ for name, (dur, vol, pri) in cat.items():
     longest.append((secs, name))
     if secs > dur + 0.05:
         bad.append(f"{name}: file {secs:.3f} s is longer than the declared {dur:.3f} s")
+man = ROOT / "VFX" / "sfx" / "MANIFEST.md"  # overnight cue set: every row needs its WAV, length within 0.05 s of the row
+nman = 0
+if man.exists():
+    for m in re.finditer(r"^\| (\w+) \| ([\d.]+) \|", man.read_text(encoding="utf-8"), re.M):
+        nman += 1
+        f = out / f"{m.group(1)}.wav"
+        if not f.exists():
+            bad.append(f"{m.group(1)}: in MANIFEST.md but {f.name} is missing")
+            continue
+        with wave.open(str(f)) as w:
+            secs = w.getnframes() / w.getframerate()
+        if abs(secs - float(m.group(2))) > 0.05:
+            bad.append(f"{m.group(1)}: file {secs:.3f} s differs from MANIFEST.md {m.group(2)} s")
+print(f"{nman} MANIFEST.md sounds checked")
 extra = sorted(p.stem for p in out.glob("*.wav") if p.stem not in cat)
 print(f"{len(cat)} catalog sounds checked; longest {max(longest)[1]} {max(longest)[0]:.2f} s")
 print("priority 1 (dropped first):", ", ".join(sorted(n for n, v in cat.items() if v[2] == 1)))

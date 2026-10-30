@@ -1,0 +1,9 @@
+PASS
+T172 five boss arena variants (look UNVERIFIED by a human; machine checks only)
+New: Studio_Export/BossArena.luau (StarterPlayerScripts.BossArena); hook: 2 lines in StageSetClient (require + BossArena.setStage(stage) at top of apply()). Mirrored.
+Play run, QAProfile stage jumps, client workspace.BossArena child read 9 s after each jump:
+stage 5 -> BossArena_Unbound (set LampwickLane); stage 10 -> BossArena_Automaton (HarbourOfBrass); stage 15 -> BossArena_Echo (SilentCathedral); stage 20 -> BossArena_Regent (ClockworkFoundry); stage 25 -> BossArena_Clockmaker (AboveTheGreyVeil); stage 3 -> no BossArena.
+Path unchanged: module touches only its own client folder; badParts (CanCollide/CanQuery/CanTouch true or unanchored) = 0; sigils stay inside the lane box interior (radius <= 10 about (-3,-6)); no Config, StageSets or path edit.
+Events: onEvent BossPhase{phase=3} raised light brightness 1.6 -> 3.2 and colour to crimson; Spawn{boss=Echo} swapped arena to BossArena_Echo.
+Captures: Overnight/captures/T172_stage05_Unbound.jpg, _stage10_Automaton, _stage15_Echo, _stage20_Regent, _stage25_Clockmaker.
+Console clean of new errors (only the known Sprint Execute asset line). Not run: a real boss wave (Spawn/BossPhase from the server), lean bot (no sim change).

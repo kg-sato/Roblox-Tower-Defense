@@ -37,6 +37,10 @@ return function(ctx)
 		state[key] = value
 		pending[key] = value
 		ctx.apply(state)
+		pcall(function() -- master and interface sliders (T605); GameClient's apply only knows music and effects
+			local RS = game:GetService("ReplicatedStorage")
+			require(RS.SoundCues).applyMix(state, require(RS.SoundFX), require(RS.MusicFX))
+		end)
 		if not scheduled then
 			scheduled = true
 			task.delay(math.max(0.05, 1.1 - (os.clock() - lastSend)), flush)
@@ -74,7 +78,7 @@ return function(ctx)
 
 	local function header(str)
 		local r = row(0.055)
-		local l = text(r, "\u{25C6}  " .. string.upper(str) .. "  \u{25C6}", 15, GOLD, SERIF, Enum.TextXAlignment.Center)
+		local l = text(r, "\u{25C6}  " .. string.upper(str) .. "  \u{25C6}", 19, GOLD, SERIF, Enum.TextXAlignment.Center)
 		l.Size = UDim2.fromScale(1, 0.8)
 		l.Position = UDim2.fromScale(0.5, 0.55)
 		local line = gui("Frame", { BackgroundColor3 = GOLD, BorderSizePixel = 0, Size = UDim2.fromScale(1, 0.04), Position = UDim2.fromScale(0.5, 0.98), ZIndex = 9 }, r)
@@ -84,7 +88,7 @@ return function(ctx)
 
 	local function labeled(str)
 		local r = row(0.075)
-		local l = text(r, str, 18, Color3.fromRGB(236, 226, 206), SERIF, Enum.TextXAlignment.Left)
+		local l = text(r, str, 22, Color3.fromRGB(236, 226, 206), SERIF, Enum.TextXAlignment.Left)
 		l.Size = UDim2.fromScale(0.42, 0.9)
 		l.Position = UDim2.fromScale(0.21, 0.5)
 		local area = gui("Frame", { BackgroundTransparency = 1, Size = UDim2.fromScale(0.54, 1), Position = UDim2.fromScale(0.73, 0.5), ZIndex = 9 }, r)
@@ -116,7 +120,7 @@ return function(ctx)
 		new("UIAspectRatioConstraint", { AspectRatio = 1 }, knob)
 		new("UIStroke", { Color = GOLD, Thickness = 0.1, StrokeSizingMode = Enum.StrokeSizingMode.ScaledSize }, knob)
 		local kf = gui("ImageLabel", { BackgroundTransparency = 1, Image = FLAME, Size = UDim2.fromScale(0.8, 0.8), Position = UDim2.fromScale(0.5, 0.45), ZIndex = 14 }, knob)
-		local readout = text(area, "", 16, GOLD, SERIF, Enum.TextXAlignment.Right)
+		local readout = text(area, "", 20, GOLD, SERIF, Enum.TextXAlignment.Right)
 		readout.Size = UDim2.fromScale(0.22, 0.8)
 		readout.Position = UDim2.fromScale(0.89, 0.5)
 
@@ -156,7 +160,7 @@ return function(ctx)
 		new("UIAspectRatioConstraint", { AspectRatio = 0.75 }, flame)
 		local smoke = gui("Frame", { BackgroundColor3 = Color3.fromRGB(150, 150, 160), BackgroundTransparency = 0.5, Size = UDim2.fromScale(0.03, 0.3), Position = UDim2.fromScale(0.2, 0.18), ZIndex = 13 }, b)
 		new("UICorner", { CornerRadius = UDim.new(0.5, 0) }, smoke)
-		local l = text(b, "", 15, GOLD, SERIF, Enum.TextXAlignment.Left)
+		local l = text(b, "", 19, GOLD, SERIF, Enum.TextXAlignment.Left)
 		l.Size = UDim2.fromScale(0.6, 0.7)
 		l.Position = UDim2.fromScale(0.72, 0.5)
 		local flicker = TweenService:Create(flame, TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Rotation = 6, Size = UDim2.fromScale(0.27, 0.66) })
@@ -201,7 +205,7 @@ return function(ctx)
 		end
 		for i, opt in options do
 			local b = gui("TextButton", { Text = "", AutoButtonColor = false, BackgroundTransparency = 1, Size = UDim2.fromScale(1 / n, 0.8), Position = UDim2.fromScale((i - 0.5) / n, 0.5), ZIndex = 11 }, area)
-			local l = text(b, opt.label, 15, INK, SERIF)
+			local l = text(b, opt.label, 19, INK, SERIF)
 			btns[i] = { b = b, l = l, value = opt.value }
 			b.Activated:Connect(function()
 				change(key, opt.value)
@@ -213,8 +217,10 @@ return function(ctx)
 	end
 
 	header("Sound")
+	slider("masterVolume", "Master")
 	slider("musicVolume", "Music")
 	slider("sfxVolume", "Effects")
+	slider("uiVolume", "Interface")
 	header("Display")
 	choice("gameSpeed", "Game speed", { { label = "1x", value = 1 }, { label = "2x", value = 2 } })
 	choice("cinematics", "Cutscenes", { { label = "Full", value = "full" }, { label = "Short", value = "short" }, { label = "Off", value = "off" } })
@@ -226,8 +232,23 @@ return function(ctx)
 	toggle("reducedMotion", "Reduced motion")
 	toggle("shake", "Screen shake")
 	toggle("damageNumbers", "Damage numbers")
-	toggle("hideUi", "Hide UI (H key also toggles)")
 	choice("uiSize", "UI size", { { label = "Small", value = "small" }, { label = "Normal", value = "normal" }, { label = "Large", value = "large" } })
+	-- T075: Controls group. Key rows are a read-only reference; Hide UI is the saved setting (applied by HideUI, kept after rejoin).
+	header("Controls")
+	toggle("hideUi", "Hide UI")
+	local function keyRow(str, keys)
+		local area = labeled(str)
+		local l = text(area, keys, 20, GOLD, SERIF, Enum.TextXAlignment.Right)
+		l.Size = UDim2.fromScale(0.95, 0.8)
+		l.Position = UDim2.fromScale(0.5, 0.5)
+	end
+	keyRow("Hide or show the HUD", "H key")
+	keyRow("Move between buttons", "Arrow keys / D-pad")
+	keyRow("Close a panel", "Esc")
+	local okC, Cfg = pcall(function() return require(game:GetService("ReplicatedStorage").Shared.Config) end)
+	if okC and Cfg.PAUSE_MENU then
+		keyRow("Pause menu", "P key")
+	end
 
 	order += 1
 	local resetRow = gui("Frame", { BackgroundTransparency = 1, Size = UDim2.fromScale(0.9, 0.08), LayoutOrder = order, ZIndex = 8, AnchorPoint = Vector2.new(0, 0) }, body)

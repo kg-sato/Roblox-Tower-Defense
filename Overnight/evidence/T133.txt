@@ -1,4 +1,9 @@
-PASS WITH QUESTIONS (enemy bible written: Roblox Dev/Design/Enemy Bible.md)
-Content: a table of six families (Hollow Parishioner, Fog Wisp, Brass Sentinel, Clockwork Crow, Lantern Thief, The Unbound as boss) with layer, role, silhouette, colour and model link, plus a lore line and counter for each. Facts checked against Config.ENEMIES (four kinds today) and the research roster table. Numbers marked PROPOSAL are design targets, not implemented.
-Conflict found and recorded: the research note describes the Unbound as a mage with a crown of arms; the lore and chapter 1 describe a faceless figure of fog. I followed the lore and asked the user which should stand.
-Limits: a design document; no code; the Hollow Parishioner still has no model.
+PASS
+T133 attack, trail and star effects per familiar (20), studio-fx2, 2026-10-29. (Replaces an older evidence file with the same id from the archived design list; it is still in git history.)
+New modules ReplicatedStorage.FamiliarShots + FxCommon (Studio_Export/FamiliarShots.luau, FxCommon.luau); ProjectileFX gets a one-line install hook and an ext (hit accent) hook; each Characters folder's Shot attribute is now "fs_<PetId>" (20 styles, each its own head shape, path, trail and impact; gold-ink palette, familiar colour as accent). GameClient untouched.
+Contact sheet (Edit mode, FamiliarShots.sheet): Overnight/captures/fx2/T133_sheet_flight_far.jpg (all 20 in flight), Overnight/captures/fx2/T133_sheet_impacts_20.jpg (all 20 impacts). Sheet fired 20 of 20 shots, emitter peak 8.
+Burst cap (stress: 3 waves x 20 shots at once, with and without reduced motion): peak live emitters Low 10 of 10, Default 20 of 20, High 32 of 32; the excess is skipped and counted, never above the cap. At most 1 emitter per shot, no Highlights.
+In Play (real shots through GameClient -> ProjectileFX.fire): counters shot_Ember, shot_StarDrake, shot_Zap, shot_CogWarden, shot_Boulder, shot_Frostling all incremented; Low setting peak 7 of cap 10. fire() with crit and react() returned ok; console clean (known asset line only).
+Reduced motion: no wave, spiral, spin, orbit or scattering shards (rings and puffs remain). Flashes off: tinted core instead of cream, softer impacts.
+UNVERIFIED: how any of it looks or reads (nobody judged it); the 20 looks differ by shape, path, trail and impact in the sheet but are not tuned. Edit-mode captures use slowed durations (FxCommon.slow) so a frame can be caught. Not fired in Play: the other 14 familiars (only 6 placed and in range).
+Files: Studio_Export/FamiliarShots.luau, FxCommon.luau, ProjectileFX.luau (+ VFX/ copies).

@@ -7,6 +7,8 @@ local SettingsDefaults = {}
 type Rule = { kind: "number", min: number, max: number } | { kind: "choice", values: { number } } | { kind: "boolean" } | { kind: "enum", values: { string } }
 
 local RULES: { [string]: Rule } = {
+	masterVolume = { kind = "number", min = 0, max = 1 },
+	uiVolume = { kind = "number", min = 0, max = 1 },
 	musicVolume = { kind = "number", min = 0, max = 1 },
 	sfxVolume = { kind = "number", min = 0, max = 1 },
 	flashes = { kind = "boolean" },
@@ -18,11 +20,14 @@ local RULES: { [string]: Rule } = {
 	particles = { kind = "enum", values = { "low", "default", "high" } },
 	backdrop = { kind = "enum", values = { "moving", "still" } },
 	numberFormat = { kind = "enum", values = { "short", "grouped", "scientific" } },
-	gameSpeed = { kind = "choice", values = { 1, 2 } },
+	gameSpeed = { kind = "choice", values = { 1, 2, 3 } },
 	cinematics = { kind = "enum", values = { "full", "short", "off" } },
+	textAnim = { kind = "enum", values = { "off", "subtle", "full" } }, -- T188: typewriter/drop/wave/shake text (reducedMotion forces off)
 }
 
 SettingsDefaults.defaults = {
+	masterVolume = 1,
+	uiVolume = 1,
 	musicVolume = 0.7,
 	sfxVolume = 0.8,
 	flashes = true,
@@ -36,6 +41,7 @@ SettingsDefaults.defaults = {
 	numberFormat = "short",
 	gameSpeed = 1,
 	cinematics = "full",
+	textAnim = "full",
 }
 
 SettingsDefaults.MIN_SAVE_GAP = 1 -- seconds between accepted settings saves per player

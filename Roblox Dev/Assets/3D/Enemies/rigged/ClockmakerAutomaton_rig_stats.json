@@ -1,0 +1,67 @@
+{
+ "name": "ClockmakerAutomaton",
+ "archetype": "quadruped",
+ "triangles": 568,
+ "vertices": 1062,
+ "height": 7.2,
+ "bones": [
+  "Root",
+  "Pelvis",
+  "Spine",
+  "Chest",
+  "Neck",
+  "Head",
+  "Tail1",
+  "Tail2",
+  "FrontUpperLeg.L",
+  "FrontUpperLeg.R",
+  "FrontLowerLeg.L",
+  "FrontLowerLeg.R",
+  "HindUpperLeg.L",
+  "HindUpperLeg.R",
+  "HindLowerLeg.L",
+  "HindLowerLeg.R"
+ ],
+ "max_influences": 4,
+ "weight_sum_min": 1.0,
+ "weight_sum_max": 1.0,
+ "owned_vertices_by_bone": {
+  "Root": 45,
+  "Pelvis": 33,
+  "Spine": 39,
+  "Chest": 61,
+  "Neck": 123,
+  "Head": 149,
+  "Tail1": 20,
+  "Tail2": 0,
+  "FrontUpperLeg.L": 196,
+  "FrontUpperLeg.R": 185,
+  "FrontLowerLeg.L": 48,
+  "FrontLowerLeg.R": 48,
+  "HindUpperLeg.L": 104,
+  "HindUpperLeg.R": 103,
+  "HindLowerLeg.L": 36,
+  "HindLowerLeg.R": 36
+ },
+ "pose_tests": {
+  "Walk": {
+   "t": 0.25,
+   "vertices_moved": 1048,
+   "max_move_height_fraction": 0.2869,
+   "finite": true
+  },
+  "Hit": {
+   "t": 0.1,
+   "vertices_moved": 1056,
+   "max_move_height_fraction": 0.1904,
+   "finite": true
+  },
+  "Death": {
+   "t": 1.2,
+   "vertices_moved": 1062,
+   "max_move_height_fraction": 0.9677,
+   "finite": true
+  }
+ },
+ "overrides": []
+}

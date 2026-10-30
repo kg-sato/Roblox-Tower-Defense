@@ -13,9 +13,12 @@ if not hudGui then
 	return
 end
 
-local function shown(g)
+local pg = player.PlayerGui
+local MODALS = { "Dialogs", "Results", "Screens" } -- a ScreenGui in this list with a visible button owns focus while open
+
+local function shown(g, top)
 	local n = g
-	while n and n ~= hudGui do
+	while n and n ~= top do
 		if n:IsA("GuiObject") and not n.Visible then
 			return false
 		end
@@ -24,14 +27,27 @@ local function shown(g)
 	return true
 end
 
-local function buttons()
+local function collect(top)
 	local out = {}
-	for _, g in hudGui:GetDescendants() do
-		if g:IsA("GuiButton") and g.AbsoluteSize.X > 4 and g.AbsoluteSize.Y > 4 and shown(g) then
+	for _, g in top:GetDescendants() do
+		if g:IsA("GuiButton") and g.AbsoluteSize.X > 4 and g.AbsoluteSize.Y > 4 and shown(g, top) then
 			table.insert(out, g)
 		end
 	end
 	return out
+end
+
+local function buttons()
+	for _, name in MODALS do
+		local m = pg:FindFirstChild(name)
+		if m and m:IsA("ScreenGui") and m.Enabled then
+			local list = collect(m)
+			if #list > 0 then
+				return list
+			end
+		end
+	end
+	return collect(hudGui) -- the settings panel lives inside the HUD gui, so it is included once open
 end
 
 local function center(g)
@@ -50,6 +66,20 @@ local function link()
 	for _, b in list do
 		b.Selectable = true
 	end
+	-- reading order (top to bottom, then left to right); fills any direction the nearest-button search left empty, so
+	-- Right/Down from the first button and Left/Up from the last always walk through every button
+	local order = table.clone(list)
+	table.sort(order, function(a, b)
+		local ca, cb = center(a), center(b)
+		if math.abs(ca.Y - cb.Y) > 8 then
+			return ca.Y < cb.Y
+		end
+		return ca.X < cb.X
+	end)
+	local index = {}
+	for i, b in order do
+		index[b] = i
+	end
 	for _, a in list do
 		local ca = center(a)
 		for dir, v in DIRS do
@@ -64,7 +94,49 @@ local function link()
 					end
 				end
 			end
+			local i = index[a]
+			if not best then
+				best = (dir == "Right" or dir == "Down") and order[i + 1] or ((dir == "Left" or dir == "Up") and order[i - 1] or nil)
+			end
 			a["NextSelection" .. dir] = best
+		end
+	end
+	-- repair: anything the four-way walk from the first button cannot reach gets a link from the nearest reached button with a free direction
+	local reached, queue = { [order[1] or false] = true }, { order[1] }
+	local function walk()
+		local qi = 1
+		while queue[qi] do
+			local a = queue[qi]
+			qi += 1
+			for dir in DIRS do
+				local n = a["NextSelection" .. dir]
+				if n and not reached[n] then
+					reached[n] = true
+					table.insert(queue, n)
+				end
+			end
+		end
+	end
+	walk()
+	for _, x in order do
+		if not reached[x] then
+			local best, bestDir, bestD = nil, nil, math.huge
+			for r in reached do
+				if r then
+					for dir in DIRS do
+						local d = (center(r) - center(x)).Magnitude
+						if r["NextSelection" .. dir] == nil and d < bestD then
+							best, bestDir, bestD = r, dir, d
+						end
+					end
+				end
+			end
+			if best then
+				best["NextSelection" .. bestDir] = x
+				reached[x] = true
+				table.insert(queue, x)
+				walk()
+			end
 		end
 	end
 end

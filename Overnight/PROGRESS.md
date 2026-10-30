@@ -248,3 +248,118 @@
 - 07:02 T106 DONE (attested): Rig template for familiars (shared skeleton for quadrupeds, bipeds, flyers and floaters)
 - 07:07 T107 DONE (attested): Re-rig Ember, Gargoyle and Frostling onto the template and test one walk and one attack each
 - 07:08 loop turned off by the user's request (ACTIVE renamed); work continues without the Stop hook or the task gate
+- 19:18 CHECKPOINT c8c1696 on overnight/2026-10-27: Add Epic and Legendary humans, boss framework, Crow and Thief client models, UILib split, comms and notify tools. Promote the overnight board and relax the guardrails for per-task commits.
+
+## Run 2026-10-29 19:18 on overnight/2026-10-27 (9.0 h, 150 loops)
+- 19:19 CHECKPOINT 4c30cda on overnight/2026-10-27: Stage completeness check passes for all 25 stages. Generated the missing front cards for the four new humans so lore, cards and voice lines are complete for 20 familiars.
+- 19:20 T232 DONE (gate-verified): Stage completeness check passes for all 25 stages
+- 19:20 T422 DONE (gate-verified): Lore, cards, voice lines complete for all 20 familiars
+- 19:30 T124 DONE (attested): 512 px texture sets for enemies, bosses and stage props
+- 19:30 T027 DONE (attested): UI research boards for HUD, collection, results plus HUD wireframe
+- 19:30 T424 DONE (attested): Refresh Systems.md, Backlog and Design Doc for bosses, 20 familiars, set 5
+- 19:30 CHECKPOINT 3d1f029 on overnight/2026-10-27: Refresh the systems, backlog and design notes, add the HUD, collection and results research boards, and bake 512 px texture sets for enemies and bosses. Evidence files hold the verification output.
+- 19:40 T413 DONE (attested): Delete stale duplicate MatchSim and stray _GameSpeedTest folder
+- 19:40 T606 DONE (attested): Fix SoundFX cap so a lower priority never stops a higher
+- 19:40 T411 DONE (attested): Save bestStage and stage progress in profile with migration
+- 19:40 T005 DONE (attested): Add 3x game speed, same results per sim second
+- 19:40 T142 DONE (attested): Rig and animate six enemy models: walk, hit, death; place in a stage
+- 19:40 T185 DONE (attested): Roster slot unlock rules (when a new slot opens) in data
+- 19:40 T019 DONE (attested): Sell and recycle refund percent per tier
+- 19:40 T407 DONE (attested): Clean blotchy first-pass textures on the 12 original familiars
+- 19:40 T155 DONE (attested): Familiar cues: placement, merge tiers 1 to 8, reveal per rarity
+- 19:40 T603 DONE (attested): Enemy footsteps and hits, boss intro per boss, trainer footsteps
+- 19:40 T604 DONE (attested): UI sound set: click, hover, error, buy, quest, achievement, level-up
+- 19:40 CHECKPOINT d17a471 on overnight/2026-10-27: Add the rigged enemy models, re-baked familiar textures, and the UI, enemy, boss and familiar sound sets with their manifest. Evidence files hold each check's output.
+- 20:01 CHECKPOINT 6c2a79d on overnight/2026-10-27: Add difficulty modes, pause and resume, collection shards, faction combos, lantern power, elite waves, day and night weather data, and the Hollow enemies behind flags. New and extended suites pass in Studio.
+- 20:18 CHECKPOINT 4961f6b on overnight/2026-10-27: Add remaining boss mechanics, achievements, quests, bond levels, leaderboard validation and endless mode as server data with tests. New features stay behind flags and the client screens are not built.
+- 20:29 CHECKPOINT f33f2cc on overnight/2026-10-27: Add per-set path shapes, per-map placement rules and path blockers as data behind flags, and split the balance numbers into data modules. All suites and the bot still pass.
+- 20:49 CHECKPOINT e9ab3ba on overnight/2026-10-27: Add Hit and Death reactions, Idle, Hit and Death clips for the twelve original familiars uploaded as Animation assets, 512 px normal maps and a rig deformation check for all twenty. Look and motion on screen remain unverified.
+- 21:30 CHECKPOINT ba682dc on overnight/2026-10-27: Verify stage sets four and five in Play, confirm the Ward metalness fix, add three landmarks and a spawn gate per set, and add a performance probe with Low, Default and High numbers. Visual quality is unverified.
+- 21:51 CHECKPOINT db328f0 on overnight/2026-10-27: Wire the new sound sets through a cue module, add scaled hit-stop and shake with reduced-motion off switch, add mix sliders with ducking, and add music per stage set with crossfade. Ear quality is unverified.
+- 22:11 CHECKPOINT e485b75 on overnight/2026-10-27: Split GameClient from 173,800 to 140,200 characters into nine modules with identical HUD counts, add the boss phase bar and banner module driven by the server events, and add enemy health bars with status icons. Pixel look is unverified.
+- 22:32 CHECKPOINT 509f979 on overnight/2026-10-27: Add enemy telegraphs, per-family damage float text, a placement hint toggle, boss phase transitions with sound, and ambient beds per stage set as new modules. Look, motion and audio are unverified.
+- 23:02 CHECKPOINT e5814d5 on overnight/2026-10-27: Add merge effects per tier, one lantern-light effect language, attack effects for all twenty familiars, hit and death reactions per enemy family, and ultimate flourishes with camera moves as new modules. Look is unverified.
+- 23:22 CHECKPOINT e5d13d9 on overnight/2026-10-27: Add the TextAnim module and apply it to captions and reveals, shared dialogs and toasts, tooltips, a strings table with a coverage test, and UI checks for text size and contrast. UI look is unverified beyond the measured numbers.
+- 23:53 CHECKPOINT fc7f179 on overnight/2026-10-27: Add the results screen, Controls settings, new reveals, collection filter, detail panel and pause menu as modules. UI look is unverified.
+- 00:03 CHECKPOINT cfcfbf0 on overnight/2026-10-27: Add the inventory, quest, battle pass and shop, leaderboard and stage-select screens with button states and keyboard focus as new modules. Shops are cosmetic only and UI look is unverified.
+- 00:13 CHECKPOINT 7f80385 on overnight/2026-10-27: Add a forty-file one-style icon set for status, currency, rarity and faction with a contact sheet and style measurements. Nothing was uploaded and the look is unverified.
+- 00:21 CHECKPOINT 71376f0 on overnight/2026-10-27: Add five boss arena variants driven by the boss events, each captured at its boss stage with the path unchanged. Look is unverified.
+- 00:50 CHECKPOINT c1992de on overnight/2026-10-27: Add a screen router with a menu dock button so inventory, quests, pass, shop, leaderboard, stage select, familiars and pause open from the game. Look is unverified.
+- 01:01 CHECKPOINT f07ef6f on overnight/2026-10-27: Run an independent regression pass and a wiring audit of everything built tonight. Thirty-three suites and the lean bot pass; one module, Achievements, is still unhooked.
+- 01:11 CHECKPOINT 7762547 on overnight/2026-10-27: Upload the forty-icon set and wire the ids into enemy status icons, rarity chips and faction badges through a StatusIcons module. Look is unverified.
+- 01:42 CHECKPOINT fa72a0a on overnight/2026-10-27: Hook achievements, quests, bond and leaderboard validation into the server behind four flags that default off, with profile migration and tests. The lean bot and all suites still pass.
+- 01:55 CHECKPOINT 46f759e on overnight/2026-10-27: Write the overnight report with commit hashes and labels, and reconcile the vault notes with the ledger. Everything visual or audible is unverified.
+- 01:55 CHECKPOINT 37c7d8b on overnight/2026-10-27: Write the final overnight report and morning digest and reconcile the vault notes with the ledger. All visual and audio results remain unverified.
+- 01:55 T153 DONE (attested): Play-verify stage sets 4 and 5: stages 16 and 21, edge rings, console clean
+- 01:55 T004 DONE (attested): Difficulty modes Normal and Hard, server-decided, labelled in data
+- 01:55 T006 DONE (attested): Pause and resume saved per run
+- 01:55 T403 DONE (attested): Play Idle, Hit, Death clips of the human familiars on the board
+- 01:55 T404 DONE (attested): Idle, Hit, Death clips for the 12 original familiars
+- 01:55 T198 DONE (attested): Split GameClient below 150,000 characters into modules
+- 01:55 T149 DONE (attested): Client boss phase bar, banner per phase, deny and freeze feedback
+- 01:55 T186 DONE (attested): Collection schema: duplicates and shards, wired to the profile
+- 01:55 T002 DONE (attested): Achievements: server unlock logic for the 30 designed ones
+- 01:55 T023 DONE (attested): Quests: server logic and data for the 20 designed quests
+- 01:55 T007 DONE (attested): Familiar bond levels from use, plus mood state, as data
+- 01:55 T012 DONE (attested): Faction adjacency combo driven by a synergy data table
+- 01:55 T011 DONE (attested): Lantern power: player light buffs nearby familiars, cooldown
+- 01:55 T015 DONE (attested): Elite enemies and ten wave modifiers as data
+- 01:55 T009 DONE (attested): Per-set day/night window and weather events as data
+- 01:55 T016 DONE (attested): Endless mode after stage 25, tested to wave 100
+- 01:55 T025 DONE (attested): Weekly leaderboard server validation and anti-cheat checks
+- 01:55 T416 DONE (attested): Remaining boss mechanics: Automaton lamp, Echo pushes, Regent candles, un-merge
+- 01:55 T417 DONE (attested): Hollow Parishioner enemy and Fog Wisp lamp-eating in the sim
+- 01:55 T167 DONE (attested): Per-set path shapes as data with a curvature test
+- 01:55 T157 DONE (attested): Path blockers and mid-path gates as data, tested in MatchSim
+- 01:55 T177 DONE (attested): Placement rules per map, decorations never block, tested
+- 01:55 T199 DONE (attested): Move balance numbers into data modules, one table per system
+- 01:55 T139 DONE (attested): Enemy health bars and status icons readable at the board camera
+- 01:55 T138 DONE (attested): Enemy telegraphs one second before Sentinel plant, Crow perch, Thief steal
+- 01:55 T194 DONE (attested): Damage float text with per-family colour, obeys damage setting
+- 01:55 T178 DONE (attested): Placement heat map hint toggle, good tiles per family
+- 01:55 T188 DONE (attested): TextAnim module: typewriter, drop, wave, shake, reduced motion, off/subtle/full
+- 01:55 T607 DONE (attested): Apply TextAnim to captions, lore reveals, headings and boss name
+- 01:55 T098 DONE (attested): Shared confirm dialog, toast queue, error and empty states
+- 01:55 T085 DONE (attested): Tooltip system on every icon and stat, hover and long press
+- 01:55 T084 DONE (attested): Button states idle, hover, pressed, disabled with motion
+- 01:55 T086 DONE (attested): Keyboard and gamepad focus for HUD and main screens
+- 01:55 T087 DONE (attested): Strings table for items, enemies, familiars with coverage test
+- 01:55 T235 DONE (attested): UI checks: text at least 14 px at 844x390, contrast 4.5:1, labelled buttons
+- 01:55 T074 DONE (attested): Results screen: wave, gold, lore line, next-step button
+- 01:55 T075 DONE (attested): Settings: add Controls group (keys, hide-UI)
+- 01:55 T057 DONE (attested): Reveal for Mythic and Celestial: own sigil and lore line
+- 01:55 T058 DONE (attested): Collection: faction filter, 20 cards reviewed, silhouettes for unowned
+- 01:55 T095 DONE (attested): Familiar detail panel with lore, stats, bond, mood, evolve preview
+- 01:55 T097 DONE (attested): Pause menu: resume, speed, settings, quit with confirm
+- 01:55 T090 DONE (attested): Inventory screen: silhouette grid, tier stars, empty-slot lore
+- 01:55 T091 DONE (attested): Quest screen with one pinned tracker line in the HUD
+- 01:55 T092 DONE (attested): Battle pass and shop screens, cosmetic only, no live purchases
+- 01:55 T093 DONE (attested): Leaderboard and stage-select screens
+- 01:55 T081 DONE (attested): One-style icon set for status, currency, rarity, faction
+- 01:55 T409 DONE (attested): Wire 512 px maps into SurfaceAppearance, check in Play
+- 01:55 T405 DONE (attested): Upload original familiars' clips as Animation assets and wire ids
+- 01:55 T406 DONE (attested): Verify rig deformation visually in Roblox for all 20 familiars
+- 01:55 T162 DONE (attested): Three distinct landmarks per set visible from the board camera
+- 01:55 T164 DONE (attested): Weather and fog per set, tested for frame cost on Low
+- 01:55 T152 DONE (attested): Spawn and exit gate per set with opening animation and enemy shadow
+- 01:55 T172 DONE (attested): Five boss arena variants of the board
+- 01:55 T148 DONE (attested): Boss phase transition: visual change, sound and cut per phase
+- 01:55 T134 DONE (attested): Hit and death reactions and effects per enemy family
+- 01:55 T133 DONE (attested): Attack, trail and star effects per familiar (20)
+- 01:55 T601 DONE (attested): Ultimate effect per familiar with a camera move
+- 01:55 T135 DONE (attested): Merge effect and look per tier 1 to 8, incl. morph cut
+- 01:55 T602 DONE (attested): Hit-stop, shake and camera nudge scaled, off with reduced motion
+- 01:55 T144 DONE (attested): One lantern-light language: spawn sparkle, level column, clear ash, low-lantern vignette, decals
+- 01:55 T605 DONE (attested): Sound mix sliders (master, music, effects, UI) and ducking
+- 01:55 T160 DONE (attested): Music per set (5, crossfade) plus tension layer by wave
+- 01:55 T166 DONE (attested): Ambient loops per set and lobby, plus sounds for captions and set morph
+- 01:55 T414 DONE (attested): Confirm Bug #4 Ward MetalnessMap is fixed and fix the Bug Log row
+- 01:55 T205 DONE (attested): Memory after 10 waves per set and frame-time probe Low/Default/High
+- 01:55 T246 DONE (attested): Write tonight's report: built, to judge, to delete
+- 01:55 T630 DONE (attested): Wire the new sound sets (UI, enemy, boss, familiar cues, uploaded ids in VFX/ASSETS.md) into SoundCatalog and call sites
+- 01:55 T650 DONE (attested): Final regression pass: all suites, lean bot, Play run to the stage 5 boss with a wave, console scan, script sizes, compile
+- 01:55 T642 DONE (attested): Make the new screens reachable: a ScreenRouter module with a menu dock button (one-line hook) opening inventory, quests, pass and shop, leaderboard, stage select, familiar panel, results after a clear and pause on Esc
+- 01:55 T641 DONE (attested): Upload the 40-icon set (images, pre-approved) and wire the ids into status, rarity and faction displays
+- 01:55 T651 DONE (attested): Wiring audit: for every module and script added tonight (see the ledger), prove it runs in Play (required by a running script or creating instances/events) and list orphans; wire the cheap ones
+- 01:55 T652 DONE (attested): Hook Achievements, Quests, Bond and LeaderboardRules into the server: profile fields with migration, events from the sim, results saved and clamped, all behind Config flags default OFF
+- 01:55 Run ended: iteration limit reached

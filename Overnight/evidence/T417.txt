@@ -1,0 +1,49 @@
+PASS
+T417: Hollow Parishioner and Fog Wisp (Combat.test new cases). Off by default (Config.HOLLOW_ENEMIES = false); the client has no models for them.
+RunAll (Studio Edit, 2026-10-29 23:53 UTC):
+ActionArgs.test.luau               PASS
+Balance.test.luau                  PASS balance baseline ran (numbers are a baseline, not assertions)
+Boss.test.luau                     PASS Boss: 31/31 checks ok
+Combat.test.luau                   PASS Combat: 74 of 74 checks
+Combo.test.luau                    PASS Combo: 29 of 29 checks
+Env.test.luau                      PASS Env: 24 of 24 checks
+FamiliarMaterials.test.luau        PASS FamiliarMaterials: 69/69 checks ok
+Familiars.test.luau                PASS Familiars: 32/32 checks ok
+GameSpeed.test.luau                PASS
+Lantern.test.luau                  PASS Lantern: 17 of 17 checks
+LoreFragments.test.luau            PASS
+MatchSim.test.luau                 PASS
+NewRoles.test.luau                 PASS NewRoles: 27/27 checks ok
+NumberFormat.test.luau             PASS
+Rules.test.luau                    PASS Rules: 90 of 90 checks
+SaveMigration.test.luau            PASS SaveMigration: 40 of 40 checks
+ServerRules.test.luau              PASS ServerRules: 83 of 83 checks
+SettingsDefaults.test.luau         PASS
+SoundCap.test.luau                 PASS
+StageSets.test.luau                PASS
+Waves.test.luau                    PASS Waves: 34 of 34 checks
+SUMMARY 21 of 21 suites PASS
+lean bot (full strategy, 10 seeds, defaults): cleared 25 stages on 10 of 10 seeds (0 failed), mean 510 s
+lean bot with WAVES_V2, SKY_ON and HOLLOW_ENEMIES all on: cleared 25 stages on 10 of 10 seeds (0 failed), mean 593 s
+lean bot with SYNERGY_ON off (the old numbers): cleared 25 stages on 10 of 10 seeds (0 failed), mean 558 s
+
+New suite output:
+PASS Combat: 74 of 74 checks
+ok   both Hollow Court kinds are defined
+ok   the Hollow flag is off by default
+ok   with the flag off the client never meets a Parishioner or a Wisp
+ok   with the flag on both appear, Parishioner from stage 11 and Wisp from stage 12 (11/12)
+ok   with the flag on wave sizes are unchanged and every kind is defined
+ok   no Hollow kind before stage 11
+ok   hollow armour takes more from light
+ok   hollow armour takes less from shadow
+ok   hollow armour takes fire normally
+ok   before the eating point the Lantern is left alone
+ok   a Wisp past the eating point snuffs a lit Lantern
+ok   a snuffed Lantern takes longer to recharge
+ok   a Wisp eats only once
+ok   a ready, unlit Lantern is darkened for a while
+ok   a recharging Lantern is left alone
+ok   other enemies never eat the lamp
+
+UNVERIFIED: no client models; wisp lamp-eating tested against the Lantern in the sim only.

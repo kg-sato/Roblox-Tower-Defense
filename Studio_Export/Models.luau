@@ -196,6 +196,14 @@ function Models.playClip(model, clip, speed)
 	return track or nil
 end
 
+-- Reactions (T403): Hit (0.5 s flinch) and Death (1.2 s, holds its last pose) overlay Idle at Action priority.
+-- Call from a client event handler on a board unit: Models.react(model, "Hit") when an enemy leaks, "Death" on banish.
+-- No caller yet: GameClient is at its size limit and held by the UI chats.
+function Models.react(model, which)
+	assert(which == "Hit" or which == "Death", "Models.react: Hit or Death")
+	return Models.playClip(model, which)
+end
+
 -- cool = (tier - 1) + 0.7 * (rarityOrder - 1)
 function Models.coolness(pet, tier)
 	local order = Config.RARITIES[Config.PETS[pet].rarity].order
@@ -354,7 +362,7 @@ end
 -- 2026-10-28 art pass: Blender-made enemy meshes (ReplicatedStorage.Enemy<Kind>Mesh, VFX/ASSETS.md) replace the
 -- primitive builders when present. Sized to the old model's height, standing on y = 0, facing -Z like the others.
 local addWalk -- defined below (Sentinel walk)
-local MESH_HEIGHT = { Tank = 10.5 } -- reviewer v7c: "a tiny grey speck at board zoom", 1.4x
+local MESH_HEIGHT = { Tank = 10.5, Crow = 2.6, Thief = 4.4 } -- reviewer v7c: "a tiny grey speck at board zoom", 1.4x
 local MESH_YAW = { Tank = 0 } -- measured in Play: with no turn the front already faces -Z
 local function meshEnemy(model, kind)
 	local art = game:GetService("ReplicatedStorage"):FindFirstChild("Enemy" .. kind .. "Mesh")

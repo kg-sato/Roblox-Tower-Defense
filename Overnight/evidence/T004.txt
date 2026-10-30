@@ -1,3 +1,54 @@
 PASS
-Note: Roblox Dev/Research/Game Design and Market/Hollow Knight creature design.md
-Sources: 5 linked with dates; 2 read in full (Wikipedia, MCV 2018-07-31), 3 summaries or unread. No palette or silhouette rule found; stated in note.
+T004: Difficulty modes (Rules.test new cases; server action Difficulty in MatchService is NOT run headless)
+RunAll (Studio Edit, 2026-10-29 23:53 UTC):
+ActionArgs.test.luau               PASS
+Balance.test.luau                  PASS balance baseline ran (numbers are a baseline, not assertions)
+Boss.test.luau                     PASS Boss: 31/31 checks ok
+Combat.test.luau                   PASS Combat: 74 of 74 checks
+Combo.test.luau                    PASS Combo: 29 of 29 checks
+Env.test.luau                      PASS Env: 24 of 24 checks
+FamiliarMaterials.test.luau        PASS FamiliarMaterials: 69/69 checks ok
+Familiars.test.luau                PASS Familiars: 32/32 checks ok
+GameSpeed.test.luau                PASS
+Lantern.test.luau                  PASS Lantern: 17 of 17 checks
+LoreFragments.test.luau            PASS
+MatchSim.test.luau                 PASS
+NewRoles.test.luau                 PASS NewRoles: 27/27 checks ok
+NumberFormat.test.luau             PASS
+Rules.test.luau                    PASS Rules: 90 of 90 checks
+SaveMigration.test.luau            PASS SaveMigration: 40 of 40 checks
+ServerRules.test.luau              PASS ServerRules: 83 of 83 checks
+SettingsDefaults.test.luau         PASS
+SoundCap.test.luau                 PASS
+StageSets.test.luau                PASS
+Waves.test.luau                    PASS Waves: 34 of 34 checks
+SUMMARY 21 of 21 suites PASS
+lean bot (full strategy, 10 seeds, defaults): cleared 25 stages on 10 of 10 seeds (0 failed), mean 510 s
+lean bot with WAVES_V2, SKY_ON and HOLLOW_ENEMIES all on: cleared 25 stages on 10 of 10 seeds (0 failed), mean 593 s
+lean bot with SYNERGY_ON off (the old numbers): cleared 25 stages on 10 of 10 seeds (0 failed), mean 558 s
+
+New suite output:
+PASS Rules: 90 of 90 checks
+ok   a new run is Normal
+ok   Normal and Hard are labelled in data
+ok   Normal changes nothing (all multipliers are 1)
+ok   an unknown id reads as Normal
+ok   Hard is locked until the best stage reaches its unlock stage (Hard unlocks at stage 10)
+ok   junk difficulty ids are refused
+ok   Hard can be picked once unlocked
+ok   Normal can be picked again before the first wave
+ok   the difficulty is locked once a wave has started
+ok   no difficulty change in the tutorial
+ok   no difficulty change after stage 1
+ok   snapshot carries the difficulty
+ok   Normal spawns Grunts at base hp (30)
+ok   Hard spawns the same enemy with the Hard hp multiplier (48)
+ok   Normal kill reward is the old reward (6/3)
+ok   Hard pays more coins and gems (8/4)
+ok   a saved Hard that is not unlocked loads as Normal
+ok   a saved unlocked Hard loads
+ok   meta() holds the difficulty for the profile
+ok   a junk saved difficulty loads as Normal
+ok   an unknown saved difficulty loads as Normal
+
+UNVERIFIED: MatchService wiring (TEMPLATE.difficulty, loadProfile sanitise, Difficulty action) compiles but ran in no live server; no client UI exists yet.

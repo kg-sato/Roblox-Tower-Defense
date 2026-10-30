@@ -14,8 +14,10 @@ local Lighting = game:GetService("Lighting")
 local player = Players.LocalPlayer
 local Captions = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("StageCaptions"))
 local events = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Event")
+local TextAnim = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("TextAnim"))
 
-local settings = { cinematics = "full", reducedMotion = false, flashes = true }
+local settings = { cinematics = "full", reducedMotion = false, flashes = true, textAnim = "full" }
+TextAnim.setSettings(settings) -- T607: the other screens read the same live table
 local seenIntro = {}
 
 local gui = Instance.new("ScreenGui")
@@ -35,20 +37,12 @@ limit.Parent = label
 local queue, running = {}, false
 local function play(text)
 	label.Text = text
-	label.MaxVisibleGraphemes = -1
-	local fast = settings.reducedMotion or settings.cinematics == "off"
-	if not fast then
-		label.MaxVisibleGraphemes = 0
+	if TextAnim.mode(settings) ~= "off" then
 		TweenService:Create(label, TweenInfo.new(0.2), { TextTransparency = 0, TextStrokeTransparency = 0.35 }):Play()
-		local reveal = math.clamp(#text * 0.03, 0.4, 0.9)
-		local steps = utf8.len(text) or #text
-		for i = 1, steps do
-			label.MaxVisibleGraphemes = i
-			task.wait(reveal / steps)
-		end
 	else
 		label.TextTransparency, label.TextStrokeTransparency = 0, 0.35
 	end
+	TextAnim.run(label, text, "typewrite", settings) -- T607: static when reduced motion, cinematics off or textAnim off
 	task.wait(1.8)
 	TweenService:Create(label, TweenInfo.new(0.6), { TextTransparency = 1, TextStrokeTransparency = 1 }):Play()
 	task.wait(0.7)
@@ -157,6 +151,7 @@ local function handle(kind, data)
 		settings.cinematics = data.cinematics or settings.cinematics
 		settings.reducedMotion = data.reducedMotion == true
 		settings.flashes = data.flashes ~= false
+		settings.textAnim = data.textAnim or "full"
 	elseif kind == "Begin" and type(data) == "table" and data.snapshot then
 		table.clear(seenIntro)
 		lastStage = data.snapshot.stage or 1

@@ -7,6 +7,18 @@
    "max_texture": 0
   },
   {
+   "file": "Roblox Dev/Assets/3D/CogWarden.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/ConstableWren.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
    "file": "Roblox Dev/Assets/3D/Ember_concept_v1.glb",
    "triangles": 18000,
    "limit": 20000,
@@ -49,10 +61,124 @@
    "max_texture": 64
   },
   {
+   "file": "Roblox Dev/Assets/3D/Enemies/HollowParishioner/HollowParishioner.glb",
+   "triangles": 332,
+   "limit": 3000,
+   "max_texture": 64
+  },
+  {
    "file": "Roblox Dev/Assets/3D/Enemies/LanternThief/LanternThief.glb",
    "triangles": 264,
    "limit": 3000,
    "max_texture": 64
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/BrassSentinel_uv.glb",
+   "triangles": 368,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/Clockmaker_uv.glb",
+   "triangles": 724,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/ClockmakerAutomaton_uv.glb",
+   "triangles": 568,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/ClockworkCrow_uv.glb",
+   "triangles": 416,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/FogWisp_uv.glb",
+   "triangles": 1405,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/HollowCourtRegent_uv.glb",
+   "triangles": 484,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/HollowParishioner_uv.glb",
+   "triangles": 332,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/LanternThief_uv.glb",
+   "triangles": 264,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/StarChoirEcho_uv.glb",
+   "triangles": 564,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/Unbound_uv.glb",
+   "triangles": 300,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/UnboundP2_uv.glb",
+   "triangles": 380,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/maps/_bake/UnboundP3_uv.glb",
+   "triangles": 204,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/rigged/BrassSentinel_rigged.glb",
+   "triangles": 368,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/rigged/ClockmakerAutomaton_rigged.glb",
+   "triangles": 568,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/rigged/ClockworkCrow_rigged.glb",
+   "triangles": 416,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/rigged/FogWisp_rigged.glb",
+   "triangles": 1405,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/rigged/HollowParishioner_rigged.glb",
+   "triangles": 332,
+   "limit": 3000,
+   "max_texture": 512
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Enemies/rigged/LanternThief_rigged.glb",
+   "triangles": 264,
+   "limit": 3000,
+   "max_texture": 512
   },
   {
    "file": "Roblox Dev/Assets/3D/Enemies/StarChoirEcho/StarChoirEcho.glb",
@@ -247,8 +373,38 @@
    "max_texture": 0
   },
   {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/CantorVesper.glb",
+   "triangles": 8999,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/CogWarden.glb",
+   "triangles": 9000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/ConstableWren.glb",
+   "triangles": 9000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/DameOrrery.glb",
+   "triangles": 7002,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
    "file": "Roblox Dev/Assets/3D/Familiars/clean/Ember.glb",
    "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/FerrymanOfFog.glb",
+   "triangles": 9000,
    "limit": 20000,
    "max_texture": 0
   },
@@ -267,6 +423,12 @@
   {
    "file": "Roblox Dev/Assets/3D/Familiars/clean/GreyVeilWraith.glb",
    "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/MadamQuill.glb",
+   "triangles": 9000,
    "limit": 20000,
    "max_texture": 0
   },
@@ -297,6 +459,18 @@
   {
    "file": "Roblox Dev/Assets/3D/Familiars/clean/StarDrake.glb",
    "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/TheLamplighter.glb",
+   "triangles": 8999,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/clean/VeilWalker.glb",
+   "triangles": 8999,
    "limit": 20000,
    "max_texture": 0
   },
@@ -421,6 +595,30 @@
    "max_texture": 0
   },
   {
+   "file": "Roblox Dev/Assets/3D/Familiars/new_raw/CantorVesper.glb",
+   "triangles": 17999,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/new_raw/DameOrrery.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/new_raw/TheLamplighter.glb",
+   "triangles": 17999,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/new_raw/VeilWalker.glb",
+   "triangles": 17999,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
    "file": "Roblox Dev/Assets/3D/Familiars/rigged/Archivist_rigged.glb",
    "triangles": 6000,
    "limit": 20000,
@@ -433,8 +631,38 @@
    "max_texture": 1024
   },
   {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/CantorVesper_rigged.glb",
+   "triangles": 8999,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/CogWarden_rigged.glb",
+   "triangles": 9000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/ConstableWren_rigged.glb",
+   "triangles": 9000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/DameOrrery_rigged.glb",
+   "triangles": 7002,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
    "file": "Roblox Dev/Assets/3D/Familiars/rigged/Ember_rigged.glb",
    "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/FerrymanOfFog_rigged.glb",
+   "triangles": 9000,
    "limit": 20000,
    "max_texture": 1024
   },
@@ -453,6 +681,12 @@
   {
    "file": "Roblox Dev/Assets/3D/Familiars/rigged/GreyVeilWraith_rigged.glb",
    "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/MadamQuill_rigged.glb",
+   "triangles": 9000,
    "limit": 20000,
    "max_texture": 1024
   },
@@ -483,6 +717,18 @@
   {
    "file": "Roblox Dev/Assets/3D/Familiars/rigged/StarDrake_rigged.glb",
    "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/TheLamplighter_rigged.glb",
+   "triangles": 8999,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/rigged/VeilWalker_rigged.glb",
+   "triangles": 8999,
    "limit": 20000,
    "max_texture": 1024
   },
@@ -589,8 +835,38 @@
    "max_texture": 1024
   },
   {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/CantorVesper.glb",
+   "triangles": 8999,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/CogWarden.glb",
+   "triangles": 9000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/ConstableWren.glb",
+   "triangles": 9000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/DameOrrery.glb",
+   "triangles": 7002,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
    "file": "Roblox Dev/Assets/3D/Familiars/textured/Ember.glb",
    "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/FerrymanOfFog.glb",
+   "triangles": 9000,
    "limit": 20000,
    "max_texture": 1024
   },
@@ -609,6 +885,12 @@
   {
    "file": "Roblox Dev/Assets/3D/Familiars/textured/GreyVeilWraith.glb",
    "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/MadamQuill.glb",
+   "triangles": 9000,
    "limit": 20000,
    "max_texture": 1024
   },
@@ -639,6 +921,18 @@
   {
    "file": "Roblox Dev/Assets/3D/Familiars/textured/StarDrake.glb",
    "triangles": 6000,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/TheLamplighter.glb",
+   "triangles": 8999,
+   "limit": 20000,
+   "max_texture": 1024
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/Familiars/textured/VeilWalker.glb",
+   "triangles": 8999,
    "limit": 20000,
    "max_texture": 1024
   },
@@ -727,7 +1021,19 @@
    "max_texture": 0
   },
   {
+   "file": "Roblox Dev/Assets/3D/FerrymanOfFog.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
    "file": "Roblox Dev/Assets/3D/Frostling_concept_v1.glb",
+   "triangles": 18000,
+   "limit": 20000,
+   "max_texture": 0
+  },
+  {
+   "file": "Roblox Dev/Assets/3D/MadamQuill.glb",
    "triangles": 18000,
    "limit": 20000,
    "max_texture": 0

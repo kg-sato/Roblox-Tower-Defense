@@ -1,3 +1,17 @@
-PASS (documented: Roblox Dev/Design/Stage Set Plans.md, section "Path shapes")
-Serpentine (384 studs), inward spiral (288) and a split with a merge point (branches 132 and 160), as waypoint lists; a script computed length, corners, sharpest turn, smallest gap between non-adjacent legs and the board-bounds check (all inside the bounds; gaps 14 to 22 studs). The split needs engine support for two branches.
-Limits: not built or placed in Studio; slot positions not designed; branches shorter than the current 234-stud path.
+PASS
+T=T155; generator VFX/sfx/make_cues.py; machine checks only, ear quality UNVERIFIED
+name                     dur    peak     rms  st400ms  clip  result
+familiar_place          0.60   -6.9d  -23.5d   -21.8d     0  PASS
+reveal_common           1.32  -10.2d  -27.0d   -21.9d     0  PASS
+reveal_rare             2.04   -6.2d  -25.0d   -18.1d     0  PASS
+reveal_epic             2.96   -4.4d  -23.0d   -17.6d     0  PASS
+reveal_legendary        4.08   -6.2d  -21.0d   -15.7d     0  PASS
+reveal_mythic           5.00   -4.5d  -19.5d   -14.1d     0  PASS
+reveal_celestial        6.02   -3.0d  -18.5d   -13.2d     0  PASS
+Overnight/captures/audio_cues_T155_spectrogram.png (0-5 kHz): 7 spectrograms stacked top to bottom in this order: familiar_place, reveal_common, reveal_rare, reveal_epic, reveal_legendary, reveal_mythic, reveal_celestial
+CUES: 30 sounds, 0 failing
+reveal ladder escalates (longer and not quieter each rarity): PASS
+check_sound_lengths.py:
+39 MANIFEST.md sounds checked
+all sounds within their declared length
+exit 0

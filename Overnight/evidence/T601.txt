@@ -1,0 +1,8 @@
+PASS
+T601 ultimate effect per familiar with a camera move, studio-fx2, 2026-10-29.
+New ReplicatedStorage.UltFlourish: 20 plans (effect kind + camera move + lean). CutsceneFX.FirstPerson (the cutscene every cast uses) calls UltFlourish.hit at its impact beat and uses the returned CFrame for the aftermath drift (orbit, crane, push, pull, whip, dutch with a 5 to 8 degree roll). Effects are parented to the cutscene stage, so CutsceneFX's own cleanup removes them. Reduced motion: the plain drift, no lean.
+Run: all 20 ultimates through CutsceneFX.play("FirstPerson") in a Play client (2 full, 18 short): every one fired onHit, counters ult_<id>=1 for all 20 and no ultFAIL_*; after each run no Cutscene stage, CutsceneGrade, CutsceneDOF or CutsceneGui was left, and the workspace descendant count before and after the 20 runs was 1409 and 1409 (no leftover parts).
+Captures: Overnight/captures/fx2/T601_Frostling_cutscene_ride.jpg, Overnight/captures/fx2/T601_StarDrake_impact.jpg (falling stars at the impact beat).
+Found and fixed: the Mourner ink tide was near-black on the dusk street; dark accents are now lifted toward cream (reinstalled in Studio and mirrored; not re-captured).
+UNVERIFIED: look of the flourishes (only Frostling and StarDrake were captured, nobody judged them); the camera moves on a real screen (per-familiar targets are logged in attributes cam_<id> on UltFlourish); the full game path (GameClient's cast through FXK.cut) was not re-driven: the harness called CutsceneFX directly with a stand-in model named after each familiar.
+Files: Studio_Export/UltFlourish.luau, CutsceneFX.luau (+ VFX/ copies).

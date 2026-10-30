@@ -9,7 +9,7 @@ return function(Shared)
 	local tmp = Instance.new("Folder")
 	tmp.Name = "_RulesTest"
 	tmp.Parent = game:GetService("ReplicatedStorage")
-	for _, n in { "Config", "Path", "MatchSim" } do
+	for _, n in { "Config", "Path", "MatchSim", "StageSets" } do
 		Shared[n]:Clone().Parent = tmp
 	end
 	local Config = require(tmp.Config)
@@ -211,6 +211,215 @@ return function(Shared)
 		end
 		check("pity: no dry streak of Epic or better reaches " .. Config.PITY_EVERY .. " rolls", worst < Config.PITY_EVERY, "worst streak " .. worst .. " over " .. rolls .. " rolls")
 		check("pity: the roll loop really ran", rolls >= 1500, rolls)
+		-- roster slot unlocks (T185)
+		check("rosterSlots at level 1 is the full unit cap today", Config.rosterSlots(1) == Config.MAX_UNITS, Config.rosterSlots(1))
+		local saved = Config.ROSTER_SLOT_UNLOCKS
+		Config.ROSTER_SLOT_UNLOCKS = { { level = 1, slots = 6 }, { level = 5, slots = 8 }, { level = 10, slots = 99 } }
+		check("a row below its level is not open yet", Config.rosterSlots(4) == 6, Config.rosterSlots(4))
+		check("the row at its level opens", Config.rosterSlots(5) == 8, Config.rosterSlots(5))
+		check("slots never exceed MAX_UNITS", Config.rosterSlots(25) == Config.MAX_UNITS, Config.rosterSlots(25))
+		check("slots are never below 1", (function()
+			Config.ROSTER_SLOT_UNLOCKS = { { level = 99, slots = 4 } }
+			return Config.rosterSlots(1)
+		end)() == 1)
+		Config.ROSTER_SLOT_UNLOCKS = saved
+
+		-- recycle refund per tier (T019)
+		local pctOk = true
+		for t = 1, Config.TIER_MAX do
+			if Config.refundPct(t) ~= 1 then
+				pctOk = false
+			end
+		end
+		check("default refund is 100 percent at every tier (economy unchanged)", pctOk)
+		local base = Config.recycleValue("Ember", 3)
+		check("default recycle value is the old formula", base == math.floor(5 * Config.RARITIES[Config.PETS.Ember.rarity].order * 3 ^ 2), base)
+		local savedPct = table.clone(Config.REFUND_PCT)
+		Config.REFUND_PCT[3] = 0.5
+		check("a 50 percent tier pays half", Config.recycleValue("Ember", 3) == math.floor(base * 0.5), Config.recycleValue("Ember", 3))
+		check("other tiers are untouched", Config.recycleValue("Ember", 2) == math.floor(5 * Config.RARITIES[Config.PETS.Ember.rarity].order * 3), Config.recycleValue("Ember", 2))
+		Config.REFUND_PCT[3] = 7
+		check("a refund above 100 percent is clamped to 100", Config.refundPct(3) == 1)
+		Config.REFUND_PCT[3] = -1
+		check("a negative refund is clamped to 0", Config.refundPct(3) == 0 and Config.recycleValue("Ember", 3) == 0)
+		Config.REFUND_PCT[3] = 0 / 0
+		check("a NaN refund falls back to 100 percent", Config.refundPct(3) == 1)
+		check("a tier without an entry refunds 100 percent", Config.refundPct(99) == 1)
+		Config.REFUND_PCT = savedPct
+		check("recycle() adds the refunded coins", (function()
+			local sim = MatchSim.new(Random.new(3), function() end, false)
+			sim.grid[1] = { pet = "Ember", tier = 3 }
+			local c0 = sim.coins
+			Config.REFUND_PCT[3] = 0.5
+			sim:recycle(1)
+			Config.REFUND_PCT[3] = 1
+			return sim.coins - c0 == math.floor(base * 0.5)
+		end)())
+
+		-- difficulty modes (T004)
+		local function plain(seed)
+			return MatchSim.new(Random.new(seed or 1), function() end, false)
+		end
+		do
+			local sim = plain(1)
+			check("a new run is Normal", sim.difficulty == "Normal")
+			check("Normal and Hard are labelled in data", Config.DIFFICULTY.Normal.label == "Normal" and Config.DIFFICULTY.Hard.label == "Hard" and #Config.DIFFICULTY_ORDER == 2)
+			check("Normal changes nothing (all multipliers are 1)", Config.DIFFICULTY.Normal.hp == 1 and Config.DIFFICULTY.Normal.coins == 1 and Config.DIFFICULTY.Normal.gems == 1)
+			check("an unknown id reads as Normal", Config.difficulty("Nightmare") == Config.DIFFICULTY.Normal and Config.difficulty(5) == Config.DIFFICULTY.Normal)
+			local okHard, why = sim:setDifficulty("Hard")
+			check("Hard is locked until the best stage reaches its unlock stage", okHard == false and sim.difficulty == "Normal", why)
+			check("junk difficulty ids are refused", select(1, sim:setDifficulty("Nightmare")) == false and select(1, sim:setDifficulty(5)) == false and select(1, sim:setDifficulty({})) == false and select(1, sim:setDifficulty(nil)) == false)
+			sim.bestStage = Config.DIFFICULTY.Hard.unlockStage
+			check("Hard can be picked once unlocked", select(1, sim:setDifficulty("Hard")) == true and sim.difficulty == "Hard")
+			check("Normal can be picked again before the first wave", select(1, sim:setDifficulty("Normal")) == true and sim.difficulty == "Normal")
+			sim:setDifficulty("Hard")
+			sim:startWave()
+			check("the difficulty is locked once a wave has started", select(1, sim:setDifficulty("Normal")) == false and sim.difficulty == "Hard")
+			local tut = MatchSim.new(Random.new(2), function() end, true)
+			tut.bestStage = 50
+			check("no difficulty change in the tutorial", select(1, tut:setDifficulty("Hard")) == false)
+			local later = plain(3)
+			later.bestStage = 50
+			later.stage = 4
+			check("no difficulty change after stage 1", select(1, later:setDifficulty("Hard")) == false)
+			check("snapshot carries the difficulty", sim:snapshot().difficulty == "Hard")
+		end
+		do
+			-- hp and rewards scale by difficulty; Normal is exactly the old numbers
+			local function firstSpawn(diff)
+				local hp
+				local sim = MatchSim.new(Random.new(5), function(kind, p)
+					if kind == "Spawn" and not hp then
+						hp = p.maxHp
+					end
+				end, false)
+				sim.bestStage = 99
+				sim:setDifficulty(diff)
+				sim:startWave()
+				sim:step(0.1)
+				return hp
+			end
+			local hn, hh = firstSpawn("Normal"), firstSpawn("Hard")
+			check("Normal spawns Grunts at base hp", near(hn, Config.ENEMIES.Grunt.hp), hn)
+			check("Hard spawns the same enemy with the Hard hp multiplier", near(hh, Config.ENEMIES.Grunt.hp * Config.DIFFICULTY.Hard.hp, 1e-6), hh)
+			local function killTank(diff)
+				local sim = plain(6)
+				sim.bestStage = 99
+				sim:setDifficulty(diff)
+				local e = { id = 1, kind = "Tank", hp = 1, maxHp = 1, dist = 0, dead = false }
+				table.insert(sim.enemies, e)
+				local c0, g0 = sim.coins, sim.gems
+				sim:damage(e, 5, false)
+				return sim.coins - c0, sim.gems - g0
+			end
+			local cn, gn = killTank("Normal")
+			local ch, gh = killTank("Hard")
+			check("Normal kill reward is the old reward", cn == Config.ENEMIES.Tank.coins and gn == Config.ENEMIES.Tank.gems, cn .. "/" .. gn)
+			check("Hard pays more coins and gems", ch == math.floor(Config.ENEMIES.Tank.coins * Config.DIFFICULTY.Hard.coins + 0.5) and gh == math.floor(Config.ENEMIES.Tank.gems * Config.DIFFICULTY.Hard.gems + 0.5) and ch > cn and gh > gn, ch .. "/" .. gh)
+		end
+		do
+			-- the saved difficulty (T004): only a known, unlocked id loads
+			local sim = plain(7)
+			sim:loadMeta({ bestStage = 3, difficulty = "Hard" })
+			check("a saved Hard that is not unlocked loads as Normal", sim.difficulty == "Normal")
+			sim = plain(7)
+			sim:loadMeta({ bestStage = Config.DIFFICULTY.Hard.unlockStage, difficulty = "Hard" })
+			check("a saved unlocked Hard loads", sim.difficulty == "Hard")
+			check("meta() holds the difficulty for the profile", sim:meta().difficulty == "Hard")
+			sim = plain(7)
+			sim:loadMeta({ bestStage = 50, difficulty = { evil = true } })
+			check("a junk saved difficulty loads as Normal", sim.difficulty == "Normal")
+			sim = plain(7)
+			sim:loadMeta({ bestStage = 50, difficulty = "Godmode" })
+			check("an unknown saved difficulty loads as Normal", sim.difficulty == "Normal")
+		end
+		do
+			-- placement rules per map (T177): data in StageSets place, read through Config.mapRules, flag Config.MAP_RULES
+			local SS = require(tmp.StageSets)
+			local pet = Config.PET_ORDER[1]
+			local fp = Config.footprint(pet)
+			check("MAP_RULES is off by default and mapRules gives nil", Config.MAP_RULES == false and Config.mapRules(7) == nil)
+			local function gridLegal(rules, label)
+				local map, n = {}, 0
+				for x = -50, 46, 2 do
+					for z = -26, 28, 2 do
+						local ok2 = Config.canPlace({}, pet, x, z, nil, rules)
+						map[x .. "," .. z] = ok2
+						n += ok2 and 1 or 0
+					end
+				end
+				return map, n
+			end
+			local base, baseCount = gridLegal(nil)
+			local function sameMap(a, b)
+				for k, v in a do
+					if b[k] ~= v then
+						return false
+					end
+				end
+				return true
+			end
+			Config.MAP_RULES = true
+			Config.PATH_PER_SET = true -- the zones and decorations are authored against each set's own lane
+			local first = Config.mapRules(1)
+			check("flag on: rules for stage 1 carry bounds, path, noBuild and decor", first ~= nil and first.bounds == Config.PLACE_BOUNDS and #first.path == #Config.PATH and #first.noBuild == 0 and #first.decor == 2)
+			check("flag on: the first set's legal spots equal today's rules everywhere", sameMap(base, (gridLegal(first))) and sameMap((gridLegal(first)), base))
+			for si, set in SS.list do
+				local stage = 1
+				for k = 1, si - 1 do
+					stage += SS.list[k].stages
+				end
+				local rules = Config.mapRules(stage)
+				local n = set.id
+				check(n .. ": rules come from the set (path and no-build zones)", rules ~= nil and #rules.noBuild == #(set.place and set.place.noBuild or {}) and #rules.path == #Config.pathFor(stage))
+				for zi, zone in set.place.noBuild do
+					local ok3, why = Config.canPlace({}, pet, zone.x, zone.z, nil, rules)
+					check(n .. ": no-build zone " .. zi .. " centre is refused as a blocked area", ok3 == false and why == "Blocked area", why)
+					check(n .. ": the same spot is legal under the old rules unless it is on the path", select(1, Config.canPlace({}, pet, zone.x, zone.z)) == (Config.distToPath(zone.x, zone.z) >= Config.PATH_HALF_WIDTH + fp * 0.6))
+					check(n .. ": just outside the zone is legal", select(1, Config.canPlace({}, pet, zone.x + zone.r + fp * 0.6 + 0.2, zone.z, nil, rules)) == true)
+				end
+				for di, d in set.place.decor do
+					check(n .. ": decoration " .. di .. " never blocks placement on it", select(1, Config.canPlace({}, pet, d.x, d.z, nil, rules)) == true)
+				end
+				local noDecor = { bounds = rules.bounds, path = rules.path, noBuild = rules.noBuild, decor = {} }
+				local m1, count = gridLegal(rules)
+				check(n .. ": removing every decoration changes no spot", sameMap(m1, (gridLegal(noDecor))))
+				check(n .. ": at least 60 legal spots on the 2 stud grid", count >= 60, count)
+				local wp = rules.path[3]
+				local okp, whyp = Config.canPlace({}, pet, wp.X, wp.Z, nil, rules)
+				check(n .. ": the set's own lane is refused", okp == false and whyp == "Not on the path", whyp)
+			end
+			-- the sim follows the rules for its stage
+			local function simAt(stage)
+				local sim = plain(11)
+				sim.stage = stage
+				return sim
+			end
+			local zone = SS.list[2].place.noBuild[1]
+			Config.MAP_RULES = false
+			local sim = simAt(6)
+			local id = sim:addUnit(pet, 0, 24)
+			check("flag off: the sim lets a unit stand in the Harbour no-build circle", select(1, sim:move(id, zone.x, zone.z)) == true)
+			Config.MAP_RULES = true
+			sim = simAt(6)
+			id = sim:addUnit(pet, 0, 24)
+			local okm, whym = sim:move(id, zone.x, zone.z)
+			check("flag on: the sim refuses a move into the Harbour no-build circle", okm == false and whym == "Blocked area", whym)
+			local sim1 = simAt(1)
+			check("flag on: the same move at stage 1 is allowed (set 1 has no zones)", select(1, sim1:move(sim1:addUnit(pet, 0, 24), zone.x, zone.z)) == (Config.distToPath(zone.x, zone.z) >= Config.PATH_HALF_WIDTH + fp * 0.6))
+			sim = simAt(6)
+			local allLegal = true
+			for _ = 1, 10 do
+				local fx, fz = sim:findSpot(pet)
+				if fx == nil or not Config.canPlace(sim.grid, pet, fx, fz, nil, Config.mapRules(6)) then
+					allLegal = false
+					break
+				end
+				sim:addUnit(pet, fx, fz)
+			end
+			check("flag on: ten auto-placed units at stage 6 all stand on legal spots", allLegal)
+			Config.MAP_RULES, Config.PATH_PER_SET = false, false
+		end
 	end)
 	if not ok then
 		failed += 1

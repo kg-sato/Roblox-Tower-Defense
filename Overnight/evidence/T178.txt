@@ -1,0 +1,6 @@
+PASS
+T178 placement heat map, studio Play, stage 1, 2026-10-29, worker studio-client2. Module StarterPlayerScripts.PlacementHint (Studio_Export/PlacementHint.luau), one-line hook in GameClient (FXK.hint). Toggle: key H (not driven in the test: the keyboard tool did not reach the game), or script attribute Toggle (used in the test).
+Tiles use Config.canPlace (same rules as the server, map rules when on) and the lane length inside the familiar's range (2 stud samples); green >= 85% of the best, yellow >= 60%, weaker tiles not drawn.
+Stage 1: StarDrake (range 28): 128 legal tiles, 33 drawn (9 green, 24 yellow), best score 75. Ember (range 20): 125 legal, 25 drawn, best 45. Toggle again removes the folder (PlacementHint folder gone). Console clean (known asset line only).
+Capture: Overnight/captures/T178_placement_hint.jpg (tiles visible over the pads between the lanes; the first run drew them under the floor, fixed to y 1.12).
+Limits: per family = per familiar range (not per faction); look UNVERIFIED; no on-screen button yet (key H only), a HUD toggle is not built.

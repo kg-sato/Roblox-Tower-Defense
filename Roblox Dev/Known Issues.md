@@ -2,6 +2,7 @@
 Compiled 2026-10-29: every open row of [[Bug Log]] plus the gaps found while working on familiars, enemies and design notes. Severity as in the Bug Log: crash, major (breaks or blocks a feature), minor, cosmetic, unverified. "Gap" means a missing piece, not a defect in something that exists.
 
 ## Open bugs from the Bug Log
+Refreshed 2026-10-30: Bug Log #3 (stale MatchSim, T413) and #4 (Ward metalness, T414) are fixed; rows below are kept for history. New open items: Bug Log #12 to #14.
 | Severity | Issue | Where |
 |---|---|---|
 | unverified | Drag-to-merge with a real mouse or touch has never been exercised (only remotes fired from a script) | Bug Log #1 |
@@ -31,3 +32,6 @@ Compiled 2026-10-29: every open row of [[Bug Log]] plus the gaps found while wor
 | cosmetic | The loading-screen title still grazes the largest clock face's lower rim | Noted in Bug Log #5 (fixed row) |
 
 Not listed: anything the user asked for but has not seen (for example every texture and every enemy model is UNVERIFIED by the user).
+
+## GameClient size (2026-10-30)
+`StarterPlayerScripts.GameClient` is about 142,000 of Roblox's 200,000-character limit (142,167 in T642/T650), down from 173,770 after T198 moved nine blocks into `GC*` modules (GCPanelKit, GCHudDressing, GCUpgradeRows, GCTutSeal, GCFeatured, GCBossPlate, GCOddsRows, GCSettingsApply, GCMergeCut). Backup: `ServerStorage.GameClient_backup_T198`. Keep new client code in new ModuleScripts with a one-line hook; run `python tools/script_sizes.py`.

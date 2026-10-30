@@ -14,6 +14,7 @@ local StageSets = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild(
 local Music = require(ReplicatedStorage:WaitForChild("MusicFX"))
 local events = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Event")
 local setsFolder = workspace:WaitForChild("StageSets")
+local BossArena = require(script.Parent:WaitForChild("BossArena")) -- T172 boss arena dressing
 
 local hidden = Instance.new("Folder") -- client-only parking spot for the sets that are not shown
 hidden.Name = "HiddenStageSets"
@@ -106,6 +107,7 @@ local function morph(set)
 end
 
 apply = function(stage)
+	BossArena.setStage(stage)
 	local set = StageSets.forStage(stage or 1)
 	if morphing then
 		pendingStage = stage

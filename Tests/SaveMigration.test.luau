@@ -7,7 +7,7 @@ return function(Shared)
 	local tmp = Instance.new("Folder")
 	tmp.Name = "_SaveMigrationTest"
 	tmp.Parent = game:GetService("ReplicatedStorage")
-	for _, n in { "Config", "Path", "MatchSim", "SettingsDefaults" } do
+	for _, n in { "Config", "Path", "MatchSim", "SettingsDefaults", "ProgressHooks", "Achievements", "Quests", "Bond", "LeaderboardRules", "LoreFragments", "Familiars" } do
 		Shared[n]:Clone().Parent = tmp
 	end
 	local Config = require(tmp.Config)
@@ -59,6 +59,35 @@ return function(Shared)
 		e:loadMeta({ level = Config.LEVEL_MAX + 10, xp = 1, sp = 0, gems = 0 })
 		check("a level above the cap loads clamped", e.level <= Config.LEVEL_MAX, e.level)
 
+		-- stage progress (T411): bestStage and lastStage are new fields; old saves lack them
+		local f = newSim(8)
+		f:loadMeta({ version = 1, level = 2, xp = 0, sp = 0, gems = 0 })
+		check("an old save without bestStage loads with best stage 1", f.bestStage == 1, f.bestStage)
+		check("a load never moves the run's own stage", f.stage == 1)
+		local g = newSim(9)
+		g:loadMeta({ bestStage = 12, lastStage = 9 })
+		check("a saved best stage loads", g.bestStage == 12, g.bestStage)
+		local h = newSim(10)
+		h:loadMeta({ bestStage = 4, lastStage = 9 })
+		check("the best stage is never below the last stage", h.bestStage == 9, h.bestStage)
+		for label, bad in { ["huge"] = 1e12, ["negative"] = -5, ["NaN"] = 0 / 0, ["string"] = "9", ["table"] = {} } do
+			local x = newSim(11)
+			x:loadMeta({ bestStage = bad, lastStage = bad })
+			check("a " .. label .. " best stage is clamped into 1 to 1000", x.bestStage >= 1 and x.bestStage <= 1000, x.bestStage)
+		end
+		local y = newSim(12)
+		y.stage = 7
+		local ym = y:meta()
+		check("meta() carries best and last stage", ym.bestStage == 7 and ym.lastStage == 7, ym.bestStage .. "/" .. ym.lastStage)
+		y.stage = 3 -- an overrun sets the stage back; the best stays
+		y.bestStage = 7
+		local ym2 = y:meta()
+		check("after a setback the best stage stays and the last stage drops", ym2.bestStage == 7 and ym2.lastStage == 3, ym2.bestStage .. "/" .. ym2.lastStage)
+		local z = newSim(13)
+		z:loadMeta(ym2)
+		check("best and last stage survive a round trip", z.bestStage == 7)
+		check("meta() of a fresh sim reports stage 1", newSim(15):meta().bestStage == 1)
+
 		-- settings: an old profile without settings, or with only some, gets full defaults and keeps its valid values
 		local def = Settings.copyDefaults()
 		local s0 = Settings.sanitize(nil)
@@ -83,6 +112,75 @@ return function(Shared)
 			end
 		end
 		check("every default key is present after sanitize", complete)
+
+		-- collection: duplicates and shards (T186)
+		do
+			local coll = {}
+			local pet = Config.PET_ORDER[1]
+			local rarity = Config.PETS[pet].rarity
+			check("the first pull is new and holds one copy and no shards", Config.collectionAdd(coll, pet) == true and coll[pet].count == 1 and coll[pet].shards == 0)
+			check("a duplicate is not new, adds a copy and shards by rarity", Config.collectionAdd(coll, pet) == false and coll[pet].count == 2 and coll[pet].shards == Config.SHARDS_PER_DUPLICATE[rarity], coll[pet].shards)
+			Config.collectionAdd(coll, pet)
+			check("shards grow with every duplicate", coll[pet].count == 3 and coll[pet].shards == 2 * Config.SHARDS_PER_DUPLICATE[rarity])
+			check("shardsFor an unknown pet is 0", Config.shardsFor("NotAPet") == 0)
+			local ok2 = true
+			for _, r in Config.RARITY_ORDER do
+				if type(Config.SHARDS_PER_DUPLICATE[r]) ~= "number" or Config.SHARDS_PER_DUPLICATE[r] <= 0 then
+					ok2 = false
+				end
+			end
+			check("every rarity pays shards", ok2)
+			local lastR, rising = 0, true
+			for _, r in Config.RARITY_ORDER do
+				if Config.SHARDS_PER_DUPLICATE[r] < lastR then
+					rising = false
+				end
+				lastR = Config.SHARDS_PER_DUPLICATE[r]
+			end
+			check("rarer familiars pay more shards", rising)
+			coll[pet].count = Config.COLLECTION_MAX
+			coll[pet].shards = Config.COLLECTION_MAX
+			Config.collectionAdd(coll, pet)
+			check("counts and shards stop at the cap", coll[pet].count == Config.COLLECTION_MAX and coll[pet].shards == Config.COLLECTION_MAX)
+			-- migration of the older `seen` list and clamping of a damaged save
+			local second = Config.PET_ORDER[2]
+			local m = Config.sanitizeCollection(nil, { [pet] = true, [second] = true, NotAPet = true, [Config.PET_ORDER[3]] = false })
+			check("an old save with only `seen` gives one copy each of the real ones", m[pet] and m[pet].count == 1 and m[pet].shards == 0 and m[second] and m[second].count == 1 and m.NotAPet == nil and m[Config.PET_ORDER[3]] == nil)
+			local raw = { [pet] = { count = 5, shards = 12 }, [second] = { count = -4, shards = 1e99 }, NotAPet = { count = 1, shards = 1 }, [Config.PET_ORDER[3]] = "bad", [Config.PET_ORDER[4]] = { count = 0 / 0, shards = "x" } }
+			local c2 = Config.sanitizeCollection(raw, {})
+			check("a saved collection keeps good counts", c2[pet].count == 5 and c2[pet].shards == 12)
+			check("a damaged collection is clamped to whole numbers in range", c2[second].count == 1 and c2[second].shards == Config.COLLECTION_MAX and c2[Config.PET_ORDER[4]].count == 1 and c2[Config.PET_ORDER[4]].shards == 0)
+			check("a damaged collection drops unknown pets and non-table entries", c2.NotAPet == nil and c2[Config.PET_ORDER[3]] == nil)
+			check("a non-table collection gives an empty one", next(Config.sanitizeCollection("junk", nil)) == nil and next(Config.sanitizeCollection(5, 7)) == nil)
+			local both = Config.sanitizeCollection({ [pet] = { count = 4, shards = 9 } }, { [pet] = true, [second] = true })
+			check("seen never lowers a stored count and fills the missing ones", both[pet].count == 4 and both[pet].shards == 9 and both[second].count == 1)
+		end
+
+		-- T652: achievements / quests / bond profile fields
+		do
+			local H = require(tmp.ProgressHooks)
+			local fresh = H.fields()
+			check("T652 fields() gives achievements, quests and bond, fresh each call", type(fresh.achievements) == "table" and type(fresh.quests) == "table" and type(fresh.bond) == "table" and H.fields().achievements ~= fresh.achievements)
+			local old = { version = 1, level = 3, gems = 40, bestStage = 4 }
+			H.sanitize(old)
+			check("T652 an old profile without the new fields gets empty ones and keeps the rest", next(old.achievements.stats) == nil and old.quests.day == 0 and next(old.bond) == nil and old.level == 3 and old.gems == 40 and old.bestStage == 4)
+			local bad = { achievements = { stats = { rolls = 12, junk = 1, merges = -4 }, unlocked = { FirstSummon = true, Nope = true } }, quests = { day = "x", stats = { rolls = 3, junk = 9 }, claimed = { D1 = true, S1 = true } }, bond = { Ember = { xp = 1e12, lastUsed = -5 }, ["bad id"] = { xp = 3 } } }
+			H.sanitize(bad)
+			check("T652 a damaged achievements field keeps good values and drops junk", bad.achievements.stats.rolls == 12 and bad.achievements.stats.junk == nil and bad.achievements.stats.merges == nil and bad.achievements.unlocked.FirstSummon == true and bad.achievements.unlocked.Nope == nil)
+			check("T652 a damaged quests field is repaired", bad.quests.day == 0 and bad.quests.stats.rolls == 3 and bad.quests.stats.junk == nil and bad.quests.claimed.D1 == true and bad.quests.claimed.S1 == nil)
+			check("T652 a damaged bond field is clamped", bad.bond.Ember.xp == 2250 and bad.bond.Ember.lastUsed == 0 and bad.bond["bad id"] == nil)
+			local junk = { achievements = "x", quests = 5, bond = true }
+			H.sanitize(junk)
+			check("T652 non-table fields become empty states", type(junk.achievements.stats) == "table" and type(junk.quests.stats) == "table" and type(junk.bond) == "table")
+			local twice = { achievements = { stats = { rolls = 7 }, unlocked = {} } }
+			H.sanitize(twice)
+			H.sanitize(twice)
+			check("T652 sanitize twice changes nothing", twice.achievements.stats.rolls == 7)
+			local d = newSim(11)
+			d:loadMeta({ level = 4, xp = 1, sp = 1, gems = 30, achievements = bad.achievements, quests = bad.quests, bond = bad.bond })
+			check("T652 loadMeta ignores the new fields and meta() does not carry them", d.level == 4 and d:meta().achievements == nil and d:meta().bond == nil)
+			check("T652 all four flags default OFF", Config.ACHIEVEMENTS_ON == false and Config.QUESTS_ON == false and Config.BOND_ON == false and Config.LEADERBOARD_ON == false)
+		end
 	end)
 	if not ok then
 		failed += 1

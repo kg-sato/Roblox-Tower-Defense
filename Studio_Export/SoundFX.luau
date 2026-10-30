@@ -8,7 +8,8 @@
 --   SoundFX.play("ultimate_impact")               -- or by hand: name, { volume, pitch, length, delay }
 --   SoundFX.setVolumes({ master = 1, sfx = 0.8 }) -- from the Settings screen (Music is a separate group, not used here)
 --   SoundFX.audit()                               -- in-engine check: every file loads and its TimeLength matches the catalog
--- Rules: one SoundGroup for all effect sounds; at most 8 sounds at once (6 on touch), UI sounds are dropped first; `length`
+-- Rules: one SoundGroup for all effect sounds; at most 8 sounds at once (6 on touch), UI sounds are dropped first, and a new sound
+-- of lower priority than every playing one is dropped instead of stopping a higher one; `length`
 -- trims a long sound (the 4 s anticipation riser is cut at the reveal's own anticipation length with a 0.25 s fade);
 -- every sound destroys itself when it ends; nothing loops.
 
@@ -21,15 +22,28 @@ local RunService = game:GetService("RunService")
 local SoundFX = {}
 SoundFX.base = "rbxasset://sounds/vfx/"
 SoundFX.catalog = require(script.Parent:WaitForChild("SoundCatalog"))
+SoundFX.catalogOld = SoundFX.catalog -- files that always exist; SoundCues adds the overnight cue set on top (T630)
 local idsModule = script.Parent:FindFirstChild("AudioIds")
 SoundFX.ids = idsModule and require(idsModule).sfx or {}
+local cuesModule = script.Parent:FindFirstChild("SoundCues")
+local Cues = cuesModule and require(cuesModule)
+if Cues then
+	SoundFX.catalog = table.clone(SoundFX.catalogOld)
+	SoundFX.ids = table.clone(SoundFX.ids)
+	for k, v in Cues.catalog do
+		SoundFX.catalog[k] = v
+	end
+	for k, v in Cues.ids do
+		SoundFX.ids[k] = v
+	end
+end
 
 -- uploaded asset id when there is one, else the local Studio preview file
 function SoundFX.soundId(name)
 	local id = SoundFX.ids[name]
 	return id and ("rbxassetid://" .. tostring(id)) or (SoundFX.base .. name .. ".wav")
 end
-SoundFX.volumes = { master = 1, sfx = 1 }
+SoundFX.volumes = { master = 1, sfx = 1, ui = 1 } -- ui scales the UI cues only (SoundCues.isUI), T605
 SoundFX.log = nil -- set to {} to record every play { name, t, ok }
 
 local active = {}
@@ -66,6 +80,16 @@ end
 
 function SoundFX.play(name, o)
 	o = o or {}
+	if Cues then
+		local origName = name
+		name = Cues.resolve(name, SoundFX.catalogOld) -- alias to a new cue, or an existing one when the new cue is not uploaded
+		if not name then
+			if SoundFX.log then
+				table.insert(SoundFX.log, { name = tostring(origName), t = os.clock(), ok = false, why = "no asset for this cue" })
+			end
+			return nil
+		end
+	end
 	local e = SoundFX.catalog[name]
 	if not e then
 		warn("SoundFX: unknown sound " .. tostring(name))
@@ -86,6 +110,13 @@ function SoundFX.play(name, o)
 				worst, wi = a, i
 			end
 		end
+		if worst and worst.pri > e.pri then
+			-- a lower priority never stops a higher one: the new sound is the one dropped
+			if SoundFX.log then
+				table.insert(SoundFX.log, { name = name, t = os.clock(), ok = false, why = "dropped (lower priority)" })
+			end
+			return nil
+		end
 		if worst then
 			worst.sound:Stop()
 			worst.sound:Destroy()
@@ -95,7 +126,7 @@ function SoundFX.play(name, o)
 	local s = Instance.new("Sound")
 	s.Name = "VFX_" .. name
 	s.SoundId = SoundFX.soundId(name)
-	s.Volume = e.vol * (o.volume or 1)
+	s.Volume = e.vol * (o.volume or 1) * ((Cues and Cues.isUI(name)) and SoundFX.volumes.ui or 1)
 	s.PlaybackSpeed = (o.pitch or 1) * (1 + (math.random() - 0.5) * 2 * e.jit)
 	s.RollOffMaxDistance = 0
 	s.SoundGroup = getGroup()
@@ -156,6 +187,9 @@ function SoundFX.audit()
 	table.sort(names)
 	for _, n in ipairs(names) do
 		local e = SoundFX.catalog[n]
+		if Cues and Cues.catalog[n] and not Cues.ids[n] then
+			continue -- new cue with no upload yet: SoundCues resolves it to an existing cue
+		end
 		local s = Instance.new("Sound")
 		s.SoundId = SoundFX.soundId(n)
 		s.Parent = SoundService

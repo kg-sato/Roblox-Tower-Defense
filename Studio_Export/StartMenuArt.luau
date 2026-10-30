@@ -12,6 +12,8 @@
 local TweenService = game:GetService("TweenService")
 
 return function(env)
+	local okT, errT = pcall(function() require(script.Parent:WaitForChild("TitleScene", 3))(env) end) -- title background (2026-10-29)
+	if not okT then warn("TitleScene: " .. tostring(errT)) end
 	local sm, btn = env.startScreen, env.startBtn
 	local A = require(game:GetService("ReplicatedStorage"):WaitForChild("ArtIds"))
 	local reduced = env.reduced or function() return false end
@@ -78,7 +80,7 @@ return function(env)
 		for k = 1, 2 do
 			echoes[k] = new("ImageLabel", { BackgroundTransparency = 1, Image = A.title, Position = UDim2.fromOffset(-20, 20 - k * 14), Size = UDim2.fromOffset(TW, TH), ImageTransparency = 0.55 + k * 0.15, ZIndex = 13 }, col)
 		end
-		local tag = new("TextLabel", { Name = "Tagline", BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 140), Size = UDim2.fromOffset(470, 26), Text = "Summon familiars. Merge three that touch. Hold the lamplit lane.", TextSize = 20, TextColor3 = MUTED, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 14 }, col)
+		local tag = new("TextLabel", { Name = "Tagline", BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 140), Size = UDim2.fromOffset(470, 26), Text = "Summon familiars. Merge three that touch. Hold the lamplit lane.", TextSize = 22, TextColor3 = IVORY, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 14 }, col)
 		tag.FontFace = Font.new("rbxasset://fonts/families/AccanthisADFStd.json", Enum.FontWeight.Bold, Enum.FontStyle.Italic)
 		-- flourish rule: a line that fades out to the right, a small diamond where it starts
 		local rule = new("Frame", { BackgroundColor3 = GOLD, BorderSizePixel = 0, Position = UDim2.fromOffset(12, 190), Size = UDim2.fromOffset(328, 1), ZIndex = 14 }, col)
@@ -86,8 +88,8 @@ return function(env)
 		new("Frame", { BackgroundColor3 = GOLD, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(4, 190), Size = UDim2.fromOffset(7, 7), Rotation = 45, ZIndex = 14 }, col)
 
 		-- the lamp plate
-		local plate = new("Frame", { Name = "LampPlate", BackgroundColor3 = PLATE, BackgroundTransparency = 0.15, BorderSizePixel = 0, Position = UDim2.fromOffset(0, 236), Size = UDim2.fromOffset(340, 66), ClipsDescendants = true, ZIndex = 14 }, col)
-		local outer = new("UIStroke", { Color = GOLD, Thickness = 1.5, Transparency = 0.35 }, plate)
+		local plate = new("Frame", { Name = "LampPlate", BackgroundColor3 = Color3.fromRGB(30, 23, 13), BackgroundTransparency = 0.08, BorderSizePixel = 0, Position = UDim2.fromOffset(0, 236), Size = UDim2.fromOffset(340, 66), ClipsDescendants = true, ZIndex = 14 }, col)
+		local outer = new("UIStroke", { Color = Color3.fromRGB(184, 151, 90), Thickness = 1.5, Transparency = 0.1 }, plate)
 		local innerF = new("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOffset(4, 4), Size = UDim2.new(1, -8, 1, -8), ZIndex = 14 }, plate)
 		new("UIStroke", { Color = GOLD, Thickness = 1, Transparency = 0.7 }, innerF)
 		local glint = new("Frame", { BackgroundColor3 = Color3.new(1, 1, 1), BackgroundTransparency = 0.88, BorderSizePixel = 0, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(-0.3, 0, 0.5, 0), Size = UDim2.new(0, 60, 2, 0), Rotation = 20, ZIndex = 15 }, plate)
@@ -102,7 +104,7 @@ return function(env)
 		words.FontFace = Font.new("rbxasset://fonts/families/Fondamento.json")
 		new("UIStroke", { Color = Color3.fromRGB(30, 16, 6), Thickness = 1.5, Transparency = 0.35 }, words)
 		btn.MouseEnter:Connect(function()
-			tw(outer, 0.2, { Transparency = 0 })
+			tw(outer, 0.2, { Transparency = 0, Color = Color3.fromRGB(217, 184, 120) }); tw(plate, 0.2, { BackgroundColor3 = Color3.fromRGB(52, 40, 22) })
 			tw(flame, 0.25, { Size = UDim2.fromOffset(40, 54) }, Enum.EasingStyle.Back)
 			tw(flameHalo, 0.25, { ImageTransparency = 0.25, Size = UDim2.fromOffset(96, 96) })
 			if not reduced() then
@@ -111,7 +113,7 @@ return function(env)
 			end
 		end)
 		btn.MouseLeave:Connect(function()
-			tw(outer, 0.2, { Transparency = 0.35 })
+			tw(outer, 0.2, { Transparency = 0.1, Color = Color3.fromRGB(184, 151, 90) }); tw(plate, 0.2, { BackgroundColor3 = Color3.fromRGB(30, 23, 13) })
 			tw(flame, 0.2, { Size = UDim2.fromOffset(30, 40) })
 			tw(flameHalo, 0.2, { ImageTransparency = 0.55, Size = UDim2.fromOffset(70, 70) })
 		end)
@@ -124,8 +126,8 @@ return function(env)
 		head:SetAttribute("KeepFont", true)
 		head.FontFace = Font.new("rbxasset://fonts/families/Fondamento.json")
 		for i, line in newsLines do
-			if i > 3 then break end
-			new("TextLabel", { BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 354 + (i - 1) * 26), Size = UDim2.fromOffset(560, 24), Text = "·  " .. line, TextSize = 18, TextColor3 = MUTED, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 14 }, col)
+			if i > 1 then break end
+			new("TextLabel", { BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 354 + (i - 1) * 26), Size = UDim2.fromOffset(560, 30), Text = "·  " .. line, TextSize = 24, TextColor3 = IVORY, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 14 }, col)
 		end
 
 		-- arrival: the echoes catch up with the title, the rest fades in from the left

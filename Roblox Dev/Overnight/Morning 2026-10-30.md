@@ -1,0 +1,239 @@
+# Morning digest (2026-10-30 06:04)
+Window: since 2026-10-29 06:04 (base a5a1e85e)
+
+**89 tasks finished** (ledger), **30 commits**, 60 phone milestones, 0 tasks still open, 3 blocked.
+Place file: NOT saved by me (save it yourself: File > Save, or Download a Copy). Nothing was pushed or published.
+
+## Finished, by lane (task | commit | three words | status | lane | evidence)
+### chars
+- T124 | commit 3d1f029 | "enemy texture sets" | attested | chars | Overnight/evidence/T124.txt (look-and-feel UNVERIFIED)
+- T142 | commit d17a471 | "enemy rigs baked" | attested | chars | Overnight/evidence/T142.txt
+- T407 | commit d17a471 | "familiar textures cleaned" | attested | chars | Overnight/evidence/T407.txt (look UNVERIFIED)
+- T403 | commit e9ab3ba | "human reactions hooked" | attested | chars | Overnight/evidence/T403.txt
+- T404 | commit e9ab3ba | "original familiar clips" | attested | chars | Overnight/evidence/T404.txt
+- T405 | commit e9ab3ba | "clips uploaded wired" | attested | chars | Overnight/evidence/T405.txt
+- T409 | commit e9ab3ba | "normal maps wired" | attested | chars | Overnight/evidence/T409.txt
+- T406 | commit e9ab3ba | "rig deformation checked" | attested | chars | Overnight/evidence/T406.txt
+### client-core
+- T198 | commit e485b75 | "gameclient split done" | attested | client-core | Overnight/evidence/T198.txt
+- T149 | commit e485b75 | "boss phase bar" | attested | client-core | Overnight/evidence/T149.txt
+- T139 | commit e485b75 | "enemy status icons" | attested | client-core | Overnight/evidence/T139.txt
+- T138 | commit 509f979 | "enemy telegraphs added" | attested | client-core | Overnight/evidence/T138.txt
+- T194 | commit 509f979 | "damage float text" | attested | client-core | Overnight/evidence/T194.txt
+- T178 | commit 509f979 | "placement hint toggle" | attested | client-core | Overnight/evidence/T178.txt
+- T148 | commit 509f979 | "boss phase transitions" | attested | client-core | Overnight/evidence/T148.txt
+- T166 | commit 509f979 | "ambient loops added" | attested | client-core | Overnight/evidence/T166.txt
+### client-ui
+- T188 | commit e5d13d9 | "text animation module" | attested | client-ui | Overnight/evidence/T188.txt
+- T607 | commit e5d13d9 | "text animation applied" | attested | client-ui | Overnight/evidence/T607.txt
+- T098 | commit e5d13d9 | "dialogs toasts states" | attested | client-ui | Overnight/evidence/T098.txt
+- T085 | commit e5d13d9 | "tooltip system added" | attested | client-ui | Overnight/evidence/T085.txt
+- T087 | commit e5d13d9 | "strings table coverage" | attested | client-ui | Overnight/evidence/T087.txt
+- T235 | commit e5d13d9 | "UI checks added" | attested | client-ui | Overnight/evidence/T235.txt
+- T075 | commit fc7f179 | "controls settings group" | attested | client-ui | Overnight/evidence/T075.txt
+- T057 | commit fc7f179 | "mythic celestial reveals" | attested | client-ui | Overnight/evidence/T057.txt
+- T058 | commit fc7f179 | "collection faction filter" | attested | client-ui | Overnight/evidence/T058.txt
+- T095 | commit fc7f179 | "familiar detail panel" | attested | client-ui | Overnight/evidence/T095.txt
+- T097 | commit fc7f179 | "pause menu added" | attested | client-ui | Overnight/evidence/T097.txt
+- T074 | commit fc7f179 | "results screen added" | attested | client-ui | Overnight/evidence/T074.txt
+- T090 | commit cfcfbf0 | "inventory screen added" | attested | client-ui | Overnight/evidence/T090.txt
+- T091 | commit cfcfbf0 | "quest screen tracker" | attested | client-ui | Overnight/evidence/T091.txt
+- T092 | commit cfcfbf0 | "pass shop screens" | attested | client-ui | Overnight/evidence/T092.txt
+- T093 | commit cfcfbf0 | "leaderboard stage select" | attested | client-ui | Overnight/evidence/T093.txt
+- T084 | commit cfcfbf0 | "button states motion" | attested | client-ui | Overnight/evidence/T084.txt
+- T086 | commit cfcfbf0 | "keyboard gamepad focus" | attested | client-ui | Overnight/evidence/T086.txt
+- T081 | commit 7f80385 | "icon set added" | attested | client-ui | Overnight/evidence/T081.txt
+- T642 | commit c1992de | "screen router added" | attested | client-ui | Overnight/evidence/T642.txt
+- T641 | commit 7762547 | "icons uploaded wired" | attested | client-ui | Overnight/evidence/T641.txt
+### docs-tooling
+- T232 | commit 4c30cda | "stage check passes" | gate-verified | docs-tooling | tools/check_stages_complete.py exit 0
+- T422 | commit 4c30cda | "familiar cards complete" | gate-verified | docs-tooling | tools/check_familiars_complete.py exit 0 (20 familiars, 0 gaps)
+- T424 | commit 3d1f029 | "docs refreshed current" | attested | docs-tooling | Overnight/evidence/T424.txt
+- T027 | commit 3d1f029 | "UI research boards" | attested | docs-tooling | Overnight/evidence/T027.txt (15 cited sources UNVERIFIED beyond search snippets)
+- T413 | commit 3d1f029 | "stale MatchSim trashed" | attested | docs-tooling | Overnight/evidence/T413.txt
+- T650 | commit f07ef6f | "regression pass done" | attested | docs-tooling | Overnight/evidence/T650.txt
+- T651 | commit f07ef6f | "wiring audit done" | attested | docs-tooling | Overnight/evidence/T651.txt
+- T246 | commit 46f759e | "overnight report written" | attested | docs-tooling | Overnight/evidence/T246.txt
+### fx-audio
+- T604 | commit d17a471 | "UI sound set" | attested | fx-audio | Overnight/evidence/T604.txt (ear UNVERIFIED)
+- T603 | commit d17a471 | "enemy boss sounds" | attested | fx-audio | Overnight/evidence/T603.txt (ear UNVERIFIED)
+- T155 | commit d17a471 | "familiar cue sounds" | attested | fx-audio | Overnight/evidence/T155.txt (ear UNVERIFIED)
+- T606 | commit 3d1f029 | "sound cap fixed" | attested | fx-audio | Overnight/evidence/T606.txt
+- T630 | commit db328f0 | "sound cues wired" | attested | fx-audio | Overnight/evidence/T630.txt
+- T602 | commit db328f0 | "fx scale settings" | attested | fx-audio | Overnight/evidence/T602.txt
+- T605 | commit db328f0 | "mix sliders ducking" | attested | fx-audio | Overnight/evidence/T605.txt
+- T160 | commit db328f0 | "music per set" | attested | fx-audio | Overnight/evidence/T160.txt
+- T135 | commit e5814d5 | "merge tier effects" | attested | fx-audio | Overnight/evidence/T135.txt
+- T144 | commit e5814d5 | "lantern light language" | attested | fx-audio | Overnight/evidence/T144.txt
+- T133 | commit e5814d5 | "familiar attack effects" | attested | fx-audio | Overnight/evidence/T133.txt
+- T134 | commit e5814d5 | "enemy family reactions" | attested | fx-audio | Overnight/evidence/T134.txt
+- T601 | commit e5814d5 | "ultimate camera flourishes" | attested | fx-audio | Overnight/evidence/T601.txt
+### sim
+- T411 | commit 3d1f029 | "best stage saved" | attested | sim | Overnight/evidence/T411.txt
+- T005 | commit 3d1f029 | "triple game speed" | attested | sim | Overnight/evidence/T005.txt
+- T185 | commit 3d1f029 | "roster slot unlocks" | attested | sim | Overnight/evidence/T185.txt
+- T019 | commit 3d1f029 | "recycle refund tiers" | attested | sim | Overnight/evidence/T019.txt
+- T004 | commit 6c2a79d | "sim lane batch" | attested | sim | Overnight/evidence/T004.txt
+- T004 | commit 6c2a79d | "difficulty modes added" | attested | sim | Overnight/evidence/T004.txt (new features default OFF where flagged; client UI not built)
+- T006 | commit 6c2a79d | "pause resume saved" | attested | sim | Overnight/evidence/T006.txt (new features default OFF where flagged; client UI not built)
+- T186 | commit 6c2a79d | "collection shards schema" | attested | sim | Overnight/evidence/T186.txt (new features default OFF where flagged; client UI not built)
+- T012 | commit 6c2a79d | "faction combo table" | attested | sim | Overnight/evidence/T012.txt (new features default OFF where flagged; client UI not built)
+- T011 | commit 6c2a79d | "lantern power added" | attested | sim | Overnight/evidence/T011.txt (new features default OFF where flagged; client UI not built)
+- T015 | commit 6c2a79d | "elite wave modifiers" | attested | sim | Overnight/evidence/T015.txt (new features default OFF where flagged; client UI not built)
+- T009 | commit 6c2a79d | "day night weather" | attested | sim | Overnight/evidence/T009.txt (new features default OFF where flagged; client UI not built)
+- T417 | commit 6c2a79d | "hollow enemies flagged" | attested | sim | Overnight/evidence/T417.txt (new features default OFF where flagged; client UI not built)
+- T416 | commit 4961f6b | "boss mechanics added" | attested | sim | Overnight/evidence/T416.txt
+- T002 | commit 4961f6b | "achievements logic added" | attested | sim | Overnight/evidence/T002.txt
+- T023 | commit 4961f6b | "quests logic added" | attested | sim | Overnight/evidence/T023.txt
+- T007 | commit 4961f6b | "bond levels added" | attested | sim | Overnight/evidence/T007.txt
+- T025 | commit 4961f6b | "leaderboard rules added" | attested | sim | Overnight/evidence/T025.txt
+- T016 | commit 4961f6b | "endless mode tested" | attested | sim | Overnight/evidence/T016.txt
+- T167 | commit f33f2cc | "path shapes data" | attested | sim | Overnight/evidence/T167.txt
+- T177 | commit f33f2cc | "placement rules data" | attested | sim | Overnight/evidence/T177.txt
+- T157 | commit f33f2cc | "path blockers data" | attested | sim | Overnight/evidence/T157.txt
+- T199 | commit f33f2cc | "balance data modules" | attested | sim | Overnight/evidence/T199.txt
+- T652 | commit fa72a0a | "progress hooks wired" | attested | sim | Overnight/evidence/T652.txt
+### world
+- T153 | commit ba682dc | "stage sets verified" | attested | world | Overnight/evidence/T153.txt
+- T414 | commit ba682dc | "ward metalness confirmed" | attested | world | Overnight/evidence/T414.txt
+- T162 | commit ba682dc | "set landmarks added" | attested | world | Overnight/evidence/T162.txt
+- T164 | commit ba682dc | "fog frame cost" | attested | world | Overnight/evidence/T164.txt
+- T152 | commit ba682dc | "spawn gates added" | attested | world | Overnight/evidence/T152.txt
+- T205 | commit ba682dc | "performance probe added" | attested | world | Overnight/evidence/T205.txt
+- T172 | commit 71376f0 | "boss arena variants" | attested | world | Overnight/evidence/T172.txt
+
+## Commits
+- dbf8634 11:11 Add twelve rigged familiars with lore, cards, textures, walk and attack clips, a collection screen, and two new enemy models. Update the vault, task log and tests; video files stay on disk only.
+- a9b2339 11:55 Add enemy and boss concept models, texture maps, headless tests, stage set 5 and design notes for the next systems. The balance bots clear all 25 stages in about five minutes, and the vault notes list what still needs the user.
+- 1e9df16 12:08 Recolour the twelve familiars in the gold-ink palette and add skill-tree respec, a next-best skill hint and a crit cap on the server. New save-migration and server-rule tests all pass, and the stale MatchSim export is refreshed.
+- 956b3b3 14:52 Add four human Mythic and Celestial familiars, six rarities and eight tiers, familiar roles, statuses, armour and enemy behaviour, and cutscenes with a morphing stage-set transition. Skill-tree respec, a crit cap, hp growth 1.27 and stage set 5 are in, and all thirteen test suites pass.
+- d72d15f 14:56 Save the latest place, screen scripts and vault notes, plus the main chat summary.
+- c8c1696 19:18 Add Epic and Legendary humans, boss framework, Crow and Thief client models, UILib split, comms and notify tools. Promote the overnight board and relax the guardrails for per-task commits.
+- f5231ba 19:18 Save the live queue and the title background generator before the overnight run. No game logic changed.
+- 4c30cda 19:19 Stage completeness check passes for all 25 stages. Generated the missing front cards for the four new humans so lore, cards and voice lines are complete for 20 familiars.
+- 3d1f029 19:30 Refresh the systems, backlog and design notes, add the HUD, collection and results research boards, and bake 512 px texture sets for enemies and bosses. Evidence files hold the verification output.
+- d17a471 19:40 Add the rigged enemy models, re-baked familiar textures, and the UI, enemy, boss and familiar sound sets with their manifest. Evidence files hold each check's output.
+- 6c2a79d 20:01 Add difficulty modes, pause and resume, collection shards, faction combos, lantern power, elite waves, day and night weather data, and the Hollow enemies behind flags. New and extended suites pass in Studio.
+- 4961f6b 20:18 Add remaining boss mechanics, achievements, quests, bond levels, leaderboard validation and endless mode as server data with tests. New features stay behind flags and the client screens are not built.
+- f33f2cc 20:29 Add per-set path shapes, per-map placement rules and path blockers as data behind flags, and split the balance numbers into data modules. All suites and the bot still pass.
+- e9ab3ba 20:49 Add Hit and Death reactions, Idle, Hit and Death clips for the twelve original familiars uploaded as Animation assets, 512 px normal maps and a rig deformation check for all twenty. Look and motion on screen remain unverified.
+- ba682dc 21:30 Verify stage sets four and five in Play, confirm the Ward metalness fix, add three landmarks and a spawn gate per set, and add a performance probe with Low, Default and High numbers. Visual quality is unverified.
+- db328f0 21:51 Wire the new sound sets through a cue module, add scaled hit-stop and shake with reduced-motion off switch, add mix sliders with ducking, and add music per stage set with crossfade. Ear quality is unverified.
+- e485b75 22:11 Split GameClient from 173,800 to 140,200 characters into nine modules with identical HUD counts, add the boss phase bar and banner module driven by the server events, and add enemy health bars with status icons. Pixel look is unverified.
+- 509f979 22:32 Add enemy telegraphs, per-family damage float text, a placement hint toggle, boss phase transitions with sound, and ambient beds per stage set as new modules. Look, motion and audio are unverified.
+- e5814d5 23:02 Add merge effects per tier, one lantern-light effect language, attack effects for all twenty familiars, hit and death reactions per enemy family, and ultimate flourishes with camera moves as new modules. Look is unverified.
+- e5d13d9 23:22 Add the TextAnim module and apply it to captions and reveals, shared dialogs and toasts, tooltips, a strings table with a coverage test, and UI checks for text size and contrast. UI look is unverified beyond the measured numbers.
+- fc7f179 23:53 Add the results screen, Controls settings, new reveals, collection filter, detail panel and pause menu as modules. UI look is unverified.
+- cfcfbf0 00:03 Add the inventory, quest, battle pass and shop, leaderboard and stage-select screens with button states and keyboard focus as new modules. Shops are cosmetic only and UI look is unverified.
+- 7f80385 00:13 Add a forty-file one-style icon set for status, currency, rarity and faction with a contact sheet and style measurements. Nothing was uploaded and the look is unverified.
+- 71376f0 00:21 Add five boss arena variants driven by the boss events, each captured at its boss stage with the path unchanged. Look is unverified.
+- c1992de 00:50 Add a screen router with a menu dock button so inventory, quests, pass, shop, leaderboard, stage select, familiars and pause open from the game. Look is unverified.
+- f07ef6f 01:01 Run an independent regression pass and a wiring audit of everything built tonight. Thirty-three suites and the lean bot pass; one module, Achievements, is still unhooked.
+- 7762547 01:11 Upload the forty-icon set and wire the ids into enemy status icons, rarity chips and faction badges through a StatusIcons module. Look is unverified.
+- fa72a0a 01:42 Hook achievements, quests, bond and leaderboard validation into the server behind four flags that default off, with profile migration and tests. The lean bot and all suites still pass.
+- 46f759e 01:55 Write the overnight report with commit hashes and labels, and reconcile the vault notes with the ledger. Everything visual or audible is unverified.
+- 37c7d8b 01:55 Write the final overnight report and morning digest and reconcile the vault notes with the ledger. All visual and audio results remain unverified.
+
+## Phone milestones
+- 2026-10-29 19:03 Milestone mode on: ntfy now carries major finishes; chat stays short.
+- 2026-10-29 19:05 Notifications now go through overnight and at night; morning digest tool ready (tools/morning_digest.py).
+- 2026-10-29 19:07 Skill tree rework (SkillTreeV3) installed in Studio, Play recorded: curved web, unlock+opening animation seen. Unverified: touch, other resolutions.
+- 2026-10-29 19:08 Silent mode on in all chats: no chat output, only phone pushes for finished tasks.
+- 2026-10-29 19:08 Loading finale overlap, blink lid and loading clock installed in Studio and Studio_Export (place not saved). Evidence: Play recordings plus zoom frames in Captures/overlap. Unverified: ring speeds, bl
+- 2026-10-29 19:09 Title art layers built and viewed (art only); Studio build, uploads and Play checks pending
+- 2026-10-29 19:14 main: coordinating; overnight board drafted; last: 19:14 silent mode + comms files
+- 2026-10-29 19:16 Title page live: faceless fog figure, drifting layers; motion verified by property sampling, window capture stale
+- 2026-10-29 19:18 Overnight armed until 04:18: 84 tasks in 7 lanes, one commit per task, ledger and morning digest on.
+- 2026-10-29 19:28 Skill tree round 2 done: new engraved icons, tarot cards, bold node states, Respec and real-open verified in Play. Unverified: touch, video of motion (recorder grabbed wrong window).
+- 2026-10-29 19:29 blender-worker: T407 familiar re-bake; last: 19:27 T124,T142 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle, holding nothing; last: 19:14 finale overlap, blink li
+- 2026-10-29 19:30 T424, T027, T124 done: docs refreshed, UI research boards, 512 px enemy textures. Look-and-feel unverified.
+- 2026-10-29 19:33 Title round 2 installed: fog deity, rooftop city, bridge, lamp; Edit captures show motion; menu text changes unverified
+- 2026-10-29 19:40 Sim batch (T413 T606 T411 T005 T185 T019), enemy rigs, textures and sound sets done; RunAll 17/17; ear and look unverified.
+- 2026-10-29 19:41 Title r3: solid robe, void face, dark bg, installed; Edit frames OK, Play capture still stale (UNVERIFIED)
+- 2026-10-29 19:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 19:48 Skill tree r3 installed: new layout, gold-ink backdrop, states, plates; blue pixels 0.0%. Edit-mode harness frames; blind review pending.
+- 2026-10-29 19:49 UI rework: skill tree V3 and title scene built in Studio, both blind-graded FAIL (best items 7/10); title r4 pending; Play motion unverified. Your call to judge.
+- 2026-10-29 19:57 Title r4 installed: feathered deity figure with crown, focal sun, mist, gold button; real Play captures r4_play_a/b. Unverified: blind grade.
+- 2026-10-29 19:58 UI rework finished: title r4 and skill tree r3 built and in Studio, both still FAIL blind review (5-7/10); notes in Research/UI. Needs your eyes.
+- 2026-10-29 19:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 20:01 Sim batch 2 done (T004 T006 T186 T012 T011 T015 T009 T417), tests added and passing in Studio; new enemy and wave features default OFF.
+- 2026-10-29 20:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 20:18 Sim batch 3 done (T416 T002 T023 T007 T025 T016); suites added, all behind flags; client screens not built.
+- 2026-10-29 20:29 Sim batch 4 done (T167 T177 T157 T199): RunAll 26/26, bot 10/10 clear; new map features default OFF.
+- 2026-10-29 20:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 20:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 20:49 Chars batch done (T403 T404 T405 T409 T406): 36 clips uploaded, maps wired, rigs checked for 20; motion on screen unverified.
+- 2026-10-29 21:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 21:30 World batch done (T153 T414 T162 T164 T152 T205): sets 4 and 5 Play-verified, landmarks and gates added, perf probe; RunAll 26/26; visuals unverified.
+- 2026-10-29 21:51 FX-audio batch done (T630 T602 T605 T160): cues wired, mix sliders, music per set; RunAll 28/28; ear unverified.
+- 2026-10-29 21:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 22:11 Client-core batch done (T198 T149 T139): GameClient now 140K of 200K, boss phase bar, enemy status icons; RunAll 28/28; pixel look unverified.
+- 2026-10-29 22:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 22:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 22:32 Client batch 8b done (T138 T194 T178 T148 T166): telegraphs, float text, placement hint, boss transitions, ambience; look and audio unverified.
+- 2026-10-29 23:02 FX batch 9 done (T135 T144 T133 T134 T601): merge, lantern, attack, enemy reaction and ultimate effects; look unverified.
+- 2026-10-29 23:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 23:22 UI batch 10 done (T188 T607 T098 T085 T087 T235): TextAnim, dialogs, tooltips, strings, UI checks; look unverified.
+- 2026-10-29 23:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 23:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-29 23:52 UI batch 11 done (T074 T075 T057 T058 T095 T097): results, controls settings, new reveals, collection filter, detail panel, pause menu; look unverified.
+- 2026-10-29 23:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | loading-anim: idle,
+- 2026-10-30 00:03 UI batch 12 done (T090 T091 T092 T093 T084 T086): inventory, quests, pass and shop (cosmetic), leaderboard, button states, focus; look unverified.
+- 2026-10-30 00:13 T081 done: 40-icon gold-ink set with contact sheet (not uploaded, look unverified).
+- 2026-10-30 00:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | icon-worker: idle;
+- 2026-10-30 00:21 T172 done (boss arenas). T200 blocked (no type checker; modules already strict). T076 blind review FAILED all 4 screens; fix task T640 queued, plus final regression T650.
+- 2026-10-30 00:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | icon-worker: idle;
+- 2026-10-30 00:31 Regression pass: 33/33 suites, bot 10/10, Play boss run clean. Finding: the new screens exist as modules but nothing opens them yet; T642 (screen router) queued.
+- 2026-10-30 00:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | icon-worker: idle;
+- 2026-10-30 00:50 T642 done: screen router and menu button; the new screens are now reachable in Play. Wiring audit T651 running.
+- 2026-10-30 00:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 01:01 T650 and T651 done: regression and wiring audit; 33/33 suites, bot 10/10; Achievements module not hooked to the server yet (needs design).
+- 2026-10-30 01:11 T641 done: 40 icons uploaded and wired to status, rarity and faction displays; look unverified. Blind-review fix rounds (T640) starting.
+- 2026-10-30 01:14 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 01:29 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 01:31 T640 failed honestly after 3 blind-review rounds (HUD, collection, results still under 7; needs a human-directed HUD rebuild). Next: T652 server hooks for achievements, quests, bond.
+- 2026-10-30 01:42 T652 done: achievements, quests, bond hooked server-side behind OFF flags; RunAll 33/33, bot 10/10. Writing the final report and vault updates.
+- 2026-10-30 01:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 01:55 Morning digest ready: 89 tasks, 22 commits, 3 blocked. Read Overnight/MORNING.md.
+
+## Needs you
+- blocked: T076 Harsh Grading pass on HUD, reveal and collection
+- blocked: T200 Strict typing on pure modules and zero type errors on all modules
+- blocked: T640 Raise HUD, reveal, collection and results screens to 7 of 10 or better on a blind review (up to three fix rounds)
+- unverified or attested only: T424 | commit 3d1f029 | "docs refreshed current" | attested | docs-tooling | Overnight/evidence/T424.txt
+- unverified or attested only: T027 | commit 3d1f029 | "UI research boards" | attested | docs-tooling | Overnight/evidence/T027.txt (15 cited sources UNVERIFIED beyond search snippets)
+- unverified or attested only: T124 | commit 3d1f029 | "enemy texture sets" | attested | chars | Overnight/evidence/T124.txt (look-and-feel UNVERIFIED)
+- unverified or attested only: T142 | commit d17a471 | "enemy rigs baked" | attested | chars | Overnight/evidence/T142.txt
+- unverified or attested only: T407 | commit d17a471 | "familiar textures cleaned" | attested | chars | Overnight/evidence/T407.txt (look UNVERIFIED)
+- unverified or attested only: T604 | commit d17a471 | "UI sound set" | attested | fx-audio | Overnight/evidence/T604.txt (ear UNVERIFIED)
+- unverified or attested only: T603 | commit d17a471 | "enemy boss sounds" | attested | fx-audio | Overnight/evidence/T603.txt (ear UNVERIFIED)
+- unverified or attested only: T155 | commit d17a471 | "familiar cue sounds" | attested | fx-audio | Overnight/evidence/T155.txt (ear UNVERIFIED)
+- unverified or attested only: T413 | commit 3d1f029 | "stale MatchSim trashed" | attested | docs-tooling | Overnight/evidence/T413.txt
+- unverified or attested only: T606 | commit 3d1f029 | "sound cap fixed" | attested | fx-audio | Overnight/evidence/T606.txt
+- unverified or attested only: T411 | commit 3d1f029 | "best stage saved" | attested | sim | Overnight/evidence/T411.txt
+- unverified or attested only: T005 | commit 3d1f029 | "triple game speed" | attested | sim | Overnight/evidence/T005.txt
+- unverified or attested only: T185 | commit 3d1f029 | "roster slot unlocks" | attested | sim | Overnight/evidence/T185.txt
+- unverified or attested only: T019 | commit 3d1f029 | "recycle refund tiers" | attested | sim | Overnight/evidence/T019.txt
+- unverified or attested only: T004 | commit 6c2a79d | "sim lane batch" | attested | sim | Overnight/evidence/T004.txt
+- unverified or attested only: T004 | commit 6c2a79d | "difficulty modes added" | attested | sim | Overnight/evidence/T004.txt (new features default OFF where flagged; client UI not built)
+- unverified or attested only: T006 | commit 6c2a79d | "pause resume saved" | attested | sim | Overnight/evidence/T006.txt (new features default OFF where flagged; client UI not built)
+- unverified or attested only: T186 | commit 6c2a79d | "collection shards schema" | attested | sim | Overnight/evidence/T186.txt (new features default OFF where flagged; client UI not built)
+- unverified or attested only: T012 | commit 6c2a79d | "faction combo table" | attested | sim | Overnight/evidence/T012.txt (new features default OFF where flagged; client UI not built)
+- unverified or attested only: T011 | commit 6c2a79d | "lantern power added" | attested | sim | Overnight/evidence/T011.txt (new features default OFF where flagged; client UI not built)
+
+## Denied actions (last 15)
+- 2026-10-30 01:27:18 SubagentHandback {"message": "ROUND 3 REVIEW (harsh, stills only). Also saved to C:\\Users\\kgsat\\Documents\\Roblox\\Overnight\\review_tmp\\round3.md\n\nHUD idle  a4 b5 c5 d4 e3\n
+- 2026-10-30 01:27:43 SubagentHandback {"message": "ROUND 3 REVIEW (harsh, stills only). Also saved at C:\\Users\\kgsat\\Documents\\Roblox\\Overnight\\review_tmp\\round3.md\n\nHUD idle  a4 b5 c5 d4 e3\n
+- 2026-10-30 01:27:57 SubagentHandback {"message": "ROUND 3 REVIEW (harsh, stills only). Also saved at C:\\Users\\kgsat\\Documents\\Roblox\\Overnight\\review_tmp\\round3.md\n\nHUD idle  a4 b5 c5 d4 e3\n
+- 2026-10-30 01:28:12 SubagentHandback {"message": "ROUND 3 REVIEW (stills only; full text also saved at C:\\Users\\kgsat\\Documents\\Roblox\\Overnight\\review_tmp\\round3.md)\n\nHUD idle  a4 b5 c5 d4 e
+- 2026-10-30 01:28:51 Bash {"command": "cd /c/Users/kgsat/Documents/Roblox; python - <<'E'\nimport re\nr=lambda n:open(f'Overnight/review_tmp/round{n}.md',encoding='utf-8').read()\nhdr='''FAIL (partial:
+- 2026-10-30 01:29:15 SubagentHandback {"message": "T640 studio-polish: FAIL (partial). Evidence is in Overnight/evidence/T640.txt. Its first line is `FAIL (partial: ...)`, and it holds all three review
+- 2026-10-30 01:29:29 SubagentHandback {"message": "T640 studio-polish: FAIL (partial) after 3 rounds. Evidence: Overnight/evidence/T640.txt (first line FAIL (partial: ...), all 3 reviews verbatim; capt
+- 2026-10-30 01:29:41 SubagentHandback {"message": "T640 studio-polish: FAIL (partial) after 3 rounds. Evidence: Overnight/evidence/T640.txt (all 3 blind-reviewer reviews verbatim; captures Overnight/ca
+- 2026-10-30 01:29:49 SubagentHandback {"message": "T640 studio-polish: FAIL (partial) after 3 rounds. Evidence: Overnight/evidence/T640.txt. Round 3 scores a/b/c/d/e: HUD idle 4/5/5/4/3; wave 4/5/5/4/3
+- 2026-10-30 01:38:20 Bash {"command": "taskkill //PID 68228 //F >/dev/null; taskkill //PID 25792 //F >/dev/null; cd /c/Users/kgsat/Documents/Roblox; python tools/script_sizes.py 2>&1 | tail -4; grep -n
+- 2026-10-30 01:38:49 SubagentHandback {"message": "T652 done. Evidence: Overnight/evidence/T652.txt (PASS). Studio released, Play stopped, place not saved, my servers stopped.\n- New: Studio_Export/Pro
+- 2026-10-30 01:39:04 SubagentHandback {"message": "T652 done. Evidence: Overnight/evidence/T652.txt (PASS). Studio released, Play stopped, place not saved, test servers stopped. Not committed.\n- New: 
+- 2026-10-30 01:39:15 SubagentHandback {"message": "T652 done, evidence Overnight/evidence/T652.txt (PASS). Studio released, Play stopped, place not saved, nothing committed.\nNew: Studio_Export/Progres
+- 2026-10-30 01:39:25 SubagentHandback {"message": "T652 done, evidence Overnight/evidence/T652.txt (PASS). Studio released, Play stopped, nothing committed. New: Studio_Export/ProgressHooks.luau, Progr
+- 2026-10-30 01:45:50 SubagentHandback {"message": "1. Edited all five files in `Roblox Dev/`: Systems.md, Backlog.md, Bug Log.md, Known Issues.md and Session Log.md. Nothing outside the vault was touch

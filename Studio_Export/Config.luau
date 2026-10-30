@@ -3,25 +3,54 @@
 
 local Config = {}
 
-Config.START_COINS = 30
-Config.START_GEMS = 30
-Config.CRYSTAL_HP = 20
-Config.TIER_MAX = 8 -- tiers 6 to 8 are the long game: tier t needs 3^(t-1) tier-1 units (2,187 for tier 8)
-Config.TIER_MULT = 3.5
-Config.ULT_NEED = 10
-Config.ULT_DAMAGE = 60
-Config.SPAWN_GAP = 0.45
-Config.STAGE_BREAK = 1.2
-Config.BOSS_EVERY = 5
-Config.BOSS_TIME = 35
-Config.OVERRUN_STAGE_LOSS = 2
-Config.OVERRUN_COIN_LOSS = 0.3
-Config.ROLL_COST = 10
-Config.PITY_EVERY = 20 -- guaranteed Epic or better within this many rolls
-Config.UPGRADE_MAX = 5
-Config.CRIT_CAP = 0.75 -- crit chance never exceeds this, whatever upgrades and skills add
-Config.RESPEC_COST = 50 -- gems for resetting the skill tree
-Config.RESPEC_COOLDOWN = 120 -- sim seconds between respecs in one run
+-- Balance numbers live in Shared.Data.* (T199), one module per system; Config re-exports every field below, so no other script changes.
+-- Data sits beside Config; a test that clones Config alone finds it through ReplicatedStorage.Shared. Each load gets its own deep copy.
+local function loadData(name: string): any
+	local shared = game:GetService("ReplicatedStorage"):FindFirstChild("Shared")
+	local folder = script.Parent:FindFirstChild("Data") or (shared and shared:FindFirstChild("Data"))
+	local mod = folder and folder:FindFirstChild(name)
+	assert(mod, "Shared.Data." .. name .. " is missing")
+	local function copy(t: any): any
+		local c = table.clone(t)
+		for k, v in c do
+			if type(v) == "table" then
+				c[k] = copy(v)
+			end
+		end
+		return c
+	end
+	return copy(require(mod :: ModuleScript))
+end
+local Economy = loadData("Economy")
+local Rarities = loadData("Rarities")
+local Upgrades = loadData("Upgrades")
+local Enemies = loadData("Enemies")
+local Combat = loadData("Combat")
+local Bosses = loadData("Bosses")
+local Waves = loadData("Waves")
+local Difficulty = loadData("Difficulty")
+local Synergies = loadData("Synergies")
+local Sky = loadData("Sky")
+
+Config.START_COINS = Economy.START_COINS
+Config.START_GEMS = Economy.START_GEMS
+Config.CRYSTAL_HP = Economy.CRYSTAL_HP
+Config.TIER_MAX = Economy.TIER_MAX
+Config.TIER_MULT = Economy.TIER_MULT
+Config.ULT_NEED = Economy.ULT_NEED
+Config.ULT_DAMAGE = Economy.ULT_DAMAGE
+Config.SPAWN_GAP = Economy.SPAWN_GAP
+Config.STAGE_BREAK = Economy.STAGE_BREAK
+Config.BOSS_EVERY = Economy.BOSS_EVERY
+Config.BOSS_TIME = Economy.BOSS_TIME
+Config.OVERRUN_STAGE_LOSS = Economy.OVERRUN_STAGE_LOSS
+Config.OVERRUN_COIN_LOSS = Economy.OVERRUN_COIN_LOSS
+Config.ROLL_COST = Economy.ROLL_COST
+Config.PITY_EVERY = Economy.PITY_EVERY
+Config.UPGRADE_MAX = Economy.UPGRADE_MAX
+Config.CRIT_CAP = Economy.CRIT_CAP
+Config.RESPEC_COST = Economy.RESPEC_COST
+Config.RESPEC_COOLDOWN = Economy.RESPEC_COOLDOWN
 
 Config.PATH = {
 	Vector3.new(-44, 1, -20),
@@ -40,16 +69,8 @@ for row = 0, 1 do
 	end
 end
 
--- Orthogonal neighbours only. Built from positions so the map and the rule never disagree.
-Config.RARITIES = {
-	Common = { order = 1, color = Color3.fromRGB(190, 196, 210), odds = 60, mult = 1 },
-	Rare = { order = 2, color = Color3.fromRGB(80, 170, 255), odds = 28, mult = 2.2 },
-	Epic = { order = 3, color = Color3.fromRGB(180, 100, 255), odds = 10, mult = 5 },
-	Legendary = { order = 4, color = Color3.fromRGB(255, 200, 60), odds = 2, mult = 12 },
-	Mythic = { order = 5, color = Color3.fromRGB(255, 90, 170), odds = 0.4, mult = 30 }, -- no familiar yet: weight is 0 until one has this rarity
-	Celestial = { order = 6, color = Color3.fromRGB(150, 245, 255), odds = 0.08, mult = 80 }, -- no familiar yet
-}
-Config.RARITY_ORDER = { "Common", "Rare", "Epic", "Legendary", "Mythic", "Celestial" }
+Config.RARITIES = Rarities.RARITIES
+Config.RARITY_ORDER = Rarities.RARITY_ORDER
 
 -- damage is for tier 1 before rarity multiplier
 Config.PETS = {
@@ -140,7 +161,22 @@ end
 -- Pets go anywhere on the street inside the fence, off the path, without footprints overlapping.
 -- Shared by server (validation) and client (preview), so both always agree.
 Config.MAX_UNITS = 12
+-- Roster slots (T185): how many pets may stand at once, by trainer level. Each row opens `slots` from `level` on; the last row
+-- whose level is reached wins. Today every slot is open from level 1, so nothing changes; raise a row's level to gate it.
+Config.ROSTER_SLOT_UNLOCKS = { { level = 1, slots = 12 } }
+function Config.rosterSlots(level: number): number
+	local n = 0
+	for _, row in Config.ROSTER_SLOT_UNLOCKS do
+		if level >= row.level then
+			n = math.max(n, row.slots)
+		end
+	end
+	return math.clamp(n, 1, Config.MAX_UNITS)
+end
 Config.PLACE_BOUNDS = { minX = -50, maxX = 46, minZ = -26, maxZ = 28 }
+Config.PATH_PER_SET = false -- T167: each stage set uses its own lane (StageSets path); OFF = the single Config.PATH everywhere
+Config.MAP_RULES = false -- T177: per-set placement rules (StageSets place) feed canPlace; OFF = the old rules
+Config.PATH_BLOCKERS = false -- T157: fences and gates from StageSets blockers stop enemies mid-lane; OFF = none
 Config.PATH_HALF_WIDTH = 4.8 -- lane half width (4) plus kerb
 Config.TOUCH_GAP = 2.5 -- extra distance that still counts as touching for merges
 
@@ -149,9 +185,9 @@ function Config.footprint(pet: string): number
 	return def and def.footprint or Config.FOOTPRINT_DEFAULT
 end
 
-function Config.distToPath(x: number, z: number): number
+function Config.distToPath(x: number, z: number, route: { Vector3 }?): number
 	local best = math.huge
-	local pts = Config.PATH
+	local pts = route or Config.PATH
 	for i = 1, #pts - 1 do
 		local ax, az, bx, bz = pts[i].X, pts[i].Z, pts[i + 1].X, pts[i + 1].Z
 		local dx, dz = bx - ax, bz - az
@@ -164,16 +200,26 @@ function Config.distToPath(x: number, z: number): number
 end
 
 -- units: { [id] = { pet, x, z } } (any table with pet/x/z works). Returns ok, reason.
-function Config.canPlace(units: any, pet: string, x: number, z: number, ignoreId: any): (boolean, string?)
-	local b = Config.PLACE_BOUNDS
+-- rules (optional, T177): { bounds, path, noBuild = { { x, z, r } } } from Config.mapRules; decorations are not in the rules, they never block.
+function Config.canPlace(units: any, pet: string, x: number, z: number, ignoreId: any, rules: any): (boolean, string?)
+	local b = rules and rules.bounds or Config.PLACE_BOUNDS
 	if x ~= x or z ~= z or x < b.minX or x > b.maxX or z < b.minZ or z > b.maxZ then
 		return false, "Out of bounds"
 	end
 	local fp = Config.footprint(pet)
-	if Config.distToPath(x, z) < Config.PATH_HALF_WIDTH + fp * 0.6 then
+	local route = rules and rules.path or Config.PATH
+	if Config.distToPath(x, z, route) < Config.PATH_HALF_WIDTH + fp * 0.6 then
 		return false, "Not on the path"
 	end
-	local last = Config.PATH[#Config.PATH]
+	if rules and rules.noBuild then
+		for _, zone in rules.noBuild do
+			local zx, zz, zr = x - zone.x, z - zone.z, zone.r + fp * 0.6
+			if zx * zx + zz * zz < zr * zr then
+				return false, "Blocked area"
+			end
+		end
+	end
+	local last = route[#route]
 	if math.abs(x - (last.X + 5)) < 6 and math.abs(z - last.Z) < 6 then
 		return false, "Too close to the crystal"
 	end
@@ -206,72 +252,34 @@ function Config.petsOfRarity(rarity: string): { string }
 	return list
 end
 
-Config.UPGRADES = {
-	Power = { name = "Power", desc = "+30% damage per level", per = 0.30 },
-	Haste = { name = "Haste", desc = "+14% attack speed per level", per = 0.14 },
-	Crit = { name = "Crit", desc = "+8% chance for 2.5x damage per level", per = 0.08 },
-}
-Config.UPGRADE_ORDER = { "Power", "Haste", "Crit" }
+Config.UPGRADES = Upgrades.UPGRADES
+Config.UPGRADE_ORDER = Upgrades.UPGRADE_ORDER
 
 function Config.upgradeCost(level: number): number
 	return math.floor(12 * 1.75 ^ level)
 end
 
-Config.ENEMIES = {
-	Grunt = { hp = 30, speed = 8, coins = 2, gems = 1, leak = 1, size = 2.4, color = Color3.fromRGB(110, 100, 150), armor = "flesh" },
-	Swift = { hp = 18, speed = 13, coins = 2, gems = 1, leak = 1, size = 2, color = Color3.fromRGB(160, 205, 235), armor = "fog" },
-	Tank = { hp = 120, speed = 5, coins = 6, gems = 3, leak = 2, size = 3.6, color = Color3.fromRGB(176, 136, 72), armor = "brass" },
-	Boss = { hp = 700, speed = 4, coins = 60, gems = 25, leak = 5, size = 6.5, color = Color3.fromRGB(140, 230, 110), armor = "none" },
-	-- new kinds (Design/Enemy Bible.md); they appear in waves only when Config.NEW_ENEMIES is true (the client has no model for them yet)
-	Crow = { hp = 12, speed = 16, coins = 3, gems = 1, leak = 1, size = 2.2, color = Color3.fromRGB(70, 74, 86), armor = "flesh" },
-	Thief = { hp = 40, speed = 11, coins = 4, gems = 2, leak = 1, size = 2.4, color = Color3.fromRGB(104, 74, 118), armor = "flesh" },
-}
-Config.NEW_ENEMIES = false -- Clockwork Crow and Lantern Thief in the wave lists (needs client models first)
-Config.MOVEMENT_EFFECTS = false -- slows, stuns, plants and speed-ups change enemy speed; the client moves enemies at a constant speed, so keep false until GameClient handles the "Pace" event {id, dist, speed, t}
+Config.ENEMIES = Enemies.ENEMIES
+Config.HOLLOW_ENEMIES = false -- Hollow Parishioner and Fog Wisp in the wave lists; keep false until the client has models for both
+Config.LAMP_EAT = { at = 0.4, snuffCooldown = 10, darkFor = 8 } -- a Fog Wisp past `at` of the path snuffs the Lantern (+snuffCooldown s to recharge) or, if it is ready, darkens it for darkFor s
+Config.NEW_ENEMIES = true -- Clockwork Crow and Lantern Thief in the wave lists (needs client models first)
+Config.MOVEMENT_EFFECTS = true -- slows, stuns, plants and speed-ups change enemy speed; the client moves enemies at a constant speed, so keep false until GameClient handles the "Pace" event {id, dist, speed, t}
 
--- Familiar roles, damage types, armour and statuses (Design/Familiar Systems.md, Design/Enemy Bible.md). Keys are the Characters folder ids.
-Config.DAMAGE_TYPE = {
-	Ember = "fire", Zap = "light", BrassHound = "spring", Sentinel = "brass", Frostling = "ice", Boulder = "stone",
-	Ward = "light", Archivist = "brass", Mourner = "shadow", VoltFox = "cosmic", StarDrake = "cosmic", GreyVeilWraith = "shadow",
-	CantorVesper = "cosmic", DameOrrery = "brass", TheLamplighter = "light", VeilWalker = "cosmic",
-}
--- multiplier by armour type and damage type; anything not listed is 1
-Config.ARMOR_MULT = {
-	brass = { fire = 0.7, ice = 1.3 },
-	fog = { stone = 0.7, light = 1.3 },
-	flesh = { fire = 1.2 },
-	stone = { spring = 0.7, cosmic = 1.3 },
-}
-Config.STATUS = {
-	burn = { dur = 3, dps = 0.2 }, -- damage per second as a share of the hit that lit it
-	chill = { dur = 2, max = 3, slow = 0.15, freeze = 0.5 }, -- 3 stacks freeze for 0.5 s (movement: needs MOVEMENT_EFFECTS)
-	stun = { dur = 1, immune = 5 }, -- 5 s immunity afterwards
-	mark = { dur = 4, bonus = 0.25 }, -- +25% damage from every source
-	hush = { dur = 2 }, -- cancels the enemy's special move
-}
--- roles: onHit statuses, every-Nth-shot bonuses, auras on touching units, armour piercing, echo and drain
-Config.ROLES = {
-	Ember = { onHit = { "burn" } },
-	Zap = { onHit = { "mark" } },
-	BrassHound = { nth = { n = 5, extraHit = true } },
-	Sentinel = { pierce = { "brass" } },
-	Frostling = { onHit = { "chill" } },
-	Boulder = { critStun = true },
-	Ward = { aura = { range = 0.2 } },
-	Archivist = { aura = { haste = 0.15 } },
-	Mourner = { onHit = { "hush" } },
-	VoltFox = { echo = 0.35 },
-	StarDrake = { nth = { n = 8, splash = { radius = 8, mult = 0.5 } } },
-	GreyVeilWraith = { pierce = "all", drain = { every = 10, heal = 1 } },
-	-- Mythic and Celestial humans: Hymn (touching familiars +20% damage), Rewind (every 10th shot resets touching cooldowns), Kindle (every familiar +10% damage), Veil (every familiar +12% crit chance)
-	CantorVesper = { aura = { damage = 0.20 } },
-	DameOrrery = { rewind = { every = 10 } },
-	TheLamplighter = { global = { damage = 0.10 } },
-	VeilWalker = { global = { crit = 0.12 } },
-}
+Config.DAMAGE_TYPE = Combat.DAMAGE_TYPE
+Config.ARMOR_MULT = Combat.ARMOR_MULT
+Config.STATUS = Combat.STATUS
+Config.ROLES = Combat.ROLES
 
 Config.HP_GROWTH = 1.27 -- enemy hp multiplier per stage (was 1.2; raised 2026-10-29: 1.25 gave a perfect bot 6 minutes, 1.3 made it fail or take 18 minutes)
+-- Endless mode (T016, OFF): past stage ENDLESS_FROM the hp growth drops from HP_GROWTH to ENDLESS_GROWTH per stage so waves 26 to 100 stay playable and finite
+-- (stage 100: about 1e5 times the stage 1 hp instead of 1.8e10). The rest (spawn counts, boss cycle, rewards) already carries on past stage 25.
+Config.ENDLESS = false
+Config.ENDLESS_FROM = 25
+Config.ENDLESS_GROWTH = 1.08
 function Config.hpScale(stage: number): number
+	if Config.ENDLESS and stage > Config.ENDLESS_FROM then
+		return Config.HP_GROWTH ^ (Config.ENDLESS_FROM - 1) * Config.ENDLESS_GROWTH ^ (stage - Config.ENDLESS_FROM)
+	end
 	return Config.HP_GROWTH ^ (stage - 1)
 end
 
@@ -279,10 +287,30 @@ function Config.isBossStage(stage: number): boolean
 	return stage % Config.BOSS_EVERY == 0
 end
 
+-- Boss framework (2026-10-29): one definition per boss, three phases at 100%, 66% and 33% hp. `Config.bossDef(stage)` picks the boss of a stage set
+-- (the five repeat after stage 25). Each phase has `fx` that the sim runs generically (Shared.MatchSim bossTick): regen { every, pct }, deny { every, dur } (the
+-- newest unit cannot fire), freeze { every, dur } (every unit cannot fire), summon { every, kind, count }, slowAura { radius, slow } (units within radius
+-- cool down 1/(1+slow) as fast), speedMult, damageTaken. Design notes: Roblox Dev/Design/Boss Designs.md and Boss Framework.md. Numbers are placeholders.
+-- BOSS_PHASES off gives the old single generic Boss.
+Config.BOSS_PHASES = true
+-- BOSS_V2 (T416, OFF): the Automaton's lamp (heals a life), the Echo's pushes, the Regent's candles instead of the flat damageTaken. BOSS_UNMERGE (OFF): the Clockmaker un-merges one unit.
+-- Phase fx keys: lamp { every, heal }, push { every, dist, count }, candles { count, every, per, min }, unmerge { every }. The sim ignores them while the flag is off.
+Config.BOSS_V2 = false
+Config.BOSS_UNMERGE = false
+Config.BOSSES = Bosses.BOSSES
+function Config.bossDef(stage: number)
+	local n = #Config.BOSSES
+	return Config.BOSSES[((math.floor(stage / Config.BOSS_EVERY) - 1) % n) + 1]
+end
+
 -- Ordered enemy kinds for a stage.
 function Config.stageSpawns(stage: number): { string }
 	local list = {}
 	local count = math.min(5 + math.floor(stage * 1.3), 28)
+	local mod = Config.WAVES_V2 and Config.waveModifier(stage) or nil
+	if mod and mod.count then
+		count = math.clamp(math.floor(count * mod.count), 3, 40)
+	end
 	for i = 1, count do
 		local kind = "Grunt"
 		if stage >= 3 and i % 3 == 0 then
@@ -298,12 +326,208 @@ function Config.stageSpawns(stage: number): { string }
 				kind = "Thief"
 			end
 		end
+		if Config.HOLLOW_ENEMIES and kind == "Grunt" then
+			if stage >= 11 and i % 6 == 1 then
+				kind = "Parishioner"
+			elseif stage >= 12 and i % 6 == 5 then
+				kind = "FogWisp"
+			end
+		end
 		table.insert(list, kind)
 	end
 	if Config.isBossStage(stage) then
 		table.insert(list, "Boss")
 	end
 	return list
+end
+
+-- ===== Wave variety (T015): elite enemies and ten wave modifiers, all data, off by default (WAVES_V2) =====
+-- An elite is a normal kind with more hp, a slower walk and a bigger reward; the sim marks it (`elite`), the kind is unchanged so the client needs no new model.
+-- Modifiers are picked from the stage number, so a stage always has the same one; boss stages and the first stages have none.
+Config.WAVES_V2 = false
+-- Client UI screens (T074, T097), off by default: the result panel after a stage clear and the pause menu button
+Config.RESULTS_SCREEN = false
+-- T652: server hooks for the data modules built earlier (Shared.ProgressHooks). All default OFF: with a flag off nothing is counted, paid or sent (profile fields are still loaded and clamped).
+Config.ACHIEVEMENTS_ON = false -- Achievements: counters from sim events, gems on unlock, "Achievement" event to the client
+Config.QUESTS_ON = false -- Quests: daily and story progress, "Quest" event when one completes, "Quest" action claims it
+Config.BOND_ON = false -- Bond: bond xp per run for the familiars used, gems on reaching a level
+Config.LEADERBOARD_ON = false -- LeaderboardRules.validate on each stage clear (no DataStore write is built; the accepted score only waits in memory)
+Config.PAUSE_MENU = false
+-- Gacha retention proposals (owner-approved 2026-10-30, Roblox Dev/Research/Game Design/Gacha Retention Study.md). Each default OFF; the server decides all of it.
+Config.P3_ROLL_FLOOR = false -- every 10th roll without a Rare or better is forced to Rare or better (Shared.Gacha)
+Config.P2_CHOSEN_GUARANTEE = false -- each roll earns 1 Lantern Oil; 100 buys one chosen Rare-or-better familiar ("Guarantee" action)
+Config.P7_DUPE_BOND = false -- duplicate copies give a small permanent damage bonus through Bond (Bond.DUPE_STEPS)
+-- Summon menu (SummonScreen, 2026-10-30): rolling, rates, pity and Skip move from the HUD to their own screen. Client-only; rolls stay the server's "Roll" action.
+Config.SUMMON_MENU = false
+-- HUD rework 2026-10-30 (HudRework): new left bar, currency bar, top strip, roll bar, per-familiar ultimate. Off until a blind review scores the HUD 7/10 (r3 gave 5.5); set true to see it.
+Config.HUD_REWORK = false
+Config.ELITE = Waves.ELITE
+Config.MOD_FIRST = Waves.MOD_FIRST
+Config.WAVE_MODIFIERS = Waves.WAVE_MODIFIERS
+function Config.waveModifier(stage: number): any?
+	if stage < Config.MOD_FIRST or Config.isBossStage(stage) then
+		return nil
+	end
+	local k = math.floor(stage) - math.floor(stage / Config.BOSS_EVERY) -- counts only non-boss stages, so ten in a row use all ten modifiers
+	return Config.WAVE_MODIFIERS[(k * 3) % #Config.WAVE_MODIFIERS + 1]
+end
+-- how many elites a stage holds, and which positions of its spawn list they are (evenly spread, never the boss)
+function Config.eliteCount(stage: number): number
+	if stage < Config.ELITE.first then
+		return 0
+	end
+	return math.min(1 + math.floor((stage - Config.ELITE.first) / Config.ELITE.every), Config.ELITE.max)
+end
+function Config.stageElites(stage: number, list: { string }): { [number]: boolean }
+	local out = {}
+	local n = #list - (list[#list] == "Boss" and 1 or 0)
+	local c = math.min(Config.eliteCount(stage), n)
+	for j = 1, c do
+		out[math.max(1, math.floor(j * n / (c + 1)))] = true
+	end
+	return out
+end
+
+Config.DIFFICULTY = Difficulty.DIFFICULTY
+Config.DIFFICULTY_ORDER = Difficulty.DIFFICULTY_ORDER
+function Config.difficulty(id: any): any
+	return (type(id) == "string" and Config.DIFFICULTY[id]) or Config.DIFFICULTY.Normal
+end
+
+-- ===== Pause (T006) =====
+Config.PAUSE_MAX = 300 -- real seconds one pause may last before the server resumes the run
+
+-- ===== Collection (T186): duplicates and shards per familiar =====
+-- A pull of a familiar already owned adds a duplicate and shards by rarity. Saved in the profile as collection[pet] = { count, shards }.
+Config.SHARDS_PER_DUPLICATE = { Common = 1, Rare = 2, Epic = 5, Legendary = 10, Mythic = 25, Celestial = 50 }
+Config.COLLECTION_MAX = 1000000
+function Config.shardsFor(pet: string): number
+	local def = Config.PETS[pet]
+	return def and Config.SHARDS_PER_DUPLICATE[def.rarity] or 0
+end
+-- Records one pull in `coll` (mutated). Returns true when the familiar is new to the collection.
+function Config.collectionAdd(coll: any, pet: string): boolean
+	local e = coll[pet]
+	if not e then
+		coll[pet] = { count = 1, shards = 0 }
+		return true
+	end
+	e.count = math.min(e.count + 1, Config.COLLECTION_MAX)
+	e.shards = math.min(e.shards + Config.shardsFor(pet), Config.COLLECTION_MAX)
+	return false
+end
+-- Clean a saved collection: only real familiars, whole numbers in range; every familiar in `seen` (the older save format) owns at least one.
+function Config.sanitizeCollection(raw: any, seen: any): { [string]: { count: number, shards: number } }
+	local out = {}
+	local function num(v: any, lo: number): number
+		if type(v) ~= "number" or v ~= v then
+			return lo
+		end
+		return math.clamp(math.floor(v), lo, Config.COLLECTION_MAX)
+	end
+	if type(raw) == "table" then
+		for id, e in raw do
+			if type(id) == "string" and Config.PETS[id] and type(e) == "table" then
+				out[id] = { count = num(e.count, 1), shards = num(e.shards, 0) }
+			end
+		end
+	end
+	if type(seen) == "table" then
+		for id, v in seen do
+			if v == true and type(id) == "string" and Config.PETS[id] and not out[id] then
+				out[id] = { count = 1, shards = 0 }
+			end
+		end
+	end
+	return out
+end
+
+Config.LANTERN = Synergies.LANTERN
+
+-- ===== Faction adjacency combos (T012): data table of pairs; a familiar touching a partner gets the bonus once per entry =====
+-- a and b are factions (Shared.Familiars). a == b needs two touching familiars of that faction. Bonuses are capped per familiar.
+Config.SYNERGY_ON = true
+Config.SYNERGIES = Synergies.SYNERGIES
+Config.SYNERGY_CAP = Synergies.SYNERGY_CAP
+
+-- ===== Day, night and weather (T009): per-set windows are data in Shared.StageSets (`sky`); the effects are here, off by default =====
+-- sky = { cycle = sim seconds per day, night = { from, to } as fractions of the cycle, weather = { { kind, at, dur } } } (at is a fraction, dur seconds).
+-- An effect may hold enemySpeed (multiplier), range (added share of every familiar's range) and damage[damageType] (added share).
+Config.SKY_ON = false
+Config.SKY_EFFECTS = Sky.SKY_EFFECTS
+local stageSetsMod: any = nil
+function Config.setFor(stage: number): any
+	if stageSetsMod == nil then
+		local shared = game:GetService("ReplicatedStorage"):FindFirstChild("Shared")
+		local m = script.Parent:FindFirstChild("StageSets") or (shared and shared:FindFirstChild("StageSets"))
+		local ok, mod = pcall(function()
+			return require(m :: ModuleScript)
+		end)
+		stageSetsMod = ok and mod or false
+	end
+	return stageSetsMod and stageSetsMod.forStage(stage) or nil
+end
+function Config.skyFor(stage: number): any
+	local set = Config.setFor(stage)
+	return set and set.sky or nil
+end
+
+-- The lane for a stage (T167): the set's own waypoints with Config.PATH_PER_SET, else the single Config.PATH.
+function Config.pathFor(stage: number): { Vector3 }
+	if not Config.PATH_PER_SET then
+		return Config.PATH
+	end
+	local set = Config.setFor(stage)
+	local wp = set and set.path
+	if not wp or #wp < 2 then
+		return Config.PATH
+	end
+	local out = {}
+	for _, p in wp do
+		table.insert(out, Vector3.new(p[1], 1, p[2]))
+	end
+	return out
+end
+
+-- Placement rules for a stage (T177): nil (old rules) unless Config.MAP_RULES. decor is data for the client; canPlace never reads it.
+function Config.mapRules(stage: number): any
+	if not Config.MAP_RULES then
+		return nil
+	end
+	local set = Config.setFor(stage)
+	local pl = set and set.place or {}
+	return { bounds = pl.bounds or Config.PLACE_BOUNDS, path = Config.pathFor(stage), noBuild = pl.noBuild or {}, decor = pl.decor or {} }
+end
+
+-- Fences and gates of a stage (T157), as a fresh copy per call: {} unless Config.PATH_BLOCKERS.
+function Config.blockersFor(stage: number): { any }
+	local out = {}
+	if not Config.PATH_BLOCKERS then
+		return out
+	end
+	local set = Config.setFor(stage)
+	for _, b in set and set.blockers or {} do
+		table.insert(out, table.clone(b))
+	end
+	return out
+end
+-- { night: boolean, weather: string? } at sim time t in a stage, or nil without sky data
+function Config.skyAt(stage: number, t: number): any
+	local sky = Config.skyFor(stage)
+	if not sky then
+		return nil
+	end
+	local phase = (t % sky.cycle) / sky.cycle
+	local night = sky.night ~= nil and phase >= sky.night[1] and phase < sky.night[2]
+	local weather
+	for _, w in sky.weather or {} do
+		local into = (t - w.at * sky.cycle) % sky.cycle
+		if into < w.dur then
+			weather = w.kind
+			break
+		end
+	end
+	return { night = night, weather = weather }
 end
 
 -- Trainer progression: XP from kills and stage clears. Each level pays gems and adds Luck.
@@ -353,9 +577,16 @@ function Config.rarityPercents(luck: number): { [string]: number }
 	return out
 end
 
+-- Refund share of a recycled pet by its tier (T019). 1 = the full value, as before; lower a tier's entry to pay less.
+Config.REFUND_PCT = { 1, 1, 1, 1, 1, 1, 1, 1 }
+function Config.refundPct(tier: number): number
+	local p = Config.REFUND_PCT[tier]
+	return if type(p) == "number" and p == p then math.clamp(p, 0, 1) else 1
+end
+
 function Config.recycleValue(pet: string, tier: number): number
 	local def = Config.PETS[pet]
-	return math.floor(5 * Config.RARITIES[def.rarity].order * 3 ^ (tier - 1))
+	return math.floor(5 * Config.RARITIES[def.rarity].order * 3 ^ (tier - 1) * Config.refundPct(tier))
 end
 
 function Config.comboMult(combo: number): number

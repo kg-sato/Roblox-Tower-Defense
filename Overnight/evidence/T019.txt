@@ -1,3 +1,8 @@
 PASS
 Note: Roblox Dev/Research/UI/Loading and title art references.md
 Deviation (read before trusting this PASS): no read source covers the title or loading screens of Hades, Hollow Knight or Bastion; the note holds menu, narration and art-style facts (Kotaku 2020-10-22, Wikipedia pages fetched 2026-10-28) and labels the rest as recommendations. The user should judge.
+
+--- sim lane (TODO.md T019, studio-sim, 2026-10-29) ---
+Config.REFUND_PCT per tier (all 1 = 100 percent, economy unchanged) and Config.refundPct clamps 0..1, NaN or missing -> 1; recycleValue multiplies and floors. Rules tests 10 cases incl. MatchSim:recycle coins. Balance not re-run for outcomes since defaults are identical to the old formula (Balance suite still PASS).
+
+RunAll: ActionArgs PASS; Balance PASS (baseline); Boss 31/31; Combat 58/58; FamiliarMaterials 69/69; Familiars 32/32; GameSpeed PASS; LoreFragments PASS; MatchSim PASS; NewRoles 27/27; NumberFormat PASS; Rules 69 of 69; SaveMigration 27 of 27; ServerRules 58/58; SettingsDefaults PASS; SoundCap PASS; StageSets PASS. SUMMARY 17 of 17 suites PASS (2026-10-29, Studio Edit mode)

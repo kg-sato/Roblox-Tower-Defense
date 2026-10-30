@@ -3,6 +3,8 @@
 Every research note, grouped by area. Add new notes to the right folder and list them here. Related: [[Home]], [[Backlog]]
 
 ## UI
+- [[Research/UI/HUD Collection Results Boards|HUD Collection Results Boards]]: three research boards with 5 cited sources each (search-summary level), takeaways for dark gold-ink 844x390, and a HUD wireframe (2026-10-29)
+- [[Research/UI/Pinterest Batch 1 - Tarot, UI, VFX, Themes (2026-10-29)|Pinterest Batch 1]]: the user's 94 pins by heading: tarot reveal model, overall UI, skill tree curves, title-page big entity facing the character, loading clock with concentric rings, transitions, VFX, weapon sheets, topography and deity themes (2026-10-29)
 - [[Research/UI/Skill Tree Grader|Skill Tree Grader]]: what makes the user's HUD and skill tree references refined; what we built from it (ours, not copied); grades in [[Research/UI/Captures 2026-10-28/Grading Report|Grading Report]] (2026-10-28)
 - [[Research/UI/Loading, Intro and UI References 2|Loading, Intro and UI References 2]]: the user's 9 recordings, 7 TikToks and gfxcomet studied; loading screen v2, first-time intro tour, rolling counters and cutscene core/glint/slam built (2026-10-28)
 - [[Research/UI/Creative Fix Method|Creative Fix Method]]: the loop for turning anything generic into a themed object or cutscene, the metaphor table, pitfalls and a log of every fix; run it with /make-creative (2026-10-28)
@@ -26,6 +28,7 @@ Screens, kits, art pipeline, and what other games' UI does.
 - [[Research/UI/UI Recreation Coverage|UI Recreation Coverage]]: which screenshot UIs are built and the suggested build order
 
 ## VFX and Animation
+- [[Research/VFX and Animation/Reference Batch 3 - 13 TikToks (2026-10-29)|Reference Batch 3 - 13 TikToks]]: 13 new TikToks; aotishe motion-design timeline (counter ease-out, glitch cuts, held frames never still), boss reveal, first-person ultimate, orb and halo reveals (2026-10-29)
 - [[Research/VFX and Animation/Animation Craft and Capabilities|Animation Craft and Capabilities]]: smears and multiples (glare and blur by duplicate copies), second-order springs, the 12 principles for games, Roblox animation tools, what Claude can and cannot animate; Motion module and /make-motion skill (2026-10-28)
 - [[Research/VFX and Animation/Summon References|Summon References]]: how FGO, Hearthstone, Honkai Star Rail and Anime Vanguards stage summons (frame study) and our tarot-table reveal The Reading (2026-10-28)
 - [[Research/VFX and Animation/Cinematic Cutscenes|Cinematic Cutscenes]]: how high-quality Roblox cutscenes are made (reference-part cameras, splines, first-person from Blender, impact frames, speed lines) and our first-person ultimate (2026-10-28)
@@ -60,6 +63,7 @@ Models, Blender, animation, image generation, backgrounds and enemies.
 ## Game Design and Market
 Genre playbooks, competitors, monetization rules, retention, low-end devices.
 
+- [[Research/Game Design/Gacha Retention Study|Gacha Retention Study]]: HSR, Endfield, Reverse: 1999 and Limbus summon menus, daily loops and dupes; Summon menu layout, 10 mechanics ranked for merge TD, 12 proposals, kid-safe guardrails (2026-10-30)
 - [[Research/Game Design and Market/Competitors and Policy|Competitors and Policy]]: live competitor numbers, UI patterns to copy, and Roblox's paid-random-item rules
 - [[Research/Game Design and Market/Engagement Loop Playbook|Engagement Loop Playbook]]: what makes simple games sticky, plus a one-month build plan
 - [[Research/Game Design and Market/Layouts, Placement and Summoning|Layouts, Placement and Summoning]]: date: 2026-10-27

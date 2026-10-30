@@ -1,1 +1,1 @@
-{"name": "Ember", "size": 1024, "uv_layers": ["UVMap"], "triangles": 6000}
+{"name": "Ember", "size": 1024, "uv_layers": ["UVMap"], "triangles": 6000, "speckle_before": 0.0173, "speckle_after": 0.005}

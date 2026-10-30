@@ -64,7 +64,7 @@ return function(ctx)
 		for lv = 0, max do
 			local a, b = at(math.max(lv, 0.5)), at(lv + 1)
 			local mid = a:Lerp(b, 0.5)
-			part({ Material = Enum.Material.Neon, Color = Color3.fromRGB(255, 214, 130), Transparency = 0.3, Size = Vector3.new(0.12, 0.05, (b - a).Magnitude + 0.1), CFrame = CFrame.lookAt(mid + Vector3.new(0, 0.05, 0), b + Vector3.new(0, 0.05, 0)) })
+			part({ Material = Enum.Material.Neon, Color = Color3.fromRGB(255, 214, 130), Transparency = 0.6, Size = Vector3.new(0.12, 0.05, (b - a).Magnitude + 0.1), CFrame = CFrame.lookAt(mid + Vector3.new(0, 0.05, 0), b + Vector3.new(0, 0.05, 0)) })
 		end
 		for lv = 1, max do
 			local p = at(lv)
@@ -216,7 +216,7 @@ return function(ctx)
 		end
 		if saved.bloom then
 			local bl = saved.bloom[1]
-			bl.Enabled, bl.Intensity, bl.Size, bl.Threshold = true, 1.4, 36, 0.85
+			bl.Enabled, bl.Intensity, bl.Size, bl.Threshold = true, 0.5, 24, 0.95
 		end
 		local cc = Lighting:FindFirstChild("RoadGrade") or Instance.new("ColorCorrectionEffect")
 		cc.Name, cc.TintColor, cc.Contrast, cc.Saturation, cc.Brightness = "RoadGrade", Color3.new(1, 1, 1):Lerp(sec.color, 0.18), 0.12, 0.1, 0.02
@@ -265,7 +265,7 @@ return function(ctx)
 		camConn = RunService.RenderStepped:Connect(function()
 			local k = math.clamp((os.clock() - t0) / walkT, 0, 1)
 			local e = 1 - (1 - k) ^ 3
-			local lv = fromLv + (target - 1.5 - fromLv) * e -- stop short of the next stone so it reads
+			local lv = fromLv + (target - 3.2 - fromLv) * e -- stop short of the next stone so it reads
 			local here, ahead = at(lv), at(lv + 1.2)
 			local bob = (ctx.settings.reducedMotion or k >= 1) and 0 or math.sin((os.clock() - t0) * 10) * 0.12 * (1 - e)
 			ctx.setCamera(CFrame.lookAt(here + Vector3.new(0, 5.2 + bob, 0), ahead + Vector3.new(0, 3.2, 0)))

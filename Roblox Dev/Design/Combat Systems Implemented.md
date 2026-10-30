@@ -30,3 +30,6 @@ Enemies: Grunt flesh, Swift fog, Tank brass, Boss none. Fire 0.7 against brass a
 
 ## Not changed
 Nothing was deleted. The stale 694-line `MatchSim` copy in Studio is still there (Bug Log #3) because deleting it needs your OK.
+
+## Update 2026-10-29: Crow, Thief and movement effects are ON
+`Config.NEW_ENEMIES` and `Config.MOVEMENT_EFFECTS` are now true. Crow and Thief have client models (`ReplicatedStorage.EnemyCrowMesh` and `EnemyThiefMesh` from the uploaded GLBs, heights 2.6 and 4.4 in `Models.MESH_HEIGHT`, no walk or flap animation). The server emits `Pace {id, dist, speed, t}` whenever an enemy's speed multiplier changes (movement effects times the boss phase's speedMult); `StarterPlayerScripts.PaceClient` applies it (spawnTime = t - dist / speed; a stun is held at speed 1e-4) through the shared slot `ReplicatedStorage.EnemyPace`, which `GameClient` fills with one line. `MatchService` sets the Pace `t` to the game clock. Play check: a stage 12 wave spawned 2 Crows and 3 Thieves, 30 Pace events arrived, no script errors; the facing of the two new models at board zoom is unverified. Combat.test.luau now sets the flag off before its off-check.

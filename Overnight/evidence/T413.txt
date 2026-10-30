@@ -1,0 +1,4 @@
+PASS
+Stale 694-line MatchSim (renamed MatchSim_stale694) and two stray ReplicatedStorage._GameSpeedTest folders were reparented to ServerStorage._Trash_20261029 (nothing destroyed). Shared now holds exactly 1 MatchSim (1145 lines). Note: RunAll was 17 suites by then (SoundCap added), not 16.
+
+RunAll: ActionArgs PASS; Balance PASS (baseline); Boss 31/31; Combat 58/58; FamiliarMaterials 69/69; Familiars 32/32; GameSpeed PASS; LoreFragments PASS; MatchSim PASS; NewRoles 27/27; NumberFormat PASS; Rules 69 of 69; SaveMigration 27 of 27; ServerRules 58/58; SettingsDefaults PASS; SoundCap PASS; StageSets PASS. SUMMARY 17 of 17 suites PASS (2026-10-29, Studio Edit mode)

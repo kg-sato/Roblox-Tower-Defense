@@ -1,0 +1,63 @@
+{
+ "name": "HollowParishioner",
+ "archetype": "biped",
+ "triangles": 332,
+ "vertices": 612,
+ "height": 3.89,
+ "bones": [
+  "Root",
+  "Pelvis",
+  "Spine",
+  "Chest",
+  "Neck",
+  "Head",
+  "UpperArm.L",
+  "UpperArm.R",
+  "LowerArm.L",
+  "LowerArm.R",
+  "UpperLeg.L",
+  "UpperLeg.R",
+  "LowerLeg.L",
+  "LowerLeg.R"
+ ],
+ "max_influences": 4,
+ "weight_sum_min": 1.0,
+ "weight_sum_max": 1.0,
+ "owned_vertices_by_bone": {
+  "Root": 18,
+  "Pelvis": 69,
+  "Spine": 45,
+  "Chest": 21,
+  "Neck": 0,
+  "Head": 0,
+  "UpperArm.L": 87,
+  "UpperArm.R": 78,
+  "LowerArm.L": 36,
+  "LowerArm.R": 96,
+  "UpperLeg.L": 3,
+  "UpperLeg.R": 87,
+  "LowerLeg.L": 21,
+  "LowerLeg.R": 72
+ },
+ "pose_tests": {
+  "Walk": {
+   "t": 0.25,
+   "vertices_moved": 597,
+   "max_move_height_fraction": 0.2455,
+   "finite": true
+  },
+  "Hit": {
+   "t": 0.1,
+   "vertices_moved": 606,
+   "max_move_height_fraction": 0.2453,
+   "finite": true
+  },
+  "Death": {
+   "t": 1.2,
+   "vertices_moved": 612,
+   "max_move_height_fraction": 1.0233,
+   "finite": true
+  }
+ },
+ "overrides": []
+}
