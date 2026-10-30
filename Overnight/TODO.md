@@ -184,7 +184,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: docs-tooling | needs: none | depends: none | size: M | owner-files: Roblox Dev/Research/UI/ (new notes)
 - [x] T424 | Refresh Systems.md, Backlog and Design Doc for bosses, 20 familiars, set 5 | verify: manual: grep shows no "idea" for Bosses and Stage set 5 rows
   lane: docs-tooling | needs: none | depends: none | size: S | owner-files: Roblox Dev/Systems.md, Backlog.md, Design/Game Design Doc.md
-- [ ] T246 | Write tonight's report: built, to judge, to delete | verify: manual: Overnight/REPORT.md updated with labels
+- [x] T246 | Write tonight's report: built, to judge, to delete | verify: manual: Overnight/REPORT.md updated with labels
   lane: docs-tooling | needs: none | depends: all lanes done | size: S | owner-files: Overnight/REPORT.md, Roblox Dev/Session Log.md (append)
 
 ## Lane: fx-audio (added by the controller during the run)

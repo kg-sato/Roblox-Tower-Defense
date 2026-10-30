@@ -288,3 +288,4 @@
 - 01:01 CHECKPOINT f07ef6f on overnight/2026-10-27: Run an independent regression pass and a wiring audit of everything built tonight. Thirty-three suites and the lean bot pass; one module, Achievements, is still unhooked.
 - 01:11 CHECKPOINT 7762547 on overnight/2026-10-27: Upload the forty-icon set and wire the ids into enemy status icons, rarity chips and faction badges through a StatusIcons module. Look is unverified.
 - 01:42 CHECKPOINT fa72a0a on overnight/2026-10-27: Hook achievements, quests, bond and leaderboard validation into the server behind four flags that default off, with profile migration and tests. The lean bot and all suites still pass.
+- 01:55 CHECKPOINT 46f759e on overnight/2026-10-27: Write the overnight report with commit hashes and labels, and reconcile the vault notes with the ledger. Everything visual or audible is unverified.

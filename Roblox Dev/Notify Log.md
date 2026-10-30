@@ -60,3 +60,4 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-30 01:31 T640 failed honestly after 3 blind-review rounds (HUD, collection, results still under 7; needs a human-directed HUD rebuild). Next: T652 server hooks for achievements, quests, bond.
 - 2026-10-30 01:42 T652 done: achievements, quests, bond hooked server-side behind OFF flags; RunAll 33/33, bot 10/10. Writing the final report and vault updates.
 - 2026-10-30 01:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 01:55 Morning digest ready: 89 tasks, 22 commits, 3 blocked. Read Overnight/MORNING.md.
