@@ -1828,5 +1828,245 @@
   "type": "Audio",
   "assetId": "126579756259575",
   "time": "2026-10-29 22:16"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\currency_coin.png",
+  "type": "Decal",
+  "assetId": "125639028193781",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\currency_coin_128.png",
+  "type": "Decal",
+  "assetId": "95048444734141",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\currency_gem.png",
+  "type": "Decal",
+  "assetId": "123300215475792",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\currency_gem_128.png",
+  "type": "Decal",
+  "assetId": "91472041004341",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_clockwork_guild.png",
+  "type": "Decal",
+  "assetId": "112625432404437",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_clockwork_guild_128.png",
+  "type": "Decal",
+  "assetId": "99192698908979",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_hollow_court.png",
+  "type": "Decal",
+  "assetId": "119092260413866",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_hollow_court_128.png",
+  "type": "Decal",
+  "assetId": "94443000089251",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_lantern_keepers.png",
+  "type": "Decal",
+  "assetId": "122526193368127",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_lantern_keepers_128.png",
+  "type": "Decal",
+  "assetId": "116961039955716",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_star_choir.png",
+  "type": "Decal",
+  "assetId": "76561180595159",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\faction_star_choir_128.png",
+  "type": "Decal",
+  "assetId": "99690597459471",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_common.png",
+  "type": "Decal",
+  "assetId": "104183261186226",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_common_128.png",
+  "type": "Decal",
+  "assetId": "90136314497755",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_epic.png",
+  "type": "Decal",
+  "assetId": "116809777893530",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_epic_128.png",
+  "type": "Decal",
+  "assetId": "112910257819559",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_1.png",
+  "type": "Decal",
+  "assetId": "135563845481619",
+  "time": "2026-10-30 01:02"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_2.png",
+  "type": "Decal",
+  "assetId": "92762313136368",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_3.png",
+  "type": "Decal",
+  "assetId": "74250484876444",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_4.png",
+  "type": "Decal",
+  "assetId": "114714240868164",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_5.png",
+  "type": "Decal",
+  "assetId": "79547292801679",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_frame_6.png",
+  "type": "Decal",
+  "assetId": "106963806645989",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_legendary.png",
+  "type": "Decal",
+  "assetId": "91345415352281",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_legendary_128.png",
+  "type": "Decal",
+  "assetId": "112444341301372",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_mythic.png",
+  "type": "Decal",
+  "assetId": "110249221506561",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_mythic_128.png",
+  "type": "Decal",
+  "assetId": "126052380860845",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_rare.png",
+  "type": "Decal",
+  "assetId": "132368321060365",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_rare_128.png",
+  "type": "Decal",
+  "assetId": "120548124608295",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_uncommon.png",
+  "type": "Decal",
+  "assetId": "103063883421222",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\rarity_uncommon_128.png",
+  "type": "Decal",
+  "assetId": "133645350983692",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_burn.png",
+  "type": "Decal",
+  "assetId": "83889539159649",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_burn_128.png",
+  "type": "Decal",
+  "assetId": "121684752465979",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_chill.png",
+  "type": "Decal",
+  "assetId": "97034705805471",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_chill_128.png",
+  "type": "Decal",
+  "assetId": "105999729035724",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_hush.png",
+  "type": "Decal",
+  "assetId": "123817188976929",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_hush_128.png",
+  "type": "Decal",
+  "assetId": "133696622099130",
+  "time": "2026-10-30 01:03"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_mark.png",
+  "type": "Decal",
+  "assetId": "130554691300874",
+  "time": "2026-10-30 01:04"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_mark_128.png",
+  "type": "Decal",
+  "assetId": "116086765531748",
+  "time": "2026-10-30 01:04"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_stun.png",
+  "type": "Decal",
+  "assetId": "116431235193679",
+  "time": "2026-10-30 01:04"
+ },
+ {
+  "file": "UI Kit\\art\\icons_set\\status_stun_128.png",
+  "type": "Decal",
+  "assetId": "73416715793376",
+  "time": "2026-10-30 01:04"
  }
 ]

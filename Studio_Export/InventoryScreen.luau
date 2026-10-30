@@ -14,6 +14,7 @@ local Familiars = require(Shared:WaitForChild("Familiars"))
 local Art = require(ReplicatedStorage:WaitForChild("FamiliarArt"))
 local Shell = require(script.Parent:WaitForChild("ScreenShell"))
 local Dialogs = require(script.Parent:WaitForChild("Dialogs"))
+local Icons = require(script.Parent:WaitForChild("StatusIcons")) -- T641 rarity chips
 local P = Shell.P
 
 local Inventory = {}
@@ -73,6 +74,7 @@ function Inventory.render(root, d, close)
 		img.Image = art and art.cutout or ""
 		img.ImageColor3 = known and Color3.new(1, 1, 1) or Color3.new(0, 0, 0)
 		Dialogs.text(c, { name = "Name", text = known and f.name or "???", x = 0.62, y = 0.3, w = 0.6, h = 0.3, size = 20, color3 = known and P.cream or P.muted, z = 14 })
+		Icons.badge(c, Icons.rarity(f.rarity), { Name = "RarityChip", AnchorPoint = Vector2.new(1, 0), Position = UDim2.fromScale(0.97, 0.06), Size = UDim2.fromScale(0.18, 0.18), SizeConstraint = Enum.SizeConstraint.RelativeYY, ZIndex = 15 })
 		for s = 1, 6 do
 			local lit = s <= (RANK[f.rarity] or 1)
 			K.box(c, { name = "Star" .. s, x = 0.44 + s * 0.07, y = 0.72, w = 0.05, h = 0.14, aspect = 1, rotation = 45, fill = lit and P.gold or P.ghost, z = 14 })

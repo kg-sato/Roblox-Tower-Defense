@@ -14,6 +14,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Config = require(Shared:WaitForChild("Config"))
 local Familiars = require(Shared:WaitForChild("Familiars"))
 local Art = require(ReplicatedStorage:WaitForChild("FamiliarArt"))
+local Icons = require(script.Parent:WaitForChild("StatusIcons")) -- T641 rarity chips
 
 local BRASS = Color3.fromRGB(214, 170, 96)
 local INK = Color3.fromRGB(26, 23, 34)
@@ -193,6 +194,7 @@ for i, id in Familiars.order do
 	local img = new("ImageLabel", { Name = "Img", BackgroundTransparency = 1, Image = Art[id].cutout, ScaleType = Enum.ScaleType.Fit, Size = UDim2.fromScale(0.86, 0.68), Position = UDim2.fromScale(0.07, 0.04), ZIndex = 13 }, cell)
 	local name = label(cell, { name = "Name", text = "???", size = UDim2.fromScale(0.9, 0.17), pos = UDim2.fromScale(0.05, 0.74), max = 18, z = 13 })
 	label(cell, { name = "Rarity", text = string.upper(f.rarity), size = UDim2.fromScale(0.9, 0.09), pos = UDim2.fromScale(0.05, 0.9), color = rarity.color, max = 12, z = 13 })
+	Icons.badge(cell, Icons.rarity(f.rarity), { Name = "RarityChip", AnchorPoint = Vector2.new(1, 0), Position = UDim2.fromScale(0.96, 0.03), Size = UDim2.fromScale(0.22, 0.22), SizeConstraint = Enum.SizeConstraint.RelativeXX, ZIndex = 14 })
 	cells[id] = { id = id, cell = cell, img = img, name = name, stroke = stroke, known = false }
 	cell.Activated:Connect(function()
 		select(id)

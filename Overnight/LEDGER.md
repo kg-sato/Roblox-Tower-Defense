@@ -85,3 +85,5 @@ T086 | commit cfcfbf0 | "keyboard gamepad focus" | attested | client-ui | Overni
 T081 | commit 7f80385 | "icon set added" | attested | client-ui | Overnight/evidence/T081.txt
 T172 | commit 71376f0 | "boss arena variants" | attested | world | Overnight/evidence/T172.txt
 T642 | commit c1992de | "screen router added" | attested | client-ui | Overnight/evidence/T642.txt
+T650 | commit f07ef6f | "regression pass done" | attested | docs-tooling | Overnight/evidence/T650.txt
+T651 | commit f07ef6f | "wiring audit done" | attested | docs-tooling | Overnight/evidence/T651.txt

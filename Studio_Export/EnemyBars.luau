@@ -4,6 +4,7 @@
 -- status reads by letter and position as well as by colour. Driven by the server event Status { id, kind, dur, stacks }. Contrast numbers: Overnight/evidence/T139.txt.
 return function(env)
 	local new, enemies, SETTINGS, tween = env.new, env.enemies, env.SETTINGS, env.tween
+	local Icons = require(script.Parent:WaitForChild("StatusIcons")) -- T641 image icons; the letter stays as the fallback
 	local M = {}
 	M.COLORS = {
 		burn = Color3.fromRGB(255, 140, 40), chill = Color3.fromRGB(110, 205, 255), stun = Color3.fromRGB(255, 230, 70),
@@ -36,10 +37,16 @@ return function(env)
 				TextColor3 = col, LayoutOrder = ORDER[data.kind] or 9, Text = "" }, e.statusRow)
 			new("UICorner", { CornerRadius = UDim.new(1, 0) }, icon)
 			new("UIStroke", { Color = col, Thickness = 2, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }, icon)
+			if Icons.status[data.kind] then
+				Icons.badge(icon, Icons.status[data.kind], { Name = "Art", Size = UDim2.fromScale(1, 1), ZIndex = 2 })
+				new("TextLabel", { Name = "Stack", BackgroundTransparency = 1, AnchorPoint = Vector2.new(1, 1), Position = UDim2.fromScale(1.1, 1.1), Size = UDim2.fromOffset(12, 12), Font = Enum.Font.GothamBlack, TextSize = 12, TextColor3 = Color3.new(1, 1, 1), TextStrokeTransparency = 0, ZIndex = 4, Text = "" }, icon)
+			end
 			e.icons[data.kind] = icon
 		end
 		local n = data.stacks or 1
-		icon.Text = M.GLYPHS[data.kind] .. (n > 1 and tostring(n) or "")
+		local stack = icon:FindFirstChild("Stack")
+		icon.Text = stack and "" or (M.GLYPHS[data.kind] .. (n > 1 and tostring(n) or ""))
+		if stack then stack.Text = n > 1 and tostring(n) or "" end
 		icon.TextSize = n > 1 and 11 or 13
 		icon:SetAttribute("Token", (icon:GetAttribute("Token") or 0) + 1)
 		local tok = icon:GetAttribute("Token")

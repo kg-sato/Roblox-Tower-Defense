@@ -192,7 +192,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: SoundCatalog, SoundCues (new), AudioIds, SoundFX call sites (no GameClient edits)
 
 ## Lane: follow-ups (added by the controller during the run)
-- [ ] T650 | Final regression pass: all suites, lean bot, Play run to the stage 5 boss with a wave, console scan, script sizes, compile | verify: studio: evidence file with RunAll counts, bot clears, Play console errors (none new), sizes
+- [x] T650 | Final regression pass: all suites, lean bot, Play run to the stage 5 boss with a wave, console scan, script sizes, compile | verify: studio: evidence file with RunAll counts, bot clears, Play console errors (none new), sizes
   lane: docs-tooling | needs: Studio | depends: none | size: M | owner-files: Overnight/evidence, Overnight/captures
 - [x] T642 | Make the new screens reachable: a ScreenRouter module with a menu dock button (one-line hook) opening inventory, quests, pass and shop, leaderboard, stage select, familiar panel, results after a clear and pause on Esc | verify: studio: in a Play run every screen is created in PlayerGui when opened and closes cleanly, console clean, HUD counts otherwise unchanged
   lane: client-ui | needs: Studio | depends: none | size: M | owner-files: StarterPlayerScripts.ScreenRouter (new), one-line hook in GameClient
@@ -200,5 +200,5 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: client-ui | needs: Studio | depends: T642 | size: L | owner-files: new UI modules only (not the title page, skill tree or loading files)
 - [ ] T641 | Upload the 40-icon set (images, pre-approved) and wire the ids into status, rarity and faction displays | verify: studio: icons visible on enemy status display and rarity chips in a Play capture, ids in VFX/ASSETS.md
   lane: client-ui | needs: Studio | depends: T081 | size: M | owner-files: new modules, VFX/ASSETS.md (append)
-- [ ] T651 | Wiring audit: for every module and script added tonight (see the ledger), prove it runs in Play (required by a running script or creating instances/events) and list orphans; wire the cheap ones | verify: studio: evidence table module -> how it was proven alive (log line, instance, event) and the orphan list with fixes or reasons
+- [x] T651 | Wiring audit: for every module and script added tonight (see the ledger), prove it runs in Play (required by a running script or creating instances/events) and list orphans; wire the cheap ones | verify: studio: evidence table module -> how it was proven alive (log line, instance, event) and the orphan list with fixes or reasons
   lane: docs-tooling | needs: Studio | depends: T642 | size: M | owner-files: Overnight/evidence, new hooks only where an orphan is trivially wirable

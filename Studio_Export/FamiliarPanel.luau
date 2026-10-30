@@ -25,6 +25,7 @@ local NumberFormat = require(Shared:WaitForChild("NumberFormat"))
 local TextAnim = require(Shared:WaitForChild("TextAnim"))
 local Art = require(ReplicatedStorage:WaitForChild("FamiliarArt"))
 local Dialogs = require(script.Parent:WaitForChild("Dialogs"))
+local Icons = require(script.Parent:WaitForChild("StatusIcons")) -- T641 rarity chip and faction badge
 local P = Dialogs.PALETTE
 
 local FamiliarPanel = {}
@@ -114,7 +115,9 @@ function FamiliarPanel.render(root, id, data, onClose)
 	line("Name", owned and f.name or "???", 0.1, 0.12, 34, P.gold, K.T.titleFont)
 	local rc = Config.RARITIES[f.rarity].color
 	local sub = Dialogs.text(panel, { name = "Rarity", text = owned and (f.rarity .. "  -  " .. f.epithet) or (f.rarity .. " familiar"), x = X0, y = 0.2, w = W, h = 0.07, size = 18, color3 = rc:Lerp(Color3.new(1, 1, 1), 0.35), left = true, z = 12 })
+	Icons.badge(panel, Icons.rarity(f.rarity), { Name = "RarityChip", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.94, 0.235), Size = UDim2.fromScale(0.07, 0.07), SizeConstraint = Enum.SizeConstraint.RelativeYY, ZIndex = 13 })
 	if owned then
+		Icons.badge(panel, Icons.faction(f.faction), { Name = "FactionBadge", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.94, 0.3), Size = UDim2.fromScale(0.07, 0.07), SizeConstraint = Enum.SizeConstraint.RelativeYY, ZIndex = 13 })
 		line("Meta", f.faction .. "  -  " .. f.element .. "  -  " .. f.home, 0.27, 0.06, 16, P.muted)
 		line("Quote", "\u{201C}" .. f.voice.summon .. "\u{201D}", 0.345, 0.08, 18, P.cream)
 		line("Role", string.upper(f.role) .. ": " .. f.roleText, 0.445, 0.105, 16, P.muted)

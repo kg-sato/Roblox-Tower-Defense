@@ -53,3 +53,4 @@ One line per milestone sent to the phone with `python tools/notify.py --done` (n
 - 2026-10-30 00:44 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | blender-worker: idle; last: 19:31 T124,T142,T407 | docs-worker: idle; last: 19:21 T424 and T027 notes + evidence | icon-worker: idle;
 - 2026-10-30 00:50 T642 done: screen router and menu button; the new screens are now reachable in Play. Wiring audit T651 running.
 - 2026-10-30 00:59 audio-worker: idle; last: 19:34 T604 T603 T155 done, 8 uploaded | audit-worker: done; last: 00:58 T651 evidence Overnight/evidence/T651.txt; Q | blender-worker: idle; last: 19:31 T124,T142,T407 | docs
+- 2026-10-30 01:01 T650 and T651 done: regression and wiring audit; 33/33 suites, bot 10/10; Achievements module not hooked to the server yet (needs design).
