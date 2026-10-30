@@ -1,0 +1,14 @@
+PASS
+T602 hit-stop, shake and camera nudge scaled, all off with reduced motion (studio-fx worker). Look and feel UNVERIFIED.
+New: Studio_Export/FXScale.luau (ReplicatedStorage.Shared.FXScale, pure), Tests/FXScale.test.luau (14 checks). FXRecipes.impact now takes frames/shake/nudge from FXScale, skips hitStop/shake/nudge deps when 0 and logs nudge. deps.nudge is new and optional.
+Rules: reducedMotion zeroes hit-stop, shake and nudge; the Screen shake setting zeroes shake and nudge only; hit-stop clamped 0..5 frames; nudge = min(0.3 + 0.5*weight, 0.8) studs.
+Test output (RunAll suite FXScale): PASS, 14 checks
+ok hit-stop passes through when motion is on / is zero with reduced motion / is clamped to 0..5 frames / stays on when only screen shake is off
+ok shake passes through when motion is on / is zero with reduced motion / is zero with the shake setting off
+ok camera nudge is zero with reduced motion / is zero with the shake setting off / grows with importance (0.325 < 0.8) / is capped at 0.8 studs
+ok nil settings behave like motion on; garbage amounts give zero; every recipe weight keeps its frames when on and is zero when off
+Ad hoc, real FXRecipes in Studio (3 of 6 recipes had reached their hit within 0.3 s):
+reducedMotion=false -> hitStop calls 3 (2/2/3), shake calls 3, nudge calls 3, log 3
+reducedMotion=true  -> hitStop calls 0, shake calls 0, nudge calls 0
+Limit: nothing in the game requires FXRecipes yet (grep), so the live game shows no hit-stop; GameClient's own camera shake already zeroes with reduced motion. deps.nudge is not connected to the camera (GameClient is locked). VFX/FXRecipes.luau (older copy) was not changed; Studio_Export is the live one.
+RunAll at end: SUMMARY 28 of 28 suites PASS.

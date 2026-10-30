@@ -1,3 +1,18 @@
+PASS (music per set, crossfade, tension by stage; stage-card note from an earlier task kept at the bottom)
+T160 (studio-fx worker). Ear quality UNVERIFIED; no music was synthesised (every set already had tracks; all 5 library tracks have uploaded ids).
+Changes: MusicFX.states.foundry (set 4 had reused state "play", now its own state with the same two tracks so no set fades a track into itself), StageSets set 4 music = "foundry", Music.tensionFor(stage, isBoss) (pure), Music.log (Studio test log of crossfade starts); SoundCuesClient sets Music.setTension on each Stage event and 0.1 on Clear.
+Tests/MusicSets.test.luau (new): PASS, 5 sets each name a state with catalog+uploaded tracks, five distinct states, tension rises over stages 1-4, restarts per set, boss = 1, stays 0..1, bed is a catalog track.
+Play crossfade log (stage jumps through the sets, Music.log):
+chill_lofi -> artifact_room [harbour]
+artifact_room -> shinsei [cathedral]
+shinsei -> rising_moon [foundry]   (run used the earlier foundry order; foundry is now chill_lofi first)
+rising_moon -> rising_moon [veil]  (the fade-into-itself that the foundry order change removes; not re-run after the change)
+Tension log from real Stage events (stage 2 onward, 40 StartWave pulses): stage1=0.10, stage2=0.28, stage3=0.45, stage4=0.62
+Tension bed audible in engine: MUS_artifact_room vol=0.132 playing=true loaded=true under MUS_chill_lofi vol=0.356.
+Limits: the bed is "artifact_room", which is also the Harbour main track, so in set 2 the bed and the main track are the same file (the bed is created once and not swapped on a set change). Boss stage tension 1 was checked in the unit test, not on a real boss stage.
+RunAll at end: SUMMARY 28 of 28 suites PASS.
+
+--- earlier content of this file (stage intro cards task, other work) ---
 PASS (documented: Roblox Dev/Design/Stage Set Plans.md, section "Stage intro and clear cards")
 Five intro cards: title from the existing captions, a one-line lore line from the set's "what went wrong", an art plate described (not painted). Lore lines are drafts for the user to approve.
 Limits: no UI built (the UI chat owns screens); no art made.

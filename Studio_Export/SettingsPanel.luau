@@ -37,6 +37,10 @@ return function(ctx)
 		state[key] = value
 		pending[key] = value
 		ctx.apply(state)
+		pcall(function() -- master and interface sliders (T605); GameClient's apply only knows music and effects
+			local RS = game:GetService("ReplicatedStorage")
+			require(RS.SoundCues).applyMix(state, require(RS.SoundFX), require(RS.MusicFX))
+		end)
 		if not scheduled then
 			scheduled = true
 			task.delay(math.max(0.05, 1.1 - (os.clock() - lastSend)), flush)
@@ -213,8 +217,10 @@ return function(ctx)
 	end
 
 	header("Sound")
+	slider("masterVolume", "Master")
 	slider("musicVolume", "Music")
 	slider("sfxVolume", "Effects")
+	slider("uiVolume", "Interface")
 	header("Display")
 	choice("gameSpeed", "Game speed", { { label = "1x", value = 1 }, { label = "2x", value = 2 } })
 	choice("cinematics", "Cutscenes", { { label = "Full", value = "full" }, { label = "Short", value = "short" }, { label = "Off", value = "off" } })

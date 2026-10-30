@@ -12,6 +12,7 @@
 -- Recipes: placement, merge, enemyDefeat, familiarHit, summonBurst, ultimateImpact.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local FXScale = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("FXScale"))
 local TweenService = game:GetService("TweenService")
 
 local FXRecipes = {}
@@ -117,18 +118,20 @@ function FXRecipes.new(deps)
 
 	local function impact(name, extraStop, extraShake)
 		local w = FXRecipes.WEIGHT[name]
-		local frames = math.clamp(w.stop + (extraStop or 0), 2, 5)
-		local shake = w.shake + (extraShake or 0)
-		if settings.reducedMotion or settings.shake == false then
-			shake = 0
-		end
-		if deps.hitStop then
+		local raw = w.shake + (extraShake or 0)
+		local frames = FXScale.hitStop(math.clamp(w.stop + (extraStop or 0), 2, 5), settings) -- 0 with reduced motion
+		local shake = FXScale.shake(raw, settings)
+		local nudge = FXScale.nudge(raw, settings)
+		if deps.hitStop and frames > 0 then
 			deps.hitStop(frames)
 		end
 		if deps.shake and shake > 0 then
 			deps.shake(shake)
 		end
-		table.insert(R.log, { recipe = name, hitStop = frames, shake = shake })
+		if deps.nudge and nudge > 0 then
+			deps.nudge(nudge)
+		end
+		table.insert(R.log, { recipe = name, hitStop = frames, shake = shake, nudge = nudge })
 		return frames
 	end
 

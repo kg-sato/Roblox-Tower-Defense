@@ -1,0 +1,28 @@
+PASS
+T630 new sound sets wired (studio-fx worker, 2026-10-29). Ear quality UNVERIFIED (nobody listened); moderation of the 8 uploaded ids not checked.
+Files: Studio_Export/SoundCues.luau (new, ReplicatedStorage.SoundCues), SoundCuesClient.luau (new LocalScript, StarterPlayerScripts), SoundFX.luau (merges SoundCues catalog/ids, resolves every play through SoundCues.resolve). GameClient untouched.
+Only 8 of 30 new cues have an uploaded id (VFX/ASSETS.md); the rest resolve to an existing cue (hit_* -> enemy_hit, boss_intro_* -> bell_toll/iron_clank, ui_quest -> milestone, ui_achievement -> discovery) or stay silent (ui_hover, step_*). No new upload tonight (the 8-file budget was already used by the cue-set upload).
+Aliases (old call site -> new cue, when uploaded): brass_click->ui_click_soft, place_thud->familiar_place, merge_fail->ui_error.
+
+Resolve check (Play client):
+resolve brass_click -> ui_click_soft
+resolve place_thud -> familiar_place
+resolve merge_fail -> ui_error
+resolve step_wisp (no upload, no fallback) -> nil
+resolve hit_wisp (no upload) -> enemy_hit
+resolve boss_intro_clockmaker (uploaded) -> boss_intro_clockmaker
+
+Cue log of Play runs (SoundCuesClient CueLog attribute; "native" = uploaded asset):
+ reveal_legendary -> reveal_legendary NATIVE (Roll, rarity Legendary, delay 0.3 s over the old reveal cue)
+ reveal_celestial -> reveal_celestial NATIVE (Roll, Celestial)
+ (Common/Rare/Epic/Mythic: no upload, old reveal cue plays alone, no double)
+ hit_sentinel/hit_thief/hit_crow -> enemy_hit (fallback) x13 on Shot events, throttled to one per 0.07 s
+ boss_intro_unbound -> bell_toll (fallback, stage 5)
+ boss_intro_clockmaker -> boss_intro_clockmaker NATIVE (stage 25 boss spawn)
+ merge_1 -> merge_1 (Merge event, tier 2, delay 0.9 s)
+ ui_levelup -> ui_levelup NATIVE (LevelUp event)
+SoundFX.play log from the game client: familiar_place x8 (Move events, via place_thud alias), ui_error x44 (Denied events via merge_fail alias), merge_1, boss_intro_clockmaker, reveal_legendary, reveal_celestial, ui_levelup, enemy_hit x13.
+UI button click: brass_click is aliased to ui_click_soft in SoundFX.play (same path as place_thud, which was observed live); a real mouse click was not driven (no input tool for it), so the click path is UNVERIFIED live.
+Known gaps: footsteps (step_*) have no uploaded asset, so no step is played; ui_hover/ui_quest/ui_achievement have no call site. RevealSection raised "attempt to perform arithmetic (mul) on nil and number" at line 557 during the Play run (not part of this change; reveal path).
+Studio_Export mirrors checked: Studio Source equals the files on disk (loaded from disk by HTTP).
+RunAll at end: SUMMARY 28 of 28 suites PASS.

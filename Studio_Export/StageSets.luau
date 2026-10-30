@@ -58,7 +58,7 @@ StageSets.list = {
 		sky = { cycle = 90, night = { 0.5, 1 }, weather = { { kind = "Embers", at = 0.3, dur = 18 } } },
 		name = "Clockwork Foundry",
 		stages = 5,
-		music = "play",
+		music = "foundry",
 		lighting = { ClockTime = 22, Brightness = 0.8, Ambient = Color3.fromRGB(60, 40, 36), OutdoorAmbient = Color3.fromRGB(90, 60, 50), FogColor = Color3.fromRGB(110, 70, 50), AtmosphereColor = Color3.fromRGB(170, 120, 90), AtmosphereDecay = Color3.fromRGB(120, 70, 40), Density = 0.5, Haze = 2.4 },
 	},
 	{

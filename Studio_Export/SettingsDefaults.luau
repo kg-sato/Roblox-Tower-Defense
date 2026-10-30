@@ -7,6 +7,8 @@ local SettingsDefaults = {}
 type Rule = { kind: "number", min: number, max: number } | { kind: "choice", values: { number } } | { kind: "boolean" } | { kind: "enum", values: { string } }
 
 local RULES: { [string]: Rule } = {
+	masterVolume = { kind = "number", min = 0, max = 1 },
+	uiVolume = { kind = "number", min = 0, max = 1 },
 	musicVolume = { kind = "number", min = 0, max = 1 },
 	sfxVolume = { kind = "number", min = 0, max = 1 },
 	flashes = { kind = "boolean" },
@@ -23,6 +25,8 @@ local RULES: { [string]: Rule } = {
 }
 
 SettingsDefaults.defaults = {
+	masterVolume = 1,
+	uiVolume = 1,
 	musicVolume = 0.7,
 	sfxVolume = 0.8,
 	flashes = true,

@@ -41,3 +41,9 @@ T404 | commit e9ab3ba | "original familiar clips" | attested | chars | Overnight
 T405 | commit e9ab3ba | "clips uploaded wired" | attested | chars | Overnight/evidence/T405.txt
 T409 | commit e9ab3ba | "normal maps wired" | attested | chars | Overnight/evidence/T409.txt
 T406 | commit e9ab3ba | "rig deformation checked" | attested | chars | Overnight/evidence/T406.txt
+T153 | commit ba682dc | "stage sets verified" | attested | world | Overnight/evidence/T153.txt
+T414 | commit ba682dc | "ward metalness confirmed" | attested | world | Overnight/evidence/T414.txt
+T162 | commit ba682dc | "set landmarks added" | attested | world | Overnight/evidence/T162.txt
+T164 | commit ba682dc | "fog frame cost" | attested | world | Overnight/evidence/T164.txt
+T152 | commit ba682dc | "spawn gates added" | attested | world | Overnight/evidence/T152.txt
+T205 | commit ba682dc | "performance probe added" | attested | world | Overnight/evidence/T205.txt

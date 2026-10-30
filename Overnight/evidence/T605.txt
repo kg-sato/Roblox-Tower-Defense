@@ -1,0 +1,12 @@
+PASS
+T605 sound mix sliders and ducking on reveal (studio-fx worker). Ear quality UNVERIFIED.
+SettingsDefaults: new keys masterVolume and uiVolume (number 0..1, default 1, clamped, NaN/inf/string/bool rejected). Tests/SettingsDefaults.test.luau +6 cases (48 checks, PASS), including: defaults full, accepted, clamp (1,0), rejected types, sanitize.
+SettingsPanel: sliders Master, Music, Effects, Interface (SettingsPanel module only, GameClient untouched); change() also calls SoundCues.applyMix.
+Apply: SoundCues.applyMix -> SoundFX.setVolumes{master,sfx,ui} (group = master*sfx, UI cues also *ui; SoundCues.isUI) and Music.setVolumes{master,music} (MusicFX gain and tension bed * master). Saved values arrive on the "Settings" event, handled by SoundCuesClient.
+Play check (volumes set master .5, sfx .8, ui .5, music .6):
+VFX_SFX group volume 0.400 (expect 0.400)
+ui_click_soft sound vol 0.250 (catalog .50 * ui .5); combo vol 0.550 (not a UI cue, unchanged)
+MusicFX volumes master=0.5 music=0.6 (restored to defaults afterwards)
+Server profile after the change carried masterVolume 1 and uiVolume 1 (sanitize accepts the new keys).
+Ducking on reveal: MusicFX.attach was never called in the game, so no duck happened. SoundCuesClient now ducks on each Roll event by rarity (SoundCues.revealDuck): Common 0.15/1.2 s, Rare 0.25/1.8, Epic 0.4/2.5, Legendary 0.55/3.2, Mythic 0.6/3.8, Celestial 0.7/4.5. Play log: duck:Common 0.15/1.2s, duck:Rare 0.25/1.8s, duck:Legendary 0.55/3.2s, duck:Celestial 0.70/4.5s. The depth of the dip on the real music gain was not measured and the sound of it is UNVERIFIED.
+RunAll at end: SUMMARY 28 of 28 suites PASS.

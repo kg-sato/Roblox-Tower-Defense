@@ -36,9 +36,10 @@ Music.states = {
 	harbour = { "artifact_room" }, -- stage set 2 (T114)
 	cathedral = { "shinsei", "iremos_forest" }, -- stage set 3 (T114)
 	veil = { "rising_moon" }, -- stage set 5, Above the Grey Veil (T154)
+	foundry = { "chill_lofi", "rising_moon" }, -- stage set 4, Clockwork Foundry (T160): reuses the "play" tracks (no new music made); its own state so set 5 never fades a track into itself
 	wish = { "iremos_forest" },
 }
-Music.volumes = { music = 1 }
+Music.volumes = { music = 1, master = 1 } -- master: the Settings master slider (T605)
 Music.fade = 3.0 -- crossfade seconds
 -- fires (name) every time a main track starts; the Now Playing popup listens to it
 Music.TrackStarted = Instance.new("BindableEvent")
@@ -100,7 +101,7 @@ end
 
 local function gainFor(rec)
 	local mainTension = 1 - 0.12 * tensionLevel
-	return rec.vol * Music.volumes.music * duckMul * mainTension
+	return rec.vol * Music.volumes.music * Music.volumes.master * duckMul * mainTension
 end
 
 local function step(dt)
@@ -120,7 +121,7 @@ local function step(dt)
 	if tension then
 		tension.cur += (tension.target - tension.cur) * k
 		if tension.sound.Parent then
-			tension.sound.Volume = tension.cur * tension.vol * Music.volumes.music
+			tension.sound.Volume = tension.cur * tension.vol * Music.volumes.music * Music.volumes.master
 		end
 		if tension.target == 0 and tension.cur < 0.01 then
 			kill(tension)
@@ -155,6 +156,9 @@ local function startTrack(name)
 		warn("MusicFX: unknown track " .. tostring(name))
 		return
 	end
+	if Music.log then -- Studio test log (T160): every crossfade start
+		table.insert(Music.log, { from = main[#main] and main[#main].name or "-", to = name, state = state, t = os.clock() })
+	end
 	for _, rec in ipairs(main) do
 		rec.target = 0
 	end
@@ -186,6 +190,14 @@ function Music.play(newState)
 	state = newState
 	playlistIndex = 0
 	Music._advance()
+end
+
+-- tension for a stage (T160): climbs through the 5 stages of a set, a boss stage is full. Pure.
+function Music.tensionFor(stage, isBoss)
+	if isBoss then
+		return 1
+	end
+	return 0.1 + 0.7 * (((tonumber(stage) or 1) - 1) % 5) / 4
 end
 
 function Music.setTension(t)

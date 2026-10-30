@@ -156,7 +156,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: fx-audio | needs: Studio | depends: T133 | size: L | owner-files: UltFX, CutsceneFX
 - [ ] T135 | Merge effect and look per tier 1 to 8, incl. morph cut | verify: studio: tier-up captured for 1 to 8
   lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: FXRecipes (merge), TDFeedback, FamiliarMaterials (tier looks)
-- [ ] T602 | Hit-stop, shake and camera nudge scaled, off with reduced motion | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/FXScale.test.luau (new, setting off yields zero))
+- [x] T602 | Hit-stop, shake and camera nudge scaled, off with reduced motion | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/FXScale.test.luau (new, setting off yields zero))
   lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: FXRecipes, ImpactFX, Tests/FXScale.test.luau
 - [ ] T144 | One lantern-light language: spawn sparkle, level column, clear ash, low-lantern vignette, decals | verify: studio: captures per effect, performance on Low
   lane: fx-audio | needs: Studio | depends: none | size: L | owner-files: FeedbackFX, FlipbookFX registry, VFX/flipbooks
@@ -166,9 +166,9 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: fx-audio | needs: Studio | depends: T606 | size: M | owner-files: SoundCatalog, VFX/sfx
 - [x] T604 | UI sound set: click, hover, error, buy, quest, achievement, level-up | verify: manual: tools/check_sound_lengths.py PASS
   lane: fx-audio | needs: Studio | depends: T606 | size: M | owner-files: SoundCatalog, VFX/sfx
-- [ ] T605 | Sound mix sliders (master, music, effects, UI) and ducking | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SettingsDefaults.test.luau (new keys), studio: duck on reveal)
+- [x] T605 | Sound mix sliders (master, music, effects, UI) and ducking | verify: studio: run Tests via RunAll in Studio Edit; evidence file must hold PASS and the output (Tests/SettingsDefaults.test.luau (new keys), studio: duck on reveal)
   lane: fx-audio | needs: Studio | depends: T604 | size: M | owner-files: SoundFX, Shared.SettingsDefaults (claim from client-ui)
-- [ ] T160 | Music per set (5, crossfade) plus tension layer by wave | verify: studio: states for sets 1 to 5 load, crossfade logged
+- [x] T160 | Music per set (5, crossfade) plus tension layer by wave | verify: studio: states for sets 1 to 5 load, crossfade logged
   lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: MusicFX, MusicCatalog, AudioIds
 - [ ] T166 | Ambient loops per set and lobby, plus sounds for captions and set morph | verify: manual: tools/check_sound_lengths.py PASS, studio: loops start per set
   lane: fx-audio | needs: Studio | depends: T153 | size: M | owner-files: MusicFX ambience states, SoundCatalog
@@ -186,3 +186,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: docs-tooling | needs: none | depends: none | size: S | owner-files: Roblox Dev/Systems.md, Backlog.md, Design/Game Design Doc.md
 - [ ] T246 | Write tonight's report: built, to judge, to delete | verify: manual: Overnight/REPORT.md updated with labels
   lane: docs-tooling | needs: none | depends: all lanes done | size: S | owner-files: Overnight/REPORT.md, Roblox Dev/Session Log.md (append)
+
+## Lane: fx-audio (added by the controller during the run)
+- [x] T630 | Wire the new sound sets (UI, enemy, boss, familiar cues, uploaded ids in VFX/ASSETS.md) into SoundCatalog and call sites | verify: studio: cue log of a Play run shows ui click, enemy hit, boss intro, reveal per rarity, placement and merge cues fired
+  lane: fx-audio | needs: Studio | depends: none | size: M | owner-files: SoundCatalog, SoundCues (new), AudioIds, SoundFX call sites (no GameClient edits)
