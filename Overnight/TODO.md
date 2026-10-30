@@ -142,7 +142,7 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
   lane: world | needs: Studio | depends: T153 | size: M | owner-files: Backdrop*.luau, Shared.StageSets lighting fields
 - [x] T152 | Spawn and exit gate per set with opening animation and enemy shadow | verify: studio: gate opens before spawn, capture per set
   lane: world | needs: Studio | depends: T153 | size: M | owner-files: MapBuilder gate parts, Backdrop*.luau
-- [ ] T172 | Five boss arena variants of the board | verify: studio: each arena loads at its boss stage, path unchanged
+- [x] T172 | Five boss arena variants of the board | verify: studio: each arena loads at its boss stage, path unchanged
   lane: world | needs: Studio | depends: T149,T167 | size: L | owner-files: StageSetClient (claim), Backdrop*.luau
 
 ## Lane: fx-audio (effects-and-audio)
@@ -194,7 +194,11 @@ Rules: one commit per finished task via checkpoint.py with --task and a three-wo
 ## Lane: follow-ups (added by the controller during the run)
 - [ ] T650 | Final regression pass: all suites, lean bot, Play run to the stage 5 boss with a wave, console scan, script sizes, compile | verify: studio: evidence file with RunAll counts, bot clears, Play console errors (none new), sizes
   lane: docs-tooling | needs: Studio | depends: none | size: M | owner-files: Overnight/evidence, Overnight/captures
+- [ ] T642 | Make the new screens reachable: a ScreenRouter module with a menu dock button (one-line hook) opening inventory, quests, pass and shop, leaderboard, stage select, familiar panel, results after a clear and pause on Esc | verify: studio: in a Play run every screen is created in PlayerGui when opened and closes cleanly, console clean, HUD counts otherwise unchanged
+  lane: client-ui | needs: Studio | depends: none | size: M | owner-files: StarterPlayerScripts.ScreenRouter (new), one-line hook in GameClient
 - [ ] T640 | Raise HUD, reveal, collection and results screens to 7 of 10 or better on a blind review (up to three fix rounds) | verify: studio: reviewer scores per item in evidence, every item at 7 or better or the honest scores and what blocked
-  lane: client-ui | needs: Studio | depends: T650 | size: L | owner-files: new UI modules only (not the title page, skill tree or loading files)
+  lane: client-ui | needs: Studio | depends: T642 | size: L | owner-files: new UI modules only (not the title page, skill tree or loading files)
 - [ ] T641 | Upload the 40-icon set (images, pre-approved) and wire the ids into status, rarity and faction displays | verify: studio: icons visible on enemy status display and rarity chips in a Play capture, ids in VFX/ASSETS.md
   lane: client-ui | needs: Studio | depends: T081 | size: M | owner-files: new modules, VFX/ASSETS.md (append)
+- [ ] T651 | Wiring audit: for every module and script added tonight (see the ledger), prove it runs in Play (required by a running script or creating instances/events) and list orphans; wire the cheap ones | verify: studio: evidence table module -> how it was proven alive (log line, instance, event) and the orphan list with fixes or reasons
+  lane: docs-tooling | needs: Studio | depends: T642 | size: M | owner-files: Overnight/evidence, new hooks only where an orphan is trivially wirable
