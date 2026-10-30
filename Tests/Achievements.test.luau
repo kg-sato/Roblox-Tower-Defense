@@ -86,6 +86,45 @@ return function(Shared)
 		check("load of a non-table gives a fresh state", next(A.load(nil).stats) == nil and next(A.load(7).unlocked) == nil)
 		local again = A.unlock(loaded)
 		check("a loaded state does not re-pay an unlocked row", not table.find(again, "FirstSummon"))
+
+		-- T652: hooked behaviour (Shared.ProgressHooks)
+		do
+			local H = require(Shared.ProgressHooks)
+			local T0 = 20000 * 86400
+			local function fresh(flags)
+				local d = {}
+				H.sanitize(d)
+				return d, H.start(d, flags, T0, { userId = 9 })
+			end
+			local on = { achievements = true }
+			local d, ctx = fresh(on)
+			local out = H.event(ctx, "Roll", { pet = "Ember" }, T0 + 1, false)
+			check("T652 first roll unlocks FirstSummon: gems and one Achievement event", out.gems == 5 and #out.events == 1 and out.events[1].kind == "Achievement" and out.events[1].payload.id == "FirstSummon" and out.events[1].payload.gems == 5)
+			local again = H.event(ctx, "Roll", { pet = "Ember" }, T0 + 2, false)
+			check("T652 an unlocked row is not paid or sent twice", again.gems == 0 and #again.events == 0)
+			local rollsBefore = d.achievements.stats.rolls
+			H.event(ctx, "Roll", { pet = "Ember", bonus = true }, T0 + 3, false)
+			check("T652 a bonus roll is not counted as a roll", d.achievements.stats.rolls == rollsBefore)
+			H.event(ctx, "Merge", { tier = 3, pet = "Ember" }, T0 + 4, false)
+			check("T652 merge counts and raises maxTier; TierThree and FirstMerge unlock", d.achievements.stats.merges == 1 and d.achievements.stats.maxTier == 3 and d.achievements.unlocked.TierThree == true and d.achievements.unlocked.FirstMerge == true)
+			H.event(ctx, "Kill", { kind = "Grunt" }, T0 + 5, false)
+			check("T652 a non-boss kill is not a boss kill", d.achievements.stats.bossKills == nil)
+			local k = H.event(ctx, "Kill", { kind = "Boss" }, T0 + 6, false)
+			check("T652 a boss kill counts and unlocks BossBane", d.achievements.stats.bossKills == 1 and k.events[1] ~= nil and k.events[1].payload.id == "BossBane")
+			H.event(ctx, "Clear", { stage = 1, perfect = true }, T0 + 7, false)
+			H.event(ctx, "Clear", { stage = 2, perfect = false }, T0 + 8, false)
+			check("T652 clears and perfect stages count; a leak resets the streak", d.achievements.stats.stagesCleared == 2 and d.achievements.stats.perfectStages == 1 and ctx.streak == 0 and d.achievements.stats.bestStreak == 1)
+			local d2, c2 = fresh({ achievements = false })
+			local o2 = H.event(c2, "Roll", { pet = "Ember" }, T0 + 1, false)
+			check("T652 flag off: no counting, no unlock, no gems", next(d2.achievements.stats) == nil and o2.gems == 0 and #o2.events == 0)
+			local d3, c3 = fresh(on)
+			for i = 1, 25 do
+				H.event(c3, "Roll", { pet = "Ember" }, T0 + i, false)
+			end
+			check("T652 25 rolls unlock Summoner once", d3.achievements.unlocked.Summoner == true and d3.achievements.stats.rolls == 25)
+			local saved = A.load(d3.achievements)
+			check("T652 a saved state reloads and does not re-pay", saved.unlocked.Summoner == true and #A.unlock(saved) == 0)
+		end
 	end)
 	if not ok then
 		failed += 1

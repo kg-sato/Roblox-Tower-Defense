@@ -7,7 +7,7 @@ return function(Shared)
 	local tmp = Instance.new("Folder")
 	tmp.Name = "_SaveMigrationTest"
 	tmp.Parent = game:GetService("ReplicatedStorage")
-	for _, n in { "Config", "Path", "MatchSim", "SettingsDefaults" } do
+	for _, n in { "Config", "Path", "MatchSim", "SettingsDefaults", "ProgressHooks", "Achievements", "Quests", "Bond", "LeaderboardRules", "LoreFragments", "Familiars" } do
 		Shared[n]:Clone().Parent = tmp
 	end
 	local Config = require(tmp.Config)
@@ -154,6 +154,32 @@ return function(Shared)
 			check("a non-table collection gives an empty one", next(Config.sanitizeCollection("junk", nil)) == nil and next(Config.sanitizeCollection(5, 7)) == nil)
 			local both = Config.sanitizeCollection({ [pet] = { count = 4, shards = 9 } }, { [pet] = true, [second] = true })
 			check("seen never lowers a stored count and fills the missing ones", both[pet].count == 4 and both[pet].shards == 9 and both[second].count == 1)
+		end
+
+		-- T652: achievements / quests / bond profile fields
+		do
+			local H = require(tmp.ProgressHooks)
+			local fresh = H.fields()
+			check("T652 fields() gives achievements, quests and bond, fresh each call", type(fresh.achievements) == "table" and type(fresh.quests) == "table" and type(fresh.bond) == "table" and H.fields().achievements ~= fresh.achievements)
+			local old = { version = 1, level = 3, gems = 40, bestStage = 4 }
+			H.sanitize(old)
+			check("T652 an old profile without the new fields gets empty ones and keeps the rest", next(old.achievements.stats) == nil and old.quests.day == 0 and next(old.bond) == nil and old.level == 3 and old.gems == 40 and old.bestStage == 4)
+			local bad = { achievements = { stats = { rolls = 12, junk = 1, merges = -4 }, unlocked = { FirstSummon = true, Nope = true } }, quests = { day = "x", stats = { rolls = 3, junk = 9 }, claimed = { D1 = true, S1 = true } }, bond = { Ember = { xp = 1e12, lastUsed = -5 }, ["bad id"] = { xp = 3 } } }
+			H.sanitize(bad)
+			check("T652 a damaged achievements field keeps good values and drops junk", bad.achievements.stats.rolls == 12 and bad.achievements.stats.junk == nil and bad.achievements.stats.merges == nil and bad.achievements.unlocked.FirstSummon == true and bad.achievements.unlocked.Nope == nil)
+			check("T652 a damaged quests field is repaired", bad.quests.day == 0 and bad.quests.stats.rolls == 3 and bad.quests.stats.junk == nil and bad.quests.claimed.D1 == true and bad.quests.claimed.S1 == nil)
+			check("T652 a damaged bond field is clamped", bad.bond.Ember.xp == 2250 and bad.bond.Ember.lastUsed == 0 and bad.bond["bad id"] == nil)
+			local junk = { achievements = "x", quests = 5, bond = true }
+			H.sanitize(junk)
+			check("T652 non-table fields become empty states", type(junk.achievements.stats) == "table" and type(junk.quests.stats) == "table" and type(junk.bond) == "table")
+			local twice = { achievements = { stats = { rolls = 7 }, unlocked = {} } }
+			H.sanitize(twice)
+			H.sanitize(twice)
+			check("T652 sanitize twice changes nothing", twice.achievements.stats.rolls == 7)
+			local d = newSim(11)
+			d:loadMeta({ level = 4, xp = 1, sp = 1, gems = 30, achievements = bad.achievements, quests = bad.quests, bond = bad.bond })
+			check("T652 loadMeta ignores the new fields and meta() does not carry them", d.level == 4 and d:meta().achievements == nil and d:meta().bond == nil)
+			check("T652 all four flags default OFF", Config.ACHIEVEMENTS_ON == false and Config.QUESTS_ON == false and Config.BOND_ON == false and Config.LEADERBOARD_ON == false)
 		end
 	end)
 	if not ok then

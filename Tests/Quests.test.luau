@@ -159,6 +159,101 @@ return function(Shared)
 		check("load keeps good values", l.day == 20000 and l.stats.rolls == 4 and l.life.bestStage == 12 and l.claimed.D1 == true and l.storyClaimed.S1 == true)
 		check("load drops junk stats, bad numbers, unknown ids and wrong-kind claims", l.stats.junk == nil and l.stats.streak == nil and l.life.nope == nil and l.claimed.S1 == nil and l.claimed.Z == nil and l.storyClaimed.D1 == nil)
 		check("load of a non-table is a fresh state", Q.load(nil).day == 0 and next(Q.load(3).stats) == nil)
+
+		-- T652: hooked behaviour (Shared.ProgressHooks)
+		do
+			local H = require(Shared.ProgressHooks)
+			local LR = require(Shared.LeaderboardRules)
+			local T0 = 20000 * 86400 + 5
+			local d = {}
+			H.sanitize(d)
+			local ctx = H.start(d, { quests = true }, T0, { userId = 77 })
+			check("T652 start rolls the quest day over to today", d.quests.day == 20000)
+			local sent = {}
+			local function feed(kind, p)
+				for _, e in H.event(ctx, kind, p, T0 + 30, false).events do
+					table.insert(sent, e)
+				end
+			end
+			-- drive each daily stat to its goal with real event kinds (factionsInRun needs a sim, covered in ServerRules)
+			local drive = {
+				rolls = function() feed("Roll", { pet = "Ember" }) end, merges = function() feed("Merge", { tier = 2, pet = "Ember" }) end,
+				stagesCleared = function() feed("Clear", { stage = 1, perfect = false }) end, bossKills = function() feed("Kill", { kind = "Boss" }) end,
+				perfectStages = function() feed("Clear", { stage = 1, perfect = true }) end, lanternUses = function() feed("Lantern", {}) end,
+				recycles = function() feed("Recycle", {}) end, upgradeLevel = function() feed("Upgrade", { level = 3 }) end,
+				streak = function() feed("Clear", { stage = 1, perfect = true }) end,
+			}
+			local covered = 0
+			for _, id in Q.dailyIds(20000) do
+				local q = Q.byId[id]
+				if drive[q.stat] then
+					for _ = 1, q.goal do
+						drive[q.stat]()
+					end
+					covered += 1
+					local _, _, done = Q.status(d.quests, id)
+					check("T652 daily " .. id .. " (" .. q.stat .. ") completes from its events", done)
+				end
+			end
+			check("T652 at least two of today's dailies could be driven", covered >= 2, covered)
+			local counts = {}
+			for _, e in sent do
+				if e.kind == "Quest" then
+					counts[e.payload.id] = (counts[e.payload.id] or 0) + 1
+				end
+			end
+			local once = true
+			for _, n in counts do
+				once = once and n == 1
+			end
+			check("T652 each Quest event fires exactly once", next(counts) ~= nil and once)
+			local first = Q.dailyIds(20000)[1]
+			local okc, _, outc = H.claimQuest(ctx, first)
+			if drive[Q.byId[first].stat] then
+				check("T652 claimQuest pays a finished daily once", okc and outc.gems == Q.byId[first].gems and outc.events[1].kind == "QuestClaimed")
+				local ok2, why2 = H.claimQuest(ctx, first)
+				check("T652 the same claim twice is refused", ok2 == false and why2 == "Already claimed")
+			end
+			local bad, why = H.claimQuest(ctx, "Z9")
+			check("T652 claimQuest refuses an unknown quest", bad == false and why == "Unknown quest")
+			-- flag off
+			local d2 = {}
+			H.sanitize(d2)
+			local c2 = H.start(d2, { quests = false }, T0, nil)
+			H.event(c2, "Clear", { stage = 3, perfect = true }, T0, false)
+			local okOff, whyOff = H.claimQuest(c2, "S1")
+			check("T652 flag off: no progress and claims are refused", next(d2.quests.stats) == nil and next(d2.quests.life) == nil and okOff == false and whyOff == "Quests are off")
+			-- story quest S1 from the first Clear
+			local d3 = {}
+			H.sanitize(d3)
+			local c3 = H.start(d3, { quests = true }, T0, nil)
+			local o3 = H.event(c3, "Clear", { stage = 1, perfect = false }, T0, false)
+			local s1 = false
+			for _, e in o3.events do
+				s1 = s1 or (e.kind == "Quest" and e.payload.id == "S1")
+			end
+			local okS, _, outS = H.claimQuest(c3, "S1")
+			check("T652 a first Clear completes story quest S1; claimQuest pays its gems and skill points", s1 and okS and outS.gems == Q.byId.S1.gems and outS.sp == (Q.byId.S1.sp or 0))
+			-- next day: dailies reset, story claim stays
+			H.start(d3, { quests = true }, T0 + 86400, nil)
+			check("T652 next day: dailies reset, story claim stays", d3.quests.day == 20001 and next(d3.quests.stats) == nil and d3.quests.storyClaimed.S1 == true)
+			-- leaderboard hook
+			local d5 = {}
+			H.sanitize(d5)
+			local start = math.max(LR.weekStart(LR.weekKey(T0)), T0 - 1000)
+			local c5 = H.start(d5, { leaderboard = true }, start, { userId = 12 })
+			H.event(c5, "Clear", { stage = 2, perfect = false }, start + 5, false)
+			check("T652 a run too short for its wave is refused by LeaderboardRules", c5.lbPending == nil)
+			H.event(c5, "Clear", { stage = 3, perfect = false }, start + 120, false)
+			check("T652 a plausible clear is accepted and waits in memory only (no DataStore)", c5.lbPending ~= nil and c5.lbPending.wave == 3 and c5.lbPending.week == LR.weekKey(start + 120))
+			H.event(c5, "Clear", { stage = 4, perfect = false }, start + 130, false)
+			check("T652 a second submit inside the 20 s gap is refused", c5.lbPending.wave == 3)
+			H.event(c5, "Clear", { stage = 5, perfect = false }, start + 200, false)
+			check("T652 a later, better clear replaces it", c5.lbPending.wave == 5)
+			local c6 = H.start({}, { leaderboard = false }, start, { userId = 12 })
+			H.event(c6, "Clear", { stage = 3, perfect = false }, start + 120, false)
+			check("T652 leaderboard flag off: no submit", c6.lbPending == nil)
+		end
 	end)
 	if not ok then
 		failed += 1

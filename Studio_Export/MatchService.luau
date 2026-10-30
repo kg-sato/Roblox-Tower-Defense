@@ -11,12 +11,16 @@ local Config = require(Shared:WaitForChild("Config"))
 local ActionArgs = require(Shared:WaitForChild("ActionArgs"))
 local MatchSim = require(Shared:WaitForChild("MatchSim"))
 local SettingsDefaults = require(Shared:WaitForChild("SettingsDefaults"))
+local ProgressHooks = require(Shared:WaitForChild("ProgressHooks")) -- T652: achievements, quests, bond, leaderboard (each behind a Config flag, default OFF)
 
 local ProfileStore = require(ServerScriptService:WaitForChild("ProfileStore")) :: any -- vendor/ProfileStore.luau (MadStudioRoblox, session-locked saving)
 
 -- What is saved between visits (see MatchSim.meta / loadMeta). Only account-level progress: the pets on the board
 -- and the current stage belong to a single run and are not saved.
 local TEMPLATE = { version = 1, level = 1, xp = 0, sp = 0, gems = 0, tree = { Start = 1 }, bestStage = 1, lastStage = 1, tutorialDone = false, settings = SettingsDefaults.copyDefaults(), seen = {}, collection = {}, difficulty = "Normal" }
+for k, v in ProgressHooks.fields() do
+	TEMPLATE[k] = v -- achievements, quests, bond (T652)
+end
 local store = ProfileStore.New("PlayerData_v1", TEMPLATE)
 local profiles: { [Player]: any } = {}
 
@@ -71,6 +75,7 @@ local toClient = makeRemote("Event") -- server -> client: (kind: string, payload
 
 type Session = {
 	sim: MatchSim.Sim,
+	hooks: any, -- ProgressHooks run state (nil in the tutorial)
 	accum: number,
 	lastAction: number,
 	snapTimer: number,
@@ -89,7 +94,29 @@ local function snap(session: Session): { [string]: any }
 	return s
 end
 
+local hookFlags = ProgressHooks.flagsFrom(Config)
+
+-- Pays what a hook earned into the run and tells the client (T652).
+local function deliver(player: Player, sim: any, out: any)
+	if out.gems > 0 then
+		sim.gems += out.gems
+	end
+	if out.sp > 0 then
+		sim.sp += out.sp
+	end
+	for _, e in out.events do
+		toClient:FireClient(player, e.kind, e.payload)
+	end
+end
+
 local function startRun(player: Player, tutorial: boolean)
+	local old = sessions[player]
+	if old and old.hooks then
+		deliver(player, old.sim, ProgressHooks.flush(old.hooks, os.time())) -- bond xp of the run being replaced
+		syncProfile(player)
+	end
+	local simRef: any = nil
+	local hooks: any = nil
 	local sim = MatchSim.new(Random.new(), function(kind: string, payload: any)
 		if kind == "Pace" then
 			local s = sessions[player]
@@ -115,14 +142,24 @@ local function startRun(player: Player, tutorial: boolean)
 			end
 		end
 		toClient:FireClient(player, kind, payload)
+		if hooks and simRef then
+			deliver(player, simRef, ProgressHooks.event(hooks, kind, payload, os.time(), tutorial))
+		end
 	end, tutorial)
+	simRef = sim
 	-- returning players continue their saved progress; the tutorial run always starts fresh
 	local profile = profiles[player]
 	if profile and not tutorial then
 		sim:loadMeta(profile.Data)
 	end
+	if profile and not tutorial and (hookFlags.achievements or hookFlags.quests or hookFlags.bond or hookFlags.leaderboard) then
+		hooks = ProgressHooks.start(profile.Data, hookFlags, os.time(), { userId = player.UserId, petFaction = function(pet: string): string?
+			local def = Config.PETS[pet]
+			return def and def.faction
+		end })
+	end
 	local speed = profile and profile.Data.settings and profile.Data.settings.gameSpeed or 1
-	sessions[player] = { sim = sim, accum = 0, lastAction = 0, snapTimer = 0, speed = speed, gclock = 0 }
+	sessions[player] = { sim = sim, hooks = hooks, accum = 0, lastAction = 0, snapTimer = 0, speed = speed, gclock = 0 }
 	toClient:FireClient(player, "Begin", { snapshot = snap(sessions[player]) })
 	if profile then
 		toClient:FireClient(player, "Settings", profile.Data.settings)
@@ -203,6 +240,7 @@ local function loadProfile(player: Player)
 	d.seen = seen
 	d.collection = Config.sanitizeCollection(d.collection, seen) -- T186: counts and shards; the older `seen` list gives one copy each
 	d.difficulty = (type(d.difficulty) == "string" and Config.DIFFICULTY[d.difficulty] and d.bestStage >= Config.DIFFICULTY[d.difficulty].unlockStage) and d.difficulty or "Normal"
+	ProgressHooks.sanitize(d) -- T652: achievements, quests and bond are clamped even with the flags off
 	seenCache[player] = table.clone(seen)
 	publishSeen(player)
 	d.version = TEMPLATE.version -- no migration is needed yet; add one here before bumping TEMPLATE.version
@@ -301,6 +339,21 @@ toServer.OnServerEvent:Connect(function(player: Player, kind: any, a: any, b: an
 		end
 		return
 	end
+	-- T652: claim a finished quest (only with Config.QUESTS_ON); the server checks everything
+	if kind == "Quest" then
+		if not (session and session.hooks and Config.QUESTS_ON) or os.clock() - session.lastAction < MIN_ACTION_GAP then
+			return
+		end
+		session.lastAction = os.clock()
+		local ok, reason, out = ProgressHooks.claimQuest(session.hooks, a)
+		if ok then
+			deliver(player, session.sim, out)
+		else
+			toClient:FireClient(player, "Denied", { reason = reason })
+		end
+		toClient:FireClient(player, "State", snap(session))
+		return
+	end
 	local now = os.clock()
 	-- security audit (T123): unknown kinds no longer use up the gap, so spam cannot block a real action
 		if not ACTION_KINDS[kind] or not session or now - session.lastAction < MIN_ACTION_GAP then
@@ -386,6 +439,7 @@ if RunService:IsStudio() then
 				for k, v in TEMPLATE do
 					profile.Data[k] = type(v) == "table" and table.clone(v) or v
 				end
+				ProgressHooks.sanitize(profile.Data) -- fresh nested tables, not the ones inside TEMPLATE
 				if sessions[player] then
 					sessions[player].sim.tutorial = true
 				end
@@ -415,6 +469,11 @@ end
 Players.PlayerRemoving:Connect(function(player)
 	syncProfile(player)
 	local profile = profiles[player]
+	local ending = sessions[player]
+	if profile and ending and ending.hooks then
+		local out = ProgressHooks.flush(ending.hooks, os.time()) -- bond xp; the sim is over, so the gems go straight into the profile
+		profile.Data.gems = math.min(profile.Data.gems + out.gems, 1e12)
+	end
 	if profile then
 		profiles[player] = nil
 		profile:EndSession()

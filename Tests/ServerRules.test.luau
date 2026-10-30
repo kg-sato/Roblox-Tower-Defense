@@ -8,7 +8,7 @@ return function(Shared)
 	local tmp = Instance.new("Folder")
 	tmp.Name = "_ServerRulesTest"
 	tmp.Parent = game:GetService("ReplicatedStorage")
-	for _, n in { "Config", "Path", "MatchSim" } do
+	for _, n in { "Config", "Path", "MatchSim", "ProgressHooks", "Achievements", "Quests", "Bond", "LeaderboardRules", "LoreFragments", "Familiars" } do
 		Shared[n]:Clone().Parent = tmp
 	end
 	local Config = require(tmp.Config)
@@ -275,6 +275,64 @@ return function(Shared)
 			check("a damaged run drops unknown pets and bad coordinates and clamps tiers", #ones == 1 and ones[1].tier == Config.TIER_MAX)
 			check("a damaged run clamps upgrades", d.upgrades.Ember.Power == Config.UPGRADE_MAX and d.upgrades.Ember.Haste == 0)
 			check("a loaded run cannot take a difficulty it has not unlocked", d.difficulty == "Normal")
+		end
+
+		-- T652: hooks fed by a real sim
+		do
+			local H = require(tmp.ProgressHooks)
+			local T0 = 20000 * 86400
+			local function runWith(flags)
+				local d = { seen = {} }
+				H.sanitize(d)
+				local ctx = H.start(d, flags, T0 + 50, { userId = 5, petFaction = function(p) local x = Config.PETS[p]; return x and x.faction end })
+				local paid, sent, rolls = 0, {}, 0
+				local sim = MatchSim.new(Random.new(7), function(kind, payload)
+					if kind == "Roll" and not payload.bonus then
+						d.seen[payload.pet] = true
+						rolls += 1
+					end
+					local out = H.event(ctx, kind, payload, T0 + 60, false)
+					paid += out.gems
+					for _, e in out.events do
+						table.insert(sent, e.kind)
+					end
+				end, false)
+				sim.gems = 500
+				for _ = 1, 6 do
+					sim:roll()
+				end
+				sim:startWave()
+				for _ = 1, 4000 do
+					sim:step(0.1)
+					if sim.stage >= 2 then
+						break
+					end
+				end
+				return d, paid, sent, rolls, sim
+			end
+			local on = { achievements = true, quests = true, bond = true, leaderboard = false }
+			local d, paid, sent, rolls, sim = runWith(on)
+			check("T652 flags on: real rolls feed achievements and quests", rolls >= 1 and d.achievements.stats.rolls == rolls and d.quests.stats.rolls == rolls, tostring(d.achievements.stats.rolls) .. "/" .. rolls)
+			check("T652 flags on: the first roll unlocks FirstSummon, pays gems and sends an Achievement event", d.achievements.unlocked.FirstSummon == true and paid >= 5 and table.find(sent, "Achievement") ~= nil)
+			check("T652 flags on: runsPlayed counted at start and bestStage follows the stage", d.achievements.stats.runsPlayed == 1 and (d.achievements.stats.bestStage or 0) >= 1)
+			check("T652 flags on: a cleared stage counts", sim.stage < 2 or ((d.achievements.stats.stagesCleared or 0) >= 1 and (d.quests.life.bestCleared or 0) >= 1), tostring(d.achievements.stats.stagesCleared) .. " stage " .. sim.stage)
+			local off = { achievements = false, quests = false, bond = false, leaderboard = false }
+			local d2, paid2, sent2 = runWith(off)
+			check("T652 flags off: nothing is counted, paid or sent", next(d2.achievements.stats) == nil and next(d2.quests.stats) == nil and next(d2.achievements.unlocked) == nil and paid2 == 0 and #sent2 == 0)
+			local d3 = {}
+			H.sanitize(d3)
+			local c3 = H.start(d3, on, T0, nil)
+			local tut = H.event(c3, "Roll", { pet = "Ember" }, T0, true)
+			check("T652 the tutorial run counts nothing", tut.gems == 0 and #tut.events == 0 and d3.achievements.stats.rolls == nil)
+			check("T652 hostile payloads are ignored, not errors", (pcall(function()
+				H.event(c3, "Roll", "x", 1, false)
+				H.event(c3, "Merge", { tier = "big", pet = 5 }, 1, false)
+				H.event(c3, "Clear", { stage = -1 / 0 }, 1, false)
+			end)))
+			H.flush(c3, T0 + 10)
+			local before = d3.achievements.stats.rolls
+			H.event(c3, "Roll", { pet = "Ember" }, T0 + 11, false)
+			check("T652 a flushed run takes no more events", d3.achievements.stats.rolls == before)
 		end
 	end)
 	if not ok then

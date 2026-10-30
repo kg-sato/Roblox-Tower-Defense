@@ -103,6 +103,51 @@ return function(Shared)
 		check("load repairs numbers, drops bad ids and non-table entries", l["bad id!"] == nil and l.Skip == nil and l.Zap.xp == 0 and l.Zap.lastUsed == 0 and l.Zap.dayXp == B.DAILY_XP_CAP)
 		check("load of a non-table is empty", next(B.load(nil)) == nil and next(B.load("x")) == nil)
 		check("a loaded xp above the maximum is clamped", B.load({ Ember = { xp = 1e9 } }).Ember.xp == 2250)
+
+		-- T652: hooked behaviour (Shared.ProgressHooks)
+		do
+			local H = require(Shared.ProgressHooks)
+			local T1 = 20000 * DAY + 100
+			local d = {}
+			H.sanitize(d)
+			local ctx = H.start(d, { bond = true }, T1, nil)
+			H.event(ctx, "Roll", { pet = "Ember" }, T1 + 10, false)
+			H.event(ctx, "Roll", { pet = "Zap" }, T1 + 11, false)
+			H.event(ctx, "Merge", { tier = 2, pet = "Ember" }, T1 + 12, false)
+			H.event(ctx, "Kill", { kind = "Boss" }, T1 + 13, false)
+			H.flush(ctx, T1 + 125)
+			check("T652 flush gives each used familiar run + minute + boss xp", d.bond.Zap ~= nil and d.bond.Zap.xp == 10 + 2 + 8, d.bond.Zap and d.bond.Zap.xp)
+			check("T652 a merge adds its xp to the familiar involved", d.bond.Ember.xp == 10 + 2 + 3 + 8, d.bond.Ember.xp)
+			local before = d.bond.Ember.xp
+			local again = H.flush(ctx, T1 + 500)
+			check("T652 a second flush adds nothing", again.gems == 0 and d.bond.Ember.xp == before)
+			local d2 = { bond = { Ember = { xp = 48, lastUsed = T1 - 100, day = 20000, dayXp = 0 } } }
+			H.sanitize(d2)
+			local c2 = H.start(d2, { bond = true }, T1, nil)
+			H.event(c2, "Roll", { pet = "Ember" }, T1, false)
+			local o2 = H.flush(c2, T1)
+			check("T652 reaching level 2 pays its gems and sends a Bond event", o2.gems == B.REWARD[2] and o2.events[1] ~= nil and o2.events[1].kind == "Bond" and o2.events[1].payload.level == 2)
+			local d3 = {}
+			H.sanitize(d3)
+			local c3 = H.start(d3, { bond = true }, T1, nil)
+			H.event(c3, "Roll", { pet = "Ember" }, T1, false)
+			for i = 1, 90 do
+				H.event(c3, "Merge", { tier = 2, pet = "Ember" }, T1 + i, false)
+			end
+			H.flush(c3, T1 + 600)
+			check("T652 the daily cap still binds through the hook", d3.bond.Ember.xp <= B.DAILY_XP_CAP, d3.bond.Ember.xp)
+			local d4 = {}
+			H.sanitize(d4)
+			local c4 = H.start(d4, { bond = false }, T1, nil)
+			H.event(c4, "Roll", { pet = "Ember" }, T1, false)
+			local o4 = H.flush(c4, T1 + 600)
+			check("T652 flag off: no bond xp, no gems", next(d4.bond) == nil and o4.gems == 0)
+			local d5 = {}
+			H.sanitize(d5)
+			local c5 = H.start(d5, { bond = true }, T1, nil)
+			H.event(c5, "Roll", { pet = "bad id!" }, T1, false)
+			check("T652 a bad familiar id is refused by Bond and the flush does not crash", pcall(function() H.flush(c5, T1 + 100) end) and next(d5.bond) == nil)
+		end
 	end)
 	if not ok then
 		failed += 1

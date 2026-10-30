@@ -61,14 +61,16 @@ new("UIStroke", { Color = BRASS, Thickness = 2 }, openBtn)
 local openText = label(openBtn, { text = "FAMILIARS", size = UDim2.fromScale(0.9, 0.62), pos = UDim2.fromScale(0.05, 0.19), color = BRASS, max = 22, z = 6 })
 openText.Name = "OpenText"
 
+local dim = new("Frame", { Name = "Dim", Visible = false, Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.new(0, 0, 0), BackgroundTransparency = 0.12, BorderSizePixel = 0, ZIndex = 9, Active = true }, gui) -- T640: the HUD no longer shows through
 local panel = new("Frame", {
 	Name = "Panel", Visible = false, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.86, 0.84),
 	BackgroundColor3 = INK, ZIndex = 10,
 }, gui)
 new("UICorner", { CornerRadius = UDim.new(0.025, 0) }, panel)
 new("UIStroke", { Color = BRASS, Thickness = 3 }, panel)
-label(panel, { name = "Title", text = "FAMILIARS", size = UDim2.fromScale(0.4, 0.075), pos = UDim2.fromScale(0.03, 0.02), color = BRASS, align = Enum.TextXAlignment.Left, max = 34, z = 11 })
-local countLabel = label(panel, { name = "Count", text = "0/12", size = UDim2.fromScale(0.2, 0.07), pos = UDim2.fromScale(0.45, 0.025), color = PARCH, align = Enum.TextXAlignment.Left, max = 26, z = 11 })
+new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(38, 32, 46), Color3.fromRGB(20, 17, 28)) }, panel)
+label(panel, { name = "Title", text = "FAMILIARS", size = UDim2.fromScale(0.4, 0.075), pos = UDim2.fromScale(0.03, 0.02), color = BRASS, align = Enum.TextXAlignment.Left, max = 40, z = 11 })
+local countLabel = label(panel, { name = "Count", text = "0/12", size = UDim2.fromScale(0.2, 0.07), pos = UDim2.fromScale(0.45, 0.025), color = Color3.fromRGB(255, 226, 150), align = Enum.TextXAlignment.Left, max = 30, z = 11 })
 local closeBtn = new("TextButton", { Name = "Close", Size = UDim2.fromScale(0.05, 0.07), Position = UDim2.fromScale(0.94, 0.02), BackgroundColor3 = Color3.fromRGB(60, 44, 40), Text = "X", Font = FONT, TextColor3 = PARCH, TextScaled = true, ZIndex = 12 }, panel)
 new("UICorner", { CornerRadius = UDim.new(0.2, 0) }, closeBtn)
 new("UIAspectRatioConstraint", { AspectRatio = 1 }, closeBtn)
@@ -82,7 +84,7 @@ new("UIGridLayout", { CellSize = UDim2.fromScale(0.3, 0.3), CellPadding = UDim2.
 local detail = new("Frame", { Name = "Detail", Size = UDim2.fromScale(0.34, 0.76), Position = UDim2.fromScale(0.63, 0.2), BackgroundTransparency = 1, ZIndex = 11 }, panel)
 local cardImg = new("ImageLabel", { Name = "Card", AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0), Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ScaleType = Enum.ScaleType.Fit, ZIndex = 12 }, detail)
 new("UIAspectRatioConstraint", { AspectRatio = 630 / 880 }, cardImg)
-local lockedNote = label(detail, { name = "Locked", text = "", size = UDim2.fromScale(1, 0.2), pos = UDim2.fromScale(0, 0.8), color = PARCH, max = 22, z = 13 })
+local lockedNote = label(detail, { name = "Locked", text = "", size = UDim2.fromScale(1, 0.2), pos = UDim2.fromScale(0, 0.8), color = Color3.fromRGB(255, 236, 190), max = 26, z = 13 })
 
 local cells = {}
 local selected = nil
@@ -97,6 +99,7 @@ for _, id in Familiars.order do
 	end
 end
 local filter = "All"
+local emptyNote = label(panel, { name = "Empty", text = "No familiars in this faction yet.", size = UDim2.fromScale(0.5, 0.1), pos = UDim2.fromScale(0.04, 0.5), color = Color3.fromRGB(196, 184, 156), max = 24, z = 12 })
 local chips = {}
 local filterRow = new("Frame", { Name = "FilterRow", Position = UDim2.fromScale(0.03, 0.115), Size = UDim2.fromScale(0.94, 0.07), BackgroundTransparency = 1, ZIndex = 11 }, panel)
 local function applyFilter()
@@ -113,6 +116,7 @@ local function applyFilter()
 		chip.BackgroundColor3 = on and BRASS or Color3.fromRGB(38, 34, 48)
 		chip.Label.TextColor3 = on and INK or PARCH
 	end
+	emptyNote.Visible = shown == 0
 	gui:SetAttribute("Filter", filter)
 	gui:SetAttribute("VisibleCells", shown)
 end
@@ -156,7 +160,9 @@ local function refresh()
 		local f = Familiars.byId[c.id]
 		local known = seen[f.charId or f.id] == true
 		c.known = known
-		c.img.ImageColor3 = known and Color3.new(1, 1, 1) or Color3.new(0, 0, 0)
+		c.img.ImageColor3 = known and Color3.new(1, 1, 1) or Color3.fromRGB(70, 64, 88) -- lighter than the cell so the silhouette reads
+		c.img.ImageTransparency = known and 0 or 0.35
+		c.lock.Visible = not known
 		c.name.Text = known and f.name or "???"
 		c.name.TextColor3 = known and PARCH or Color3.fromRGB(140, 134, 150)
 	end
@@ -174,7 +180,8 @@ local function refresh()
 		end
 		for id, cc in cells do
 			cc.stroke.Thickness = id == selected and 5 or 2
-			cc.cell.BackgroundColor3 = id == selected and Color3.fromRGB(62, 54, 80) or Color3.fromRGB(38, 34, 48)
+			cc.cell.BackgroundColor3 = id == selected and Color3.fromRGB(74, 62, 96) or (cc.known and Color3.fromRGB(52, 44, 64) or Color3.fromRGB(26, 22, 34))
+			cc.stroke.Transparency = cc.known and 0 or 0.55
 		end
 	end
 end
@@ -192,10 +199,12 @@ for i, id in Familiars.order do
 	new("UICorner", { CornerRadius = UDim.new(0.08, 0) }, cell)
 	local stroke = new("UIStroke", { Color = rarity.color, Thickness = 2 }, cell)
 	local img = new("ImageLabel", { Name = "Img", BackgroundTransparency = 1, Image = Art[id].cutout, ScaleType = Enum.ScaleType.Fit, Size = UDim2.fromScale(0.86, 0.68), Position = UDim2.fromScale(0.07, 0.04), ZIndex = 13 }, cell)
-	local name = label(cell, { name = "Name", text = "???", size = UDim2.fromScale(0.9, 0.17), pos = UDim2.fromScale(0.05, 0.74), max = 18, z = 13 })
-	label(cell, { name = "Rarity", text = string.upper(f.rarity), size = UDim2.fromScale(0.9, 0.09), pos = UDim2.fromScale(0.05, 0.9), color = rarity.color, max = 12, z = 13 })
-	Icons.badge(cell, Icons.rarity(f.rarity), { Name = "RarityChip", AnchorPoint = Vector2.new(1, 0), Position = UDim2.fromScale(0.96, 0.03), Size = UDim2.fromScale(0.22, 0.22), SizeConstraint = Enum.SizeConstraint.RelativeXX, ZIndex = 14 })
-	cells[id] = { id = id, cell = cell, img = img, name = name, stroke = stroke, known = false }
+	local name = label(cell, { name = "Name", text = "???", size = UDim2.fromScale(0.9, 0.17), pos = UDim2.fromScale(0.05, 0.69), max = 26, z = 13 })
+	local pill = new("Frame", { Name = "RarityPill", BackgroundColor3 = rarity.color, Size = UDim2.fromScale(0.62, 0.1), Position = UDim2.fromScale(0.19, 0.895), ZIndex = 13 }, cell)
+	new("UICorner", { CornerRadius = UDim.new(0.5, 0) }, pill)
+	label(pill, { name = "Rarity", text = string.upper(f.rarity), size = UDim2.fromScale(0.9, 0.9), pos = UDim2.fromScale(0.05, 0.05), color = INK, max = 18, z = 14 }).FontFace = Font.fromName("Merriweather", Enum.FontWeight.Bold)
+	local lock = label(cell, { name = "Lock", text = "?", size = UDim2.fromScale(0.5, 0.4), pos = UDim2.fromScale(0.25, 0.18), color = Color3.fromRGB(200, 190, 215), max = 44, z = 14 })
+	cells[id] = { id = id, cell = cell, img = img, name = name, stroke = stroke, known = false, lock = lock }
 	cell.Activated:Connect(function()
 		select(id)
 	end)
@@ -226,6 +235,7 @@ end)
 
 local function setOpen(open)
 	panel.Visible = open
+	dim.Visible = open
 	updateButton()
 	if open then
 		refresh()

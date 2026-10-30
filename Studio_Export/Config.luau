@@ -347,6 +347,11 @@ end
 Config.WAVES_V2 = false
 -- Client UI screens (T074, T097), off by default: the result panel after a stage clear and the pause menu button
 Config.RESULTS_SCREEN = false
+-- T652: server hooks for the data modules built earlier (Shared.ProgressHooks). All default OFF: with a flag off nothing is counted, paid or sent (profile fields are still loaded and clamped).
+Config.ACHIEVEMENTS_ON = false -- Achievements: counters from sim events, gems on unlock, "Achievement" event to the client
+Config.QUESTS_ON = false -- Quests: daily and story progress, "Quest" event when one completes, "Quest" action claims it
+Config.BOND_ON = false -- Bond: bond xp per run for the familiars used, gems on reaching a level
+Config.LEADERBOARD_ON = false -- LeaderboardRules.validate on each stage clear (no DataStore write is built; the accepted score only waits in memory)
 Config.PAUSE_MENU = false
 Config.ELITE = Waves.ELITE
 Config.MOD_FIRST = Waves.MOD_FIRST
